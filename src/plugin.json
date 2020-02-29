@@ -21,8 +21,8 @@
       "large": "img/taosdata_logo.png"
     },
     "links": [
-      {"name": "GitHub", "url": "https://github.com/taosdata/TDengine/tree/develop/src/connector/grafana/tdengine"},
-      {"name": "AGPL 3.0", "url": "https://github.com/taosdata/TDengine/tree/develop/src/connector/grafana/tdengine/LICENSE"}
+      {"name": "GitHub", "url": "https://github.com/taosdata/grafanaplugin"},
+      {"name": "AGPL 3.0", "url": "https://github.com/taosdata/grafanaplugin/LICENSE"}
     ],
     "version": "1.0.0",
     "updated": "2020-01-13"
