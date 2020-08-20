@@ -89,8 +89,8 @@ after login `http://localhost:3000 `, then you can import the tdengine demo dash
 
 you can import the  `dashboard/tdengine-grafana.json`:
 
-![import_dashboard](dashboard/import_dashboard.png)
+![import_dashboard](https://raw.githubusercontent/taosdata/grafanaplugin/master/dashboard/import_dashboard.png)
 
 after finished import:
 
-![import_dashboard](dashboard/tdengine_dashboard.png)
+![import_dashboard](https://raw.githubusercontent/taosdata/grafanaplugin/master/dashboard/tdengine_dashboard.png)
