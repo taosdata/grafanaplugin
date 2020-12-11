@@ -38,6 +38,7 @@
     "q": "^1.5.0"
   },
   "dependencies": {
+    "@grafana/toolkit": "^7.3.5",
     "lodash": "^4.17.19",
     "yarn": "^1.22.0"
   },
