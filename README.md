@@ -12,7 +12,7 @@ Copy the data source you want to /var/lib/grafana/plugins/. Then restart grafana
 
 ```
 cp -r <grafanaplugin-dir> /var/lib/grafana/plugins/
-# if you use TDengine repo's grafana plugin submodule, use "cp -r <tdengine-extrach-dir>/connector/grafana/tdengine /var/lib/grafana/plugins/" instead of above command.
+# if you use TDengine repo's grafana plugin submodule, use "cp -r <tdengine-extrach-dir>/src/connector/grafanaplugin /var/lib/grafana/plugins/" instead of above command.
 sudo service grafana-server restart
 ```
 
