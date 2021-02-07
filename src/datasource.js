@@ -123,5 +123,35 @@ export class GenericDatasource {
     sql = this.templateSrv.replace(sql, options.scopedVars, 'csv');
     return sql;
   }
+  metricFindQuery(query, options) {
+  	// query like 'select  name  from dbtest.t;'
+    const targets = [
+      {
+        alias: "",
+        refId: "A",
+        sql: query,
+      },
+    ];
+    let req = {
+      url: this.url + "/grafana/query",
+      data: targets,
+      method: "POST",
+    };
+    return this.doRequest(req).then((res) => {
+      let tempList = [];
+      (Array.isArray(res.data) ? res.data : []).forEach((item) => {
+        (Array.isArray(item.datapoints) ? item.datapoints : []).forEach(
+          (end) => {
+            tempList.push({
+              expendable: false,
+              text: end[0],
+              value: end[0],
+            });
+          }
+        );
+      });
+      return Array.from(new Set(tempList));
+    });
+  }
 
 }
