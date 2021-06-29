@@ -1,7 +1,7 @@
 {
   "name": "TDengine",
   "private": false,
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "grafana datasource plugin for tdengine",
   "scripts": {
     "build": "./node_modules/grunt-cli/bin/grunt",
@@ -29,6 +29,7 @@
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-uglify": "^2.3.0",
     "grunt-contrib-watch": "^1.0.0",
+    "grunt-execute": "^0.2.2",
     "grunt-mocha-test": "^0.13.2",
     "grunt-systemjs-builder": "^1.0.0",
     "jsdom": "~9.12.0",
@@ -39,8 +40,7 @@
   },
   "dependencies": {
     "@grafana/toolkit": "^7.3.5",
-    "lodash": "^4.17.19",
-    "yarn": "^1.22.0"
+    "lodash": "^4.17.19"
   },
   "homepage": "https://github.com/taosdata/grafanaplugin"
 }

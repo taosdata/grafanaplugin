@@ -149,6 +149,34 @@ var GenericDatasource = exports.GenericDatasource = function () {
       sql = this.templateSrv.replace(sql, options.scopedVars, 'csv');
       return sql;
     }
+  }, {
+    key: 'metricFindQuery',
+    value: function metricFindQuery(query, options) {
+      // query like 'select  name  from dbtest.t;'
+      var targets = [{
+        alias: "",
+        refId: "A",
+        sql: query
+      }];
+      var req = {
+        url: this.url + "/grafana/query",
+        data: targets,
+        method: "POST"
+      };
+      return this.doRequest(req).then(function (res) {
+        var tempList = [];
+        (Array.isArray(res.data) ? res.data : []).forEach(function (item) {
+          (Array.isArray(item.datapoints) ? item.datapoints : []).forEach(function (end) {
+            tempList.push({
+              expendable: false,
+              text: end[0],
+              value: end[0]
+            });
+          });
+        });
+        return Array.from(new Set(tempList));
+      });
+    }
   }]);
 
   return GenericDatasource;
