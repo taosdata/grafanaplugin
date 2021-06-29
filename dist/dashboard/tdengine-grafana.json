@@ -22,11 +22,7 @@
       "cacheTimeout": null,
       "colorBackground": false,
       "colorValue": true,
-      "colors": [
-        "#299c46",
-        "rgba(237, 129, 40, 0.89)",
-        "#d44a3a"
-      ],
+      "colors": ["#299c46", "rgba(237, 129, 40, 0.89)", "#d44a3a"],
       "datasource": "TDengine",
       "description": "total  select  request  per minute last hour",
       "format": "none",
@@ -109,11 +105,7 @@
       "cacheTimeout": null,
       "colorBackground": false,
       "colorValue": true,
-      "colors": [
-        "#299c46",
-        "rgba(237, 129, 40, 0.89)",
-        "#d44a3a"
-      ],
+      "colors": ["#299c46", "rgba(237, 129, 40, 0.89)", "#d44a3a"],
       "datasource": "TDengine",
       "description": "total   insert  request   per minute  for last hour",
       "format": "none",
@@ -204,9 +196,7 @@
       "id": 12,
       "options": {
         "fieldOptions": {
-          "calcs": [
-            "mean"
-          ],
+          "calcs": ["mean"],
           "defaults": {
             "mappings": [],
             "max": 4096,
@@ -227,6 +217,23 @@
             ],
             "unit": "decmbytes"
           },
+          "thresholds": [
+            {
+              "index": 0,
+              "color": "green",
+              "value": null
+            },
+            {
+              "index": 1,
+              "color": "red",
+              "value": 80
+            },
+            {
+              "index": 2,
+              "color": "#EAB839",
+              "value": 2048
+            }
+          ],
           "override": {},
           "values": false
         },
@@ -261,9 +268,8 @@
       "id": 10,
       "options": {
         "fieldOptions": {
-          "calcs": [
-            "last"
-          ],
+          "calcs": ["last"],
+          "mappings": [],
           "defaults": {
             "mappings": [],
             "max": 4,
@@ -285,6 +291,23 @@
             "title": "",
             "unit": "decmbytes"
           },
+          "thresholds": [
+            {
+              "index": 0,
+              "color": "green",
+              "value": null
+            },
+            {
+              "index": 1,
+              "color": "semi-dark-orange",
+              "value": 60
+            },
+            {
+              "index": 2,
+              "color": "dark-red",
+              "value": 80
+            }
+          ],
           "override": {},
           "values": false
         },
@@ -319,9 +342,7 @@
       "id": 14,
       "options": {
         "fieldOptions": {
-          "calcs": [
-            "last"
-          ],
+          "calcs": ["last"],
           "defaults": {
             "mappings": [],
             "max": 8192,
@@ -342,11 +363,29 @@
             ],
             "unit": "Kbits"
           },
+          "mappings": [],
+          "thresholds": [
+            {
+              "index": 0,
+              "color": "green",
+              "value": null
+            },
+            {
+              "index": 1,
+              "color": "#EAB839",
+              "value": 4916
+            },
+            {
+              "index": 2,
+              "color": "red",
+              "value": 6554
+            }
+          ],
           "override": {},
           "values": false
         },
         "orientation": "auto",
-        "showThresholdLabels": true,
+        "showThresholdLabels": false,
         "showThresholdMarkers": true
       },
       "pluginVersion": "6.4.3",

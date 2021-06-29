@@ -1,19 +1,25 @@
-TDengine Datasource - build by Taosdata Inc. www.taosdata.com
+# Grafana Plugin for TDengine
+
+A [Grafana] plugin for [TDengine] datasource build by [Taosdata Inc.](https://www.taosdata.com)
 
 TDengine backend server implement 2 urls:
 
-*   `/heartbeat` return 200 ok. Used for "Test connection" on the datasource config page.
-*   `/query` return data based on input sqls.
+* `/heartbeat` return 200 ok. Used for "Test connection" on the datasource config page.
+* `/query` return data based on input sqls.
 
 ## Installation
 
-To install this plugin:  
-Copy the data source you want to /var/lib/grafana/plugins/. Then restart grafana-server. The new data source should now be available in the data source type dropdown in the Add Data Source View.
+To install this plugin, just copy the `dist/` directory to Grafana plugin dir: `/var/lib/grafana/plugins/`. Then restart grafana-server. The new data source should now be available in the data source type dropdown in the **Add Data Source** view.
 
-```
-cp -r <grafanaplugin-dir> /var/lib/grafana/plugins/
-# if you use TDengine repo's grafana plugin submodule, use "cp -r <tdengine-extrach-dir>/src/connector/grafanaplugin /var/lib/grafana/plugins/" instead of above command.
+```sh
+sudo rm -rf /var/lib/grafana/plugins/tdengine
+sudo cp -r ./dist /var/lib/grafana/plugins/tdengine
+# if you use TDengine repo's grafana plugin submodule, use "cp -r <tdengine-extrach-dir>/src/connector/grafanaplugin/dist /var/lib/grafana/plugins/tdengine" instead of above command.
+
+# start grafana service
 sudo service grafana-server restart
+# or with systemd
+sudo systemctl start grafana-server
 ```
 
 ### Query API
@@ -82,19 +88,22 @@ This plugin requires node 6.10.0
 
 ```javascript
 
-npm install -g yarn 
+npm install -g yarn
 yarn install
-npm run build
+yarn build
 ```
 
 ### Import Dashboard
 
-after login `http://localhost:3000` , then you can import the tdengine demo dashboard to monitor the system metrics.
+After login `http://localhost:3000` , then you can import the tdengine demo dashboard to monitor the system metrics.
 
-you can import the `dashboard/tdengine-grafana.json`:
+Ad as example, you can import the [`dashboard/tdengine-grafana.json`](dashboard/tdengine-grafana.json) (Note that the dashboard panel requires Grafana 6.2+):
 
-![import_dashboard](https://raw.githubusercontent/taosdata/grafanaplugin/master/dashboard/import_dashboard.png)
+![import_dashboard](./dashboard/import_dashboard.png)
 
 after finished import:
 
-![import_dashboard](https://raw.githubusercontent/taosdata/grafanaplugin/master/dashboard/tdengine_dashboard.png)
+![import_dashboard](/dashboard/tdengine_dashboard.png)
+
+[TDengine]: https://github.com/taosdata/TDengine
+[Grafana]: https://grafana.com
