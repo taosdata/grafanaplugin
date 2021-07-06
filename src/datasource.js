@@ -1,4 +1,5 @@
 import _ from "lodash";
+import "moment";
 
 export class GenericDatasource {
 
@@ -41,7 +42,28 @@ export class GenericDatasource {
   doRequest(options) {
     options.headers = this.headers;
 
-    return this.backendSrv.datasourceRequest(options);
+    return this.backendSrv.datasourceRequest(options).then(function(res) {
+      res.data = _.map(res.data, function(data) {
+        let target = _.find(options.data, { refId: data.refId });
+        if (_.isObject(target.timeshift)) {
+          data.datapoints = _(data.datapoints).map(datapoint => {
+            const unit2millis = {
+              seconds: 1000,
+              minutes: 60 * 1000,
+              hours: 60 * 60 * 1000,
+              days: 24 * 60 * 60 * 1000,
+              weeks: 7 * 24 * 60 * 60 * 1000,
+              months: 30 * 24 * 60 * 60 * 1000,
+            };
+            datapoint[1] += target.timeshift.period * unit2millis[target.timeshift.unit];
+            return datapoint
+          }).value();
+          return data;
+        }
+        return data;
+      });
+      return res;
+    });
   }
 
   buildQueryParameters(options) {
@@ -50,7 +72,8 @@ export class GenericDatasource {
       return {
         refId: target.refId,
         alias: this.generateAlias(options, target),
-        sql: this.generateSql(options, target)
+        sql: this.generateSql(options, target),
+        timeshift: target.timeshift
       };
     });
 
@@ -89,6 +112,11 @@ export class GenericDatasource {
     return "Basic " + this.encode(defaultUser + ":" + defaultPassword);
   }
 
+  generateTimeshift(options, target){
+    var alias = target.alias || "";
+    alias = this.templateSrv.replace(alias, options.scopedVars, 'csv');
+    return alias;
+  }
   generateAlias(options, target){
     var alias = target.alias || "";
     alias = this.templateSrv.replace(alias, options.scopedVars, 'csv');

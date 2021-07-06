@@ -37,6 +37,11 @@ var GenericDatasourceQueryCtrl = exports.GenericDatasourceQueryCtrl = function (
       this.panelCtrl.refresh(); // Asks the panel to refresh data.
     }
   }, {
+    key: 'targetBlur',
+    value: function targetBlur() {
+      this.panelCtrl.refresh();
+    }
+  }, {
     key: 'generateSQL',
     value: function generateSQL(query) {
       this.lastGenerateSQL = this.datasource.generateSql(this.panelCtrl, this.target);
