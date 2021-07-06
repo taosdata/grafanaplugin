@@ -1,9 +1,9 @@
-import {QueryCtrl} from 'app/plugins/sdk';
+import { QueryCtrl } from 'app/plugins/sdk';
 import './css/query-editor.css!'
 
 export class GenericDatasourceQueryCtrl extends QueryCtrl {
 
-  constructor($scope, $injector)  {
+  constructor($scope, $injector) {
     super($scope, $injector);
 
     this.scope = $scope;
@@ -15,8 +15,12 @@ export class GenericDatasourceQueryCtrl extends QueryCtrl {
     this.panelCtrl.refresh(); // Asks the panel to refresh data.
   }
 
+  targetBlur() {
+    this.panelCtrl.refresh();
+  }
+
   generateSQL(query) {
-    this.lastGenerateSQL = this.datasource.generateSql( this.panelCtrl, this.target);
+    this.lastGenerateSQL = this.datasource.generateSql(this.panelCtrl, this.target);
     this.showGenerateSQL = !this.showGenerateSQL;
   }
 

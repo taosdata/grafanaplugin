@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -7,9 +7,11 @@ exports.GenericDatasource = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _lodash = require('lodash');
+var _lodash = require("lodash");
 
 var _lodash2 = _interopRequireDefault(_lodash);
+
+require("moment");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -30,7 +32,7 @@ var GenericDatasource = exports.GenericDatasource = function () {
   }
 
   _createClass(GenericDatasource, [{
-    key: 'query',
+    key: "query",
     value: function query(options) {
       var targets = this.buildQueryParameters(options);
 
@@ -45,7 +47,7 @@ var GenericDatasource = exports.GenericDatasource = function () {
       });
     }
   }, {
-    key: 'testDatasource',
+    key: "testDatasource",
     value: function testDatasource() {
       return this.doRequest({
         url: this.url + '/grafana/heartbeat',
@@ -57,14 +59,35 @@ var GenericDatasource = exports.GenericDatasource = function () {
       });
     }
   }, {
-    key: 'doRequest',
+    key: "doRequest",
     value: function doRequest(options) {
       options.headers = this.headers;
 
-      return this.backendSrv.datasourceRequest(options);
+      return this.backendSrv.datasourceRequest(options).then(function (res) {
+        res.data = _lodash2.default.map(res.data, function (data) {
+          var target = _lodash2.default.find(options.data, { refId: data.refId });
+          if (_lodash2.default.isObject(target.timeshift)) {
+            data.datapoints = (0, _lodash2.default)(data.datapoints).map(function (datapoint) {
+              var unit2millis = {
+                seconds: 1000,
+                minutes: 60 * 1000,
+                hours: 60 * 60 * 1000,
+                days: 24 * 60 * 60 * 1000,
+                weeks: 7 * 24 * 60 * 60 * 1000,
+                months: 30 * 24 * 60 * 60 * 1000
+              };
+              datapoint[1] += target.timeshift.period * unit2millis[target.timeshift.unit];
+              return datapoint;
+            }).value();
+            return data;
+          }
+          return data;
+        });
+        return res;
+      });
     }
   }, {
-    key: 'buildQueryParameters',
+    key: "buildQueryParameters",
     value: function buildQueryParameters(options) {
       var _this = this;
 
@@ -72,14 +95,15 @@ var GenericDatasource = exports.GenericDatasource = function () {
         return {
           refId: target.refId,
           alias: _this.generateAlias(options, target),
-          sql: _this.generateSql(options, target)
+          sql: _this.generateSql(options, target),
+          timeshift: target.timeshift
         };
       });
 
       return targets;
     }
   }, {
-    key: 'encode',
+    key: "encode",
     value: function encode(input) {
       var _keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
       var output = "";
@@ -104,7 +128,7 @@ var GenericDatasource = exports.GenericDatasource = function () {
       return output;
     }
   }, {
-    key: 'getAuthorization',
+    key: "getAuthorization",
     value: function getAuthorization(jsonData) {
       jsonData = jsonData || {};
       var defaultUser = jsonData.user || "root";
@@ -113,14 +137,21 @@ var GenericDatasource = exports.GenericDatasource = function () {
       return "Basic " + this.encode(defaultUser + ":" + defaultPassword);
     }
   }, {
-    key: 'generateAlias',
+    key: "generateTimeshift",
+    value: function generateTimeshift(options, target) {
+      var alias = target.alias || "";
+      alias = this.templateSrv.replace(alias, options.scopedVars, 'csv');
+      return alias;
+    }
+  }, {
+    key: "generateAlias",
     value: function generateAlias(options, target) {
       var alias = target.alias || "";
       alias = this.templateSrv.replace(alias, options.scopedVars, 'csv');
       return alias;
     }
   }, {
-    key: 'generateSql',
+    key: "generateSql",
     value: function generateSql(options, target) {
       var sql = target.sql;
       if (sql == null || sql == "") {
@@ -150,7 +181,7 @@ var GenericDatasource = exports.GenericDatasource = function () {
       return sql;
     }
   }, {
-    key: 'metricFindQuery',
+    key: "metricFindQuery",
     value: function metricFindQuery(query, options) {
       // query like 'select  name  from dbtest.t;'
       var targets = [{

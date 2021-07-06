@@ -29,7 +29,32 @@
       </label>
     </div>        
   </div>
-  
+ 
+  <div class="gf-form-inline">  
+    <div class="gf-form gf-form--grow">
+      <label class="gf-form-label query-keyword width-7">Timeshift</label>
+      <input
+        type="number"
+        class="gf-form-input max-width-8"
+        placeholder="1"
+        empty-to-null
+        ng-model="ctrl.target.timeshift.period"
+        ng-change="ctrl.targetBlur()"
+        ng-model-onblur
+      />
+      <label class="gf-form-label query-keyword width-9">
+        Unit
+      </label>
+      <div class="gf-form-select-wrapper max-width-10">
+        <select ng-model="ctrl.target.timeshift.unit" class="gf-form-input" ng-options="timeshiftUnit for timeshiftUnit in ['seconds', 'minutes', 'hours', 'days', 'weeks', 'months']" ng-change="ctrl.targetBlur()">
+          <option value="" disabled>Please Select</option>
+        </select>
+      </div>
+      <label class="gf-form-label" bs-tooltip="ctrl.target.errors.timeshiftUnit" style="color: rgb(229, 189, 28)" ng-show="ctrl.target.errors.timeshiftUnit">
+        <i class="fa fa-warning"></i>
+      </label>
+    </div>   
+  </div> 
   <div class="gf-form" ng-show="ctrl.showGenerateSQL">
     <pre class="gf-form-pre">{{ctrl.lastGenerateSQL}}</pre>
   </div>
