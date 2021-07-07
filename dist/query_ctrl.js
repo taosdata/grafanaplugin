@@ -28,6 +28,9 @@ var GenericDatasourceQueryCtrl = exports.GenericDatasourceQueryCtrl = function (
     _this.scope = $scope;
     _this.target.target = _this.target.target || 'select metric';
     _this.target.type = _this.target.type || 'timeserie';
+    _this.target.queryType = _this.target.queryType || 'SQL';
+
+    _this.queryTypes = ["SQL", "Arithmetic"];
     return _this;
   }
 
@@ -46,6 +49,15 @@ var GenericDatasourceQueryCtrl = exports.GenericDatasourceQueryCtrl = function (
     value: function generateSQL(query) {
       this.lastGenerateSQL = this.datasource.generateSql(this.panelCtrl, this.target);
       this.showGenerateSQL = !this.showGenerateSQL;
+    }
+  }, {
+    key: 'validateArithmeticQuery',
+    value: function validateArithmeticQuery(target, errs) {
+      if (!target.expression || target.expression.length == 0) {
+        errs.expression = "Must specify a javascript expression";
+        return false;
+      }
+      return true;
     }
   }]);
 
