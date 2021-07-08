@@ -42,7 +42,7 @@ export class GenericDatasource {
   postQuery(options, res) {
     res.data = _.map(res.data, function (data) {
       let target = _.find(options.data, { refId: data.refId });
-      if (_.isObject(target.timeshift)) {
+      if (_.isObject(target.timeshift) && !!target.timeshift.period) {
         data.datapoints = _(data.datapoints).map(datapoint => {
           const unit2millis = {
             seconds: 1000,
@@ -56,58 +56,70 @@ export class GenericDatasource {
           return datapoint
         }).value();
       }
-      console.log("target:", target);
       data.hide = target.hide;
       return data;
     });
     return res;
   }
+  arithmeticQueries(options, res, sqlQueries) {
+    let arithmeticQueries = _.filter(options.data, { queryType: "Arithmetic" });
+    if (_.size(arithmeticQueries) == 0) return res;
+    let targetRefIds = _.map(sqlQueries, ({ refId }) => refId);
+    let targetResults = _(res.data).map(target => [target.refId, target]).fromPairs().value();
+    let data = _.map(arithmeticQueries, target => {
+      let functionArgs = targetRefIds.join(', ');
+      let functionBody = "return (" + target.expression + ");";
+      let expressionFunction = new Function(functionArgs, functionBody);
+
+      let datapoints = _(targetResults).values()
+        .flatMap(result => _.map(result.datapoints, datapoint => {
+          return { value: datapoint[0], ts: datapoint[1], refId: result.refId };
+        }))
+        .groupBy('ts')
+        .map((datapoints, ts) => {
+          let dps = _(datapoints).map(dp => [dp.refId, dp.value]).fromPairs().value();
+          let args = _.map(targetRefIds, refId => _.get(dps, refId));
+          let result = null;
+          try {
+            result = expressionFunction.apply(this, args)
+          }
+          catch (err) {
+            console.error("expression function eval error:", err);
+          }
+          let tsint = parseInt(ts);
+          return [result, _.isNaN(tsint) ? ts : tsint]
+        })
+        .value();
+      return { ...target, target: target.alias, refId: target.refId, datapoints };
+    });
+    res.data = _.concat(res.data, data);
+    return res
+  }
 
   doRequest(options) {
     options.headers = this.headers;
-    let sqlQueries = _.filter(options.data, { queryType: "SQL" });
-    let arithmeticQueries = _.filter(options.data, { queryType: "Arithmetic" });
-    let targetRefIds = _.map(sqlQueries, ({refId}) => refId);
+    let sqlQueries = _.filter(options.data, (target) => !_.get(target, "queryType") || _.get(target, 'queryType') === "SQL");
+    let ops = _.map(sqlQueries, target => {
+      return { ...options, data: [target] }
+    });
 
-    return Promise.all(_.map(sqlQueries, target => {
+    return Promise.all(_.map(ops, target => {
       return this.backendSrv
-        .datasourceRequest({ ...options, data: [target] })
+        .datasourceRequest(target)
         .then(res => this.postQuery(options, res));
     }))
       .then(res => {
         return { ...res[0], data: _.flatMap(res, ({ data }) => data) };
-      }).then(res => {
-        console.log(res);
-        let targetResults = _(res.data).map(target => [target.refId, target]).fromPairs().value();
-        let data = _.map(arithmeticQueries, target => {
-          let functionArgs = targetRefIds.join(', ');
-          let functionBody = "return (" + target.expression + ");";
-          let expressionFunction = new Function(functionArgs, functionBody);
+      }).then(res => this.arithmeticQueries(options, res, sqlQueries));
+  }
 
-          let datapoints = _(targetResults).values()
-            .flatMap(result => _.map(result.datapoints, datapoint => {
-            return { value: datapoint[0], ts: datapoint[1], refId: result.refId };
-            }))
-            .groupBy('ts')
-            .map((datapoints, ts) => {
-              let dps = _(datapoints).map(dp => [dp.refId, dp.value]).fromPairs().value();
-              let args = _.map(targetRefIds, refId => _.get(dps, refId));
-              let result = null;
-              try {
-                result = expressionFunction.apply(this, args)
-              }
-              catch(err) {
-                console.log("expression function eval error:", err);
-              }
-              let tsint = parseInt(ts);
-              return [result, _.isNaN(tsint) ? ts : tsint]
-            })
-            .value();
-          return { ...target, target: target.alias, refId: target.refId, datapoints };
-        });
-        res.data = _.concat(res.data, data);
-        return res
-      });
+  fetchMetricNames(query) {
+    let options = {
+      url: this.url + '/grafana/query',
+      data: [{ refId: "A", sql: query, alias: "ref" }],
+      method: 'POST'
+    }
+    return this.doRequest(options)
   }
 
   buildQueryParameters(options) {
@@ -165,7 +177,6 @@ export class GenericDatasource {
   }
   generateAlias(options, target) {
     var alias = target.alias || "";
-    console.log(options);
     alias = this.templateSrv.replace(alias, options.scopedVars, 'csv');
     return alias;
   }
@@ -194,23 +205,22 @@ export class GenericDatasource {
     sql = sql.replace("$to", "'" + queryEnd + "'");
     sql = sql.replace("$end", "'" + queryEnd + "'");
     sql = sql.replace("$interval", intervalMs);
-    console.log(this.templateSrv.getVariables());
 
     let variables = _(this.templateSrv.getVariables()).flatMap(v => {
       let re = new RegExp("\\$(\{" + v.name + "(:\\S+)?\}|" + v.name + ")")
       let matches = sql.match(re)
-      if (_.isNull(matches)) {
-        return []
-      } else {
+      if (!!matches) {
         return [{ matches, ...v }];
+      } else {
+        return [];
       }
     }).value();
+    if (!_.size(variables)) {
+      return this.templateSrv.replace(sql, options.scopedVars, 'csv');
+    }
 
-    const cartesian = (first, ...rest) =>
-      rest.length ? first.flatMap(v => cartesian(...rest).map(c => [v].concat(c)))
-        : first;
     let expanded = _(variables).map(v => {
-      if (_.eq(v.current.value, "$__all")) {
+      if (v.includeAll) {
         return _(v.options)
           .filter(o => o.value != "$__all")
           .map(o => { return { option: o.value, variable: v }; })
@@ -219,7 +229,7 @@ export class GenericDatasource {
         return _(v.current.value)
           .map(option => { return { option, variable: v }; })
           .value();
-      } {
+      } else {
         return []
       }
     }).reduce((exp, vv) => {
@@ -231,7 +241,6 @@ export class GenericDatasource {
     if (_.size(expanded) > 0) {
       return _(expanded)
         .map((vv, i) => {
-          console.log(vv, i);
           let sql2 = _(vv).reduce((sql, { option, variable }) => {
             return _.replace(sql, variable.matches[0], option)
           }, sql);
@@ -242,10 +251,10 @@ export class GenericDatasource {
 
           sql2 = this.templateSrv.replace(sql2, options.scopedVars, 'csv');
           return {
-            refId: target.refId + "_" + i,
+            ...target,
             alias,
             sql: sql2,
-            timeshift: target.timeshift
+            queryType: "SQL",
           }
         })
         .value();
@@ -255,21 +264,7 @@ export class GenericDatasource {
     }
   }
   metricFindQuery(query, options) {
-    console.log("metric find query");
-    // query like 'select  name  from dbtest.t;'
-    const targets = [
-      {
-        alias: "",
-        refId: "A",
-        sql: query,
-      },
-    ];
-    let req = {
-      url: this.url + "/grafana/query",
-      data: targets,
-      method: "POST",
-    };
-    return this.doRequest(req).then((res) => {
+    return this.fetchMetricNames(query).then((res) => {
       let tempList = [];
       (Array.isArray(_.get(res, 'data')) ? res.data : []).forEach((item) => {
         (Array.isArray(item.datapoints) ? item.datapoints : []).forEach(
@@ -284,7 +279,7 @@ export class GenericDatasource {
       });
       return Array.from(new Set(tempList));
     }).catch(err => {
-      console.log("err: ", err)
+      console.error("err: ", err)
     });
   }
 
