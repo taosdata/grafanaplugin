@@ -548,7 +548,7 @@
         {
           "alias": "",
           "refId": "A",
-          "sql": "select avg(disk_used)  disk_used from log.dn where ts >= $from and ts < $to interval(1s) group by ipaddr",
+          "sql": "select avg(disk_used)  disk_used from log.dn where ts >= $from and ts < $to interval(1s) group by fqdn",
           "target": "select metric",
           "type": "timeserie"
         }
