@@ -12,7 +12,7 @@
     "url": "git+https://github.com/taosdata/grafanaplugin.git"
   },
   "author": "https://www.taosdata.com",
-  "license": "AGPL 3.0",
+  "license": "AGPL-3.0",
   "bugs": {
     "url": "https://github.com/taosdata/grafanaplugin/issues"
   },
