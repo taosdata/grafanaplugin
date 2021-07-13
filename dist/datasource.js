@@ -51,13 +51,15 @@ var GenericDatasource = exports.GenericDatasource = function () {
   }, {
     key: "testDatasource",
     value: function testDatasource() {
-      return this.doRequest({
+      return this.backendSrv.datasourceRequest({
+        headers: this.headers,
         url: this.url + '/grafana/heartbeat',
         method: 'GET'
       }).then(function (response) {
-        if (response.status === 200) {
+        if (!!response && response.status === 200) {
           return { status: "success", message: "TDengine Data source is working", title: "Success" };
         }
+        return { status: "error", message: "TDengine Data source is not working", title: "Failed" };
       });
     }
   }, {
