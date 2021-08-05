@@ -31,15 +31,15 @@ export class GenericDatasource {
   testDatasource() {
     return this.backendSrv
       .datasourceRequest({
-      headers: this.headers,
-      url: this.url + '/grafana/heartbeat',
-      method: 'GET',
-    }).then(response => {
-      if (!!response && response.status === 200) {
-        return { status: "success", message: "TDengine Data source is working", title: "Success" };
-      }
-      return { status: "error", message: "TDengine Data source is not working", title: "Failed" };
-    });
+        headers: this.headers,
+        url: this.url + '/grafana/heartbeat',
+        method: 'GET',
+      }).then(response => {
+        if (!!response && response.status === 200) {
+          return { status: "success", message: "TDengine Data source is working", title: "Success" };
+        }
+        return { status: "error", message: "TDengine Data source is not working", title: "Failed" };
+      });
   }
 
   postQuery(options, res) {
@@ -113,7 +113,15 @@ export class GenericDatasource {
     }))
       .then(res => {
         return { ...res[0], data: _.flatMap(res, ({ data }) => data) };
-      }).then(res => this.arithmeticQueries(options, res, sqlQueries));
+      }).then(res => this.arithmeticQueries(options, res, sqlQueries))
+      .then(res => {
+        this.result = res;
+        try {
+          this.$scope.$digest();
+        } catch(err) {
+        }
+        return res;
+      });
   }
 
   fetchMetricNames(query) {
@@ -209,7 +217,8 @@ export class GenericDatasource {
     sql = sql.replace("$end", "'" + queryEnd + "'");
     sql = sql.replace("$interval", intervalMs);
 
-    let variables = _(this.templateSrv.getVariables()).flatMap(v => {
+    let allVaribles = this.templateSrv.getVariables ? this.templateSrv.getVariables() : [];
+    let variables = _(allVaribles).flatMap(v => {
       let re = new RegExp("\\$(\{" + v.name + "(:\\S+)?\}|" + v.name + ")")
       let matches = sql.match(re)
       if (!!matches) {
