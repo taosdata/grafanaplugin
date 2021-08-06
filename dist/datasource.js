@@ -154,6 +154,12 @@ var GenericDatasource = exports.GenericDatasource = function () {
           }) });
       }).then(function (res) {
         return _this2.arithmeticQueries(options, res, sqlQueries);
+      }).then(function (res) {
+        _this2.result = res;
+        try {
+          _this2.$scope.$digest();
+        } catch (err) {}
+        return res;
       });
     }
   }, {
@@ -261,7 +267,8 @@ var GenericDatasource = exports.GenericDatasource = function () {
       sql = sql.replace("$end", "'" + queryEnd + "'");
       sql = sql.replace("$interval", intervalMs);
 
-      var variables = (0, _lodash2.default)(this.templateSrv.getVariables()).flatMap(function (v) {
+      var allVaribles = this.templateSrv.getVariables ? this.templateSrv.getVariables() : [];
+      var variables = (0, _lodash2.default)(allVaribles).flatMap(function (v) {
         var re = new RegExp("\\$(\{" + v.name + "(:\\S+)?\}|" + v.name + ")");
         var matches = sql.match(re);
         if (!!matches) {
