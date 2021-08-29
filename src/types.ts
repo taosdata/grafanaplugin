@@ -1,18 +1,24 @@
 import { DataQuery, DataSourceJsonData } from '@grafana/data';
 
 export interface MyQuery extends DataQuery {
-  queryText?: string;
+  queryType?: string;
+  alias: string;
+  sql: string;
+  expression: string;
+  timeshiftUnit: string;
+  timeshiftPeriod?: number;
 }
 
 export const defaultQuery: Partial<MyQuery> = {
-  queryText: 'show databases;',
 };
 
 /**
  * These are options configured for each DataSource instance
  */
 export interface MyDataSourceOptions extends DataSourceJsonData {
-  path?: string;
+  url?: string;
+  user?: string;
+  password?: string;
 }
 
 /**

@@ -9,7 +9,7 @@
       "name": "Taosdata Inc.",
       "url": "https://www.taosdata.com"
     },
-    "keywords": ["example"],
+    "keywords": ["tdengine"],
     "logos": {
       "small": "img/taosdata_logo.png",
       "large": "img/taosdata_logo.png"
@@ -19,9 +19,10 @@
       {"name": "AGPL 3.0", "url": "https://github.com/taosdata/grafanaplugin/LICENSE"}
     ],
     "screenshots": [],
-    "version": "2.0.0",
+    "version": "3.0.0",
     "updated": "2021-08-20"
   },
+  "alerting": true,
   "dependencies": {
     "grafanaVersion": "7.0.x",
     "plugins": []
