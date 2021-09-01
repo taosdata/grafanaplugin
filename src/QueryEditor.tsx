@@ -83,7 +83,7 @@ export const QueryEditor: React.FC<Props> = (props) => {
           <Input
             value={expression || ''}
             onChange={onExpressionChange}
-            placeholder="A+B"
+            placeholder="A+B__1"
           />
         </div>
       </div>

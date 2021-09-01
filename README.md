@@ -2,9 +2,9 @@
 
 A [Grafana] plugin for [TDengine] datasource build by [Taosdata Inc.](https://www.taosdata.com)
 
-TDengine backend server implement 1 urls:
+TDengine backend server implement 1 url:
 
-* `/rest/sql` return data based on input sqls. Please see [RESTful Connector.](https://www.taosdata.com/cn/documentation/connector#restful)
+* `/rest/sql` return data based on input sqls. Please see [Grafana Connector](https://www.taosdata.com/en/documentation/connections#grafana) and [RESTful Connector](https://www.taosdata.com/cn/documentation/connector#restful).
 
 ## Installation
 

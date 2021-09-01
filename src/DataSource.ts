@@ -33,7 +33,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     console.log("options",options);
     this.options = options;
     const timezone = options.timezone=="browser"?Intl.DateTimeFormat().resolvedOptions().timeZone:options.timezone;
-    const targets = options.targets.filter((target) => (!target.queryType||target.queryType === "SQL")&&target.sql);
+    const targets = options.targets.filter((target) => (!target.queryType||target.queryType === "SQL")&&target.sql&&!(target.hide===true));
     const promises = targets.map(async target => {
       const query = defaults(target, defaultQuery);
       const response = await this.request('/rest/sql', this.generateSql(options,query.sql||""));
@@ -100,12 +100,12 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
       });
     });
 
-    return Promise.all(promises).then(data => ({data:this.arithmeticQueries(options,data)}));
+    return Promise.all(promises).then(data => ({data:this.arithmeticQueries(options,data)}),(err)=>{console.log(err);throw new Error(JSON.stringify(err))});
   }
   arithmeticQueries(options:DataQueryRequest<MyQuery>, data: MutableDataFrame<DataFrame>[]) {
-    const arithmeticQueries = options.targets.filter((target) => target.queryType === "Arithmetic"&&target.expression);
+    const arithmeticQueries = options.targets.filter((target) => target.queryType === "Arithmetic"&&target.expression&&!(target.hide===true));
     if (arithmeticQueries.length == 0) return data;
-    let targetRefIds = data.flatMap((item)=>item.fields.map(field=>(field.name==='ts'?item.refId:item.refId+'__'+field.name)));
+    let targetRefIds = data.flatMap((item)=>item.fields.map((field,index)=>(field.name==='ts'?item.refId:item.refId+'__'+index)));
     
     let targetResults:{[ts: string]:any[]} = {};
     data.forEach((item)=>{
@@ -131,7 +131,11 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
         const tsList:any[] = [];
         const resultList:any[] = [];
         Object.entries(targetResults).map(args=>{
-          result = expressionFunction.apply(this, args[1]);
+          try {
+            result = expressionFunction.apply(this, args[1]);
+          } catch (error) {
+            throw error
+          }
           tsList.push(args[0]);
           resultList.push(result);
         });
@@ -144,14 +148,15 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
       });
       return data.concat(dataArithmetic);
     }catch (err) {
-      console.error("expression function eval error:", err);
-      return data;
+      console.log(err);
+      throw new Error(err);
     }
   }
   getRowAlias(alias: string, aliasRow: string) {
     if (!alias) {
       return aliasRow;
     }
+    alias=this.generateSql(this.options,alias);
     const regex = /\$(\w+)|\[\[([\s\S]+?)\]\]/g;
     return alias.replace(regex,(match: any, g1: any, g2: any) => {
       const group = g1 || g2;
@@ -248,6 +253,9 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     }
   }
   async metricFindQuery(query: string, options?: any): Promise<MetricFindValue[]> {
+    if (query.length==0) {
+      return [];
+    }
     return this.request('/rest/sql', this.generateSql(options,query)).then(res=>{
       if (!res.data||!res.data.data) {
         return [];
