@@ -16,7 +16,7 @@
     <div class="gf-form-inline"  ng-hide="ctrl.target.resultFormat === 'table'">
       <div class="gf-form max-width-30">
         <label class="gf-form-label query-keyword width-8">ALIAS BY</label>
-        <input type="text" class="gf-form-input" ng-model="ctrl.target.alias" spellcheck='false' placeholder="Naming pattern" ng-blur="ctrl.panelCtrl.refresh()">
+        <input type="text" class="gf-form-input" ng-model="ctrl.target.alias" spellcheck='false' placeholder="Naming pattern: a,[[col]]" ng-blur="ctrl.panelCtrl.refresh()">
       </div>
     </div>
     <div class="gf-form gf-form--grow">
@@ -33,24 +33,6 @@
       </div>
     </div>
 
-    <div ng-switch-when="SQL" ng-switch-when-separator="|" class="gf-form gf-form--grow">  
-      <div class="gf-form-inline">
-        <div class="gf-form width-8">
-          <label class="gf-form-label gf-form--grow query-keyword" ng-click="ctrl.generateSQL()">
-            GENERATE SQL
-            <i class="fa fa-caret-down" ng-show="ctrl.showGenerateSQL"></i>
-            <i class="fa fa-caret-right" ng-hide="ctrl.showGenerateSQL"></i>
-          </label>
-        </div>
-        <div class="gf-form width-8">
-          <label class="gf-form-label gf-form--grow query-keyword" ng-click="ctrl.showHelp = !ctrl.showHelp">
-            SHOW HELP
-            <i class="fa fa-caret-down" ng-show="ctrl.showHelp"></i>
-            <i class="fa fa-caret-right" ng-hide="ctrl.showHelp"></i>
-          </label>
-        </div>        
-      </div>
-    </div>
     <div ng-switch-when="SQL" ng-switch-when-separator="|" class="gf-form max-width-20">  
       <div class="gf-form-inline">  
         <div class="gf-form gf-form--grow">
@@ -77,6 +59,31 @@
         </div>   
       </div>
     </div> 
+    <div ng-switch-when="SQL" ng-switch-when-separator="|" class="gf-form gf-form--grow">  
+      <div class="gf-form-inline">
+        <div class="gf-form width-8">
+          <label class="gf-form-label gf-form--grow query-keyword" ng-click="ctrl.generateSQL()">
+            GENERATE SQL
+            <i class="fa fa-caret-down" ng-show="ctrl.showGenerateSQL"></i>
+            <i class="fa fa-caret-right" ng-hide="ctrl.showGenerateSQL"></i>
+          </label>
+        </div>
+        <div class="gf-form width-8">
+          <label class="gf-form-label gf-form--grow query-keyword" ng-click="ctrl.showHelp = !ctrl.showHelp">
+            SHOW HELP
+            <i class="fa fa-caret-down" ng-show="ctrl.showHelp"></i>
+            <i class="fa fa-caret-right" ng-hide="ctrl.showHelp"></i>
+          </label>
+        </div>    
+        <label class="gf-form-label query-keyword width-8">
+          Format as
+        </label>
+        <div class="gf-form-select-wrapper min-width-12 max-width-22">
+          <select ng-model="ctrl.target.formatType" class="gf-form-input" ng-options="type for type in ctrl.formatTypes" ng-change="ctrl.targetBlur()">
+          </select>
+        </div>    
+      </div>
+    </div>
     <div ng-switch-when="SQL" ng-switch-when-separator="|" class="gf-form max-width-20">  
       <div class="gf-form" ng-show="ctrl.showGenerateSQL">
         <pre class="gf-form-pre">{{ctrl.lastGenerateSQL}}</pre>
@@ -107,7 +114,7 @@ Example of SQL:
       <label class="gf-form-label query-keyword width-10">
         Expression
       </label>
-      <input type="text" class="gf-form-input width-20" ng-model="ctrl.target.expression" spellcheck='false' placeholder="query" ng-blur="ctrl.targetBlur()"  />
+      <input type="text" class="gf-form-input width-20" ng-model="ctrl.target.expression" spellcheck='false' placeholder="Arithmetic pattern: A+1 or [A+A__0,A]" ng-blur="ctrl.targetBlur()"  />
       <label class="gf-form-label" bs-tooltip="ctrl.target.errors.expression" style="color: rgb(229, 189, 28)" ng-show="ctrl.target.errors.expression">
         <i class="fa fa-warning"></i>
       </label>

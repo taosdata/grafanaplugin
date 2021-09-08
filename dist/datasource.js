@@ -5,24 +5,23 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.GenericDatasource = undefined;
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _lodash = require("lodash");
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-require("moment");
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var moment = require('./js/moment-timezone-with-data');
 
 var GenericDatasource = exports.GenericDatasource = function () {
   function GenericDatasource(instanceSettings, $q, backendSrv, templateSrv) {
     _classCallCheck(this, GenericDatasource);
 
+    console.log("instanceSettings", instanceSettings);
     this.type = instanceSettings.type;
     this.url = instanceSettings.url;
     this.name = instanceSettings.name;
@@ -31,31 +30,41 @@ var GenericDatasource = exports.GenericDatasource = function () {
     this.templateSrv = templateSrv;
     this.headers = { 'Content-Type': 'application/json' };
     this.headers.Authorization = this.getAuthorization(instanceSettings.jsonData);
+    this.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    this.options = null;
   }
 
   _createClass(GenericDatasource, [{
     key: "query",
     value: function query(options) {
-      var targets = this.buildQueryParameters(options);
+      var _this = this;
 
+      console.log('options', options);
+      this.options = options;
+      if (this.options.timezone) {
+        this.timezone = this.options.timezone == "browser" ? Intl.DateTimeFormat().resolvedOptions().timeZone : this.options.timezone;
+      }
+      var targets = this.options.targets.filter(function (target) {
+        return (!target.queryType || target.queryType === "SQL") && target.sql && !(target.hide === true);
+      });
       if (targets.length <= 0) {
         return this.q.when({ data: [] });
       }
 
-      return this.doRequest({
-        url: this.url + '/grafana/query',
-        data: targets,
-        method: 'POST'
+      return Promise.all(targets.map(function (target) {
+        return _this.request('/rest/sql', _this.generateSql(target.sql)).then(function (res) {
+          return _this.postQuery(target, res);
+        });
+      })).then(function (data) {
+        return console.log('{data:this.arithmeticQueries(data).flat()}', { data: _this.arithmeticQueries(data).flat() }), { data: _this.arithmeticQueries(data).flat() };
+      }, function (err) {
+        console.log(err);throw new Error(JSON.stringify(err));
       });
     }
   }, {
     key: "testDatasource",
     value: function testDatasource() {
-      return this.backendSrv.datasourceRequest({
-        headers: this.headers,
-        url: this.url + '/grafana/heartbeat',
-        method: 'GET'
-      }).then(function (response) {
+      return this.request('/rest/sql', 'show databases').then(function (response) {
         if (!!response && response.status === 200) {
           return { status: "success", message: "TDengine Data source is working", title: "Success" };
         }
@@ -63,132 +72,188 @@ var GenericDatasource = exports.GenericDatasource = function () {
       });
     }
   }, {
-    key: "postQuery",
-    value: function postQuery(options, res) {
-      res.data = _lodash2.default.map(res.data, function (data) {
-        var target = _lodash2.default.find(options.data, { refId: data.refId });
-        if (_lodash2.default.isObject(target.timeshift) && !!target.timeshift.period) {
-          data.datapoints = (0, _lodash2.default)(data.datapoints).map(function (datapoint) {
-            var unit2millis = {
-              seconds: 1000,
-              minutes: 60 * 1000,
-              hours: 60 * 60 * 1000,
-              days: 24 * 60 * 60 * 1000,
-              weeks: 7 * 24 * 60 * 60 * 1000,
-              months: 30 * 24 * 60 * 60 * 1000
-            };
-            datapoint[1] += target.timeshift.period * unit2millis[target.timeshift.unit];
-            return datapoint;
-          }).value();
-        }
-        data.hide = target.hide;
-        return data;
+    key: "request",
+    value: function request(url, params) {
+      if (!params) {
+        return new Promise(function (resolve, reject) {
+          resolve();
+        });
+      }
+      return this.backendSrv.datasourceRequest({
+        url: "" + this.url + url,
+        data: params,
+        method: 'POST',
+        headers: this.headers
       });
-      return res;
+    }
+  }, {
+    key: "getRowAlias",
+    value: function getRowAlias(alias, aliasRow) {
+      if (!alias) {
+        return aliasRow;
+      }
+      alias = this.generateSql(alias);
+      var regex = /\$(\w+)|\[\[([\s\S]+?)\]\]/g;
+      return alias.replace(regex, function (match, g1, g2) {
+        var group = g1 || g2;
+
+        if (group === 'col') {
+          return aliasRow;
+        }
+        return match;
+      });
+    }
+  }, {
+    key: "generateSql",
+    value: function generateSql(sql) {
+      console.log('sql', sql);
+      if (!sql || sql.length == 0) {
+        return sql;
+      }
+
+      var queryStart = "now-1h";
+      if (!!this.options.range && !!this.options.range.from) {
+        queryStart = this.options.range.from.toISOString();
+      }
+
+      var queryEnd = "now";
+      if (!!this.options.range && !!this.options.range.to) {
+        queryEnd = this.options.range.to.toISOString();
+      }
+
+      var intervalMs = "20000";
+      if (!!this.options.intervalMs) {
+        intervalMs = this.options.intervalMs.toString();
+      }
+
+      intervalMs += "a";
+      sql = sql.replace(/^\s+|\s+$/gm, '');
+      sql = sql.replace("$from", "'" + queryStart + "'");
+      sql = sql.replace("$begin", "'" + queryStart + "'");
+      sql = sql.replace("$to", "'" + queryEnd + "'");
+      sql = sql.replace("$end", "'" + queryEnd + "'");
+      sql = sql.replace("$interval", intervalMs);
+
+      var allVaribles = this.templateSrv.getVariables ? this.templateSrv.getVariables() : [];
+      for (var i = 0; i < allVaribles.length; i++) {
+        if (allVaribles[i].current && allVaribles[i].current.value) {
+          sql = sql.replace("$" + allVaribles[i].name, allVaribles[i].current.value);
+        }
+      }
+
+      return sql;
+    }
+  }, {
+    key: "postQuery",
+    value: function postQuery(query, response) {
+      console.log('query', query);
+      console.log('response', response);
+      if (!response || !response.data || !response.data.data) {
+        return [];
+      }
+      var headers = response.data.column_meta;
+      var data = response.data.data;
+      var rows = response.data.rows;
+      var cols = headers.length;
+      var result = [];
+      var aliasList = query.alias.split(',') || [];
+      if (!!headers && !!headers[0] && !!headers[0][1]) {
+        var timeSeriesIndex = headers.findIndex(function (item) {
+          return item[1] === 9;
+        });
+        if (timeSeriesIndex == -1 || query.formatType == 'Table') {
+          result.push({ columns: headers.map(function (item) {
+              return { text: item[0] };
+            }), rows: data, type: 'table', refId: query.refId, target: this.getRowAlias(aliasList[0], headers[0][0]), hide: !!query.hide });
+        } else {
+          for (var i = 0; i < cols; i++) {
+            if (i == timeSeriesIndex) {
+              continue;
+            }
+            var aliasRow = headers[i][0];
+            if (i <= aliasList.length) {
+              aliasRow = this.getRowAlias(aliasList[i - 1], aliasRow);
+            }
+            var resultItem = { datapoints: [], refId: query.refId, target: aliasRow, hide: !!query.hide };
+            for (var k = 0; k < rows; k++) {
+              var timeShiftDuration = moment.duration();
+              if (query.timeshift && query.timeshift.period && query.timeshift.unit) {
+                timeShiftDuration = moment.duration(query.timeshift.period, query.timeshift.unit);
+              }
+              resultItem.datapoints.push([data[k][i], moment.utc(data[k][timeSeriesIndex]).tz(this.timezone).add(timeShiftDuration).valueOf()]);
+            }
+            result.push(resultItem);
+          }
+        }
+      }
+      console.log('result', result);
+      return result;
     }
   }, {
     key: "arithmeticQueries",
-    value: function arithmeticQueries(options, res, sqlQueries) {
-      var _this = this;
-
-      var arithmeticQueries = _lodash2.default.filter(options.data, { queryType: "Arithmetic" });
-      if (_lodash2.default.size(arithmeticQueries) == 0) return res;
-      var targetRefIds = _lodash2.default.map(sqlQueries, function (_ref) {
-        var refId = _ref.refId;
-        return refId;
-      });
-      var targetResults = (0, _lodash2.default)(res.data).map(function (target) {
-        return [target.refId, target];
-      }).fromPairs().value();
-      var data = _lodash2.default.map(arithmeticQueries, function (target) {
-        var functionArgs = targetRefIds.join(', ');
-        var functionBody = "return (" + target.expression + ");";
-        var expressionFunction = new Function(functionArgs, functionBody);
-
-        var datapoints = (0, _lodash2.default)(targetResults).values().flatMap(function (result) {
-          return _lodash2.default.map(result.datapoints, function (datapoint) {
-            return { value: datapoint[0], ts: datapoint[1], refId: result.refId };
-          });
-        }).groupBy('ts').map(function (datapoints, ts) {
-          var dps = (0, _lodash2.default)(datapoints).map(function (dp) {
-            return [dp.refId, dp.value];
-          }).fromPairs().value();
-          var args = _lodash2.default.map(targetRefIds, function (refId) {
-            return _lodash2.default.get(dps, refId);
-          });
-          var result = null;
-          try {
-            result = expressionFunction.apply(_this, args);
-          } catch (err) {
-            console.error("expression function eval error:", err);
-          }
-          var tsint = parseInt(ts);
-          return [result, _lodash2.default.isNaN(tsint) ? ts : tsint];
-        }).value();
-        return _extends({}, target, { target: target.alias, refId: target.refId, datapoints: datapoints });
-      });
-      res.data = _lodash2.default.concat(res.data, data);
-      return res;
-    }
-  }, {
-    key: "doRequest",
-    value: function doRequest(options) {
+    value: function arithmeticQueries(data) {
       var _this2 = this;
 
-      options.headers = this.headers;
-      var sqlQueries = _lodash2.default.filter(options.data, function (target) {
-        return !_lodash2.default.get(target, "queryType") || _lodash2.default.get(target, 'queryType') === "SQL";
+      var arithmeticQueries = this.options.targets.filter(function (target) {
+        return target.queryType === "Arithmetic" && target.expression && !(target.hide === true);
       });
-      var ops = _lodash2.default.map(sqlQueries, function (target) {
-        return _extends({}, options, { data: [target] });
-      });
-
-      return Promise.all(_lodash2.default.map(ops, function (target) {
-        return _this2.backendSrv.datasourceRequest(target).then(function (res) {
-          return _this2.postQuery(options, res);
+      if (arithmeticQueries.length == 0) return data;
+      var targetRefIds = data.flatMap(function (item) {
+        return item.flatMap(function (field, index) {
+          return index == 0 ? [field.refId, field.refId + '__' + index] : [field.refId + '__' + index];
         });
-      })).then(function (res) {
-        return _extends({}, res[0], { data: _lodash2.default.flatMap(res, function (_ref2) {
-            var data = _ref2.data;
-            return data;
-          }) });
-      }).then(function (res) {
-        return _this2.arithmeticQueries(options, res, sqlQueries);
-      }).then(function (res) {
-        _this2.result = res;
-        try {
-          _this2.$scope.$digest();
-        } catch (err) {}
-        return res;
       });
-    }
-  }, {
-    key: "fetchMetricNames",
-    value: function fetchMetricNames(query) {
-      var options = {
-        url: this.url + '/grafana/query',
-        data: [{ refId: "A", sql: query, alias: "ref" }],
-        method: 'POST'
-      };
-      return this.doRequest(options);
-    }
-  }, {
-    key: "buildQueryParameters",
-    value: function buildQueryParameters(options) {
-      var _this3 = this;
+      console.log('targetRefIds', targetRefIds);
+      var targetResults = {};
+      data.forEach(function (item) {
+        item.forEach(function (field, index) {
+          field.datapoints.forEach(function (datapoint) {
+            targetResults[datapoint[1]] = targetResults[datapoint[1]] || [];
+            if (index == 0) {
+              targetResults[datapoint[1]].push(datapoint[0]);
+            }
+            targetResults[datapoint[1]].push(datapoint[0]);
+          });
+        });
+      });
 
-      var targets = _lodash2.default.flatMap(options.targets, function (target) {
-        var sql = _this3.generateSql(options, target);
-        if (_lodash2.default.isArray(sql)) {
-          return sql;
-        } else {
-          return [_extends({}, target, {
-            alias: _this3.generateAlias(options, target),
-            sql: sql
-          })];
-        }
-      });
-      return targets;
+      try {
+        var dataArithmetic = arithmeticQueries.map(function (target) {
+          var functionArgs = targetRefIds.join(', ');
+          var functionBody = "return (" + target.expression + ");";
+          var expressionFunction = new Function(functionArgs, functionBody);
+          var result = null;
+          var aliasList = (target.alias || '').split(',').map(function (alias) {
+            return _this2.getRowAlias(alias, target.refId);
+          });
+
+          var aliasListResult = [];
+          Object.entries(targetResults).forEach(function (args) {
+            if (args[1].length === targetRefIds.length) {
+              try {
+                result = expressionFunction.apply(_this2, args[1]);
+              } catch (error) {
+                throw error;
+              }
+            }
+            // else{
+            //   console.log('args not full',targetRefIds,args);
+            // }
+            if (!Array.isArray(result)) {
+              result = [result];
+            }
+            result.forEach(function (item, index) {
+              aliasListResult[index] = aliasListResult[index] || { datapoints: [], refId: target.refId, target: aliasList[index] || target.refId + '__' + index, hide: !!target.hide };
+              aliasListResult[index].datapoints.push([item, args[0]]);
+            });
+          });
+          return aliasListResult;
+        });
+        return data.concat(dataArithmetic);
+      } catch (err) {
+        console.log(err);
+        throw new Error(err);
+      }
     }
   }, {
     key: "encode",
@@ -239,115 +304,21 @@ var GenericDatasource = exports.GenericDatasource = function () {
       return alias;
     }
   }, {
-    key: "generateSql",
-    value: function generateSql(options, target) {
-      var _this4 = this;
-
-      var sql = target.sql;
-      if (sql == null || sql == "") {
-        return sql;
-      }
-
-      var queryStart = "now-1h";
-      if (options != null && options.range != null && options.range.from != null) {
-        queryStart = options.range.from.toISOString();
-      }
-
-      var queryEnd = "now";
-      if (options != null && options.range != null && options.range.to != null) {
-        queryEnd = options.range.to.toISOString();
-      }
-      var intervalMs = options.intervalMs || "20000";
-
-      intervalMs += "a";
-      sql = sql.replace(/^\s+|\s+$/gm, '');
-      sql = sql.replace("$from", "'" + queryStart + "'");
-      sql = sql.replace("$begin", "'" + queryStart + "'");
-      sql = sql.replace("$to", "'" + queryEnd + "'");
-      sql = sql.replace("$end", "'" + queryEnd + "'");
-      sql = sql.replace("$interval", intervalMs);
-
-      var allVaribles = this.templateSrv.getVariables ? this.templateSrv.getVariables() : [];
-      var variables = (0, _lodash2.default)(allVaribles).flatMap(function (v) {
-        var re = new RegExp("\\$(\{" + v.name + "(:\\S+)?\}|" + v.name + ")");
-        var matches = sql.match(re);
-        if (!!matches) {
-          return [_extends({ matches: matches }, v)];
-        } else {
-          return [];
-        }
-      }).value();
-      if (!_lodash2.default.size(variables)) {
-        return this.templateSrv.replace(sql, options.scopedVars, 'csv');
-      }
-
-      var expanded = (0, _lodash2.default)(variables).map(function (v) {
-        if (v.includeAll) {
-          return (0, _lodash2.default)(v.options).filter(function (o) {
-            return o.value != "$__all";
-          }).map(function (o) {
-            return { option: o.value, variable: v };
-          }).value();
-        } else if (_lodash2.default.isArray(v.current.value)) {
-          return (0, _lodash2.default)(v.current.value).map(function (option) {
-            return { option: option, variable: v };
-          }).value();
-        } else {
-          return [];
-        }
-      }).reduce(function (exp, vv) {
-        return _lodash2.default.flatMap(vv, function (vvv) {
-          return exp.length ? _lodash2.default.map(exp, function (e) {
-            return _lodash2.default.concat([e], vvv);
-          }) : [[vvv]];
-        });
-      }, []);
-
-      if (_lodash2.default.size(expanded) > 0) {
-        return (0, _lodash2.default)(expanded).map(function (vv, i) {
-          var sql2 = (0, _lodash2.default)(vv).reduce(function (sql, _ref3) {
-            var option = _ref3.option,
-                variable = _ref3.variable;
-
-            return _lodash2.default.replace(sql, variable.matches[0], option);
-          }, sql);
-
-          var alias = (0, _lodash2.default)(vv).reduce(function (sql, _ref4) {
-            var option = _ref4.option,
-                variable = _ref4.variable;
-
-            return _lodash2.default.replace(sql, variable.matches[0], option);
-          }, target.alias || "");
-
-          sql2 = _this4.templateSrv.replace(sql2, options.scopedVars, 'csv');
-          return _extends({}, target, {
-            alias: alias,
-            sql: sql2,
-            queryType: "SQL"
-          });
-        }).value();
-      } else {
-        sql = this.templateSrv.replace(sql, options.scopedVars, 'csv');
-        return sql;
-      }
-    }
-  }, {
     key: "metricFindQuery",
     value: function metricFindQuery(query, options) {
-      return this.fetchMetricNames(query).then(function (res) {
-        var tempList = [];
-        (Array.isArray(_lodash2.default.get(res, 'data')) ? res.data : []).forEach(function (item) {
-          (Array.isArray(item.datapoints) ? item.datapoints : []).forEach(function (end) {
-            tempList.push({
-              expendable: false,
-              text: end[0],
-              value: end[0]
-            });
-          });
-        });
-        return Array.from(new Set(tempList));
-      }).catch(function (err) {
-        console.error("err: ", err);
+      this.options = options;
+      console.log('options', options);
+      return this.request('/rest/sql', this.generateSql(query)).then(function (res) {
+        if (!res || !res.data || !res.data.data) {
+          return [];
+        } else {
+          console.log('res', res);
+          var values = [];
+          for (var i = 0; i < res.data.data.length; i++) {
+            values.push({ text: '' + res.data.data[i] });
+          }
+          return values;
+        }
       });
     }
   }]);

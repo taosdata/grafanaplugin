@@ -29,8 +29,10 @@ var GenericDatasourceQueryCtrl = exports.GenericDatasourceQueryCtrl = function (
     _this.target.target = _this.target.target || 'select metric';
     _this.target.type = _this.target.type || 'timeserie';
     _this.target.queryType = _this.target.queryType || 'SQL';
+    _this.target.formatType = _this.target.formatType || 'Time series';
 
     _this.queryTypes = ["SQL", "Arithmetic"];
+    _this.formatTypes = ["Time series", "Table"];
     return _this;
   }
 
@@ -46,8 +48,8 @@ var GenericDatasourceQueryCtrl = exports.GenericDatasourceQueryCtrl = function (
     }
   }, {
     key: 'generateSQL',
-    value: function generateSQL(query) {
-      this.lastGenerateSQL = this.datasource.generateSql(this.panelCtrl, this.target);
+    value: function generateSQL() {
+      this.lastGenerateSQL = this.datasource.generateSql(this.target.sql);
       this.showGenerateSQL = !this.showGenerateSQL;
     }
   }, {
