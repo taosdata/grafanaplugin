@@ -4,7 +4,7 @@ A [Grafana] plugin for [TDengine] datasource build by [Taosdata Inc.](https://ww
 
 TDengine backend server implement 1 url:
 
-* `/rest/sql` return data based on input sqls. Please see [Grafana Connector](https://www.taosdata.com/en/documentation/connections#grafana) and [RESTful Connector](https://www.taosdata.com/cn/documentation/connector#restful).
+* `/rest/sqlutc` return data based on input sqls. Please see [Grafana Connector](https://www.taosdata.com/en/documentation/connections#grafana) and [RESTful Connector](https://www.taosdata.com/cn/documentation/connector#restful).
 
 ## Installation
 

@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -7,7 +7,7 @@ exports.GenericDatasource = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _lodash = require("lodash");
+var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -21,7 +21,7 @@ var GenericDatasource = exports.GenericDatasource = function () {
   function GenericDatasource(instanceSettings, $q, backendSrv, templateSrv) {
     _classCallCheck(this, GenericDatasource);
 
-    console.log("instanceSettings", instanceSettings);
+    // console.log("instanceSettings",instanceSettings);
     this.type = instanceSettings.type;
     this.url = instanceSettings.url;
     this.name = instanceSettings.name;
@@ -35,11 +35,11 @@ var GenericDatasource = exports.GenericDatasource = function () {
   }
 
   _createClass(GenericDatasource, [{
-    key: "query",
+    key: 'query',
     value: function query(options) {
       var _this = this;
 
-      console.log('options', options);
+      // console.log('options',options);
       this.options = options;
       if (this.options.timezone) {
         this.timezone = this.options.timezone == "browser" ? Intl.DateTimeFormat().resolvedOptions().timeZone : this.options.timezone;
@@ -52,19 +52,24 @@ var GenericDatasource = exports.GenericDatasource = function () {
       }
 
       return Promise.all(targets.map(function (target) {
-        return _this.request('/rest/sql', _this.generateSql(target.sql)).then(function (res) {
+        return _this.request('/rest/sqlutc', _this.generateSql(target.sql)).then(function (res) {
           return _this.postQuery(target, res);
         });
       })).then(function (data) {
-        return console.log('{data:this.arithmeticQueries(data).flat()}', { data: _this.arithmeticQueries(data).flat() }), { data: _this.arithmeticQueries(data).flat() };
+        return { data: _this.arithmeticQueries(data).flat() };
       }, function (err) {
-        console.log(err);throw new Error(JSON.stringify(err));
+        console.log(err);
+        if (err.data && err.data.desc) {
+          throw new Error(err.data.desc);
+        } else {
+          throw new Error(err);
+        }
       });
     }
   }, {
-    key: "testDatasource",
+    key: 'testDatasource',
     value: function testDatasource() {
-      return this.request('/rest/sql', 'show databases').then(function (response) {
+      return this.request('/rest/sqlutc', 'show databases').then(function (response) {
         if (!!response && response.status === 200) {
           return { status: "success", message: "TDengine Data source is working", title: "Success" };
         }
@@ -72,7 +77,7 @@ var GenericDatasource = exports.GenericDatasource = function () {
       });
     }
   }, {
-    key: "request",
+    key: 'request',
     value: function request(url, params) {
       if (!params) {
         return new Promise(function (resolve, reject) {
@@ -80,14 +85,14 @@ var GenericDatasource = exports.GenericDatasource = function () {
         });
       }
       return this.backendSrv.datasourceRequest({
-        url: "" + this.url + url,
+        url: '' + this.url + url,
         data: params,
         method: 'POST',
         headers: this.headers
       });
     }
   }, {
-    key: "getRowAlias",
+    key: 'getRowAlias',
     value: function getRowAlias(alias, aliasRow) {
       if (!alias) {
         return aliasRow;
@@ -104,9 +109,9 @@ var GenericDatasource = exports.GenericDatasource = function () {
       });
     }
   }, {
-    key: "generateSql",
+    key: 'generateSql',
     value: function generateSql(sql) {
-      console.log('sql', sql);
+      // console.log('sql',sql);
       if (!sql || sql.length == 0) {
         return sql;
       }
@@ -144,10 +149,10 @@ var GenericDatasource = exports.GenericDatasource = function () {
       return sql;
     }
   }, {
-    key: "postQuery",
+    key: 'postQuery',
     value: function postQuery(query, response) {
-      console.log('query', query);
-      console.log('response', response);
+      // console.log('query',query);
+      // console.log('response',response);
       if (!response || !response.data || !response.data.data) {
         return [];
       }
@@ -156,7 +161,7 @@ var GenericDatasource = exports.GenericDatasource = function () {
       var rows = response.data.rows;
       var cols = headers.length;
       var result = [];
-      var aliasList = query.alias.split(',') || [];
+      var aliasList = (query.alias || '').split(',') || [];
       if (!!headers && !!headers[0] && !!headers[0][1]) {
         var timeSeriesIndex = headers.findIndex(function (item) {
           return item[1] === 9;
@@ -186,11 +191,11 @@ var GenericDatasource = exports.GenericDatasource = function () {
           }
         }
       }
-      console.log('result', result);
+      // console.log('result',result);
       return result;
     }
   }, {
-    key: "arithmeticQueries",
+    key: 'arithmeticQueries',
     value: function arithmeticQueries(data) {
       var _this2 = this;
 
@@ -203,7 +208,7 @@ var GenericDatasource = exports.GenericDatasource = function () {
           return index == 0 ? [field.refId, field.refId + '__' + index] : [field.refId + '__' + index];
         });
       });
-      console.log('targetRefIds', targetRefIds);
+      // console.log('targetRefIds',targetRefIds);
       var targetResults = {};
       data.forEach(function (item) {
         item.forEach(function (field, index) {
@@ -251,12 +256,12 @@ var GenericDatasource = exports.GenericDatasource = function () {
         });
         return data.concat(dataArithmetic);
       } catch (err) {
-        console.log(err);
+        // console.log(err);
         throw new Error(err);
       }
     }
   }, {
-    key: "encode",
+    key: 'encode',
     value: function encode(input) {
       var _keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
       var output = "";
@@ -281,7 +286,7 @@ var GenericDatasource = exports.GenericDatasource = function () {
       return output;
     }
   }, {
-    key: "getAuthorization",
+    key: 'getAuthorization',
     value: function getAuthorization(jsonData) {
       jsonData = jsonData || {};
       var defaultUser = jsonData.user || "root";
@@ -290,25 +295,25 @@ var GenericDatasource = exports.GenericDatasource = function () {
       return "Basic " + this.encode(defaultUser + ":" + defaultPassword);
     }
   }, {
-    key: "generateTimeshift",
+    key: 'generateTimeshift',
     value: function generateTimeshift(options, target) {
       var alias = target.alias || "";
       alias = this.templateSrv.replace(alias, options.scopedVars, 'csv');
       return alias;
     }
   }, {
-    key: "generateAlias",
+    key: 'generateAlias',
     value: function generateAlias(options, target) {
       var alias = target.alias || "";
       alias = this.templateSrv.replace(alias, options.scopedVars, 'csv');
       return alias;
     }
   }, {
-    key: "metricFindQuery",
+    key: 'metricFindQuery',
     value: function metricFindQuery(query, options) {
       this.options = options;
-      console.log('options', options);
-      return this.request('/rest/sql', this.generateSql(query)).then(function (res) {
+      // console.log('options',options);
+      return this.request('/rest/sqlutc', this.generateSql(query)).then(function (res) {
         if (!res || !res.data || !res.data.data) {
           return [];
         } else {

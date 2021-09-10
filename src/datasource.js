@@ -3,7 +3,7 @@ var moment = require('./js/moment-timezone-with-data');
 export class GenericDatasource {
 
   constructor(instanceSettings, $q, backendSrv, templateSrv) {
-    console.log("instanceSettings",instanceSettings);
+    // console.log("instanceSettings",instanceSettings);
     this.type = instanceSettings.type;
     this.url = instanceSettings.url;
     this.name = instanceSettings.name;
@@ -17,7 +17,7 @@ export class GenericDatasource {
   }
 
   query(options) {
-    console.log('options',options);
+    // console.log('options',options);
     this.options=options;
     if (this.options.timezone) {
       this.timezone = this.options.timezone=="browser"?Intl.DateTimeFormat().resolvedOptions().timeZone:this.options.timezone;
@@ -27,12 +27,19 @@ export class GenericDatasource {
       return this.q.when({ data: [] });
     }
 
-    return Promise.all(targets.map(target=>this.request('/rest/sql',this.generateSql(target.sql)).then(res=>this.postQuery(target,res))))
-      .then(data => (console.log('{data:this.arithmeticQueries(data).flat()}',{data:this.arithmeticQueries(data).flat()}),{data:this.arithmeticQueries(data).flat()}),(err)=>{console.log(err);throw new Error(JSON.stringify(err))});
+    return Promise.all(targets.map(target=>this.request('/rest/sqlutc',this.generateSql(target.sql)).then(res=>this.postQuery(target,res))))
+      .then(data => ({data:this.arithmeticQueries(data).flat()}),(err)=>{
+        console.log(err);
+        if (err.data&&err.data.desc) {
+          throw new Error(err.data.desc);
+        }else{
+          throw new Error(err);
+        }
+      });
   }
 
   testDatasource() {
-    return this.request('/rest/sql','show databases').then(response => {
+    return this.request('/rest/sqlutc','show databases').then(response => {
         if (!!response && response.status === 200) {
           return { status: "success", message: "TDengine Data source is working", title: "Success" };
         }
@@ -70,7 +77,7 @@ export class GenericDatasource {
     });
   }
   generateSql(sql) {
-    console.log('sql',sql);
+    // console.log('sql',sql);
     if (!sql||sql.length==0) {
       return sql;
     }
@@ -109,8 +116,8 @@ export class GenericDatasource {
   }
 
   postQuery(query, response) {
-    console.log('query',query);
-    console.log('response',response);
+    // console.log('query',query);
+    // console.log('response',response);
     if (!response||!response.data||!response.data.data) {
       return [];
     }
@@ -119,7 +126,7 @@ export class GenericDatasource {
     const rows = response.data.rows;
     const cols = headers.length;
     const result = [];
-    const aliasList = query.alias.split(',')||[];
+    const aliasList = (query.alias||'').split(',')||[];
     if (!!headers&&!!headers[0]&&!!headers[0][1]) {
       const timeSeriesIndex = headers.findIndex(item=>item[1]===9);
       if (timeSeriesIndex==-1||query.formatType=='Table') {
@@ -145,14 +152,14 @@ export class GenericDatasource {
         }
       }
     }
-    console.log('result',result);
+    // console.log('result',result);
     return result;
   }
   arithmeticQueries(data) {
     const arithmeticQueries = this.options.targets.filter((target) => target.queryType === "Arithmetic"&&target.expression&&!(target.hide===true));
     if (arithmeticQueries.length == 0) return data;
     let targetRefIds = data.flatMap((item)=>item.flatMap((field,index)=>(index==0?[field.refId,field.refId+'__'+index]:[field.refId+'__'+index])));
-    console.log('targetRefIds',targetRefIds);
+    // console.log('targetRefIds',targetRefIds);
     let targetResults = {};
     data.forEach((item)=>{
       item.forEach((field,index)=>{
@@ -198,7 +205,7 @@ export class GenericDatasource {
       });
       return data.concat(dataArithmetic);
     }catch (err) {
-      console.log(err);
+      // console.log(err);
       throw new Error(err);
     }
   }
@@ -248,8 +255,8 @@ export class GenericDatasource {
 
   metricFindQuery(query, options) {
     this.options=options;
-    console.log('options',options);
-    return this.request('/rest/sql', this.generateSql(query)).then(res=>{
+    // console.log('options',options);
+    return this.request('/rest/sqlutc', this.generateSql(query)).then(res=>{
       if (!res||!res.data||!res.data.data) {
         return [];
       }else{
