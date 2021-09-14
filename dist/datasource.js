@@ -139,7 +139,7 @@ var GenericDatasource = exports.GenericDatasource = function () {
       sql = sql.replace("$end", "'" + queryEnd + "'");
       sql = sql.replace("$interval", intervalMs);
 
-      var allVaribles = this.templateSrv.getVariables ? this.templateSrv.getVariables() : [];
+      var allVaribles = this.templateSrv.getVariables ? this.templateSrv.getVariables() : this.templateSrv.variables || [];
       for (var i = 0; i < allVaribles.length; i++) {
         if (allVaribles[i].current && allVaribles[i].current.value) {
           sql = sql.replace("$" + allVaribles[i].name, allVaribles[i].current.value);

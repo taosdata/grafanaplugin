@@ -12,22 +12,22 @@ export class GenericDatasource {
     this.templateSrv = templateSrv;
     this.headers = { 'Content-Type': 'application/json' };
     this.headers.Authorization = this.getAuthorization(instanceSettings.jsonData);
-    this.timezone=Intl.DateTimeFormat().resolvedOptions().timeZone;
-    this.options=null;
+    this.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    this.options = null;
   }
 
   query(options) {
     // console.log('options',options);
-    this.options=options;
+    this.options = options;
     if (this.options.timezone) {
-      this.timezone = this.options.timezone=="browser"?Intl.DateTimeFormat().resolvedOptions().timeZone:this.options.timezone;
+      this.timezone = this.options.timezone == "browser"?Intl.DateTimeFormat().resolvedOptions().timeZone:this.options.timezone;
     }
-    const targets = this.options.targets.filter((target) => (!target.queryType||target.queryType === "SQL")&&target.sql&&!(target.hide===true));
+    const targets = this.options.targets.filter((target) => (!target.queryType||target.queryType === "SQL")&&target.sql&&!(target.hide === true));
     if (targets.length <= 0) {
       return this.q.when({ data: [] });
     }
 
-    return Promise.all(targets.map(target=>this.request('/rest/sqlutc',this.generateSql(target.sql)).then(res=>this.postQuery(target,res))))
+    return Promise.all(targets.map(target => this.request('/rest/sqlutc',this.generateSql(target.sql)).then(res => this.postQuery(target,res))))
       .then(data => ({data:this.arithmeticQueries(data).flat()}),(err)=>{
         console.log(err);
         if (err.data&&err.data.desc) {
@@ -65,7 +65,7 @@ export class GenericDatasource {
     if (!alias) {
       return aliasRow;
     }
-    alias=this.generateSql(alias);
+    alias = this.generateSql(alias);
     const regex = /\$(\w+)|\[\[([\s\S]+?)\]\]/g;
     return alias.replace(regex,(match, g1, g2) => {
       const group = g1 || g2;
@@ -78,7 +78,7 @@ export class GenericDatasource {
   }
   generateSql(sql) {
     // console.log('sql',sql);
-    if (!sql||sql.length==0) {
+    if (!sql||sql.length == 0) {
       return sql;
     }
 
@@ -105,7 +105,7 @@ export class GenericDatasource {
     sql = sql.replace("$end", "'" + queryEnd + "'");
     sql = sql.replace("$interval", intervalMs);
     
-    const allVaribles = this.templateSrv.getVariables ? this.templateSrv.getVariables() : [];
+    const allVaribles = this.templateSrv.getVariables ? this.templateSrv.getVariables() : this.templateSrv.variables||[];
     for (let i = 0; i < allVaribles.length; i++) {
       if (allVaribles[i].current&&allVaribles[i].current.value) {
         sql = sql.replace("$"+allVaribles[i].name, allVaribles[i].current.value);
@@ -128,23 +128,23 @@ export class GenericDatasource {
     const result = [];
     const aliasList = (query.alias||'').split(',')||[];
     if (!!headers&&!!headers[0]&&!!headers[0][1]) {
-      const timeSeriesIndex = headers.findIndex(item=>item[1]===9);
-      if (timeSeriesIndex==-1||query.formatType=='Table') {
-        result.push({columns:headers.map(item=>({text:item[0]})),rows:data,type:'table',refId:query.refId,target:this.getRowAlias(aliasList[0],headers[0][0]),hide:!!query.hide});
+      const timeSeriesIndex = headers.findIndex(item => item[1] === 9);
+      if (timeSeriesIndex == -1||query.formatType == 'Table') {
+        result.push({columns:headers.map(item => ({text:item[0]})),rows:data,type:'table',refId:query.refId,target:this.getRowAlias(aliasList[0],headers[0][0]),hide:!!query.hide});
       }else{
         for (let i = 0; i < cols; i++) {
-          if (i==timeSeriesIndex) {
+          if (i == timeSeriesIndex) {
             continue;
           }
           let aliasRow = headers[i][0];
           if (i<=aliasList.length) {
-            aliasRow=this.getRowAlias(aliasList[i-1],aliasRow);
+            aliasRow = this.getRowAlias(aliasList[i-1],aliasRow);
           }
-          let resultItem={datapoints:[],refId:query.refId,target:aliasRow,hide:!!query.hide};
+          let resultItem = {datapoints:[],refId:query.refId,target:aliasRow,hide:!!query.hide};
           for (let k = 0; k < rows; k++) {
             let timeShiftDuration = moment.duration();
             if (query.timeshift&&query.timeshift.period&&query.timeshift.unit) {
-              timeShiftDuration=moment.duration(query.timeshift.period,query.timeshift.unit);
+              timeShiftDuration = moment.duration(query.timeshift.period,query.timeshift.unit);
             }
             resultItem.datapoints.push([data[k][i],moment.utc(data[k][timeSeriesIndex]).tz(this.timezone).add(timeShiftDuration).valueOf()]);
           }
@@ -156,16 +156,16 @@ export class GenericDatasource {
     return result;
   }
   arithmeticQueries(data) {
-    const arithmeticQueries = this.options.targets.filter((target) => target.queryType === "Arithmetic"&&target.expression&&!(target.hide===true));
+    const arithmeticQueries = this.options.targets.filter((target) => target.queryType === "Arithmetic"&&target.expression&&!(target.hide === true));
     if (arithmeticQueries.length == 0) return data;
-    let targetRefIds = data.flatMap((item)=>item.flatMap((field,index)=>(index==0?[field.refId,field.refId+'__'+index]:[field.refId+'__'+index])));
+    let targetRefIds = data.flatMap((item)=>item.flatMap((field,index)=>(index == 0?[field.refId,field.refId+'__'+index]:[field.refId+'__'+index])));
     // console.log('targetRefIds',targetRefIds);
     let targetResults = {};
     data.forEach((item)=>{
       item.forEach((field,index)=>{
-        field.datapoints.forEach(datapoint=>{
-          targetResults[datapoint[1]]=targetResults[datapoint[1]]||[];
-          if (index==0) {
+        field.datapoints.forEach(datapoint => {
+          targetResults[datapoint[1]] = targetResults[datapoint[1]]||[];
+          if (index == 0) {
             targetResults[datapoint[1]].push(datapoint[0]);
           }
           targetResults[datapoint[1]].push(datapoint[0]);
@@ -179,11 +179,11 @@ export class GenericDatasource {
         let functionBody = "return (" + target.expression + ");";
         let expressionFunction = new Function(functionArgs, functionBody);
         let result = null;
-        const aliasList=(target.alias||'').split(',').map(alias=>this.getRowAlias(alias,target.refId));
+        const aliasList = (target.alias||'').split(',').map(alias => this.getRowAlias(alias,target.refId));
 
         const aliasListResult = [];
-        Object.entries(targetResults).forEach(args=>{
-          if (args[1].length===targetRefIds.length) {
+        Object.entries(targetResults).forEach(args => {
+          if (args[1].length === targetRefIds.length) {
             try {
               result = expressionFunction.apply(this, args[1]);
             } catch (error) {
@@ -194,10 +194,10 @@ export class GenericDatasource {
           //   console.log('args not full',targetRefIds,args);
           // }
           if (!Array.isArray(result)) {
-            result=[result];
+            result = [result];
           }
           result.forEach((item,index)=>{
-            aliasListResult[index]=aliasListResult[index]||{datapoints:[],refId:target.refId,target:aliasList[index]||(target.refId+'__'+index),hide:!!target.hide};
+            aliasListResult[index] = aliasListResult[index]||{datapoints:[],refId:target.refId,target:aliasList[index]||(target.refId+'__'+index),hide:!!target.hide};
             aliasListResult[index].datapoints.push([item,args[0]]);
           })
         });
@@ -254,9 +254,9 @@ export class GenericDatasource {
   }
 
   metricFindQuery(query, options) {
-    this.options=options;
+    this.options = options;
     // console.log('options',options);
-    return this.request('/rest/sqlutc', this.generateSql(query)).then(res=>{
+    return this.request('/rest/sqlutc', this.generateSql(query)).then(res => {
       if (!res||!res.data||!res.data.data) {
         return [];
       }else{
