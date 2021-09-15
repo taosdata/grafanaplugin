@@ -9,8 +9,10 @@ export class GenericDatasourceQueryCtrl extends QueryCtrl {
     this.target.target = this.target.target || 'select metric';
     this.target.type = this.target.type || 'timeserie';
     this.target.queryType = this.target.queryType || 'SQL';
+    this.target.formatType = this.target.formatType || 'Time series';
 
     this.queryTypes = ["SQL", "Arithmetic"];
+    this.formatTypes = ["Time series", "Table"];
   }
 
   onChangeInternal() {
@@ -21,8 +23,8 @@ export class GenericDatasourceQueryCtrl extends QueryCtrl {
     this.panelCtrl.refresh();
   }
 
-  generateSQL(query) {
-    this.lastGenerateSQL = this.datasource.generateSql(this.panelCtrl, this.target);
+  generateSQL() {
+    this.lastGenerateSQL = this.datasource.generateSql(this.target.sql);
     this.showGenerateSQL = !this.showGenerateSQL;
   }
 

@@ -9,6 +9,7 @@
 
   "metrics": true,
   "annotations": false,
+  "alerting": true,
 
   "info": {
     "description": "grafana datasource plugin for tdengine",
