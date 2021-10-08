@@ -57,7 +57,7 @@ var GenericDatasource = exports.GenericDatasource = function () {
         });
       })).then(function (data) {
         var result = _this.arithmeticQueries(data, options).flat();
-        console.log('result', result);
+        // console.log('result',result);
         return { data: result };
       }, function (err) {
         console.log(err);

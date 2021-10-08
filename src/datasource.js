@@ -30,7 +30,7 @@ export class GenericDatasource {
     return Promise.all(targets.map(target => this.request('/rest/sqlutc',this.generateSql(target.sql)).then(res => this.postQuery(target,res))))
       .then(data => {
         let result = this.arithmeticQueries(data,options).flat();
-        console.log('result',result)
+        // console.log('result',result);
         return {data:result};
       },(err)=>{
         console.log(err);
