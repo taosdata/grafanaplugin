@@ -41,10 +41,10 @@ var GenericDatasource = exports.GenericDatasource = function () {
 
       // console.log('options',options);
       this.options = options;
-      if (this.options.timezone) {
-        this.timezone = this.options.timezone == "browser" ? Intl.DateTimeFormat().resolvedOptions().timeZone : this.options.timezone;
+      if (options.timezone) {
+        this.timezone = options.timezone == "browser" ? Intl.DateTimeFormat().resolvedOptions().timeZone : options.timezone;
       }
-      var targets = this.options.targets.filter(function (target) {
+      var targets = options.targets.filter(function (target) {
         return (!target.queryType || target.queryType === "SQL") && target.sql && !(target.hide === true);
       });
       if (targets.length <= 0) {
@@ -56,7 +56,9 @@ var GenericDatasource = exports.GenericDatasource = function () {
           return _this.postQuery(target, res);
         });
       })).then(function (data) {
-        return { data: _this.arithmeticQueries(data).flat() };
+        var result = _this.arithmeticQueries(data, options).flat();
+        // console.log('result',result);
+        return { data: result };
       }, function (err) {
         console.log(err);
         if (err.data && err.data.desc) {
@@ -196,10 +198,10 @@ var GenericDatasource = exports.GenericDatasource = function () {
     }
   }, {
     key: 'arithmeticQueries',
-    value: function arithmeticQueries(data) {
+    value: function arithmeticQueries(data, options) {
       var _this2 = this;
 
-      var arithmeticQueries = this.options.targets.filter(function (target) {
+      var arithmeticQueries = options.targets.filter(function (target) {
         return target.queryType === "Arithmetic" && target.expression && !(target.hide === true);
       });
       if (arithmeticQueries.length == 0) return data;
@@ -249,7 +251,7 @@ var GenericDatasource = exports.GenericDatasource = function () {
             }
             result.forEach(function (item, index) {
               aliasListResult[index] = aliasListResult[index] || { datapoints: [], refId: target.refId, target: aliasList[index] || target.refId + '__' + index, hide: !!target.hide };
-              aliasListResult[index].datapoints.push([item, args[0]]);
+              aliasListResult[index].datapoints.push([item, parseInt(args[0])]);
             });
           });
           return aliasListResult;
