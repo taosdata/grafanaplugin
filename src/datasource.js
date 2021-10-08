@@ -19,16 +19,20 @@ export class GenericDatasource {
   query(options) {
     // console.log('options',options);
     this.options = options;
-    if (this.options.timezone) {
-      this.timezone = this.options.timezone == "browser"?Intl.DateTimeFormat().resolvedOptions().timeZone:this.options.timezone;
+    if (options.timezone) {
+      this.timezone = options.timezone == "browser"?Intl.DateTimeFormat().resolvedOptions().timeZone:options.timezone;
     }
-    const targets = this.options.targets.filter((target) => (!target.queryType||target.queryType === "SQL")&&target.sql&&!(target.hide === true));
+    const targets = options.targets.filter((target) => (!target.queryType||target.queryType === "SQL")&&target.sql&&!(target.hide === true));
     if (targets.length <= 0) {
       return this.q.when({ data: [] });
     }
 
     return Promise.all(targets.map(target => this.request('/rest/sqlutc',this.generateSql(target.sql)).then(res => this.postQuery(target,res))))
-      .then(data => ({data:this.arithmeticQueries(data).flat()}),(err)=>{
+      .then(data => {
+        let result = this.arithmeticQueries(data,options).flat();
+        console.log('result',result)
+        return {data:result};
+      },(err)=>{
         console.log(err);
         if (err.data&&err.data.desc) {
           throw new Error(err.data.desc);
@@ -155,8 +159,8 @@ export class GenericDatasource {
     // console.log('result',result);
     return result;
   }
-  arithmeticQueries(data) {
-    const arithmeticQueries = this.options.targets.filter((target) => target.queryType === "Arithmetic"&&target.expression&&!(target.hide === true));
+  arithmeticQueries(data,options) {
+    const arithmeticQueries = options.targets.filter((target) => target.queryType === "Arithmetic"&&target.expression&&!(target.hide === true));
     if (arithmeticQueries.length == 0) return data;
     let targetRefIds = data.flatMap((item)=>item.flatMap((field,index)=>(index == 0?[field.refId,field.refId+'__'+index]:[field.refId+'__'+index])));
     // console.log('targetRefIds',targetRefIds);
@@ -198,7 +202,7 @@ export class GenericDatasource {
           }
           result.forEach((item,index)=>{
             aliasListResult[index] = aliasListResult[index]||{datapoints:[],refId:target.refId,target:aliasList[index]||(target.refId+'__'+index),hide:!!target.hide};
-            aliasListResult[index].datapoints.push([item,args[0]]);
+            aliasListResult[index].datapoints.push([item,parseInt(args[0])]);
           })
         });
         return aliasListResult;
