@@ -11,7 +11,7 @@
   "annotations": false,
   "alerting": true,
   "backend": true,
-  "executable": "gpx_taosdata-tdengine-datasource",
+  "executable": "taosdata-tdengine-datasource",
 
   "info": {
     "description": "grafana datasource plugin for tdengine",
