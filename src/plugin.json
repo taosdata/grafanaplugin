@@ -10,6 +10,8 @@
   "metrics": true,
   "annotations": false,
   "alerting": true,
+  "backend": true,
+  "executable": "taosdata-tdengine-datasource",
 
   "info": {
     "description": "grafana datasource plugin for tdengine",
@@ -25,7 +27,7 @@
       {"name": "GitHub", "url": "https://github.com/taosdata/grafanaplugin"},
       {"name": "AGPL 3.0", "url": "https://github.com/taosdata/grafanaplugin/LICENSE"}
     ],
-    "version": "1.0.0",
+    "version": "3.1.0",
     "updated": "2020-01-13"
   },
 
