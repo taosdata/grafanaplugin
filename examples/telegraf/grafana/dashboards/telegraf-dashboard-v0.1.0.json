@@ -2302,7 +2302,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "SELECT derivative(ip_indiscards, 1s, 0) FROM (SELECT avg(ip_indiscards) as _ip_indiscards from $database.net WHERE (host = '$server') and _ts >= $from and _ts <= $to interval($interval))",
+          "sql": "SELECT derivative(ip_indiscards, 1s, 0) FROM (SELECT avg(ip_indiscards) as ip_indiscards from $database.net WHERE (host = '$server') and _ts >= $from and _ts <= $to interval($interval))",
           "target": "select metric",
           "type": "timeserie"
         }
