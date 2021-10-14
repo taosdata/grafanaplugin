@@ -23,7 +23,7 @@ module.exports = function (grunt) {
       },
       examples_to_dist: {
         expand: true,
-        src: ['examples/*'],
+        src: ['examples/**'],
         dest: 'dist'
       },
       pluginDef: {
