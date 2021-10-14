@@ -1,4 +1,4 @@
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
   require('load-grunt-tasks')(grunt);
 
@@ -21,6 +21,11 @@ module.exports = function(grunt) {
         src: ['dashboard/*'],
         dest: 'dist'
       },
+      examples_to_dist: {
+        expand: true,
+        src: ['examples/*'],
+        dest: 'dist'
+      },
       pluginDef: {
         expand: true,
         src: ['README.md'],
@@ -32,14 +37,14 @@ module.exports = function(grunt) {
       rebuild_all: {
         files: ['src/**/*'],
         tasks: ['default'],
-        options: {spawn: false}
+        options: { spawn: false }
       }
     },
 
     babel: {
       options: {
         sourceMap: true,
-        presets:  ['env'],
+        presets: ['env'],
         plugins: ['transform-object-rest-spread']
       },
       dist: {
@@ -48,7 +53,7 @@ module.exports = function(grunt) {
           expand: true,
           src: ['**/*.js'],
           dest: 'dist',
-          ext:'.js'
+          ext: '.js'
         }]
       },
       distTestNoSystemJs: {
@@ -57,7 +62,7 @@ module.exports = function(grunt) {
           expand: true,
           src: ['**/*.js'],
           dest: 'dist/test',
-          ext:'.js'
+          ext: '.js'
         }]
       },
       distTestsSpecsNoSystemJs: {
@@ -66,7 +71,7 @@ module.exports = function(grunt) {
           cwd: 'spec',
           src: ['**/*.js'],
           dest: 'dist/test/spec',
-          ext:'.js'
+          ext: '.js'
         }]
       }
     },
@@ -81,5 +86,6 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('default', ['clean', 'copy:src_to_dist', 'copy:dashboard_to_dist', 'copy:pluginDef', 'babel', 'mochaTest']);
+  grunt.registerTask('default', ['clean', 'copy:src_to_dist', 'copy:dashboard_to_dist',
+    'copy:examples_to_dist', 'copy:pluginDef', 'babel', 'mochaTest']);
 };
