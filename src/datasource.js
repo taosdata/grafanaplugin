@@ -13,12 +13,10 @@ export class GenericDatasource {
     this.headers = { 'Content-Type': 'application/json' };
     this.headers.Authorization = this.getAuthorization(instanceSettings.jsonData);
     this.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    this.options = null;
   }
 
   query(options) {
     // console.log('options',options);
-    this.options = options;
     if (options.timezone) {
       this.timezone = options.timezone == "browser"?Intl.DateTimeFormat().resolvedOptions().timeZone:options.timezone;
     }
@@ -27,7 +25,7 @@ export class GenericDatasource {
       return this.q.when({ data: [] });
     }
 
-    return Promise.all(targets.map(target => this.request('/rest/sqlutc',this.generateSql(target.sql)).then(res => this.postQuery(target,res))))
+    return Promise.all(targets.map(target => this.request('/rest/sqlutc',this.generateSql(target.sql,options)).then(res => this.postQuery(target,res,options))))
       .then(data => {
         let result = this.arithmeticQueries(data,options).flat();
         // console.log('result',result);
@@ -65,11 +63,11 @@ export class GenericDatasource {
     });
   }
 
-  getRowAlias(alias, aliasRow) {
+  getRowAlias(alias, aliasRow,options) {
     if (!alias) {
       return aliasRow;
     }
-    alias = this.generateSql(alias);
+    alias = this.generateSql(alias,options);
     const regex = /\$(\w+)|\[\[([\s\S]+?)\]\]/g;
     return alias.replace(regex,(match, g1, g2) => {
       const group = g1 || g2;
@@ -80,27 +78,31 @@ export class GenericDatasource {
       return match;
     });
   }
-  generateSql(sql) {
+  generateSql(sql,options) {
     // console.log('sql',sql);
     if (!sql||sql.length == 0) {
       return sql;
     }
 
     var queryStart = "now-1h";
-    if (!!this.options.range && !!this.options.range.from ) {
-      queryStart = this.options.range.from.toISOString();
-    }
-
     var queryEnd = "now";
-    if (!!this.options.range && !!this.options.range.to ) {
-      queryEnd = this.options.range.to.toISOString();
+    var intervalMs = "20000";
+    if (!!options) {
+      if (!!options.range && !!options.range.from ) {
+        queryStart = options.range.from.toISOString();
+      }
+  
+      if (!!options.range && !!options.range.to ) {
+        queryEnd = options.range.to.toISOString();
+      }
+      
+      if (!!options.intervalMs ) {
+        intervalMs = options.intervalMs.toString();
+      }
+  
+      sql = this.templateSrv.replace(sql, options.scopedVars, 'csv');
     }
     
-    var intervalMs = "20000";
-    if (!!this.options.intervalMs ) {
-      intervalMs = this.options.intervalMs.toString();
-    }
-
     intervalMs += "a";
     sql = sql.replace(/^\s+|\s+$/gm, '');
     sql = sql.replace("$from", "'" + queryStart + "'");
@@ -119,7 +121,7 @@ export class GenericDatasource {
     return sql;
   }
 
-  postQuery(query, response) {
+  postQuery(query, response,options) {
     // console.log('query',query);
     // console.log('response',response);
     if (!response||!response.data||!response.data.data) {
@@ -134,7 +136,7 @@ export class GenericDatasource {
     if (!!headers&&!!headers[0]&&!!headers[0][1]) {
       const timeSeriesIndex = headers.findIndex(item => item[1] === 9);
       if (timeSeriesIndex == -1||query.formatType == 'Table') {
-        result.push({columns:headers.map(item => ({text:item[0]})),rows:data,type:'table',refId:query.refId,target:this.getRowAlias(aliasList[0],headers[0][0]),hide:!!query.hide});
+        result.push({columns:headers.map(item => ({text:item[0]})),rows:data,type:'table',refId:query.refId,target:this.getRowAlias(aliasList[0],headers[0][0],options),hide:!!query.hide});
       }else{
         for (let i = 0; i < cols; i++) {
           if (i == timeSeriesIndex) {
@@ -142,7 +144,7 @@ export class GenericDatasource {
           }
           let aliasRow = headers[i][0];
           if (i<=aliasList.length) {
-            aliasRow = this.getRowAlias(aliasList[i-1],aliasRow);
+            aliasRow = this.getRowAlias(aliasList[i-1],aliasRow,options);
           }
           let resultItem = {datapoints:[],refId:query.refId,target:aliasRow,hide:!!query.hide};
           for (let k = 0; k < rows; k++) {
@@ -183,7 +185,7 @@ export class GenericDatasource {
         let functionBody = "return (" + target.expression + ");";
         let expressionFunction = new Function(functionArgs, functionBody);
         let result = null;
-        const aliasList = (target.alias||'').split(',').map(alias => this.getRowAlias(alias,target.refId));
+        const aliasList = (target.alias||'').split(',').map(alias => this.getRowAlias(alias,target.refId,options));
 
         const aliasListResult = [];
         Object.entries(targetResults).forEach(args => {
@@ -258,9 +260,8 @@ export class GenericDatasource {
   }
 
   metricFindQuery(query, options) {
-    this.options = options;
     // console.log('options',options);
-    return this.request('/rest/sqlutc', this.generateSql(query)).then(res => {
+    return this.request('/rest/sqlutc', this.generateSql(query,options)).then(res => {
       if (!res||!res.data||!res.data.data) {
         return [];
       }else{
