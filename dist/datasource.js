@@ -31,7 +31,6 @@ var GenericDatasource = exports.GenericDatasource = function () {
     this.headers = { 'Content-Type': 'application/json' };
     this.headers.Authorization = this.getAuthorization(instanceSettings.jsonData);
     this.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    this.options = null;
   }
 
   _createClass(GenericDatasource, [{
@@ -40,7 +39,6 @@ var GenericDatasource = exports.GenericDatasource = function () {
       var _this = this;
 
       // console.log('options',options);
-      this.options = options;
       if (options.timezone) {
         this.timezone = options.timezone == "browser" ? Intl.DateTimeFormat().resolvedOptions().timeZone : options.timezone;
       }
@@ -52,8 +50,8 @@ var GenericDatasource = exports.GenericDatasource = function () {
       }
 
       return Promise.all(targets.map(function (target) {
-        return _this.request('/rest/sqlutc', _this.generateSql(target.sql)).then(function (res) {
-          return _this.postQuery(target, res);
+        return _this.request('/rest/sqlutc', _this.generateSql(target.sql, options)).then(function (res) {
+          return _this.postQuery(target, res, options);
         });
       })).then(function (data) {
         var result = _this.arithmeticQueries(data, options).flat();
@@ -95,11 +93,11 @@ var GenericDatasource = exports.GenericDatasource = function () {
     }
   }, {
     key: 'getRowAlias',
-    value: function getRowAlias(alias, aliasRow) {
+    value: function getRowAlias(alias, aliasRow, options) {
       if (!alias) {
         return aliasRow;
       }
-      alias = this.generateSql(alias);
+      alias = this.generateSql(alias, options);
       var regex = /\$(\w+)|\[\[([\s\S]+?)\]\]/g;
       return alias.replace(regex, function (match, g1, g2) {
         var group = g1 || g2;
@@ -112,25 +110,29 @@ var GenericDatasource = exports.GenericDatasource = function () {
     }
   }, {
     key: 'generateSql',
-    value: function generateSql(sql) {
+    value: function generateSql(sql, options) {
       // console.log('sql',sql);
       if (!sql || sql.length == 0) {
         return sql;
       }
 
       var queryStart = "now-1h";
-      if (!!this.options.range && !!this.options.range.from) {
-        queryStart = this.options.range.from.toISOString();
-      }
-
       var queryEnd = "now";
-      if (!!this.options.range && !!this.options.range.to) {
-        queryEnd = this.options.range.to.toISOString();
-      }
-
       var intervalMs = "20000";
-      if (!!this.options.intervalMs) {
-        intervalMs = this.options.intervalMs.toString();
+      if (!!options) {
+        if (!!options.range && !!options.range.from) {
+          queryStart = options.range.from.toISOString();
+        }
+
+        if (!!options.range && !!options.range.to) {
+          queryEnd = options.range.to.toISOString();
+        }
+
+        if (!!options.intervalMs) {
+          intervalMs = options.intervalMs.toString();
+        }
+
+        sql = this.templateSrv.replace(sql, options.scopedVars, 'csv');
       }
 
       intervalMs += "a";
@@ -152,7 +154,7 @@ var GenericDatasource = exports.GenericDatasource = function () {
     }
   }, {
     key: 'postQuery',
-    value: function postQuery(query, response) {
+    value: function postQuery(query, response, options) {
       // console.log('query',query);
       // console.log('response',response);
       if (!response || !response.data || !response.data.data) {
@@ -171,7 +173,7 @@ var GenericDatasource = exports.GenericDatasource = function () {
         if (timeSeriesIndex == -1 || query.formatType == 'Table') {
           result.push({ columns: headers.map(function (item) {
               return { text: item[0] };
-            }), rows: data, type: 'table', refId: query.refId, target: this.getRowAlias(aliasList[0], headers[0][0]), hide: !!query.hide });
+            }), rows: data, type: 'table', refId: query.refId, target: this.getRowAlias(aliasList[0], headers[0][0], options), hide: !!query.hide });
         } else {
           for (var i = 0; i < cols; i++) {
             if (i == timeSeriesIndex) {
@@ -179,7 +181,7 @@ var GenericDatasource = exports.GenericDatasource = function () {
             }
             var aliasRow = headers[i][0];
             if (i <= aliasList.length) {
-              aliasRow = this.getRowAlias(aliasList[i - 1], aliasRow);
+              aliasRow = this.getRowAlias(aliasList[i - 1], aliasRow, options);
             }
             var resultItem = { datapoints: [], refId: query.refId, target: aliasRow, hide: !!query.hide };
             for (var k = 0; k < rows; k++) {
@@ -231,7 +233,7 @@ var GenericDatasource = exports.GenericDatasource = function () {
           var expressionFunction = new Function(functionArgs, functionBody);
           var result = null;
           var aliasList = (target.alias || '').split(',').map(function (alias) {
-            return _this2.getRowAlias(alias, target.refId);
+            return _this2.getRowAlias(alias, target.refId, options);
           });
 
           var aliasListResult = [];
@@ -313,9 +315,8 @@ var GenericDatasource = exports.GenericDatasource = function () {
   }, {
     key: 'metricFindQuery',
     value: function metricFindQuery(query, options) {
-      this.options = options;
       // console.log('options',options);
-      return this.request('/rest/sqlutc', this.generateSql(query)).then(function (res) {
+      return this.request('/rest/sqlutc', this.generateSql(query, options)).then(function (res) {
         if (!res || !res.data || !res.data.data) {
           return [];
         } else {
