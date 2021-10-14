@@ -4,7 +4,7 @@ This an example project to show the how Telegraf + TDengine + Grafana works toge
 
 The telegraf dashboard comes from the top 1 downloaded [dashboard](https://grafana.com/grafana/dashboards/928) - which downloaded 21k times - with InfluxDB data source, completely ported to TDengine with its [data source plugin](https://github.com/taosdata/grafanaplugin).
 
-![Dashboard](dashboards/telegraf-dashboard-v0.1.0.png)
+![Dashboard](assets/telegraf-dashboard-v0.1.0.png)
 
 ## Start
 
