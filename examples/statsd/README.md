@@ -2,7 +2,7 @@
 
 This an example project to show the how StatsD + TDengine + Grafana works together.
 
-![Dashboard](dashboards/fake-view.png)
+![Dashboard](dashboards/statsd-with-tdengine-view.png)
 
 ## Start
 
@@ -36,7 +36,7 @@ docker-compose up
 
 Start data simulation by `./sim.sh`.
 
-Open grafana with dashboard name **Fake Measurement for TDengine StatsD** and everything done.
+Open grafana with dashboard name **Simulating Measurement for TDengine StatsD** and everything done.
 
 ## License
 
