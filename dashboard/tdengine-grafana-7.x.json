@@ -12,11 +12,12 @@
       }
     ]
   },
+  "description": "TDengine nodes metrics.",
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 2,
-  "iteration": 1632908572050,
+  "id": 3,
+  "iteration": 1634275785625,
   "links": [],
   "panels": [
     {
@@ -68,6 +69,7 @@
       ],
       "timeFrom": null,
       "timeShift": null,
+      "title": "-- OVERVIEW --",
       "transformations": [
         {
           "id": "calculateField",
@@ -88,7 +90,7 @@
       "type": "text"
     },
     {
-      "datasource": null,
+      "datasource": "${ds}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -113,7 +115,7 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 6,
+        "w": 8,
         "x": 0,
         "y": 4
       },
@@ -185,7 +187,7 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "${ds}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -206,8 +208,8 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 9,
-        "x": 6,
+        "w": 7,
+        "x": 8,
         "y": 4
       },
       "id": 70,
@@ -287,7 +289,7 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "${ds}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -315,7 +317,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 12,
+        "h": 9,
         "w": 9,
         "x": 15,
         "y": 4
@@ -377,7 +379,7 @@
       "type": "table"
     },
     {
-      "datasource": null,
+      "datasource": "${ds}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -402,7 +404,7 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 3,
+        "w": 2,
         "x": 0,
         "y": 7
       },
@@ -445,7 +447,7 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "${ds}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -471,75 +473,7 @@
       "gridPos": {
         "h": 3,
         "w": 3,
-        "x": 3,
-        "y": 7
-      },
-      "id": 34,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "/.*/",
-          "values": true
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "7.5.10",
-      "repeatDirection": "h",
-      "targets": [
-        {
-          "alias": "dnodes",
-          "formatType": "Table",
-          "queryType": "SQL",
-          "refId": "A",
-          "sql": "select client_version() as client",
-          "target": "select metric",
-          "timeshift": {
-            "period": null
-          },
-          "type": "timeserie"
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Client Version",
-      "transformations": [],
-      "type": "stat"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 3,
-        "x": 6,
+        "x": 2,
         "y": 7
       },
       "id": 27,
@@ -620,7 +554,189 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "${ds}",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 2,
+        "x": 5,
+        "y": 7
+      },
+      "id": 41,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value"
+      },
+      "pluginVersion": "7.5.10",
+      "targets": [
+        {
+          "formatType": "Time series",
+          "queryType": "SQL",
+          "refId": "A",
+          "sql": "show dnodes",
+          "target": "select metric",
+          "type": "timeserie"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Total Dnodes",
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "includeTimeField": false,
+            "mode": "reduceFields",
+            "reducers": [
+              "count"
+            ]
+          }
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "id"
+              ]
+            }
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": "${ds}",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 2,
+        "x": 7,
+        "y": 7
+      },
+      "id": 31,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value"
+      },
+      "pluginVersion": "7.5.10",
+      "targets": [
+        {
+          "formatType": "Time series",
+          "queryType": "SQL",
+          "refId": "A",
+          "sql": "show dnodes",
+          "target": "select metric",
+          "type": "timeserie"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Offline Dnodes",
+      "transformations": [
+        {
+          "id": "filterByValue",
+          "options": {
+            "filters": [
+              {
+                "config": {
+                  "id": "regex",
+                  "options": {
+                    "value": "ready"
+                  }
+                },
+                "fieldName": "status"
+              }
+            ],
+            "match": "all",
+            "type": "exclude"
+          }
+        },
+        {
+          "id": "reduce",
+          "options": {
+            "includeTimeField": false,
+            "mode": "reduceFields",
+            "reducers": [
+              "count"
+            ]
+          }
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "id"
+              ]
+            }
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": "${ds}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -709,7 +825,7 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "${ds}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -798,7 +914,7 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "${ds}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -845,8 +961,8 @@
         ]
       },
       "gridPos": {
-        "h": 6,
-        "w": 6,
+        "h": 3,
+        "w": 9,
         "x": 0,
         "y": 10
       },
@@ -905,87 +1021,7 @@
       "type": "table"
     },
     {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 3,
-        "x": 6,
-        "y": 10
-      },
-      "id": 41,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "last"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "value"
-      },
-      "pluginVersion": "7.5.10",
-      "targets": [
-        {
-          "formatType": "Time series",
-          "queryType": "SQL",
-          "refId": "A",
-          "sql": "show dnodes",
-          "target": "select metric",
-          "type": "timeserie"
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Total Dnodes",
-      "transformations": [
-        {
-          "id": "reduce",
-          "options": {
-            "includeTimeField": false,
-            "mode": "reduceFields",
-            "reducers": [
-              "count"
-            ]
-          }
-        },
-        {
-          "id": "filterFieldsByName",
-          "options": {
-            "include": {
-              "names": [
-                "id"
-              ]
-            }
-          }
-        }
-      ],
-      "type": "stat"
-    },
-    {
-      "datasource": null,
+      "datasource": "${ds}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1074,7 +1110,7 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "${ds}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1087,10 +1123,6 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           }
@@ -1163,115 +1195,13 @@
       "type": "stat"
     },
     {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 1
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 3,
-        "x": 6,
-        "y": 13
-      },
-      "id": 31,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "last"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "value"
-      },
-      "pluginVersion": "7.5.10",
-      "targets": [
-        {
-          "formatType": "Time series",
-          "queryType": "SQL",
-          "refId": "A",
-          "sql": "show dnodes",
-          "target": "select metric",
-          "type": "timeserie"
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Offline Dnodes",
-      "transformations": [
-        {
-          "id": "filterByValue",
-          "options": {
-            "filters": [
-              {
-                "config": {
-                  "id": "regex",
-                  "options": {
-                    "value": "ready"
-                  }
-                },
-                "fieldName": "status"
-              }
-            ],
-            "match": "all",
-            "type": "exclude"
-          }
-        },
-        {
-          "id": "reduce",
-          "options": {
-            "includeTimeField": false,
-            "mode": "reduceFields",
-            "reducers": [
-              "count"
-            ]
-          }
-        },
-        {
-          "id": "filterFieldsByName",
-          "options": {
-            "include": {
-              "names": [
-                "id"
-              ]
-            }
-          }
-        }
-      ],
-      "type": "stat"
-    },
-    {
       "collapsed": false,
       "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 16
+        "y": 13
       },
       "id": 24,
       "panels": [],
@@ -1279,7 +1209,7 @@
       "type": "row"
     },
     {
-      "datasource": null,
+      "datasource": "${ds}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1334,9 +1264,9 @@
       },
       "gridPos": {
         "h": 5,
-        "w": 15,
+        "w": 16,
         "x": 0,
-        "y": 17
+        "y": 14
       },
       "id": 36,
       "options": {
@@ -1360,7 +1290,7 @@
       "type": "table"
     },
     {
-      "datasource": null,
+      "datasource": "${ds}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1385,9 +1315,9 @@
       },
       "gridPos": {
         "h": 5,
-        "w": 9,
-        "x": 15,
-        "y": 17
+        "w": 8,
+        "x": 16,
+        "y": 14
       },
       "id": 40,
       "options": {
@@ -1486,7 +1416,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 22
+        "y": 19
       },
       "id": 22,
       "panels": [],
@@ -1494,7 +1424,7 @@
       "type": "row"
     },
     {
-      "datasource": null,
+      "datasource": "${ds}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1525,7 +1455,7 @@
         "h": 5,
         "w": 24,
         "x": 0,
-        "y": 23
+        "y": 20
       },
       "id": 38,
       "options": {
@@ -1552,7 +1482,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 28
+        "y": 25
       },
       "id": 20,
       "panels": [],
@@ -1560,15 +1490,15 @@
       "scopedVars": {
         "fqdn": {
           "selected": true,
-          "text": "td1:6030",
-          "value": "td1:6030"
+          "text": "huolinhe-TM1701:6030",
+          "value": "huolinhe-TM1701:6030"
         }
       },
       "title": "节点资源占用 [ $fqdn ]",
       "type": "row"
     },
     {
-      "datasource": "TDengine",
+      "datasource": "${ds}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1594,7 +1524,7 @@
         "h": 6,
         "w": 5,
         "x": 0,
-        "y": 29
+        "y": 26
       },
       "id": 66,
       "options": {
@@ -1614,8 +1544,8 @@
       "scopedVars": {
         "fqdn": {
           "selected": true,
-          "text": "td1:6030",
-          "value": "td1:6030"
+          "text": "huolinhe-TM1701:6030",
+          "value": "huolinhe-TM1701:6030"
         }
       },
       "targets": [
@@ -1635,7 +1565,7 @@
       "type": "gauge"
     },
     {
-      "datasource": "TDengine",
+      "datasource": "${ds}",
       "description": "taosd  max  memery  last 10 minutes",
       "fieldConfig": {
         "defaults": {
@@ -1694,7 +1624,7 @@
         "h": 6,
         "w": 5,
         "x": 5,
-        "y": 29
+        "y": 26
       },
       "id": 45,
       "options": {
@@ -1714,8 +1644,8 @@
       "scopedVars": {
         "fqdn": {
           "selected": true,
-          "text": "td1:6030",
-          "value": "td1:6030"
+          "text": "huolinhe-TM1701:6030",
+          "value": "huolinhe-TM1701:6030"
         }
       },
       "targets": [
@@ -1735,7 +1665,7 @@
       "type": "gauge"
     },
     {
-      "datasource": "TDengine",
+      "datasource": "${ds}",
       "description": "avg band speed  last  one minute",
       "fieldConfig": {
         "defaults": {
@@ -1770,7 +1700,7 @@
         "h": 6,
         "w": 4,
         "x": 10,
-        "y": 29
+        "y": 26
       },
       "id": 14,
       "options": {
@@ -1790,8 +1720,8 @@
       "scopedVars": {
         "fqdn": {
           "selected": true,
-          "text": "td1:6030",
-          "value": "td1:6030"
+          "text": "huolinhe-TM1701:6030",
+          "value": "huolinhe-TM1701:6030"
         }
       },
       "targets": [
@@ -1811,7 +1741,7 @@
       "type": "gauge"
     },
     {
-      "datasource": "TDengine",
+      "datasource": "${ds}",
       "description": "io read/write rate",
       "fieldConfig": {
         "defaults": {
@@ -1846,7 +1776,7 @@
         "h": 6,
         "w": 5,
         "x": 14,
-        "y": 29
+        "y": 26
       },
       "id": 48,
       "options": {
@@ -1866,8 +1796,8 @@
       "scopedVars": {
         "fqdn": {
           "selected": true,
-          "text": "td1:6030",
-          "value": "td1:6030"
+          "text": "huolinhe-TM1701:6030",
+          "value": "huolinhe-TM1701:6030"
         }
       },
       "targets": [
@@ -1887,7 +1817,7 @@
       "type": "gauge"
     },
     {
-      "datasource": "TDengine",
+      "datasource": "${ds}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1926,7 +1856,7 @@
         "h": 6,
         "w": 5,
         "x": 19,
-        "y": 29
+        "y": 26
       },
       "id": 51,
       "options": {
@@ -1946,8 +1876,8 @@
       "scopedVars": {
         "fqdn": {
           "selected": true,
-          "text": "td1:6030",
-          "value": "td1:6030"
+          "text": "huolinhe-TM1701:6030",
+          "value": "huolinhe-TM1701:6030"
         }
       },
       "targets": [
@@ -2002,7 +1932,7 @@
       "type": "gauge"
     },
     {
-      "datasource": "TDengine",
+      "datasource": "${ds}",
       "description": "taosd  max  memery  last 10 minutes",
       "fieldConfig": {
         "defaults": {
@@ -2028,7 +1958,7 @@
         "h": 6,
         "w": 5,
         "x": 0,
-        "y": 35
+        "y": 32
       },
       "id": 12,
       "options": {
@@ -2048,8 +1978,8 @@
       "scopedVars": {
         "fqdn": {
           "selected": true,
-          "text": "td1:6030",
-          "value": "td1:6030"
+          "text": "huolinhe-TM1701:6030",
+          "value": "huolinhe-TM1701:6030"
         }
       },
       "targets": [
@@ -2069,7 +1999,7 @@
       "type": "gauge"
     },
     {
-      "datasource": "TDengine",
+      "datasource": "${ds}",
       "description": "taosd  max  memery  last 10 minutes",
       "fieldConfig": {
         "defaults": {
@@ -2104,7 +2034,7 @@
         "h": 6,
         "w": 5,
         "x": 5,
-        "y": 35
+        "y": 32
       },
       "id": 43,
       "options": {
@@ -2124,8 +2054,8 @@
       "scopedVars": {
         "fqdn": {
           "selected": true,
-          "text": "td1:6030",
-          "value": "td1:6030"
+          "text": "huolinhe-TM1701:6030",
+          "value": "huolinhe-TM1701:6030"
         }
       },
       "targets": [
@@ -2145,7 +2075,7 @@
       "type": "gauge"
     },
     {
-      "datasource": "TDengine",
+      "datasource": "${ds}",
       "description": "avg band speed  last  one minute",
       "fieldConfig": {
         "defaults": {
@@ -2180,7 +2110,7 @@
         "h": 6,
         "w": 4,
         "x": 10,
-        "y": 35
+        "y": 32
       },
       "id": 50,
       "options": {
@@ -2200,8 +2130,8 @@
       "scopedVars": {
         "fqdn": {
           "selected": true,
-          "text": "td1:6030",
-          "value": "td1:6030"
+          "text": "huolinhe-TM1701:6030",
+          "value": "huolinhe-TM1701:6030"
         }
       },
       "targets": [
@@ -2221,7 +2151,7 @@
       "type": "gauge"
     },
     {
-      "datasource": "TDengine",
+      "datasource": "${ds}",
       "description": "io read/write rate",
       "fieldConfig": {
         "defaults": {
@@ -2256,7 +2186,7 @@
         "h": 6,
         "w": 5,
         "x": 14,
-        "y": 35
+        "y": 32
       },
       "id": 49,
       "options": {
@@ -2276,8 +2206,8 @@
       "scopedVars": {
         "fqdn": {
           "selected": true,
-          "text": "td1:6030",
-          "value": "td1:6030"
+          "text": "huolinhe-TM1701:6030",
+          "value": "huolinhe-TM1701:6030"
         }
       },
       "targets": [
@@ -2297,7 +2227,7 @@
       "type": "gauge"
     },
     {
-      "datasource": "TDengine",
+      "datasource": "${ds}",
       "description": "io read/write rate",
       "fieldConfig": {
         "defaults": {
@@ -2332,7 +2262,7 @@
         "h": 6,
         "w": 5,
         "x": 19,
-        "y": 35
+        "y": 32
       },
       "id": 52,
       "options": {
@@ -2352,8 +2282,8 @@
       "scopedVars": {
         "fqdn": {
           "selected": true,
-          "text": "td1:6030",
-          "value": "td1:6030"
+          "text": "huolinhe-TM1701:6030",
+          "value": "huolinhe-TM1701:6030"
         }
       },
       "targets": [
@@ -2393,47 +2323,12 @@
       "type": "gauge"
     },
     {
-      "alert": {
-        "alertRuleTags": {},
-        "conditions": [
-          {
-            "evaluator": {
-              "params": [
-                80
-              ],
-              "type": "gt"
-            },
-            "operator": {
-              "type": "and"
-            },
-            "query": {
-              "params": [
-                "A",
-                "5m",
-                "now"
-              ]
-            },
-            "reducer": {
-              "params": [],
-              "type": "avg"
-            },
-            "type": "query"
-          }
-        ],
-        "executionErrorState": "keep_state",
-        "for": "5m",
-        "frequency": "1m",
-        "handler": 1,
-        "name": "CPU 资源占用情况 alert",
-        "noDataState": "alerting",
-        "notifications": []
-      },
       "aliasColors": {},
       "bars": false,
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "TDengine",
+      "datasource": "${ds}",
       "description": "monitor system cpu",
       "fieldConfig": {
         "defaults": {
@@ -2447,7 +2342,7 @@
         "h": 11,
         "w": 12,
         "x": 0,
-        "y": 41
+        "y": 38
       },
       "hiddenSeries": false,
       "hideTimeOverride": true,
@@ -2476,8 +2371,8 @@
       "scopedVars": {
         "fqdn": {
           "selected": true,
-          "text": "td1:6030",
-          "value": "td1:6030"
+          "text": "huolinhe-TM1701:6030",
+          "value": "huolinhe-TM1701:6030"
         }
       },
       "seriesOverrides": [],
@@ -2506,16 +2401,7 @@
           "type": "timeserie"
         }
       ],
-      "thresholds": [
-        {
-          "colorMode": "critical",
-          "fill": true,
-          "line": true,
-          "op": "gt",
-          "value": 80,
-          "visible": true
-        }
-      ],
+      "thresholds": [],
       "timeFrom": "1h",
       "timeRegions": [],
       "timeShift": "30s",
@@ -2565,7 +2451,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "TDengine",
+      "datasource": "${ds}",
       "description": "monitor system cpu",
       "fieldConfig": {
         "defaults": {
@@ -2579,7 +2465,7 @@
         "h": 11,
         "w": 12,
         "x": 12,
-        "y": 41
+        "y": 38
       },
       "hiddenSeries": false,
       "hideTimeOverride": true,
@@ -2608,8 +2494,8 @@
       "scopedVars": {
         "fqdn": {
           "selected": true,
-          "text": "td1:6030",
-          "value": "td1:6030"
+          "text": "huolinhe-TM1701:6030",
+          "value": "huolinhe-TM1701:6030"
         }
       },
       "seriesOverrides": [],
@@ -2693,47 +2579,11 @@
       }
     },
     {
-      "alert": {
-        "alertRuleTags": {},
-        "conditions": [
-          {
-            "evaluator": {
-              "params": [
-                90
-              ],
-              "type": "gt"
-            },
-            "operator": {
-              "type": "and"
-            },
-            "query": {
-              "params": [
-                "C",
-                "1m",
-                "now"
-              ]
-            },
-            "reducer": {
-              "params": [],
-              "type": "avg"
-            },
-            "type": "query"
-          }
-        ],
-        "executionErrorState": "keep_state",
-        "for": "5m",
-        "frequency": "1m",
-        "handler": 1,
-        "message": "Disk has been used reached limits.",
-        "name": "DIsk Used Percent",
-        "noDataState": "keep_state",
-        "notifications": []
-      },
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "${ds}",
       "fieldConfig": {
         "defaults": {
           "unit": "percent"
@@ -2746,7 +2596,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 52
+        "y": 49
       },
       "hiddenSeries": false,
       "id": 54,
@@ -2775,8 +2625,8 @@
       "scopedVars": {
         "fqdn": {
           "selected": true,
-          "text": "td1:6030",
-          "value": "td1:6030"
+          "text": "huolinhe-TM1701:6030",
+          "value": "huolinhe-TM1701:6030"
         }
       },
       "seriesOverrides": [
@@ -2832,16 +2682,7 @@
           "type": "timeserie"
         }
       ],
-      "thresholds": [
-        {
-          "colorMode": "critical",
-          "fill": true,
-          "line": true,
-          "op": "gt",
-          "value": 90,
-          "visible": true
-        }
-      ],
+      "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
@@ -2889,7 +2730,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "${ds}",
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -2900,7 +2741,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 52
+        "y": 49
       },
       "hiddenSeries": false,
       "id": 64,
@@ -2929,8 +2770,8 @@
       "scopedVars": {
         "fqdn": {
           "selected": true,
-          "text": "td1:6030",
-          "value": "td1:6030"
+          "text": "huolinhe-TM1701:6030",
+          "value": "huolinhe-TM1701:6030"
         }
       },
       "seriesOverrides": [
@@ -3030,7 +2871,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "TDengine",
+      "datasource": "${ds}",
       "description": "total  select  request  per minute last hour",
       "fieldConfig": {
         "defaults": {
@@ -3044,7 +2885,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 61
+        "y": 58
       },
       "hiddenSeries": false,
       "id": 8,
@@ -3074,8 +2915,8 @@
       "scopedVars": {
         "fqdn": {
           "selected": true,
-          "text": "td1:6030",
-          "value": "td1:6030"
+          "text": "huolinhe-TM1701:6030",
+          "value": "huolinhe-TM1701:6030"
         }
       },
       "seriesOverrides": [],
@@ -3165,7 +3006,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "TDengine",
+      "datasource": "${ds}",
       "description": "io",
       "fieldConfig": {
         "defaults": {
@@ -3180,7 +3021,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 61
+        "y": 58
       },
       "hiddenSeries": false,
       "hideTimeOverride": true,
@@ -3209,8 +3050,8 @@
       "scopedVars": {
         "fqdn": {
           "selected": true,
-          "text": "td1:6030",
-          "value": "td1:6030"
+          "text": "huolinhe-TM1701:6030",
+          "value": "huolinhe-TM1701:6030"
         }
       },
       "seriesOverrides": [],
@@ -3318,7 +3159,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 70
+        "y": 67
       },
       "id": 63,
       "panels": [],
@@ -3330,7 +3171,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "${ds}",
       "fieldConfig": {
         "defaults": {
           "displayName": "Logins Per Minute",
@@ -3344,7 +3185,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 71
+        "y": 68
       },
       "hiddenSeries": false,
       "id": 61,
@@ -3436,18 +3277,41 @@
   "refresh": "1m",
   "schemaVersion": 27,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "TDengine"
+  ],
   "templating": {
     "list": [
+      {
+        "current": {
+          "selected": true,
+          "text": "TDengine",
+          "value": "TDengine"
+        },
+        "description": "TDengine Data Source Selector",
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": "Datasource",
+        "multi": false,
+        "name": "ds",
+        "options": [],
+        "query": "taosdata-tdengine-datasource",
+        "queryValue": "",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
       {
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "td1:6030",
-          "value": "td1:6030"
+          "text": "huolinhe-TM1701:6030",
+          "value": "huolinhe-TM1701:6030"
         },
-        "datasource": null,
-        "definition": "select distinct(fqdn) from log.dn",
+        "datasource": "${ds}",
+        "definition": "select fqdn from log.dn",
         "description": "TDengine Nodes FQDN (Hostname)",
         "error": null,
         "hide": 0,
@@ -3456,7 +3320,7 @@
         "multi": false,
         "name": "fqdn",
         "options": [],
-        "query": "select distinct(fqdn) from log.dn",
+        "query": "select fqdn from log.dn",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -3488,7 +3352,7 @@
     ]
   },
   "timezone": "",
-  "title": "TDengine Imported",
+  "title": "TDengine",
   "uid": "tdengine",
-  "version": 10
+  "version": 8
 }
