@@ -76,7 +76,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Fake Measurement From TDengine StatsD",
+      "title": "Simulating Measurement From TDengine StatsD",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -175,7 +175,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Fake Measurement Rate",
+      "title": "Measurement Rate",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -228,7 +228,7 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Fake Measurement for TDengine StatsD",
+  "title": "Simulating Measurement for TDengine StatsD",
   "uid": "xKwH2iOnk",
   "version": 4
 }
