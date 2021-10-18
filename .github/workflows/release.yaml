@@ -106,7 +106,7 @@ jobs:
           echo "::set-output name=path::release_notes.md"
 
       - name: Check package version
-        run: if [[ "${{ steps.metadata.outputs.github-tag }}" != "v${{ steps.metadata.outputs.plugin-version }}*" ]]; then printf "\033[0;31mPlugin version doesn't match tag name\033[0m\n"; exit 1; fi
+        run: if [[ "${{ steps.metadata.outputs.github-tag }}" != "v${{ steps.metadata.outputs.plugin-version }}"* ]]; then printf "\033[0;31mPlugin version doesn't match tag name\033[0m\n"; exit 1; fi
 
       - name: Package plugin
         id: package-plugin
