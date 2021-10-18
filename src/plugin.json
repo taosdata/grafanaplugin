@@ -1,6 +1,6 @@
 {
   "name": "TDengine",
-  "id": "tdengine",
+  "id": "tdengine-datasource",
   "type": "datasource",
 
   "metrics": true,
