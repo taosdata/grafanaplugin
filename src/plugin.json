@@ -3,10 +3,6 @@
   "id": "taosdata-tdengine-datasource",
   "type": "datasource",
 
-  "partials": {
-    "config": "partials/config.html"
-  },
-
   "metrics": true,
   "annotations": false,
   "alerting": true,
@@ -14,6 +10,8 @@
   "executable": "taosdata-tdengine-datasource",
 
   "info": {
+    "screenshots": [{"name": "config", "path": "dashboard/howto-add-datasource.png"}],
+    "keywords": ["taosdata","TDengine"],
     "description": "grafana datasource plugin for tdengine",
     "author": {
       "name": "Taosdata Inc.",
@@ -32,8 +30,7 @@
   },
 
   "dependencies": {
-    "grafanaDependency": "Yes",
-    "grafanaVersion": "5.2.4",
-    "plugins": [ ]
+    "grafanaDependency": "7.0.0",
+    "grafanaVersion": "5.2.4"
   }
 }

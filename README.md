@@ -54,13 +54,13 @@ When using grafana's alert function, you must use `SQL` as the `Type` option. In
 
 After login `http://localhost:3000` , then you can import the tdengine demo dashboard to monitor the system metrics.
 
-Ad as example, you can import the [`dashboard/tdengine-grafana.json`](dashboard/tdengine-grafana.json) (Note that the dashboard panel requires Grafana 6.2+):
+Ad as example, you can import the [`dashboard/tdengine-grafana.json`](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/tdengine-grafana.json) (Note that the dashboard panel requires Grafana 6.2+):
 
-![import_dashboard](./dashboard/import_dashboard.png)
+![import_dashboard](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/import_dashboard.png)
 
 after finished import:
 
-![import_dashboard](/dashboard/tdengine_dashboard.png)
+![import_dashboard](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/tdengine_dashboard.png)
 
 [TDengine]: https://github.com/taosdata/TDengine
 [Grafana]: https://grafana.com
