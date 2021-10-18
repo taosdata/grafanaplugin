@@ -53,27 +53,27 @@ jobs:
       - name: Build and test frontend
         run: yarn build
 
-      - name: Check for backend
-        id: check-for-backend
-        run: |
-          if [ -f "Magefile.go" ]
-          then
-            echo "::set-output name=has-backend::true"
-          fi
+      # - name: Check for backend
+      #   id: check-for-backend
+      #   run: |
+      #     if [ -f "Magefile.go" ]
+      #     then
+      #       echo "::set-output name=has-backend::true"
+      #     fi
 
-      - name: Test backend
-        if: steps.check-for-backend.outputs.has-backend == 'true'
-        uses: magefile/mage-action@v1
-        with:
-          version: latest
-          args: coverage
+      # - name: Test backend
+      #   if: steps.check-for-backend.outputs.has-backend == 'true'
+      #   uses: magefile/mage-action@v1
+      #   with:
+      #     version: latest
+      #     args: coverage
 
-      - name: Build backend
-        if: steps.check-for-backend.outputs.has-backend == 'true'
-        uses: magefile/mage-action@v1
-        with:
-          version: latest
-          args: buildAll
+      # - name: Build backend
+      #   if: steps.check-for-backend.outputs.has-backend == 'true'
+      #   uses: magefile/mage-action@v1
+      #   with:
+      #     version: latest
+      #     args: buildAll
 
           #- name: Sign plugin
           # run: yarn sign
@@ -106,7 +106,7 @@ jobs:
           echo "::set-output name=path::release_notes.md"
 
       - name: Check package version
-        run: if [ "v${{ steps.metadata.outputs.plugin-version }}" != "${{ steps.metadata.outputs.github-tag }}" ]; then printf "\033[0;31mPlugin version doesn't match tag name\033[0m\n"; exit 1; fi
+        run: if [[ "${{ steps.metadata.outputs.github-tag }}" != "v${{ steps.metadata.outputs.plugin-version }}*" ]]; then printf "\033[0;31mPlugin version doesn't match tag name\033[0m\n"; exit 1; fi
 
       - name: Package plugin
         id: package-plugin
