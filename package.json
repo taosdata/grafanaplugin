@@ -1,8 +1,8 @@
 {
-  "name": "TDengine",
+  "name": "tdengine",
   "private": false,
-  "version": "3.1.0-pre",
-  "description": "grafana datasource plugin for tdengine",
+  "version": "3.1.0",
+  "description": "grafana data-source plugin for TDengine",
   "scripts": {
     "build": "./node_modules/grunt-cli/bin/grunt",
     "test": "./node_modules/grunt-cli/bin/grunt mochaTest"
