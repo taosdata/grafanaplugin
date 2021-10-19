@@ -1,5 +1,5 @@
 {
-  "name": "tdengine",
+  "name": "tdengine-grafana-datasource-plugin",
   "private": false,
   "version": "3.1.0",
   "description": "grafana data-source plugin for TDengine",
