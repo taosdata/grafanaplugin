@@ -1,5 +1,5 @@
 #!/bin/sh
-name=`jq '.id + "-v" + .info.version' -r src/plugin.json`
+name=`jq '.id + "-" + .info.version' -r src/plugin.json`
 echo generate plugin as $name
 rm -rf $name
 cp -r dist $name
