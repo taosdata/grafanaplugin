@@ -52,11 +52,11 @@ func (rd *RocksetDatasource) QueryData(ctx context.Context, req *backend.QueryDa
 	}
 	user, found := dat["user"]
 	if !found {
-		return nil, fmt.Errorf("could not locate user")
+		user = "root"
 	}
 	password, found := dat["password"]
 	if !found {
-		return nil, fmt.Errorf("could not locate password")
+		password = "taosdata"
 	}
 
 	response := backend.NewQueryDataResponse()
@@ -96,8 +96,13 @@ func generateSql(query backend.DataQuery) (sql, alias string, err error) {
 		sql = strings.ReplaceAll(sql, "$end", "'"+fmt.Sprint(query.TimeRange.To.In(timeZone).Format(time.RFC3339Nano))+"'")
 	}
 
-	// pluginLogger.Debug(sql)
-	return sql, queryDataJson["alias"].(string), nil
+	pluginLogger.Debug(sql)
+	// alias := ""
+	aliasJ, exist := queryDataJson["alias"]
+	if exist {
+		alias = aliasJ.(string)
+	}
+	return sql, alias, nil
 }
 
 func getTypeArray(typeNum int) interface{} {
@@ -205,11 +210,11 @@ func (rd *RocksetDatasource) CheckHealth(ctx context.Context, req *backend.Check
 	}
 	user, found := dat["user"]
 	if !found {
-		return healthError("could not locate user"), nil
+		user = "root"
 	}
 	password, found := dat["password"]
 	if !found {
-		return healthError("could not locate password"), nil
+		password = "taosdata"
 	}
 
 	if _, err := query(req.PluginContext.DataSourceInstanceSettings.URL, user, password, []byte("show databases")); err != nil {
