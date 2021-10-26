@@ -99,11 +99,62 @@ After import:
 
 ![dashboard display](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/howto-dashboard-display.png)
 
-### Attention
+### Alert
 
-Since version 3.1.0, it began to support the alert function of grafana, but currently its sql statement only supports two variables: `$from` and `$to`.
+Now TDengine data source plugin provides basic alert feature support by backend plugin since version `3.1.0`. But it has some known limits currently:
 
-When using grafana's alert function, you must use `SQL` as the `Type` option. In addition, only `ALIAS BY` and `INPUT SQL` are valid.
+1. The sql statement only supports two variables: `$from` and `$to`.
+2. When using grafana's alert function, you must use `SQL` as the `Type` option. That means, Arithmetic expression will not work as you expected for alert.
+3. In addition, only `ALIAS BY` and `INPUT SQL` are valid. So alert is not work if you requires the time-shift feature.
+
+We've published a dashboard ([15155](https://grafana.com/grafana/dashboards/15155)) for you to under stand how alert working.
+
+Here is the details:
+
+First, you should have a notification channel, if no, add a new one in <http://localhost:3000/alerting/notification/new>(here we use alertmanager fr test, we also provides a webhook example here, in `webhook/` directory)
+
+![notification channel](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/alert-notification-channel.png)
+
+Second, set the alert query in panel like this:
+
+![alert query](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/alert-query-demo.png)
+
+Config the alert rule and notifications:
+
+![alert rule](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/alert-rule-condition-notifications.png)
+
+Test it with **Test rule** button, it should return `firing: true`:
+
+![alert rule test](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/alert-rule-test.png)
+
+In alert manager dashboard, you could see the alert:
+
+![alert manager](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/alert-manager-status.png)
+
+## Docker Stack
+
+For a quick look and test, you can use `docker-compose` to start a full Grafana + AlertManager + Alert Webhook stack:
+
+```sh
+docker-compose up -d --build
+```
+
+Services:
+
+* Grafana: <http://localhost:3000>
+* AlertManager: <http://localhost:9093>, in docker it's <http://alertmanager:9010/sms>
+* Webhook: <http://localhost:9010/sms>, in docker it's <http://webhook:9010/sms>
+
+## Dashboards
+
+You can get other dashboards in the examples directory, or search in grafana with TDengine datasource <https://grafana.com/grafana/dashboards/?orderBy=downloads&direction=desc&dataSource=tdengine-datasource> .
+
+Here is a short list:
+
+* [15146](https://grafana.com/grafana/dashboards/15146): Multiple TDengines Monitoring Dashboard
+* [15155](https://grafana.com/grafana/dashboards/15155): TDengine Alert Demo
+
+You could open a pr to add one if you want to share your dashboard with TDengine community, we're so appreciate for your great help!
 
 [TDengine]: https://github.com/taosdata/TDengine
 [Grafana]: https://grafana.com

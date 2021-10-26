@@ -34,3 +34,4 @@ profile.cov
 
 # Test artifacts
 /dist/test/
+dist
