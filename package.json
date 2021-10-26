@@ -4,8 +4,9 @@
   "version": "2.0.1",
   "description": "grafana datasource plugin for tdengine",
   "scripts": {
-    "build": "./node_modules/grunt-cli/bin/grunt",
-    "test": "./node_modules/grunt-cli/bin/grunt mochaTest"
+    "build": "grunt && mage",
+    "package": "scripts/package.sh",
+    "test": "grunt mochaTest"
   },
   "repository": {
     "type": "git",
