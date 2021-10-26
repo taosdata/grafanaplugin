@@ -5,7 +5,7 @@ services:
     image: grafana/grafana:7.5.10
     volumes:
       - ./dist:/var/lib/grafana/plugins/tdengine
-      - ./grafana/:/etc/grafana/
+      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
       - grafana-data:/var/lib/grafana
     ports:
       - 3000:3000
