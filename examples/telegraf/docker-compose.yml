@@ -1,13 +1,13 @@
 version: '3.6'
 services:
   telegraf:
-    image: telegraf:1.18-alpine
+    image: telegraf:1.20-alpine
     hostname: telegraf
     volumes:
     - ./telegraf/etc/telegraf.conf:/etc/telegraf/telegraf.conf:ro
     env_file: tdengine.env
     ports:
-    - '127.0.0.1:8125:8125/udp'
+    - '127.0.0.1:18125:8125/udp'
 
   grafana:
     image: grafana/grafana:7.5.10
@@ -27,4 +27,3 @@ services:
 
 volumes:
   grafana_data: {}
-  influxdb_data: {}
