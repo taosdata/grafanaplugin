@@ -12,7 +12,7 @@ datasources:
   # <string, required> name of the datasource. Required
 - name: TDengine
   # <string, required> datasource type. Required
-  type: taosdata-tdengine-datasource
+  type: tdengine-datasource
   # <string, required> access mode. direct or proxy. Required
   # <int> org id. will defauto orgId 1 if not specified
   orgId: 1

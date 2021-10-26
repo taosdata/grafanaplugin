@@ -6,9 +6,31 @@ services:
     volumes:
       - ./dist:/var/lib/grafana/plugins/tdengine
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
+      - ./grafana/dashboards/:/var/lib/grafana/dashboards/
       - grafana-data:/var/lib/grafana
+    environment:
+      TDENGINE_API: ${TDENGINE_API}
+      TDENGINE_USER: ${TDENGINE_USER}
+      TDENGINE_PASS: ${TDENGINE_PASS}
     ports:
       - 3000:3000
+  alertmanager:
+    image: prom/alertmanager:v0.21.0
+    container_name: alertmanager
+    volumes:
+      - ./alertmanager:/etc/alertmanager
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+      - '--storage.path=/alertmanager'
+    # restart: unless-stopped
+    ports:
+      - 9093:9093
+    expose:
+      - 9093
+  webhook:
+    build: ./webhook/
+    hostname: webhook
 
 volumes:
   grafana-data:

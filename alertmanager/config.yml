@@ -1,0 +1,7 @@
+route:
+    receiver: 'webhook'
+
+receivers:
+    - name: 'webhook'
+      webhook_configs:
+        - url: 'http://webhook:9010/sms'

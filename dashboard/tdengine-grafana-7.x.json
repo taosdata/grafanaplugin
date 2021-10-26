@@ -3296,7 +3296,7 @@
         "multi": false,
         "name": "ds",
         "options": [],
-        "query": "taosdata-tdengine-datasource",
+        "query": "tdengine-datasource",
         "queryValue": "",
         "refresh": 1,
         "regex": "",
