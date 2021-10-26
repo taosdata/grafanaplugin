@@ -96,8 +96,13 @@ func generateSql(query backend.DataQuery) (sql, alias string, err error) {
 		sql = strings.ReplaceAll(sql, "$end", "'"+fmt.Sprint(query.TimeRange.To.In(timeZone).Format(time.RFC3339Nano))+"'")
 	}
 
-	// pluginLogger.Debug(sql)
-	return sql, queryDataJson["alias"].(string), nil
+	pluginLogger.Debug(sql)
+	// alias := ""
+	aliasJ, exist := queryDataJson["alias"]
+	if exist {
+		alias = aliasJ.(string)
+	}
+	return sql, alias, nil
 }
 
 func getTypeArray(typeNum int) interface{} {
