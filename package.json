@@ -4,7 +4,9 @@
   "version": "3.1.0",
   "description": "grafana data-source plugin for TDengine",
   "scripts": {
-    "build": "grunt && mage",
+    "build": "grunt",
+    "build:dist": "grunt && mage",
+    "build:all": "grunt && mage && scripts/package.sh",
     "package": "scripts/package.sh",
     "test": "grunt mochaTest"
   },
