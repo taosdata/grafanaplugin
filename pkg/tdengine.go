@@ -52,11 +52,11 @@ func (rd *RocksetDatasource) QueryData(ctx context.Context, req *backend.QueryDa
 	}
 	user, found := dat["user"]
 	if !found {
-		return nil, fmt.Errorf("could not locate user")
+		user = "root"
 	}
 	password, found := dat["password"]
 	if !found {
-		return nil, fmt.Errorf("could not locate password")
+		password = "taosdata"
 	}
 
 	response := backend.NewQueryDataResponse()
@@ -205,11 +205,11 @@ func (rd *RocksetDatasource) CheckHealth(ctx context.Context, req *backend.Check
 	}
 	user, found := dat["user"]
 	if !found {
-		return healthError("could not locate user"), nil
+		user = "root"
 	}
 	password, found := dat["password"]
 	if !found {
-		return healthError("could not locate password"), nil
+		password = "taosdata"
 	}
 
 	if _, err := query(req.PluginContext.DataSourceInstanceSettings.URL, user, password, []byte("show databases")); err != nil {
