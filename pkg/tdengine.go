@@ -78,7 +78,7 @@ func (rd *RocksetDatasource) QueryData(ctx context.Context, req *backend.QueryDa
 
 func generateSql(query backend.DataQuery) (sql, alias string, err error) {
 	var queryDataJson map[string]interface{}
-	// pluginLogger.Debug(fmt.Sprintf("req.Queries.JSON:%+v", string(query.JSON)))
+	pluginLogger.Debug(fmt.Sprintf("req.Queries.JSON:%+v", string(query.JSON)))
 	if err = json.Unmarshal(query.JSON, &queryDataJson); err != nil {
 		return "", "", fmt.Errorf("get query error: %w", err)
 	}
@@ -89,6 +89,7 @@ func generateSql(query backend.DataQuery) (sql, alias string, err error) {
 	if timeZone, err := time.LoadLocation(""); err != nil {
 		return "", "", fmt.Errorf("get time location zone: %w", err)
 	} else {
+		// pluginLogger.Debug("use timeZone: %v", timeZone)
 		// sql = strings.ReplaceAll(sql, "$interval", fmt.Sprint(query.Interval.Seconds())+"s")  // Do not support $interval,because it always be 0.
 		sql = strings.ReplaceAll(sql, "$from", "'"+fmt.Sprint(query.TimeRange.From.In(timeZone).Format(time.RFC3339Nano))+"'")
 		sql = strings.ReplaceAll(sql, "$begin", "'"+fmt.Sprint(query.TimeRange.From.In(timeZone).Format(time.RFC3339Nano))+"'")
@@ -131,6 +132,8 @@ func getTypeArray(typeNum int) interface{} {
 }
 func makeResponse(body []byte, alias string) (response backend.DataResponse, err error) {
 	var res map[string]interface{}
+
+	backend.Logger.Debug("body: ", string(body))
 	if err = json.Unmarshal(body, &res); err != nil {
 		return response, fmt.Errorf("get res error: %w", err)
 	}
@@ -150,14 +153,27 @@ func makeResponse(body []byte, alias string) (response backend.DataResponse, err
 	if len(res["data"].([]interface{})) == 0 || len(res["data"].([]interface{})[0].([]interface{})) == 0 {
 		return response, nil
 	}
-	if len(res["data"].([]interface{})[0].([]interface{})[0].(string)) == len("2006-01-02T15:04:05.000-0700") {
+	tsLayout := res["data"].([]interface{})[0].([]interface{})[0].(string)
+	pluginLogger.Debug("tsLayout:", tsLayout)
+
+	if len(tsLayout) == len("2006-01-02T15:04:05-07:00") {
+		timeLayout = "2006-01-02T15:04:05-07:00"
+	} else if len(tsLayout) == len("2006-01-02T15:04:05-0700") {
+		timeLayout = "2006-01-02T15:04:05-0700"
+	} else if len(tsLayout) == len("2006-01-02T15:04:05.000-07:00") {
+		timeLayout = "2006-01-02T15:04:05.000-07:00"
+	} else if len(tsLayout) == len("2006-01-02T15:04:05.000-0700") {
 		timeLayout = "2006-01-02T15:04:05.000-0700"
-	} else if len(res["data"].([]interface{})[0].([]interface{})[0].(string)) == len("2006-01-02T15:04:05.000000-0700") {
+	} else if len(tsLayout) == len("2006-01-02T15:04:05.000000-07:00") {
+		timeLayout = "2006-01-02T15:04:05.000000-07:00"
+	} else if len(tsLayout) == len("2006-01-02T15:04:05.000000-0700") {
 		timeLayout = "2006-01-02T15:04:05.000000-0700"
-	} else if len(res["data"].([]interface{})[0].([]interface{})[0].(string)) == len("2006-01-02T15:04:05.000000000-0700") {
+	} else if len(tsLayout) == len("2006-01-02T15:04:05.000000000-07:00") {
+		timeLayout = "2006-01-02T15:04:05.000000000-07:00"
+	} else if len(tsLayout) == len("2006-01-02T15:04:05.000000000-0700") {
 		timeLayout = "2006-01-02T15:04:05.000000000-0700"
 	} else {
-		return response, fmt.Errorf("ts parse layout error")
+		return response, fmt.Errorf("ts parse layout error %s", tsLayout)
 	}
 	for i := 0; i < len(res["data"].([]interface{})); i++ {
 		if res["data"].([]interface{})[i].([]interface{})[0], err = time.Parse(timeLayout, res["data"].([]interface{})[i].([]interface{})[0].(string)); err != nil {

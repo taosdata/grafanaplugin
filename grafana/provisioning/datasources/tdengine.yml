@@ -1,0 +1,35 @@
+# config file version
+apiVersion: 1
+
+# list of datasources that should be deleted from the database
+deleteDatasources:
+  - name: TDengine
+    orgId: 1
+
+# list of datasources to insert/update depending
+# whats available in the database
+datasources:
+  # <string, required> name of the datasource. Required
+- name: TDengine
+  # <string, required> datasource type. Required
+  type: tdengine-datasource
+  # <string, required> access mode. direct or proxy. Required
+  # <int> org id. will defauto orgId 1 if not specified
+  orgId: 1
+  # <string> url
+  url: $TDENGINE_API
+  # <string> database password, if used
+  password: $TDENGINE_PASS
+  # <string> database user, if used
+  user: $TDENGINE_USER
+  # <bool> enable/disable basic auth
+  basicAuth: true
+#  withCredentials:
+  # <bool> mark as default datasource. Max one per org
+  isDefault: true
+  # <map> fields that will be converted to json and stored in json_data
+  jsonData:
+    timeInterval: "5s"
+  version: 1
+  # <bool> allow users to edit datasources from the UI.
+  editable: true

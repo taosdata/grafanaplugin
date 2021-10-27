@@ -31,6 +31,8 @@ services:
   webhook:
     build: ./webhook/
     hostname: webhook
+    ports:
+      - 9010:9010
 
 volumes:
   grafana-data:
