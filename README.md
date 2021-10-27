@@ -1,10 +1,19 @@
 # Grafana Plugin for TDengine
 
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Add Data Source](#add-data-source)
+  - [Import Dashboard](#import-dashboard)
+  - [Alert Feature](#alert-feature)
+- [Monitor TDengine Database with TDengine Data Source Plugin](#monitor-tdengine-database-with-tdengine-data-source-plugin)
+- [Docker Stack](#docker-stack)
+- [Dashboards](#dashboards)
+
 A [Grafana] plugin for [TDengine] datasource build by [Taosdata Inc.](https://www.taosdata.com)
 
 TDengine backend server implement 1 url:
 
-* `/rest/sqlutc` return data for the input sql. Please see [Grafana Connector](https://www.taosdata.com/en/documentation/connections#grafana) and [RESTful Connector](https://www.taosdata.com/cn/documentation/connector#restful).
+- `/rest/sqlutc` return data for the input sql. Please see [Grafana Connector](https://www.taosdata.com/en/documentation/connections#grafana) and [RESTful Connector](https://www.taosdata.com/cn/documentation/connector#restful).
 
 ## Installation
 
@@ -62,7 +71,11 @@ yarn run grafana-toolkit plugin:sign --signatureType private --rootUrls 'http://
 
 `rootUrls` is your local grafana server url.
 
-## Create Data Source
+## Usage
+
+Now it's ready for you to add your own TDengine data source and use it in a dashboard.
+
+### Add Data Source
 
 Point to **Configurations** -> **Data Sources** menu and then **Add data source** button.
 
@@ -79,7 +92,7 @@ Save and test it, it should say 'TDengine Data source is working'.
 
 ![data source test](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/howto-add-datasource-test.png)
 
-## Import Dashboard
+### Import Dashboard
 
 Point to **+** / **Create** - **import** (or `/dashboard/import` url).
 
@@ -99,7 +112,7 @@ After import:
 
 ![dashboard display](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/howto-dashboard-display.png)
 
-### Alert
+### Alert Feature
 
 Now TDengine data source plugin provides basic alert feature support by backend plugin since version `3.1.0`. But it has some known limits currently:
 
@@ -111,7 +124,7 @@ We've published a dashboard ([15155](https://grafana.com/grafana/dashboards/1515
 
 Here is the details:
 
-First, you should have a notification channel, if no, add a new one in <http://localhost:3000/alerting/notification/new>(here we use alertmanager fr test, we also provides a webhook example here, in `webhook/` directory)
+First, you should have a notification channel, if no, add a new one in <http://localhost:3000/alerting/notification/new>(here we use AlertManager for test, we also provides a webhook example here, in `webhook/` directory)
 
 ![notification channel](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/alert-notification-channel.png)
 
@@ -131,6 +144,10 @@ In alert manager dashboard, you could see the alert:
 
 ![alert manager](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/alert-manager-status.png)
 
+## Monitor TDengine Database with TDengine Data Source Plugin
+
+See [How to Monitor TDengine Cluster with Grafana](https://github.com/taosdata/grafanaplugin/blob/master/HOWTO.md) for the details.
+
 ## Docker Stack
 
 For a quick look and test, you can use `docker-compose` to start a full Grafana + AlertManager + Alert Webhook stack:
@@ -141,9 +158,9 @@ docker-compose up -d --build
 
 Services:
 
-* Grafana: <http://localhost:3000>
-* AlertManager: <http://localhost:9093>, in docker it's <http://alertmanager:9010/sms>
-* Webhook: <http://localhost:9010/sms>, in docker it's <http://webhook:9010/sms>
+- Grafana: <http://localhost:3000>
+- AlertManager: <http://localhost:9093>, in docker it's <http://alertmanager:9010/sms>
+- Webhook: <http://localhost:9010/sms>, in docker it's <http://webhook:9010/sms>
 
 ## Dashboards
 
@@ -151,8 +168,8 @@ You can get other dashboards in the examples directory, or search in grafana wit
 
 Here is a short list:
 
-* [15146](https://grafana.com/grafana/dashboards/15146): Multiple TDengines Monitoring Dashboard
-* [15155](https://grafana.com/grafana/dashboards/15155): TDengine Alert Demo
+- [15146](https://grafana.com/grafana/dashboards/15146): Multiple TDengines Monitoring Dashboard
+- [15155](https://grafana.com/grafana/dashboards/15155): TDengine Alert Demo
 
 You could open a pr to add one if you want to share your dashboard with TDengine community, we're so appreciate for your great help!
 
