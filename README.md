@@ -11,7 +11,7 @@
 
 A [Grafana] plugin for [TDengine] datasource build by [Taosdata Inc.](https://www.taosdata.com)
 
-TDengine backend server implement 1 url:
+TDengine backend server implements 1 url:
 
 - `/rest/sqlutc` return data for the input sql. Please see [Grafana Connector](https://www.taosdata.com/en/documentation/connections#grafana) and [RESTful Connector](https://www.taosdata.com/cn/documentation/connector#restful).
 
@@ -171,7 +171,7 @@ Here is a short list:
 - [15146](https://grafana.com/grafana/dashboards/15146): Multiple TDengines Monitoring Dashboard
 - [15155](https://grafana.com/grafana/dashboards/15155): TDengine Alert Demo
 
-You could open a pr to add one if you want to share your dashboard with TDengine community, we're so appreciate for your great help!
+You could open a pr to add one if you want to share your dashboard with TDengine community, we appreciate your contribution!
 
 [TDengine]: https://github.com/taosdata/TDengine
 [Grafana]: https://grafana.com
