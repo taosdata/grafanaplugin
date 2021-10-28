@@ -13,6 +13,7 @@ export class GenericDatasource {
     this.headers = { 'Content-Type': 'application/json' };
     this.headers.Authorization = this.getAuthorization(instanceSettings.jsonData);
     this.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    this.generateSqlList = {};
   }
 
   query(options) {
@@ -24,8 +25,11 @@ export class GenericDatasource {
     if (targets.length <= 0) {
       return this.q.when({ data: [] });
     }
-
-    return Promise.all(targets.map(target => this.request('/rest/sqlutc',this.generateSql(target.sql,options)).then(res => this.postQuery(target,res,options))))
+    return Promise.all(targets.map(target => {
+      let sql = this.generateSql(target.sql,options);
+      this.generateSqlList[target.refId]=sql;
+      return this.request('/rest/sqlutc',sql).then(res => this.postQuery(target,res,options));
+    }))
       .then(data => {
         let result = this.arithmeticQueries(data,options).flat();
         // console.log('result',result);

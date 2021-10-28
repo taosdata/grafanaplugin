@@ -24,7 +24,7 @@ export class GenericDatasourceQueryCtrl extends QueryCtrl {
   }
 
   generateSQL() {
-    this.lastGenerateSQL = this.datasource.generateSql(this.target.sql);
+    this.lastGenerateSQL = this.datasource.generateSqlList[this.target.refId];
     this.showGenerateSQL = !this.showGenerateSQL;
   }
 
