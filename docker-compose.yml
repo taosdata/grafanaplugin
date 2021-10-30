@@ -17,17 +17,13 @@ services:
       - 3000:3000
   alertmanager:
     image: prom/alertmanager:v0.21.0
-    container_name: alertmanager
     volumes:
       - ./alertmanager:/etc/alertmanager
     command:
       - '--config.file=/etc/alertmanager/config.yml'
       - '--storage.path=/alertmanager'
-    # restart: unless-stopped
     ports:
       - 9093:9093
-    expose:
-      - 9093
   webhook:
     build: ./webhook/
     hostname: webhook
