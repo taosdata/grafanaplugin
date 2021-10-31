@@ -8,7 +8,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	grafana_webhook "webhook/grafana-webhook"
+	"webhook/grafana_webhook"
 )
 
 func main() {
