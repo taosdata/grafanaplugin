@@ -4,15 +4,13 @@ import './css/query-editor.css!'
 export class GenericDatasourceQueryCtrl extends QueryCtrl {
   constructor($scope, $injector) {
     super($scope, $injector);
-
     this.scope = $scope;
-    this.target.target = this.target.target || 'select metric';
-    this.target.type = this.target.type || 'timeserie';
-    this.target.queryType = this.target.queryType || 'SQL';
-    this.target.formatType = this.target.formatType || 'Time series';
 
     this.queryTypes = ["SQL", "Arithmetic"];
     this.formatTypes = ["Time series", "Table"];
+    this.target.queryType = this.target.queryType || this.queryTypes[0];
+    this.target.formatType = this.target.formatType || this.formatTypes[0];
+    this.target.groupDataByColName = "";
   }
 
   onChangeInternal() {
@@ -24,7 +22,7 @@ export class GenericDatasourceQueryCtrl extends QueryCtrl {
   }
 
   generateSQL() {
-    this.lastGenerateSQL = this.datasource.generateSql(this.target.sql);
+    this.lastGenerateSQL = this.datasource.generateSqlList[this.target.sql];
     this.showGenerateSQL = !this.showGenerateSQL;
   }
 
