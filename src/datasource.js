@@ -4,7 +4,6 @@ export class GenericDatasource {
 
   constructor(instanceSettings, $q, backendSrv, templateSrv) {
     // console.log("instanceSettings",instanceSettings);
-    this.type = instanceSettings.type;
     this.url = instanceSettings.url;
     this.name = instanceSettings.name;
     this.q = $q;
@@ -125,40 +124,85 @@ export class GenericDatasource {
     return sql;
   }
 
+  groupDataByColName(dataRecv,colName) {
+    if(!colName||colName.length==0) {
+      return [dataRecv];
+    }
+    for (let index = 0; index < dataRecv.column_meta.length; index++) {
+      if (dataRecv.column_meta[index][0]==colName) {
+        let groupData = {};
+        let headers = dataRecv.column_meta;
+        const data = dataRecv.data;
+        const rows = dataRecv.rows;
+        const cols = headers.length;
+        for (let rowsIndex = 0; rowsIndex < rows; rowsIndex++) {
+          let groupColValue = data[rowsIndex][index];
+          if (!groupData[groupColValue]) {
+            groupData[groupColValue]={column_meta:[],data:[],rows:0};
+            for (let k = 0; k < dataRecv.column_meta.length; k++) {
+              if (k!=index) {
+                groupData[groupColValue].column_meta.push([...dataRecv.column_meta[k]]);
+                if (!(k==0&&dataRecv.column_meta[k][1]==9)) {
+                  groupData[groupColValue].column_meta[groupData[groupColValue].column_meta.length-1][0]+="_"+groupColValue;
+                }
+              }
+            }
+            groupData[groupColValue].column_meta;
+          }
+          data[rowsIndex].splice(index,1);
+          groupData[groupColValue].data.push(data[rowsIndex]);
+          groupData[groupColValue].rows+=1;
+        }
+        let keys = Object.keys(groupData).sort();
+        let groupDataRet = [];
+        for (let indexKeys = 0; indexKeys < keys.length; indexKeys++) {
+          groupDataRet.push(groupData[keys[indexKeys]]);
+        }
+        return groupDataRet;
+      }
+    }
+    return [dataRecv];
+  }
+
   postQuery(query, response,options) {
     // console.log('query',query);
     // console.log('response',response);
     if (!response||!response.data||!response.data.data) {
       return [];
     }
-    const headers = response.data.column_meta;
-    const data = response.data.data;
-    const rows = response.data.rows;
-    const cols = headers.length;
+    let dataGroupList = this.groupDataByColName(response.data,query.colName);
     const result = [];
     const aliasList = (query.alias||'').split(',')||[];
-    if (!!headers&&!!headers[0]&&!!headers[0][1]) {
-      const timeSeriesIndex = headers.findIndex(item => item[1] === 9);
-      if (timeSeriesIndex == -1||query.formatType == 'Table') {
-        result.push({columns:headers.map(item => ({text:item[0]})),rows:data,type:'table',refId:query.refId,target:this.getRowAlias(aliasList[0],headers[0][0],options),hide:!!query.hide});
-      }else{
-        for (let i = 0; i < cols; i++) {
-          if (i == timeSeriesIndex) {
-            continue;
-          }
-          let aliasRow = headers[i][0];
-          if (i<=aliasList.length) {
-            aliasRow = this.getRowAlias(aliasList[i-1],aliasRow,options);
-          }
-          let resultItem = {datapoints:[],refId:query.refId,target:aliasRow,hide:!!query.hide};
-          for (let k = 0; k < rows; k++) {
-            let timeShiftDuration = moment.duration();
-            if (query.timeshift&&query.timeshift.period&&query.timeshift.unit) {
-              timeShiftDuration = moment.duration(query.timeshift.period,query.timeshift.unit);
+    let aliasListIndex = 0;
+    for (let index = 0; index < dataGroupList.length; index++) {
+      const headers = dataGroupList[index].column_meta;
+      const data = dataGroupList[index].data;
+      const rows = dataGroupList[index].rows;
+      const cols = headers.length;
+      if (!!headers&&!!headers[0]&&!!headers[0][1]) {
+        const timeSeriesIndex = headers.findIndex(item => item[1] === 9);
+        if (timeSeriesIndex == -1||query.formatType == 'Table') {
+          result.push({columns:headers.map(item => ({text:item[0]})),rows:data,type:'table',refId:query.refId,target:this.getRowAlias(aliasList[0],headers[0][0],options),hide:!!query.hide});
+        }else{
+          for (let i = 0; i < cols; i++) {
+            if (i == timeSeriesIndex) {
+              continue;
             }
-            resultItem.datapoints.push([data[k][i],moment.utc(data[k][timeSeriesIndex]).tz(this.timezone).add(timeShiftDuration).valueOf()]);
+            let aliasRow = headers[i][0];
+            if (aliasListIndex<aliasList.length) {
+              aliasRow = this.getRowAlias(aliasList[aliasListIndex],aliasRow,options);
+              aliasListIndex++;
+            }
+            let resultItem = {datapoints:[],refId:query.refId,target:aliasRow,hide:!!query.hide};
+            for (let k = 0; k < rows; k++) {
+              let timeShiftDuration = moment.duration();
+              if (query.timeshift&&query.timeshift.period&&query.timeshift.unit) {
+                timeShiftDuration = moment.duration(query.timeshift.period,query.timeshift.unit);
+              }
+              resultItem.datapoints.push([data[k][i],moment.utc(data[k][timeSeriesIndex]).tz(this.timezone).add(timeShiftDuration).valueOf()]);
+            }
+            result.push(resultItem);
           }
-          result.push(resultItem);
         }
       }
     }

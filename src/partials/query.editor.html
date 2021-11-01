@@ -82,6 +82,16 @@
           <select ng-model="ctrl.target.formatType" class="gf-form-input" ng-options="type for type in ctrl.formatTypes" ng-change="ctrl.targetBlur()">
           </select>
         </div>    
+        <label class="gf-form-label query-keyword width-10">
+          Group data by cal name
+        </label>
+        <input
+          type="text"
+          class="gf-form-input width-10"
+          ng-model="ctrl.target.colName"
+          ng-change="ctrl.targetBlur()"
+          ng-model-onblur
+        />
       </div>
     </div>
     <div ng-switch-when="SQL" ng-switch-when-separator="|" class="gf-form max-width-100">  
