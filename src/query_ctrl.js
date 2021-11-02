@@ -10,8 +10,8 @@ export class GenericDatasourceQueryCtrl extends QueryCtrl {
     this.formatTypes = ["Time series", "Table"];
     this.target.queryType = this.target.queryType || this.queryTypes[0];
     this.target.formatType = this.target.formatType || this.formatTypes[0];
-    this.target.colNameToGroup = "";
-    this.target.colNameFormatStr = "";
+    this.target.colNameToGroup = this.target.colNameToGroup || "";
+    this.target.colNameFormatStr = this.target.colNameFormatStr || "";
   }
 
   onChangeInternal() {
