@@ -74,7 +74,6 @@ export class GenericDatasource {
     const regex = /\$(\w+)|\[\[([\s\S]+?)\]\]|\{\{([\s\S]+?)\}\}/g;
     return alias.replace(regex,(match, g1, g2, g3) => {
       const group = g1 || g2 || g3;
-      console.log(group,replaceObject)
       return replaceObject[group]||match;
     });
   }
@@ -311,7 +310,7 @@ export class GenericDatasource {
       if (!res||!res.data||!res.data.data) {
         return [];
       }else{
-        console.log('res',res);
+        // console.log('res',res);
         let values = [];
         for (let i = 0; i < res.data.data.length; i++) {
           values.push({text:''+res.data.data[i]});
