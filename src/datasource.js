@@ -66,19 +66,16 @@ export class GenericDatasource {
     });
   }
 
-  getRowAlias(alias, aliasRow,options) {
+  getRowAlias(alias, replaceObject,options) {
     if (!alias) {
-      return aliasRow;
+      return Object.values(replaceObject)[0];
     }
     alias = this.generateSql(alias,options);
-    const regex = /\$(\w+)|\[\[([\s\S]+?)\]\]/g;
-    return alias.replace(regex,(match, g1, g2) => {
-      const group = g1 || g2;
-
-      if (group === 'col') {
-        return aliasRow;
-      }
-      return match;
+    const regex = /\$(\w+)|\[\[([\s\S]+?)\]\]|\{\{([\s\S]+?)\}\}/g;
+    return alias.replace(regex,(match, g1, g2, g3) => {
+      const group = g1 || g2 || g3;
+      console.log(group,replaceObject)
+      return replaceObject[group]||match;
     });
   }
   generateSql(sql,options) {
@@ -124,12 +121,12 @@ export class GenericDatasource {
     return sql;
   }
 
-  groupDataByColName(dataRecv,colName) {
-    if(!colName||colName.length==0) {
+  groupDataByColName(dataRecv,query,options) {
+    if(!query.colNameToGroup||query.colNameToGroup.length==0) {
       return [dataRecv];
     }
     for (let index = 0; index < dataRecv.column_meta.length; index++) {
-      if (dataRecv.column_meta[index][0]==colName) {
+      if (dataRecv.column_meta[index][0]==query.colNameToGroup) {
         let groupData = {};
         let headers = dataRecv.column_meta;
         const data = dataRecv.data;
@@ -141,10 +138,11 @@ export class GenericDatasource {
             groupData[groupColValue]={column_meta:[],data:[],rows:0};
             for (let k = 0; k < dataRecv.column_meta.length; k++) {
               if (k!=index) {
-                groupData[groupColValue].column_meta.push([...dataRecv.column_meta[k]]);
-                if (!(k==0&&dataRecv.column_meta[k][1]==9)) {
-                  groupData[groupColValue].column_meta[groupData[groupColValue].column_meta.length-1][0]+="_"+groupColValue;
+                let header = [...dataRecv.column_meta[k]];
+                if (!(k==0&&header[1]==9)) {
+                  header[0]=this.getRowAlias(query.colNameFormatStr||"{{colName}}_{{groupValue}}",{colName:header[0],groupValue:groupColValue},options);
                 }
+                groupData[groupColValue].column_meta.push(header);
               }
             }
             groupData[groupColValue].column_meta;
@@ -164,13 +162,13 @@ export class GenericDatasource {
     return [dataRecv];
   }
 
-  postQuery(query, response,options) {
+  postQuery(query, response, options) {
     // console.log('query',query);
     // console.log('response',response);
     if (!response||!response.data||!response.data.data) {
       return [];
     }
-    let dataGroupList = this.groupDataByColName(response.data,query.colName);
+    let dataGroupList = this.groupDataByColName(response.data,query,options);
     const result = [];
     const aliasList = (query.alias||'').split(',')||[];
     let aliasListIndex = 0;
@@ -182,7 +180,7 @@ export class GenericDatasource {
       if (!!headers&&!!headers[0]&&!!headers[0][1]) {
         const timeSeriesIndex = headers.findIndex(item => item[1] === 9);
         if (timeSeriesIndex == -1||query.formatType == 'Table') {
-          result.push({columns:headers.map(item => ({text:item[0]})),rows:data,type:'table',refId:query.refId,target:this.getRowAlias(aliasList[0],headers[0][0],options),hide:!!query.hide});
+          result.push({columns:headers.map(item => ({text:item[0]})),rows:data,type:'table',refId:query.refId,target:this.getRowAlias(aliasList[0],{col:headers[0][0]},options),hide:!!query.hide});
         }else{
           for (let i = 0; i < cols; i++) {
             if (i == timeSeriesIndex) {
@@ -190,7 +188,7 @@ export class GenericDatasource {
             }
             let aliasRow = headers[i][0];
             if (aliasListIndex<aliasList.length) {
-              aliasRow = this.getRowAlias(aliasList[aliasListIndex],aliasRow,options);
+              aliasRow = this.getRowAlias(aliasList[aliasListIndex],{col:aliasRow},options);
               aliasListIndex++;
             }
             let resultItem = {datapoints:[],refId:query.refId,target:aliasRow,hide:!!query.hide};
@@ -233,7 +231,7 @@ export class GenericDatasource {
         let functionBody = "return (" + target.expression + ");";
         let expressionFunction = new Function(functionArgs, functionBody);
         let result = null;
-        const aliasList = (target.alias||'').split(',').map(alias => this.getRowAlias(alias,target.refId,options));
+        const aliasList = (target.alias||'').split(',').map(alias => this.getRowAlias(alias,{col:target.refId},options));
 
         const aliasListResult = [];
         Object.entries(targetResults).forEach(args => {
