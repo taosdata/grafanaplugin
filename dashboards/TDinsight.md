@@ -142,7 +142,7 @@ Then it's all done.
 
 The full page view for TDengine will like below.
 
-![display](tdinsight.png)
+![display](TDinsight-full.png)
 
 ## The Dashboard Details
 
