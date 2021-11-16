@@ -104,11 +104,11 @@ export class GenericDatasource {
     
     intervalMs += "a";
     sql = sql.replace(/^\s+|\s+$/gm, '');
-    sql = sql.replace("$from", "'" + queryStart + "'");
-    sql = sql.replace("$begin", "'" + queryStart + "'");
-    sql = sql.replace("$to", "'" + queryEnd + "'");
-    sql = sql.replace("$end", "'" + queryEnd + "'");
-    sql = sql.replace("$interval", intervalMs);
+    sql = sql.replace(/\$from/g, "'" + queryStart + "'");
+    sql = sql.replace(/\$begin/g, "'" + queryStart + "'");
+    sql = sql.replace(/\$to/g, "'" + queryEnd + "'");
+    sql = sql.replace(/\$end/g, "'" + queryEnd + "'");
+    sql = sql.replace(/\$interval/g, intervalMs);
     
     const allVaribles = this.templateSrv.getVariables ? this.templateSrv.getVariables() : this.templateSrv.variables||[];
     for (let i = 0; i < allVaribles.length; i++) {
