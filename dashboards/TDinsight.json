@@ -83,7 +83,7 @@
   "gnetId": 15146,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1636854227538,
+  "iteration": 1637035354222,
   "links": [],
   "panels": [
     {
@@ -2153,7 +2153,7 @@
             "h": 9,
             "w": 24,
             "x": 0,
-            "y": 25
+            "y": 2
           },
           "hiddenSeries": false,
           "id": 110,
@@ -2287,7 +2287,7 @@
             "h": 9,
             "w": 24,
             "x": 0,
-            "y": 34
+            "y": 11
           },
           "hiddenSeries": false,
           "id": 112,
@@ -2314,12 +2314,7 @@
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
-          "seriesOverrides": [
-            {
-              "alias": "/.*insert.*/",
-              "transform": "negative-Y"
-            }
-          ],
+          "seriesOverrides": [],
           "spaceLength": 10,
           "stack": false,
           "steppedLine": false,
@@ -2399,7 +2394,7 @@
             "h": 8,
             "w": 24,
             "x": 0,
-            "y": 43
+            "y": 20
           },
           "hiddenSeries": false,
           "id": 114,
@@ -2442,7 +2437,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select sum(req_select) as req_select from log.dnodes_info where ts >= $from and ts <= $to interval(30s) group by dnode_ep"
+              "sql": "select sum(req_select) as req_select from log.dnodes_info where ts >= $from and ts <= $to interval($interval) group by dnode_ep"
             },
             {
               "colNameFormatStr": "",
@@ -2451,7 +2446,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "B",
-              "sql": "select sum(req_select) as total from log.dnodes_info where ts >= $from and ts <= $to interval(30s)"
+              "sql": "select sum(req_select) as total from log.dnodes_info where ts >= $from and ts <= $to interval($interval)"
             },
             {
               "colNameFormatStr": "",
@@ -2460,7 +2455,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "C",
-              "sql": "select avg(req_select_rate) as req_select_rate from log.dnodes_info where ts >= $from and ts <= $to interval(30s) group by dnode_ep"
+              "sql": "select avg(req_select_rate) as req_select_rate from log.dnodes_info where ts >= $from and ts <= $to interval($interval) group by dnode_ep"
             },
             {
               "colNameFormatStr": "",
@@ -2469,7 +2464,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "D",
-              "sql": "select avg(req_select_rate) as req_select_rate from (select sum(req_select_rate) as req_select_rate from log.dnodes_info where ts >= $from and ts <= $to interval(1s)) interval(30s)"
+              "sql": "select avg(req_select_rate) as req_select_rate from (select sum(req_select_rate) as req_select_rate from log.dnodes_info where ts >= $from and ts <= $to interval(1s)) interval($interval)"
             }
           ],
           "thresholds": [],
@@ -2529,7 +2524,7 @@
             "h": 8,
             "w": 24,
             "x": 0,
-            "y": 51
+            "y": 28
           },
           "hiddenSeries": false,
           "id": 111,
@@ -2558,7 +2553,6 @@
           "renderer": "flot",
           "seriesOverrides": [
             {
-              "$$hashKey": "object:85",
               "alias": "/.*rate.*/",
               "dashes": true,
               "fill": 4,
@@ -2594,7 +2588,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "C",
-              "sql": "select sum(req_http_rate) as req_http_rate from log.dnodes_info where ts >= $from and ts <= $to interval(30s) group by dnode_ep"
+              "sql": "select avg(req_http_rate) as req_http_rate from log.dnodes_info where ts >= $from and ts <= $to interval(30s) group by dnode_ep"
             },
             {
               "colNameFormatStr": "",
@@ -2603,7 +2597,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "D",
-              "sql": "select avg(req_http_rate) as req_http_rate from log.dnodes_info where ts >= $from and ts <= $to interval(30s)"
+              "sql": "select avg(req_http_rate) as req_http_rate from (select sum(req_http_rate) as req_http_rate from log.dnodes_info where ts >= $from and ts <= $to interval(1s)) interval($interval)"
             }
           ],
           "thresholds": [],
@@ -2626,7 +2620,6 @@
           },
           "yaxes": [
             {
-              "$$hashKey": "object:98",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -2635,7 +2628,6 @@
               "show": true
             },
             {
-              "$$hashKey": "object:99",
               "format": "ops",
               "label": null,
               "logBase": 1,
@@ -2776,7 +2768,7 @@
             "h": 5,
             "w": 16,
             "x": 0,
-            "y": 26
+            "y": 60
           },
           "id": 36,
           "options": {
@@ -2829,7 +2821,7 @@
             "h": 5,
             "w": 8,
             "x": 16,
-            "y": 26
+            "y": 60
           },
           "id": 40,
           "options": {
@@ -2952,7 +2944,7 @@
             "h": 7,
             "w": 5,
             "x": 0,
-            "y": 31
+            "y": 65
           },
           "id": 90,
           "options": {
@@ -3008,7 +3000,7 @@
             "h": 7,
             "w": 11,
             "x": 5,
-            "y": 31
+            "y": 65
           },
           "hiddenSeries": false,
           "id": 88,
@@ -3912,7 +3904,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 84
+        "y": 29
       },
       "id": 20,
       "panels": [
@@ -3943,7 +3935,7 @@
             "h": 6,
             "w": 4,
             "x": 0,
-            "y": 7
+            "y": 223
           },
           "id": 120,
           "options": {
@@ -4045,7 +4037,7 @@
             "h": 6,
             "w": 2,
             "x": 4,
-            "y": 7
+            "y": 223
           },
           "id": 121,
           "options": {
@@ -4141,7 +4133,7 @@
             "h": 6,
             "w": 2,
             "x": 6,
-            "y": 7
+            "y": 223
           },
           "id": 122,
           "options": {
@@ -4232,7 +4224,7 @@
             "h": 6,
             "w": 2,
             "x": 8,
-            "y": 7
+            "y": 223
           },
           "id": 123,
           "options": {
@@ -4323,7 +4315,7 @@
             "h": 6,
             "w": 2,
             "x": 10,
-            "y": 7
+            "y": 223
           },
           "id": 124,
           "options": {
@@ -4431,7 +4423,7 @@
             "h": 6,
             "w": 4,
             "x": 12,
-            "y": 7
+            "y": 223
           },
           "id": 45,
           "options": {
@@ -4500,7 +4492,7 @@
             "h": 6,
             "w": 4,
             "x": 16,
-            "y": 7
+            "y": 223
           },
           "id": 66,
           "options": {
@@ -4582,7 +4574,7 @@
             "h": 6,
             "w": 4,
             "x": 20,
-            "y": 7
+            "y": 223
           },
           "id": 51,
           "options": {
@@ -4648,7 +4640,7 @@
             "h": 11,
             "w": 12,
             "x": 0,
-            "y": 13
+            "y": 229
           },
           "hiddenSeries": false,
           "hideTimeOverride": true,
@@ -4762,7 +4754,7 @@
             "h": 11,
             "w": 12,
             "x": 12,
-            "y": 13
+            "y": 229
           },
           "hiddenSeries": false,
           "hideTimeOverride": true,
@@ -4872,7 +4864,7 @@
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 24
+            "y": 240
           },
           "hiddenSeries": false,
           "id": 117,
@@ -5007,7 +4999,7 @@
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 24
+            "y": 240
           },
           "hiddenSeries": false,
           "id": 64,
@@ -5153,7 +5145,7 @@
             "h": 12,
             "w": 12,
             "x": 0,
-            "y": 34
+            "y": 250
           },
           "hiddenSeries": false,
           "hideTimeOverride": true,
@@ -5234,7 +5226,7 @@
           "yaxes": [
             {
               "decimals": null,
-              "format": "KBs",
+              "format": "MBs",
               "label": "IO Rate",
               "logBase": 1,
               "max": null,
@@ -5266,7 +5258,7 @@
           "fieldConfig": {
             "defaults": {
               "links": [],
-              "unit": "Kbits"
+              "unit": "Mbits"
             },
             "overrides": []
           },
@@ -5276,7 +5268,7 @@
             "h": 12,
             "w": 12,
             "x": 12,
-            "y": 34
+            "y": 250
           },
           "hiddenSeries": false,
           "hideTimeOverride": true,
@@ -5354,7 +5346,7 @@
           "yaxes": [
             {
               "decimals": null,
-              "format": "Kbits",
+              "format": "Mbits",
               "label": "IO Rate",
               "logBase": 1,
               "max": null,
@@ -5387,7 +5379,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 169
+        "y": 30
       },
       "id": 63,
       "panels": [
@@ -5410,7 +5402,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 8
+            "y": 65
           },
           "hiddenSeries": false,
           "id": 61,
