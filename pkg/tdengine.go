@@ -17,6 +17,43 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 )
 
+const (
+	CTypeNull             = 0
+	CTypeBool             = 1
+	CTypeTinyInt          = 2
+	CTypeSmallInt         = 3
+	CTypeInt              = 4
+	CTypeBigInt           = 5
+	CTypeFloat            = 6
+	CTypeDouble           = 7
+	CTypeBinary           = 8
+	CTypeTimestamp        = 9
+	CTypeNChar            = 10
+	CTypeUnsignedTinyInt  = 11
+	CTypeUnsignedSmallInt = 12
+	CTypeUnsignedInt      = 13
+	CTypeUnsignedBigInt   = 14
+)
+
+// Check if the target type of `typeNum` is boolean or not.
+func isBoolType(typeNum int) bool {
+	return typeNum == CTypeBool
+}
+
+// Check if the target type of `typeNum` is integers or not.
+func isIntegerTypes(typeNum int) bool {
+	return (typeNum >= CTypeTinyInt && typeNum <= CTypeBigInt) ||
+		(typeNum >= CTypeUnsignedTinyInt && typeNum <= CTypeUnsignedBigInt)
+}
+
+func isFloatTypes(typeNum int) bool {
+	return typeNum == CTypeFloat || typeNum == CTypeDouble
+}
+
+func isTimestampType(typeNum int) bool {
+	return typeNum == CTypeTimestamp
+}
+
 // newDatasource returns datasource.ServeOpts.
 func newDatasource() datasource.ServeOpts {
 	// creates a instance manager for your plugin. The function passed
@@ -107,16 +144,16 @@ func generateSql(query backend.DataQuery) (sql, alias string, err error) {
 }
 
 func getTypeArray(typeNum int) interface{} {
-	if typeNum == 1 {
+	if isBoolType(typeNum) {
 		// BOOL
 		return []bool{}
-	} else if (typeNum >= 2 && typeNum <= 5) || (typeNum >= 11 && typeNum <= 14) {
+	} else if isIntegerTypes(typeNum) {
 		// 2/3/4/5,11/12/13/14, INTs
 		return []int64{}
-	} else if typeNum == 6 || typeNum == 7 {
+	} else if isFloatTypes(typeNum) {
 		// float/double
 		return []float64{}
-	} else if typeNum == 9 {
+	} else if isTimestampType(typeNum) {
 		// timestamp
 		return []time.Time{}
 	} else {
@@ -193,7 +230,7 @@ func makeResponse(body []byte, alias string) (response backend.DataResponse, err
 		for j := 1; j < len(res.Data[i]); j++ {
 			// pluginLogger.Debug(fmt.Sprint("column: ", j))
 			typeNum := int(res.ColumnMeta[j][1].(float64))
-			if (typeNum >= 2 && typeNum <= 5) || (typeNum >= 11 && typeNum <= 14) {
+			if isIntegerTypes(typeNum) {
 				res.Data[i][j] = int64(res.Data[i][j].(float64))
 			}
 		}
