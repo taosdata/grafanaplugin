@@ -17,6 +17,43 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 )
 
+const (
+	CTypeNull             = 0
+	CTypeBool             = 1
+	CTypeTinyInt          = 2
+	CTypeSmallInt         = 3
+	CTypeInt              = 4
+	CTypeBigInt           = 5
+	CTypeFloat            = 6
+	CTypeDouble           = 7
+	CTypeBinary           = 8
+	CTypeTimestamp        = 9
+	CTypeNChar            = 10
+	CTypeUnsignedTinyInt  = 11
+	CTypeUnsignedSmallInt = 12
+	CTypeUnsignedInt      = 13
+	CTypeUnsignedBigInt   = 14
+)
+
+// Check if the target type of `typeNum` is boolean or not.
+func isBoolType(typeNum int) bool {
+	return typeNum == CTypeBool
+}
+
+// Check if the target type of `typeNum` is integers or not.
+func isIntegerTypes(typeNum int) bool {
+	return (typeNum >= CTypeTinyInt && typeNum <= CTypeBigInt) ||
+		(typeNum >= CTypeUnsignedTinyInt && typeNum <= CTypeUnsignedBigInt)
+}
+
+func isFloatTypes(typeNum int) bool {
+	return typeNum == CTypeFloat || typeNum == CTypeDouble
+}
+
+func isTimestampType(typeNum int) bool {
+	return typeNum == CTypeTimestamp
+}
+
 // newDatasource returns datasource.ServeOpts.
 func newDatasource() datasource.ServeOpts {
 	// creates a instance manager for your plugin. The function passed
@@ -107,54 +144,63 @@ func generateSql(query backend.DataQuery) (sql, alias string, err error) {
 }
 
 func getTypeArray(typeNum int) interface{} {
-	if typeNum == 1 { // 1：BOOL
+	if isBoolType(typeNum) {
+		// BOOL
 		return []bool{}
-	} else if typeNum == 2 { // 2：TINYINT
-		return []int8{}
-	} else if typeNum == 3 { // 3：SMALLINT
-		return []int16{}
-	} else if typeNum == 4 { // 4：INT
-		return []int32{}
-	} else if typeNum == 5 { // 5：BIGINT
+	} else if isIntegerTypes(typeNum) {
+		// 2/3/4/5,11/12/13/14, INTs
 		return []int64{}
-	} else if typeNum == 6 { // 6：FLOAT
-		return []float32{}
-	} else if typeNum == 7 { // 7：DOUBLE
+	} else if isFloatTypes(typeNum) {
+		// float/double
 		return []float64{}
-	} else if typeNum == 8 { // 8：BINARY
-		return []string{}
-	} else if typeNum == 9 { // 9：TIMESTAMP
+	} else if isTimestampType(typeNum) {
+		// timestamp
 		return []time.Time{}
-	} else if typeNum == 10 { // 10：NCHAR
+	} else {
+		// binary/nchar, and maybe json
 		return []string{}
 	}
-	return []string{}
 }
-func makeResponse(body []byte, alias string) (response backend.DataResponse, err error) {
-	var res map[string]interface{}
 
-	backend.Logger.Debug("body: ", string(body))
+type restResult struct {
+	Status     string          `json:"status"`
+	Head       []string        `json:"head"`
+	ColumnMeta [][]interface{} `json:"column_meta"`
+	Data       [][]interface{} `json:"data"`
+	Rows       int             `json:"rows"`
+}
+
+func makeResponse(body []byte, alias string) (response backend.DataResponse, err error) {
+
+	// var res map[string]interface{}
+	var res restResult
+
+	// pluginLogger.Debug(fmt.Sprint("body: ", string(body)))
 	if err = json.Unmarshal(body, &res); err != nil {
+		pluginLogger.Error(fmt.Sprint("parse json error: ", err))
 		return response, fmt.Errorf("get res error: %w", err)
 	}
+	// pluginLogger.Info(fmt.Sprint("parsed: ", res))
 	frame := data.NewFrame("response")
+
 	aliasList := strings.Split(alias, ",")
-	for i := 0; i < len(res["column_meta"].([]interface{})); i++ {
-		name := res["column_meta"].([]interface{})[i].([]interface{})[0].(string)
+	for i := 0; i < len(res.ColumnMeta); i++ {
+		name := res.ColumnMeta[i][0].(string)
 		if i > 0 && len(aliasList) >= i && len(aliasList[i-1]) > 0 {
 			name = strings.ReplaceAll(aliasList[i-1], "[[col]]", name)
 		}
 		frame.Fields = append(frame.Fields,
-			data.NewField(name, nil, getTypeArray(int(res["column_meta"].([]interface{})[i].([]interface{})[1].(float64)))),
+			data.NewField(name, nil, getTypeArray(int(res.ColumnMeta[i][1].(float64)))),
 		)
+		// pluginLogger.Debug(fmt.Sprint("frame: ", frame, ", after field: ", name, ", typeNum: ", int(res.ColumnMeta[i][1].(float64))))
 	}
 
 	timeLayout := ""
-	if len(res["data"].([]interface{})) == 0 || len(res["data"].([]interface{})[0].([]interface{})) == 0 {
+	if len(res.Data) == 0 || len(res.Data[0]) == 0 {
 		return response, nil
 	}
-	tsLayout := res["data"].([]interface{})[0].([]interface{})[0].(string)
-	pluginLogger.Debug("tsLayout:", tsLayout)
+	tsLayout := res.Data[0][0].(string)
+	// pluginLogger.Debug(fmt.Sprint("tsLayout: ", tsLayout))
 
 	if len(tsLayout) == len("2006-01-02T15:04:05-07:00") {
 		timeLayout = "2006-01-02T15:04:05-07:00"
@@ -175,15 +221,25 @@ func makeResponse(body []byte, alias string) (response backend.DataResponse, err
 	} else {
 		return response, fmt.Errorf("ts parse layout error %s", tsLayout)
 	}
-	for i := 0; i < len(res["data"].([]interface{})); i++ {
-		if res["data"].([]interface{})[i].([]interface{})[0], err = time.Parse(timeLayout, res["data"].([]interface{})[i].([]interface{})[0].(string)); err != nil {
+	// pluginLogger.Debug(fmt.Sprint("frame: ", frame))
+	for i := 0; i < len(res.Data); i++ {
+		if res.Data[i][0], err = time.Parse(timeLayout, res.Data[i][0].(string)); err != nil {
+			pluginLogger.Error(fmt.Sprint("parse error:", err))
 			return response, fmt.Errorf("ts parse error: %w", err)
 		}
-		frame.AppendRow(res["data"].([]interface{})[i].([]interface{})...)
+		for j := 1; j < len(res.Data[i]); j++ {
+			// pluginLogger.Debug(fmt.Sprint("column: ", j))
+			typeNum := int(res.ColumnMeta[j][1].(float64))
+			if isIntegerTypes(typeNum) {
+				res.Data[i][j] = int64(res.Data[i][j].(float64))
+			}
+		}
+		frame.AppendRow(res.Data[i]...)
+		// pluginLogger.Debug(fmt.Sprint("appended row ", i))
 	}
 	response.Frames = append(response.Frames, frame)
 	// json, _ := response.MarshalJSON()
-	// pluginLogger.Debug(string(json))
+	// pluginLogger.Debug(fmt.Sprint("response is", string(json)))
 	return response, nil
 }
 func query(url, user, password string, reqBody []byte) ([]byte, error) {
