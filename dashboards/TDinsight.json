@@ -83,7 +83,7 @@
   "gnetId": 15146,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1637118167297,
+  "iteration": 1637142692893,
   "links": [],
   "panels": [
     {
@@ -2769,7 +2769,7 @@
             "h": 5,
             "w": 16,
             "x": 0,
-            "y": 3
+            "y": 26
           },
           "id": 36,
           "options": {
@@ -2822,7 +2822,7 @@
             "h": 5,
             "w": 8,
             "x": 16,
-            "y": 3
+            "y": 26
           },
           "id": 40,
           "options": {
@@ -2930,10 +2930,6 @@
                   {
                     "color": "green",
                     "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
                   }
                 ]
               },
@@ -2945,14 +2941,14 @@
             "h": 7,
             "w": 5,
             "x": 0,
-            "y": 8
+            "y": 31
           },
           "id": 90,
           "options": {
             "colorMode": "value",
-            "graphMode": "area",
+            "graphMode": "none",
             "justifyMode": "auto",
-            "orientation": "auto",
+            "orientation": "horizontal",
             "reduceOptions": {
               "calcs": [
                 "lastNotNull"
@@ -2961,19 +2957,19 @@
               "values": false
             },
             "text": {},
-            "textMode": "value"
+            "textMode": "value_and_name"
           },
           "pluginVersion": "7.5.10",
           "repeat": null,
           "targets": [
             {
               "alias": "",
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
+              "colNameFormatStr": "{{groupValue}}",
+              "colNameToGroup": "dnode_ep",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last(uptime) from log.dnodes_info where ts >= now -1m and ts <= now interval($interval) group by dnode_ep",
+              "sql": "select last(uptime) from log.dnodes_info where ts >= now -1m and ts <= now group by dnode_ep",
               "target": "select metric",
               "type": "timeserie"
             }
@@ -3001,7 +2997,7 @@
             "h": 7,
             "w": 11,
             "x": 5,
-            "y": 8
+            "y": 31
           },
           "hiddenSeries": false,
           "id": 88,
@@ -3149,7 +3145,7 @@
             "h": 5,
             "w": 24,
             "x": 0,
-            "y": 4
+            "y": 39
           },
           "id": 38,
           "options": {
@@ -3189,7 +3185,7 @@
             "h": 6,
             "w": 24,
             "x": 0,
-            "y": 9
+            "y": 44
           },
           "hiddenSeries": false,
           "id": 89,
@@ -3308,9 +3304,9 @@
           },
           "gridPos": {
             "h": 3,
-            "w": 6,
+            "w": 3,
             "x": 0,
-            "y": 5
+            "y": 28
           },
           "id": 96,
           "options": {
@@ -3381,309 +3377,6 @@
           "type": "stat"
         },
         {
-          "datasource": "${DS_TDENGINE}",
-          "description": "所有普通表的个数（包括超级表的子表）",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "thresholds"
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  }
-                ]
-              }
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 3,
-            "w": 6,
-            "x": 6,
-            "y": 5
-          },
-          "id": 98,
-          "options": {
-            "colorMode": "value",
-            "graphMode": "area",
-            "justifyMode": "auto",
-            "orientation": "auto",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": true
-            },
-            "text": {},
-            "textMode": "auto"
-          },
-          "pluginVersion": "7.5.10",
-          "repeatDirection": "h",
-          "scopedVars": {
-            "database": {
-              "selected": false,
-              "text": "demo",
-              "value": "demo"
-            }
-          },
-          "targets": [
-            {
-              "alias": "dnodes",
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
-              "formatType": "Time series",
-              "queryType": "SQL",
-              "refId": "A",
-              "sql": "show $database.tables;",
-              "target": "select metric",
-              "timeshift": {
-                "period": null
-              },
-              "type": "timeserie"
-            }
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Total Tables",
-          "transformations": [
-            {
-              "id": "filterFieldsByName",
-              "options": {
-                "include": {
-                  "names": [
-                    "columns"
-                  ]
-                }
-              }
-            },
-            {
-              "id": "reduce",
-              "options": {
-                "includeTimeField": false,
-                "mode": "reduceFields",
-                "reducers": [
-                  "count"
-                ]
-              }
-            }
-          ],
-          "type": "stat"
-        },
-        {
-          "datasource": "${DS_TDENGINE}",
-          "description": "超级表的所有子表个数",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "thresholds"
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  }
-                ]
-              }
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 3,
-            "w": 6,
-            "x": 12,
-            "y": 5
-          },
-          "id": 97,
-          "options": {
-            "colorMode": "value",
-            "graphMode": "area",
-            "justifyMode": "auto",
-            "orientation": "auto",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": true
-            },
-            "text": {},
-            "textMode": "auto"
-          },
-          "pluginVersion": "7.5.10",
-          "repeatDirection": "h",
-          "scopedVars": {
-            "database": {
-              "selected": false,
-              "text": "demo",
-              "value": "demo"
-            }
-          },
-          "targets": [
-            {
-              "alias": "dnodes",
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
-              "formatType": "Time series",
-              "queryType": "SQL",
-              "refId": "A",
-              "sql": "show $database.stables;",
-              "target": "select metric",
-              "timeshift": {
-                "period": null
-              },
-              "type": "timeserie"
-            }
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Sub Tables",
-          "transformations": [
-            {
-              "id": "filterFieldsByName",
-              "options": {
-                "include": {
-                  "names": [
-                    "tables"
-                  ]
-                }
-              }
-            },
-            {
-              "id": "reduce",
-              "options": {
-                "includeTimeField": false,
-                "mode": "reduceFields",
-                "reducers": [
-                  "sum"
-                ]
-              }
-            }
-          ],
-          "type": "stat"
-        },
-        {
-          "datasource": "${DS_TDENGINE}",
-          "description": "所有普通表的个数（不包括超级表的子表）",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "thresholds"
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  }
-                ]
-              }
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 3,
-            "w": 6,
-            "x": 18,
-            "y": 5
-          },
-          "id": 116,
-          "options": {
-            "colorMode": "value",
-            "graphMode": "area",
-            "justifyMode": "auto",
-            "orientation": "auto",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": true
-            },
-            "text": {},
-            "textMode": "auto"
-          },
-          "pluginVersion": "7.5.10",
-          "repeatDirection": "h",
-          "scopedVars": {
-            "database": {
-              "selected": false,
-              "text": "demo",
-              "value": "demo"
-            }
-          },
-          "targets": [
-            {
-              "alias": "dnodes",
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
-              "formatType": "Time series",
-              "queryType": "SQL",
-              "refId": "A",
-              "sql": "show $database.tables;",
-              "target": "select metric",
-              "timeshift": {
-                "period": null
-              },
-              "type": "timeserie"
-            }
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Common Tables",
-          "transformations": [
-            {
-              "id": "filterByValue",
-              "options": {
-                "filters": [
-                  {
-                    "config": {
-                      "id": "regex",
-                      "options": {
-                        "value": "\\S+"
-                      }
-                    },
-                    "fieldName": "stable_name"
-                  }
-                ],
-                "match": "any",
-                "type": "exclude"
-              }
-            },
-            {
-              "id": "reduce",
-              "options": {
-                "includeTimeField": false,
-                "mode": "reduceFields",
-                "reducers": [
-                  "count"
-                ]
-              }
-            },
-            {
-              "id": "filterFieldsByName",
-              "options": {
-                "include": {
-                  "names": [
-                    "vgId"
-                  ]
-                }
-              }
-            }
-          ],
-          "type": "stat"
-        },
-        {
           "aliasColors": {},
           "bars": false,
           "dashLength": 10,
@@ -3696,10 +3389,10 @@
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
-            "w": 12,
-            "x": 0,
-            "y": 8
+            "h": 9,
+            "w": 9,
+            "x": 3,
+            "y": 28
           },
           "hiddenSeries": false,
           "id": 94,
@@ -3744,7 +3437,7 @@
               "groupDataByColName": "",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select sum(tables_num) as tables_num from log.vgroups_info where ts > $from and ts <= $to and database_name = '$database' interval(1s)"
+              "sql": "select last(tables_num) as tables_num from (select last(ts) as ts, sum(tables_num) as tables_num from log.vgroups_info where ts > $from and ts <= $to and database_name = '$database' group by ts) interval($interval)"
             }
           ],
           "thresholds": [],
@@ -3801,10 +3494,10 @@
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 9,
             "w": 12,
             "x": 12,
-            "y": 8
+            "y": 28
           },
           "hiddenSeries": false,
           "id": 95,
@@ -3892,6 +3585,175 @@
             "align": false,
             "alignLevel": null
           }
+        },
+        {
+          "datasource": "${DS_TDENGINE}",
+          "description": "所有普通表的个数（包括超级表的子表）",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 3,
+            "w": 3,
+            "x": 0,
+            "y": 31
+          },
+          "id": 98,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": true
+            },
+            "text": {},
+            "textMode": "auto"
+          },
+          "pluginVersion": "7.5.10",
+          "repeatDirection": "h",
+          "scopedVars": {
+            "database": {
+              "selected": false,
+              "text": "demo",
+              "value": "demo"
+            }
+          },
+          "targets": [
+            {
+              "alias": "dnodes",
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select last(tables_num) from (select last(ts) as ts, sum(tables_num) as tables_num from log.vgroups_info where ts > $from and ts <= $to and database_name = '$database' group by ts)",
+              "target": "select metric",
+              "timeshift": {
+                "period": null
+              },
+              "type": "timeserie"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Total Tables",
+          "transformations": [],
+          "type": "stat"
+        },
+        {
+          "datasource": "${DS_TDENGINE}",
+          "description": "超级表的所有子表个数",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 3,
+            "w": 3,
+            "x": 0,
+            "y": 34
+          },
+          "id": 97,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": true
+            },
+            "text": {},
+            "textMode": "auto"
+          },
+          "pluginVersion": "7.5.10",
+          "repeatDirection": "h",
+          "scopedVars": {
+            "database": {
+              "selected": false,
+              "text": "demo",
+              "value": "demo"
+            }
+          },
+          "targets": [
+            {
+              "alias": "dnodes",
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "show $database.stables;",
+              "target": "select metric",
+              "timeshift": {
+                "period": null
+              },
+              "type": "timeserie"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Sub Tables",
+          "transformations": [
+            {
+              "id": "filterFieldsByName",
+              "options": {
+                "include": {
+                  "names": [
+                    "tables"
+                  ]
+                }
+              }
+            },
+            {
+              "id": "reduce",
+              "options": {
+                "includeTimeField": false,
+                "mode": "reduceFields",
+                "reducers": [
+                  "sum"
+                ]
+              }
+            }
+          ],
+          "type": "stat"
         }
       ],
       "repeat": "database",
@@ -3905,7 +3767,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 84
+        "y": 29
       },
       "id": 20,
       "panels": [
@@ -3936,7 +3798,7 @@
             "h": 6,
             "w": 4,
             "x": 0,
-            "y": 7
+            "y": 30
           },
           "id": 120,
           "options": {
@@ -4038,7 +3900,7 @@
             "h": 6,
             "w": 2,
             "x": 4,
-            "y": 7
+            "y": 30
           },
           "id": 121,
           "options": {
@@ -4134,7 +3996,7 @@
             "h": 6,
             "w": 2,
             "x": 6,
-            "y": 7
+            "y": 30
           },
           "id": 122,
           "options": {
@@ -4225,7 +4087,7 @@
             "h": 6,
             "w": 2,
             "x": 8,
-            "y": 7
+            "y": 30
           },
           "id": 123,
           "options": {
@@ -4316,7 +4178,7 @@
             "h": 6,
             "w": 2,
             "x": 10,
-            "y": 7
+            "y": 30
           },
           "id": 124,
           "options": {
@@ -4424,7 +4286,7 @@
             "h": 6,
             "w": 4,
             "x": 12,
-            "y": 7
+            "y": 30
           },
           "id": 45,
           "options": {
@@ -4493,7 +4355,7 @@
             "h": 6,
             "w": 4,
             "x": 16,
-            "y": 7
+            "y": 30
           },
           "id": 66,
           "options": {
@@ -4575,7 +4437,7 @@
             "h": 6,
             "w": 4,
             "x": 20,
-            "y": 7
+            "y": 30
           },
           "id": 51,
           "options": {
@@ -4641,7 +4503,7 @@
             "h": 11,
             "w": 12,
             "x": 0,
-            "y": 13
+            "y": 36
           },
           "hiddenSeries": false,
           "hideTimeOverride": true,
@@ -4755,7 +4617,7 @@
             "h": 11,
             "w": 12,
             "x": 12,
-            "y": 13
+            "y": 36
           },
           "hiddenSeries": false,
           "hideTimeOverride": true,
@@ -4865,7 +4727,7 @@
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 24
+            "y": 47
           },
           "hiddenSeries": false,
           "id": 117,
@@ -4919,7 +4781,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select avg(datadir_l0_used) as l0_used, avg(datadir_l0_total) as l0_total, avg(datadir_l1_used) as l1_used, avg(datadir_l1_total) as l1_total, avg(datadir_l2_used) as l2_used, avg(datadir_l2_total) as l2_total from log.disks_info where dnode_ep = '$fqdn' and ts >= $from and ts < $to interval($interval)",
+              "sql": "select avg(datadir_l0_used) as level0_used, avg(datadir_l0_total) as level0_total, avg(datadir_l1_used) as level1_used, avg(datadir_l1_total) as level1_total, avg(datadir_l2_used) as level2_used, avg(datadir_l2_total) as level2_total from log.disks_info where dnode_ep = '$fqdn' and ts >= $from and ts < $to interval($interval)",
               "target": "select metric",
               "timeshift": {
                 "period": null
@@ -4934,7 +4796,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "D",
-              "sql": "select avg(datadir_l0_used)/avg(datadir_l0_total) as l0_percent, avg(datadir_l1_used)/avg(datadir_l1_total) as l1_percent , avg(datadir_l2_used)/avg(datadir_l2_total) as l2_percent  from log.disks_info where dnode_ep = '$fqdn' and ts >= $from and ts < $to interval($interval)",
+              "sql": "select avg(datadir_l0_used)/avg(datadir_l0_total) as level0_percent, avg(datadir_l1_used)/avg(datadir_l1_total) as level1_percent , avg(datadir_l2_used)/avg(datadir_l2_total) as level2_percent  from log.disks_info where dnode_ep = '$fqdn' and ts >= $from and ts < $to interval($interval)",
               "target": "select metric",
               "timeshift": {
                 "period": null
@@ -4971,7 +4833,7 @@
               "show": true
             },
             {
-              "format": "percent",
+              "format": "percentunit",
               "label": "Disk Used",
               "logBase": 1,
               "max": null,
@@ -5000,7 +4862,7 @@
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 24
+            "y": 47
           },
           "hiddenSeries": false,
           "id": 64,
@@ -5040,7 +4902,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "alias": "l0",
+              "alias": "level0",
               "colNameFormatStr": "",
               "colNameToGroup": "",
               "formatType": "Time series",
@@ -5055,7 +4917,7 @@
               "type": "timeserie"
             },
             {
-              "alias": "l1",
+              "alias": "level1",
               "colNameFormatStr": "",
               "colNameToGroup": "",
               "formatType": "Time series",
@@ -5070,7 +4932,7 @@
               "type": "timeserie"
             },
             {
-              "alias": "l2",
+              "alias": "level2",
               "colNameFormatStr": "",
               "colNameToGroup": "",
               "formatType": "Time series",
@@ -5146,7 +5008,7 @@
             "h": 12,
             "w": 12,
             "x": 0,
-            "y": 34
+            "y": 57
           },
           "hiddenSeries": false,
           "hideTimeOverride": true,
@@ -5201,7 +5063,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select  avg(io_read_disk) as io_read_engine, avg(io_write_disk) as io_write_engine, avg(io_read) as io_read_system, avg(io_write) as io_write_system from log.dnodes_info where dnode_ep = '$fqdn' and ts >= now-1h and ts < now  interval($interval)",
+              "sql": "select  avg(io_read_disk) as io_read_taosd, avg(io_write_disk) as io_write_taosd from log.dnodes_info where dnode_ep = '$fqdn' and ts >= now-1h and ts < now  interval($interval)",
               "target": "select metric",
               "type": "timeserie"
             }
@@ -5269,7 +5131,7 @@
             "h": 12,
             "w": 12,
             "x": 12,
-            "y": 34
+            "y": 57
           },
           "hiddenSeries": false,
           "hideTimeOverride": true,
@@ -5380,7 +5242,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 169
+        "y": 30
       },
       "id": 63,
       "panels": [
@@ -5529,7 +5391,7 @@
         "allValue": null,
         "current": {},
         "datasource": "${DS_TDENGINE}",
-        "definition": "select distinct(database_name) from log.vgroups_info",
+        "definition": "select distinct(database_name) from log.vgroups_info where ts >= $from and ts <= $to",
         "description": null,
         "error": null,
         "hide": 0,
@@ -5538,8 +5400,8 @@
         "multi": true,
         "name": "database",
         "options": [],
-        "query": "select distinct(database_name) from log.vgroups_info",
-        "refresh": 1,
+        "query": "select distinct(database_name) from log.vgroups_info where ts >= $from and ts <= $to",
+        "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
         "sort": 1,
@@ -5717,5 +5579,5 @@
   "timezone": "",
   "title": "TDinsight",
   "uid": "tdinsight",
-  "version": 16
+  "version": 26
 }
