@@ -83,7 +83,7 @@
   "gnetId": 15146,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1637053893665,
+  "iteration": 1637118167279,
   "links": [],
   "panels": [
     {
@@ -2153,7 +2153,7 @@
             "h": 9,
             "w": 24,
             "x": 0,
-            "y": 2
+            "y": 25
           },
           "hiddenSeries": false,
           "id": 110,
@@ -2198,7 +2198,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select sum(req_insert) as insert_count, sum(req_insert_success) as insert_success, sum(req_insert_batch) as insert_batches, sum(req_insert_batch_success) as insert_batch_success from log.dnodes_info where ts >= $from and ts <= $to interval(30s) group by dnode_ep"
+              "sql": "select sum(req_insert) as insert_count, sum(req_insert_success) as insert_success, sum(req_insert_batch) as insert_batches, sum(req_insert_batch_success) as insert_batch_success from log.dnodes_info where ts >= $from and ts <= $to interval($interval) group by dnode_ep"
             },
             {
               "colNameFormatStr": "",
@@ -2207,7 +2207,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "B",
-              "sql": "select sum(req_insert) as total_inserts, sum(req_insert_batch) as total_batches from log.dnodes_info where ts >= $from and ts <= $to interval(30s)"
+              "sql": "select sum(req_insert) as total_inserts, sum(req_insert_batch) as total_batches from log.dnodes_info where ts >= $from and ts <= $to interval($interval)"
             },
             {
               "colNameFormatStr": "",
@@ -2216,7 +2216,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "C",
-              "sql": "select sum(req_insert_success)  / sum(req_insert) as success_rate from log.dnodes_info where ts >= $from and ts <= $to interval(30s) group by dnode_ep"
+              "sql": "select sum(req_insert_success)  / sum(req_insert) as success_rate from log.dnodes_info where ts >= $from and ts <= $to interval($interval) group by dnode_ep"
             },
             {
               "colNameFormatStr": "",
@@ -2225,7 +2225,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "D",
-              "sql": "select sum(req_insert_success)  / sum(req_insert) as success_rate from log.dnodes_info where ts >= $from and ts <= $to interval(30s)"
+              "sql": "select sum(req_insert_success)  / sum(req_insert) as success_rate from log.dnodes_info where ts >= $from and ts <= $to interval($interval)"
             }
           ],
           "thresholds": [],
@@ -2287,7 +2287,7 @@
             "h": 9,
             "w": 24,
             "x": 0,
-            "y": 11
+            "y": 34
           },
           "hiddenSeries": false,
           "id": 112,
@@ -2325,7 +2325,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select avg(req_insert_rate) as insert_rate, avg(req_insert_batch_rate) as batch_rate from log.dnodes_info where ts >= $from and ts <= $to interval(30s) group by dnode_ep"
+              "sql": "select avg(req_insert_rate) as insert_rate, avg(req_insert_batch_rate) as batch_rate from log.dnodes_info where ts >= $from and ts <= $to interval($interval) group by dnode_ep"
             },
             {
               "colNameFormatStr": "",
@@ -2334,7 +2334,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "B",
-              "sql": "select avg(insert_rate) as cluster_insert_rate, avg(batch_rate) as cluster_batch_rate from (select sum(req_insert_rate) as insert_rate,  sum(req_insert_batch_rate) as batch_rate from log.dnodes_info where ts >= $from and ts <= $to interval(1s)) interval(30s)"
+              "sql": "select avg(insert_rate) as cluster_insert_rate, avg(batch_rate) as cluster_batch_rate from (select sum(req_insert_rate) as insert_rate,  sum(req_insert_batch_rate) as batch_rate from log.dnodes_info where ts >= $from and ts <= $to interval(1s)) interval($interval)"
             }
           ],
           "thresholds": [],
@@ -2394,7 +2394,7 @@
             "h": 8,
             "w": 24,
             "x": 0,
-            "y": 20
+            "y": 43
           },
           "hiddenSeries": false,
           "id": 114,
@@ -2524,10 +2524,11 @@
             "h": 8,
             "w": 24,
             "x": 0,
-            "y": 28
+            "y": 51
           },
           "hiddenSeries": false,
           "id": 111,
+          "interval": null,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -2570,7 +2571,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select sum(req_http) as req_http from log.dnodes_info where ts >= $from and ts <= $to interval(30s) group by dnode_ep"
+              "sql": "select sum(req_http) as req_http from log.dnodes_info where ts >= $from and ts <= $to interval($interval) group by dnode_ep"
             },
             {
               "colNameFormatStr": "",
@@ -2579,7 +2580,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "B",
-              "sql": "select sum(req_http) as req_http from log.dnodes_info where ts >= $from and ts <= $to interval(30s)"
+              "sql": "select sum(req_http) as req_http from log.dnodes_info where ts >= $from and ts <= $to interval($interval)"
             },
             {
               "colNameFormatStr": "",
@@ -2588,7 +2589,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "C",
-              "sql": "select avg(req_http_rate) as req_http_rate from log.dnodes_info where ts >= $from and ts <= $to interval(30s) group by dnode_ep"
+              "sql": "select avg(req_http_rate) as req_http_rate from log.dnodes_info where ts >= $from and ts <= $to interval($interval) group by dnode_ep"
             },
             {
               "colNameFormatStr": "",
@@ -2972,7 +2973,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last(uptime) from log.dnodes_info where ts >= now -1m and ts <= now interval(30s) group by dnode_ep",
+              "sql": "select last(uptime) from log.dnodes_info where ts >= now -1m and ts <= now interval($interval) group by dnode_ep",
               "target": "select metric",
               "type": "timeserie"
             }
@@ -3035,7 +3036,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select avg(dnodes_total) as total, avg(dnodes_alive) as alive from log.cluster_info where ts >= $from and ts <= $to interval(30s)",
+              "sql": "select avg(dnodes_total) as total, avg(dnodes_alive) as alive from log.cluster_info where ts >= $from and ts <= $to interval($interval)",
               "target": "select metric",
               "type": "timeserie"
             }
@@ -3223,7 +3224,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select avg(mnodes_total) as total, avg(mnodes_alive) as alive from log.cluster_info where ts >= $from and ts <= $to interval(30s)",
+              "sql": "select avg(mnodes_total) as total, avg(mnodes_alive) as alive from log.cluster_info where ts >= $from and ts <= $to interval($interval)",
               "target": "select metric",
               "type": "timeserie"
             }
@@ -3848,7 +3849,7 @@
               "groupDataByColName": "",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select max(tables_num) as tables_num from log.vgroups_info where ts > $from and ts <= $to and database_name = '$database' interval(30s) group by vgroup_id"
+              "sql": "select max(tables_num) as tables_num from log.vgroups_info where ts > $from and ts <= $to and database_name = '$database' interval($interval) group by vgroup_id"
             }
           ],
           "thresholds": [],
@@ -4918,7 +4919,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select avg(datadir_l0_used) as l0_used, avg(datadir_l0_total) as l0_total, avg(datadir_l1_used) as l1_used, avg(datadir_l1_total) as l1_total, avg(datadir_l2_used) as l2_used, avg(datadir_l2_total) as l2_total from log.disks_info where dnode_ep = '$fqdn' and ts >= $from and ts < $to interval(30s)",
+              "sql": "select avg(datadir_l0_used) as l0_used, avg(datadir_l0_total) as l0_total, avg(datadir_l1_used) as l1_used, avg(datadir_l1_total) as l1_total, avg(datadir_l2_used) as l2_used, avg(datadir_l2_total) as l2_total from log.disks_info where dnode_ep = '$fqdn' and ts >= $from and ts < $to interval($interval)",
               "target": "select metric",
               "timeshift": {
                 "period": null
@@ -4933,7 +4934,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "D",
-              "sql": "select avg(datadir_l0_used)/avg(datadir_l0_total) as l0_percent, avg(datadir_l1_used)/avg(datadir_l1_total) as l1_percent , avg(datadir_l2_used)/avg(datadir_l2_total) as l2_percent  from log.disks_info where dnode_ep = '$fqdn' and ts >= $from and ts < $to interval(30s)",
+              "sql": "select avg(datadir_l0_used)/avg(datadir_l0_total) as l0_percent, avg(datadir_l1_used)/avg(datadir_l1_total) as l1_percent , avg(datadir_l2_used)/avg(datadir_l2_total) as l2_percent  from log.disks_info where dnode_ep = '$fqdn' and ts >= $from and ts < $to interval($interval)",
               "target": "select metric",
               "timeshift": {
                 "period": null
@@ -5595,6 +5596,88 @@
         "tagsQuery": "",
         "type": "query",
         "useTags": false
+      },
+      {
+        "auto": true,
+        "auto_count": 30,
+        "auto_min": "10s",
+        "current": {
+          "selected": false,
+          "text": "30s",
+          "value": "30s"
+        },
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "label": "Interval",
+        "name": "interval",
+        "options": [
+          {
+            "selected": false,
+            "text": "auto",
+            "value": "$__auto_interval_interval"
+          },
+          {
+            "selected": false,
+            "text": "10s",
+            "value": "10s"
+          },
+          {
+            "selected": false,
+            "text": "20s",
+            "value": "20s"
+          },
+          {
+            "selected": true,
+            "text": "30s",
+            "value": "30s"
+          },
+          {
+            "selected": false,
+            "text": "1m",
+            "value": "1m"
+          },
+          {
+            "selected": false,
+            "text": "5m",
+            "value": "5m"
+          },
+          {
+            "selected": false,
+            "text": "10m",
+            "value": "10m"
+          },
+          {
+            "selected": false,
+            "text": "30m",
+            "value": "30m"
+          },
+          {
+            "selected": false,
+            "text": "1h",
+            "value": "1h"
+          },
+          {
+            "selected": false,
+            "text": "6h",
+            "value": "6h"
+          },
+          {
+            "selected": false,
+            "text": "12h",
+            "value": "12h"
+          },
+          {
+            "selected": false,
+            "text": "1d",
+            "value": "1d"
+          }
+        ],
+        "query": "10s,20s,30s,1m,5m,10m,30m,1h,6h,12h,1d",
+        "queryValue": "",
+        "refresh": 2,
+        "skipUrlSync": false,
+        "type": "interval"
       }
     ]
   },
@@ -5619,5 +5702,5 @@
   "timezone": "",
   "title": "TDinsight",
   "uid": "tdinsight",
-  "version": 7
+  "version": 12
 }
