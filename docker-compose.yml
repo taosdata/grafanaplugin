@@ -4,15 +4,17 @@ services:
   grafana:
     image: grafana/grafana:7.5.10
     volumes:
-      - ./dist:/var/lib/grafana/plugins/tdengine
+      # - ./dist:/var/lib/grafana/plugins/tdengine
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini
       - ./grafana/provisioning/:/etc/grafana/provisioning/
       - ./grafana/dashboards/:/var/lib/grafana/dashboards/
+      - ./tdengine-datasource-3.1.2.zip:/tmp/tdengine-datasource-3.1.2.zip
       - grafana-data:/var/lib/grafana
     environment:
       TDENGINE_API: ${TDENGINE_API}
       TDENGINE_USER: ${TDENGINE_USER}
       TDENGINE_PASS: ${TDENGINE_PASS}
+      GF_INSTALL_PLUGINS: /tmp/tdengine-datasource-3.1.2.zip;tdengine-datasource
     ports:
       - 3000:3000
   alertmanager:
