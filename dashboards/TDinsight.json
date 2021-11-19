@@ -2983,7 +2983,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "B",
-              "sql": "select avg(insert_rate) as cluster_insert_rate, avg(batch_rate) as cluster_batch_rate from (select sum(req_insert_rate) as insert_rate,  sum(req_insert_batch_rate) as batch_rate from log.dnodes_info where ts >= $from and ts <= $to interval(1s)) interval($interval) fill(null)"
+              "sql": "select avg(insert_rate) as cluster_insert_rate, avg(batch_rate) as cluster_batch_rate from (select sum(req_insert_rate) as insert_rate,  sum(req_insert_batch_rate) as batch_rate from log.dnodes_info where ts >= $from and ts <= $to interval(1s)) interval($interval)"
             }
           ],
           "thresholds": [],
@@ -3113,7 +3113,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "D",
-              "sql": "select avg(req_select_rate) as req_select_rate from (select sum(req_select_rate) as req_select_rate from log.dnodes_info where ts >= $from and ts <= $to interval(1s)) interval($interval) fill(null)"
+              "sql": "select avg(req_select_rate) as req_select_rate from (select sum(req_select_rate) as req_select_rate from log.dnodes_info where ts >= $from and ts <= $to interval(1s)) interval($interval)"
             }
           ],
           "thresholds": [],
@@ -3247,7 +3247,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "D",
-              "sql": "select avg(req_http_rate) as req_http_rate from (select sum(req_http_rate) as req_http_rate from log.dnodes_info where ts >= $from and ts <= $to interval(1s)) interval($interval) fill(null)"
+              "sql": "select avg(req_http_rate) as req_http_rate from (select sum(req_http_rate) as req_http_rate from log.dnodes_info where ts >= $from and ts <= $to interval(1s)) interval($interval)"
             }
           ],
           "thresholds": [],
@@ -3462,7 +3462,7 @@
               "groupDataByColName": "",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last(tables_num) as tables_num from (select last(ts) as ts, sum(tables_num) as tables_num from log.vgroups_info where ts > $from and ts <= $to and database_name = '$database' group by ts) interval($interval) fill(null)"
+              "sql": "select last(tables_num) as tables_num from (select last(ts) as ts, sum(tables_num) as tables_num from log.vgroups_info where ts > $from and ts <= $to and database_name = '$database' group by ts) interval($interval)"
             }
           ],
           "thresholds": [],
