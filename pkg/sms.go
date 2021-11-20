@@ -24,6 +24,10 @@ func CreateClient(accessKeyId *string, accessKeySecret *string) (_result *dysmsa
 	config.Endpoint = tea.String("dysmsapi.aliyuncs.com")
 	_result = &dysmsapi20170525.Client{}
 	_result, _err = dysmsapi20170525.NewClient(config)
+	if _err != nil {
+		pluginLogger.Debug(_err.Error())
+		return nil, _err
+	}
 	return _result, _err
 }
 
@@ -32,13 +36,13 @@ func SendSms(templateParam string) (_err error) {
 	if _err != nil {
 		return _err
 	}
-	pluginLogger.Debug(templateParam)
+	// pluginLogger.Debug(templateParam)
 	for i := 0; i < len(SmsConf.PhoneNumbers); i++ {
 		sendSmsRequest := &dysmsapi20170525.SendSmsRequest{
 			PhoneNumbers:  tea.String(SmsConf.PhoneNumbers[i]),
 			TemplateCode:  tea.String(SmsConf.AlibabaCloudSms.TemplateCode),
 			TemplateParam: tea.String(templateParam),
-			SignName:      tea.String(SmsConf.SignName),
+			SignName:      tea.String(SmsConf.AlibabaCloudSms.SignName),
 		}
 		// 复制代码运行请自行打印 API 的返回值
 		resp, _err := client.SendSms(sendSmsRequest)

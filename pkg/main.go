@@ -34,7 +34,10 @@ func main() {
 	handler.HandleFunc("/sms", HandleWebhook(func(w http.ResponseWriter, b *Body) {
 		// pluginLogger.Debug("Grafana status: " + b.Title)
 		// pluginLogger.Debug(b.Message)
-		SendSms(fmt.Sprintf(SmsConf.AlibabaCloudSms.TemplateParam, b.State, time.Now().Format("2006-01-02 15:04:05"), b.Title, b.Message[:35]))
+		if len(b.Message) > 35 {
+			b.Message = b.Message[:35]
+		}
+		SendSms(fmt.Sprintf(SmsConf.AlibabaCloudSms.TemplateParam, b.State, time.Now().Format("2006-01-02 15:04:05"), b.Title, b.Message))
 	}, 0))
 
 	go http.ListenAndServe(SmsConf.ListenAddr, handler)
