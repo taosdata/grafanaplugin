@@ -30,6 +30,12 @@ module.exports = function (grunt) {
         expand: true,
         src: ['README.md'],
         dest: 'dist'
+      },
+      cmsConfig: {
+        cwd: 'pkg',
+        expand: true,
+        src: ['config.json'],
+        dest: 'dist'
       }
     },
 
@@ -87,5 +93,5 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('default', ['clean', 'copy:src_to_dist', 'copy:dashboard_to_dist',
-    'copy:examples_to_dist', 'copy:pluginDef', 'babel', 'mochaTest']);
+    'copy:examples_to_dist', 'copy:pluginDef', 'copy:cmsConfig', 'babel', 'mochaTest']);
 };

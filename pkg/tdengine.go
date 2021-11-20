@@ -115,7 +115,7 @@ func (rd *RocksetDatasource) QueryData(ctx context.Context, req *backend.QueryDa
 
 func generateSql(query backend.DataQuery) (sql, alias string, err error) {
 	var queryDataJson map[string]interface{}
-	pluginLogger.Debug(fmt.Sprintf("req.Queries.JSON:%+v", string(query.JSON)))
+	// pluginLogger.Debug(fmt.Sprintf("req.Queries.JSON:%+v", string(query.JSON)))
 	if err = json.Unmarshal(query.JSON, &queryDataJson); err != nil {
 		return "", "", fmt.Errorf("get query error: %w", err)
 	}
@@ -134,8 +134,7 @@ func generateSql(query backend.DataQuery) (sql, alias string, err error) {
 		sql = strings.ReplaceAll(sql, "$end", "'"+fmt.Sprint(query.TimeRange.To.In(timeZone).Format(time.RFC3339Nano))+"'")
 	}
 
-	pluginLogger.Debug(sql)
-	// alias := ""
+	// pluginLogger.Debug(sql)
 	aliasJ, exist := queryDataJson["alias"]
 	if exist {
 		alias = aliasJ.(string)
