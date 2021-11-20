@@ -31,7 +31,7 @@ module.exports = function (grunt) {
         src: ['README.md'],
         dest: 'dist'
       },
-      cmsConfig: {
+      smsConfig: {
         cwd: 'pkg',
         expand: true,
         src: ['config.json'],
@@ -93,5 +93,5 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('default', ['clean', 'copy:src_to_dist', 'copy:dashboard_to_dist',
-    'copy:examples_to_dist', 'copy:pluginDef', 'copy:cmsConfig', 'babel', 'mochaTest']);
+    'copy:examples_to_dist', 'copy:pluginDef', 'copy:smsConfig', 'babel', 'mochaTest']);
 };
