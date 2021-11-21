@@ -1,0 +1,11 @@
+{
+  "alibabaCloudSms": {
+    "accessKeyId": "xxxxxxxxxxxxxxxxxxxxxxx",
+    "accessKeySecret": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "signName": "xxx",
+    "templateCode": "SMS_xxxxxxxxxx",
+    "templateParam": "{\"alarm_level\":\"%s\",\"time\":\"%s\",\"name\":\"%s\",\"content\":\"%s\"}"
+  },
+  "phoneNumbers": [],
+  "listenAddr": "0.0.0.0:9010"
+}
