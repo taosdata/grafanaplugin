@@ -80,10 +80,10 @@
   },
   "description": "Monitor TDengine with alerts",
   "editable": true,
-  "gnetId": 15146,
+  "gnetId": 15167,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1637142692917,
+  "iteration": 1637564302559,
   "links": [],
   "panels": [
     {
@@ -4077,24 +4077,7 @@
               "color": {
                 "mode": "thresholds"
               },
-              "mappings": [
-                {
-                  "from": "",
-                  "id": 1,
-                  "text": "Has MNode",
-                  "to": "",
-                  "type": 1,
-                  "value": "1"
-                },
-                {
-                  "from": "",
-                  "id": 2,
-                  "text": "No MNode",
-                  "to": "",
-                  "type": 1,
-                  "value": "0"
-                }
-              ],
+              "mappings": [],
               "thresholds": {
                 "mode": "percentage",
                 "steps": [
@@ -4168,24 +4151,7 @@
               "color": {
                 "mode": "thresholds"
               },
-              "mappings": [
-                {
-                  "from": "",
-                  "id": 1,
-                  "text": "Has MNode",
-                  "to": "",
-                  "type": 1,
-                  "value": "1"
-                },
-                {
-                  "from": "",
-                  "id": 2,
-                  "text": "No MNode",
-                  "to": "",
-                  "type": 1,
-                  "value": "0"
-                }
-              ],
+              "mappings": [],
               "thresholds": {
                 "mode": "percentage",
                 "steps": [
@@ -5604,5 +5570,5 @@
   "timezone": "",
   "title": "TDinsight",
   "uid": "tdinsight",
-  "version": 32
+  "version": 19
 }
