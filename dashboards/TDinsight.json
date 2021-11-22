@@ -2847,7 +2847,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select sum(req_insert) as insert_count, sum(req_insert_success) as insert_success, sum(req_insert_batch) as insert_batches, sum(req_insert_batch_success) as insert_batch_success from log.dnodes_info where ts >= $from and ts <= $to interval($interval) fill(null) group by dnode_ep"
+              "sql": "select sum(req_insert) as insert_count, sum(req_insert_success) as insert_success, sum(req_insert_batch) as insert_batches, sum(req_insert_batch_success) as insert_batch_success from log.dnodes_info where ts >= $from and ts <= $to interval($interval) group by dnode_ep"
             },
             {
               "colNameFormatStr": "",
@@ -2865,7 +2865,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "C",
-              "sql": "select sum(req_insert_success)  / sum(req_insert) as success_rate from log.dnodes_info where ts >= $from and ts <= $to interval($interval) fill(null) group by dnode_ep"
+              "sql": "select sum(req_insert_success)  / sum(req_insert) as success_rate from log.dnodes_info where ts >= $from and ts <= $to interval($interval) group by dnode_ep"
             },
             {
               "colNameFormatStr": "",
@@ -2974,7 +2974,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select avg(req_insert_rate) as insert_rate, avg(req_insert_batch_rate) as batch_rate from log.dnodes_info where ts >= $from and ts <= $to interval($interval) fill(null) group by dnode_ep"
+              "sql": "select avg(req_insert_rate) as insert_rate, avg(req_insert_batch_rate) as batch_rate from log.dnodes_info where ts >= $from and ts <= $to interval($interval) group by dnode_ep"
             },
             {
               "colNameFormatStr": "",
@@ -3086,7 +3086,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select sum(req_select) as req_select from log.dnodes_info where ts >= $from and ts <= $to interval($interval) fill(null) group by dnode_ep"
+              "sql": "select sum(req_select) as req_select from log.dnodes_info where ts >= $from and ts <= $to interval($interval) group by dnode_ep"
             },
             {
               "colNameFormatStr": "",
@@ -3104,7 +3104,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "C",
-              "sql": "select avg(req_select_rate) as req_select_rate from log.dnodes_info where ts >= $from and ts <= $to interval($interval) fill(null) group by dnode_ep"
+              "sql": "select avg(req_select_rate) as req_select_rate from log.dnodes_info where ts >= $from and ts <= $to interval($interval) group by dnode_ep"
             },
             {
               "colNameFormatStr": "",
