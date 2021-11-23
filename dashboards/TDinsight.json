@@ -80,10 +80,10 @@
   },
   "description": "Monitor TDengine with alerts",
   "editable": true,
-  "gnetId": 15146,
+  "gnetId": 15167,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1637142692917,
+  "iteration": 1637590763527,
   "links": [],
   "panels": [
     {
@@ -1047,7 +1047,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select avg(dnodes_alive)/avg(dnodes_total) from log.cluster_info where ts >= $from and ts <= $to interval(30s)",
+          "sql": "select avg(dnodes_alive)/avg(dnodes_total) from log.cluster_info where ts >= $from and ts <= $to interval(30s) fill(null)",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -1189,7 +1189,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select avg(mnodes_alive)/avg(mnodes_total) from log.cluster_info where ts >= $from and ts <= $to interval(30s)",
+          "sql": "select avg(mnodes_alive)/avg(mnodes_total) from log.cluster_info where ts >= $from and ts <= $to interval(30s) fill(null)",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -1326,10 +1326,12 @@
       "targets": [
         {
           "alias": "",
+          "colNameFormatStr": "",
+          "colNameToGroup": "",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select avg(vgroups_alive)/avg(vgroups_total) from log.cluster_info where ts >= $from and ts <= $to interval(30s)",
+          "sql": "select avg(vgroups_alive)/avg(vgroups_total) from log.cluster_info where ts >= $from and ts <= $to interval(30s) fill(null)",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -1466,10 +1468,12 @@
       "targets": [
         {
           "alias": "",
+          "colNameFormatStr": "",
+          "colNameToGroup": "",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select avg(vnodes_alive)/avg(vnodes_total) from log.cluster_info where ts >= $from and ts <= $to interval(30s)",
+          "sql": "select avg(vnodes_alive)/avg(vnodes_total) from log.cluster_info where ts >= $from and ts <= $to interval(30s) fill(null)",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -1639,7 +1643,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select avg(timeseries_used)/avg(timeseries_total) as percent from log.grants_info where ts >= $from and ts <= $to interval(30s)",
+          "sql": "select avg(timeseries_used)/avg(timeseries_total) as percent from log.grants_info where ts >= $from and ts <= $to interval(30s) fill(null)",
           "target": "select metric",
           "type": "timeserie"
         },
@@ -1650,7 +1654,7 @@
           "hide": false,
           "queryType": "SQL",
           "refId": "B",
-          "sql": "select avg(timeseries_used) as used , avg(timeseries_total) as total from log.grants_info where ts >= $from and ts <= $to interval(30s)",
+          "sql": "select avg(timeseries_used) as used , avg(timeseries_total) as total from log.grants_info where ts >= $from and ts <= $to interval(30s) fill(null)",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -1797,7 +1801,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select last(expire_time) as expire_time from log.grants_info where ts >= $from and ts <= $to interval(30s)",
+          "sql": "select last(expire_time) as expire_time from log.grants_info where ts >= $from and ts <= $to interval(30s) fill(null)",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -2833,7 +2837,6 @@
           "seriesOverrides": [
             {
               "alias": "/success_rate/",
-              "nullPointMode": "connected",
               "yaxis": 2
             }
           ],
@@ -2845,6 +2848,7 @@
               "colNameFormatStr": "",
               "colNameToGroup": "dnode_ep",
               "formatType": "Time series",
+              "hide": false,
               "queryType": "SQL",
               "refId": "A",
               "sql": "select sum(req_insert) as insert_count, sum(req_insert_success) as insert_success, sum(req_insert_batch) as insert_batches, sum(req_insert_batch_success) as insert_batch_success from log.dnodes_info where ts >= $from and ts <= $to interval($interval) fill(null) group by dnode_ep"
@@ -2869,7 +2873,7 @@
             },
             {
               "colNameFormatStr": "",
-              "colNameToGroup": "dnode_ep",
+              "colNameToGroup": "",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -2983,7 +2987,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "B",
-              "sql": "select avg(insert_rate) as cluster_insert_rate, avg(batch_rate) as cluster_batch_rate from (select sum(req_insert_rate) as insert_rate,  sum(req_insert_batch_rate) as batch_rate from log.dnodes_info where ts >= $from and ts <= $to interval(1s)) interval($interval)"
+              "sql": "select avg(insert_rate) as cluster_insert_rate, avg(batch_rate) as cluster_batch_rate from (select sum(req_insert_rate) as insert_rate,  sum(req_insert_batch_rate) as batch_rate from log.dnodes_info where ts >= $from and ts <= $to interval(1s)) where ts >= $from and ts <= $to interval($interval) fill(null)"
             }
           ],
           "thresholds": [],
@@ -3113,7 +3117,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "D",
-              "sql": "select avg(req_select_rate) as req_select_rate from (select sum(req_select_rate) as req_select_rate from log.dnodes_info where ts >= $from and ts <= $to interval(1s)) interval($interval)"
+              "sql": "select avg(req_select_rate) as req_select_rate from (select sum(req_select_rate) as req_select_rate from log.dnodes_info where ts >= $from and ts <= $to interval(1s)) where ts >= $from and ts <= $to interval($interval) fill(null)"
             }
           ],
           "thresholds": [],
@@ -3247,7 +3251,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "D",
-              "sql": "select avg(req_http_rate) as req_http_rate from (select sum(req_http_rate) as req_http_rate from log.dnodes_info where ts >= $from and ts <= $to interval(1s)) interval($interval)"
+              "sql": "select avg(req_http_rate) as req_http_rate from (select sum(req_http_rate) as req_http_rate from log.dnodes_info where ts >= $from and ts <= $to interval(1s)) where ts >= $from and ts <= $to interval($interval) fill(null)"
             }
           ],
           "thresholds": [],
@@ -3331,7 +3335,7 @@
             "h": 3,
             "w": 3,
             "x": 0,
-            "y": 28
+            "y": 73
           },
           "id": 96,
           "options": {
@@ -3417,7 +3421,7 @@
             "h": 9,
             "w": 9,
             "x": 3,
-            "y": 28
+            "y": 73
           },
           "hiddenSeries": false,
           "id": 94,
@@ -3462,7 +3466,7 @@
               "groupDataByColName": "",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last(tables_num) as tables_num from (select last(ts) as ts, sum(tables_num) as tables_num from log.vgroups_info where ts > $from and ts <= $to and database_name = '$database' group by ts) interval($interval)"
+              "sql": "select last(tables_num) as tables_num from (select last(ts) as ts, sum(tables_num) as tables_num from log.vgroups_info where ts > $from and ts <= $to and database_name = '$database' group by ts) where ts >= $from and ts <= $to interval($interval) fill(null)"
             }
           ],
           "thresholds": [],
@@ -3522,7 +3526,7 @@
             "h": 9,
             "w": 12,
             "x": 12,
-            "y": 28
+            "y": 73
           },
           "hiddenSeries": false,
           "id": 95,
@@ -3636,7 +3640,7 @@
             "h": 3,
             "w": 3,
             "x": 0,
-            "y": 31
+            "y": 76
           },
           "id": 98,
           "options": {
@@ -3710,7 +3714,7 @@
             "h": 3,
             "w": 3,
             "x": 0,
-            "y": 34
+            "y": 79
           },
           "id": 97,
           "options": {
@@ -3792,7 +3796,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 117
+        "y": 41
       },
       "id": 20,
       "panels": [
@@ -3823,7 +3827,7 @@
             "h": 6,
             "w": 4,
             "x": 0,
-            "y": 30
+            "y": 42
           },
           "id": 120,
           "options": {
@@ -3925,7 +3929,7 @@
             "h": 6,
             "w": 2,
             "x": 4,
-            "y": 30
+            "y": 42
           },
           "id": 121,
           "options": {
@@ -4021,7 +4025,7 @@
             "h": 6,
             "w": 2,
             "x": 6,
-            "y": 30
+            "y": 42
           },
           "id": 122,
           "options": {
@@ -4077,24 +4081,7 @@
               "color": {
                 "mode": "thresholds"
               },
-              "mappings": [
-                {
-                  "from": "",
-                  "id": 1,
-                  "text": "Has MNode",
-                  "to": "",
-                  "type": 1,
-                  "value": "1"
-                },
-                {
-                  "from": "",
-                  "id": 2,
-                  "text": "No MNode",
-                  "to": "",
-                  "type": 1,
-                  "value": "0"
-                }
-              ],
+              "mappings": [],
               "thresholds": {
                 "mode": "percentage",
                 "steps": [
@@ -4112,7 +4099,7 @@
             "h": 6,
             "w": 2,
             "x": 8,
-            "y": 30
+            "y": 42
           },
           "id": 123,
           "options": {
@@ -4168,24 +4155,7 @@
               "color": {
                 "mode": "thresholds"
               },
-              "mappings": [
-                {
-                  "from": "",
-                  "id": 1,
-                  "text": "Has MNode",
-                  "to": "",
-                  "type": 1,
-                  "value": "1"
-                },
-                {
-                  "from": "",
-                  "id": 2,
-                  "text": "No MNode",
-                  "to": "",
-                  "type": 1,
-                  "value": "0"
-                }
-              ],
+              "mappings": [],
               "thresholds": {
                 "mode": "percentage",
                 "steps": [
@@ -4203,7 +4173,7 @@
             "h": 6,
             "w": 2,
             "x": 10,
-            "y": 30
+            "y": 42
           },
           "id": 124,
           "options": {
@@ -4311,7 +4281,7 @@
             "h": 6,
             "w": 4,
             "x": 12,
-            "y": 30
+            "y": 42
           },
           "id": 45,
           "options": {
@@ -4380,7 +4350,7 @@
             "h": 6,
             "w": 4,
             "x": 16,
-            "y": 30
+            "y": 42
           },
           "id": 66,
           "options": {
@@ -4462,7 +4432,7 @@
             "h": 6,
             "w": 4,
             "x": 20,
-            "y": 30
+            "y": 42
           },
           "id": 51,
           "options": {
@@ -4528,7 +4498,7 @@
             "h": 11,
             "w": 12,
             "x": 0,
-            "y": 36
+            "y": 48
           },
           "hiddenSeries": false,
           "hideTimeOverride": true,
@@ -4537,6 +4507,7 @@
             "alignAsTable": true,
             "avg": true,
             "current": true,
+            "hideZero": false,
             "max": true,
             "min": true,
             "show": true,
@@ -4642,7 +4613,7 @@
             "h": 11,
             "w": 12,
             "x": 12,
-            "y": 36
+            "y": 48
           },
           "hiddenSeries": false,
           "hideTimeOverride": true,
@@ -4752,7 +4723,7 @@
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 47
+            "y": 59
           },
           "hiddenSeries": false,
           "id": 117,
@@ -4887,7 +4858,7 @@
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 47
+            "y": 59
           },
           "hiddenSeries": false,
           "id": 64,
@@ -5033,7 +5004,7 @@
             "h": 12,
             "w": 12,
             "x": 0,
-            "y": 57
+            "y": 69
           },
           "hiddenSeries": false,
           "hideTimeOverride": true,
@@ -5156,7 +5127,7 @@
             "h": 12,
             "w": 12,
             "x": 12,
-            "y": 57
+            "y": 69
           },
           "hiddenSeries": false,
           "hideTimeOverride": true,
@@ -5267,7 +5238,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 235
+        "y": 42
       },
       "id": 63,
       "panels": [
@@ -5426,7 +5397,7 @@
         "name": "database",
         "options": [],
         "query": "select distinct(database_name) from log.vgroups_info where ts >= $from and ts <= $to",
-        "refresh": 2,
+        "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
         "sort": 1,
@@ -5604,5 +5575,5 @@
   "timezone": "",
   "title": "TDinsight",
   "uid": "tdinsight",
-  "version": 32
+  "version": 20
 }
