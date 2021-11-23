@@ -65,8 +65,9 @@ func newDatasource() datasource.ServeOpts {
 	}
 
 	return datasource.ServeOpts{
-		QueryDataHandler:   ds,
-		CheckHealthHandler: ds,
+		QueryDataHandler:    ds,
+		CheckHealthHandler:  ds,
+		CallResourceHandler: ds,
 	}
 }
 
@@ -275,6 +276,10 @@ func query(url, user, password string, reqBody []byte) ([]byte, error) {
 // datasource configuration page which allows users to verify that
 // a datasource is working as expected.
 func (rd *RocksetDatasource) CheckHealth(ctx context.Context, req *backend.CheckHealthRequest) (*backend.CheckHealthResult, error) {
+	pluginLogger.Debug("CheckHealth")
+	// pluginLogger.Debug(fmt.Sprintf("%#v", req.PluginContext))
+	// pluginLogger.Debug(fmt.Sprintf("%#v", req.PluginContext.User))
+	// pluginLogger.Debug(fmt.Sprintf("%#v", req.PluginContext.AppInstanceSettings))
 	var dat map[string]string
 	if err := json.Unmarshal(req.PluginContext.DataSourceInstanceSettings.JSONData, &dat); err != nil {
 		return healthError("get dataSourceInstanceSettings error: %s", err.Error()), nil
@@ -303,6 +308,33 @@ func healthError(msg string, args ...string) *backend.CheckHealthResult {
 		Status:  backend.HealthStatusError,
 		Message: fmt.Sprintf(msg, args),
 	}
+}
+
+// CheckHealth handles health checks sent from Grafana to the plugin.
+// The main use case for these health checks is the test button on the
+// datasource configuration page which allows users to verify that
+// a datasource is working as expected.
+func (rd *RocksetDatasource) CallResource(ctx context.Context, req *backend.CallResourceRequest, sender backend.CallResourceResponseSender) error {
+	// pluginLogger.Debug("CallResource")
+	if req.Path == "setSmsConfig" {
+		var dat map[string]SmsConfInfo
+		if err := json.Unmarshal(req.Body, &dat); err != nil {
+			pluginLogger.Debug("CallResource error: " + err.Error())
+			pluginLogger.Debug("CallResource req.Body: " + string(req.Body))
+			return err
+		}
+		StoreConfig(req.Body)
+		StartSmsWorkers(ctx)
+	}
+	if req.Path == "getSmsConfig" {
+		if resp, err := json.Marshal(LoadConfig()); err != nil {
+			pluginLogger.Debug("CallResource getSmsConfig error: " + err.Error())
+			return err
+		} else {
+			sender.Send(&backend.CallResourceResponse{Status: 200, Body: resp})
+		}
+	}
+	return nil
 }
 
 type instanceSettings struct {

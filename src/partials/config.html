@@ -3,7 +3,8 @@
 <div class="gf-form-group">
 	<div class="gf-form max-width-30">
 		<span class="gf-form-label width-7">Host</span>
-		<input type="text" class="gf-form-input" ng-model='ctrl.current.url' placeholder="http://localhost:6041" bs-typeahead="{{['http://localhost:6041']}}" required></input>
+		<input type="text" class="gf-form-input" ng-model='ctrl.current.url' placeholder="http://localhost:6041"
+			bs-typeahead="{{['http://localhost:6041']}}" required></input>
 	</div>
 
 	<div class="gf-form-inline">
@@ -13,7 +14,59 @@
 		</div>
 		<div class="gf-form max-width-15">
 			<span class="gf-form-label width-7">Password</span>
-			<input type="password" class="gf-form-input" ng-model='ctrl.current.jsonData.password' placeholder="taosdata"></input>
+			<input type="password" class="gf-form-input" ng-model='ctrl.current.jsonData.password'
+				placeholder="taosdata"></input>
 		</div>
+	</div>
+</div>
+<div class="gf-form max-width-30">
+	<h3 style="padding-top:4px;padding-right:15px;">Alibaba Cloud Sms Config</h3>
+	<div class="gf-form-switch " style="margin-left:4px;">
+		<input type="checkbox" ng-model="ctrl.smsShowFlag">
+		<span class="gf-form-switch__slider" ng-click="ctrl.smsShowChange()"></span>
+	</div>
+	<div class="gf-form-label">{{ctrl.smsShowFlag?"show":"hide"}}</div>
+</div>
+<div class="gf-form-group" ng-show="ctrl.smsShowFlag">
+	<div class="gf-form max-width-30">
+		<span class="gf-form-label width-7">accessKeyId</span>
+		<input type="text" class="gf-form-input" ng-model='ctrl.current.jsonData.smsConfig.AlibabaCloudSms.AccessKeyId'
+			required></input>
+	</div>
+	<div class="gf-form max-width-30">
+		<span class="gf-form-label width-7">accessKeySecret</span>
+		<input type="text" class="gf-form-input"
+			ng-model='ctrl.current.jsonData.smsConfig.AlibabaCloudSms.AccessKeySecret' required></input>
+	</div>
+	<div class="gf-form-inline">
+		<div class="gf-form max-width-15">
+			<span class="gf-form-label width-7">signName</span>
+			<input type="text" class="gf-form-input" ng-model='ctrl.current.jsonData.smsConfig.AlibabaCloudSms.SignName'
+				required></input>
+		</div>
+		<div class="gf-form max-width-15">
+			<span class="gf-form-label width-7">templateCode</span>
+			<input type="text" class="gf-form-input"
+				ng-model='ctrl.current.jsonData.smsConfig.AlibabaCloudSms.TemplateCode' required></input>
+		</div>
+	</div>
+	<div class="gf-form max-width-30">
+		<span class="gf-form-label width-7">templateParam</span>
+		<input type="text" class="gf-form-input"
+			ng-model='ctrl.current.jsonData.smsConfig.AlibabaCloudSms.TemplateParam' required></input>
+	</div>
+	<div class="gf-form max-width-30">
+		<span class="gf-form-label width-7">phoneNumbers</span>
+		<input type="text" class="gf-form-input" ng-model='ctrl.current.jsonData.smsConfig.PhoneNumberLists'
+			placeholder="131xxxxxxxx,132xxxxxxxx" required></input>
+	</div>
+	<div class="gf-form max-width-30">
+		<span class="gf-form-label width-7">listenAddr</span>
+		<input type="text" class="gf-form-input" ng-model='ctrl.current.jsonData.smsConfig.ListenAddr'
+			placeholder="127.0.0.1:9010" required></input>
+	</div>
+	<div class="gf-form max-width-30">
+		<pre
+			class="gf-form-pre">If you enable this feature, you can input http://listenAddr/sms (for example: http://127.0.0.1:9010/sms) into alerting->notification channels->webhook->url </pre>
 	</div>
 </div>

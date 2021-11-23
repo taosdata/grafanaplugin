@@ -4,6 +4,7 @@ export class GenericDatasource {
 
   constructor(instanceSettings, $q, backendSrv, templateSrv) {
     // console.log("instanceSettings",instanceSettings);
+    this.pluginId = instanceSettings.type;
     this.url = instanceSettings.url;
     this.name = instanceSettings.name;
     this.q = $q;
@@ -44,6 +45,21 @@ export class GenericDatasource {
   }
 
   testDatasource() {
+    this.backendSrv.datasourceRequest({
+      url: `/api/frontend/settings`,
+    }).then(response => {
+      // console.log(response);
+      if (!!response&&!!(response.data)&&!!(response.data.datasources)) {
+        this.requestResources(`/setSmsConfig`,Object.fromEntries(Object.values(response.data.datasources).filter(datasource=>datasource.type===this.pluginId).map(item=>[item.uid,item.jsonData.smsConfig]))).then(response => {
+          if (!!response && response.status === 200) {
+            return { status: "success", message: "SMS Config Success", title: "Success" };
+          }
+          return { status: "error", message: "SMS Config Success Failed", title: "Failed" };
+        });
+      }
+    },error=>{
+      console.log(error);
+    });
     return this.request('/rest/sqlutc','show databases').then(response => {
         if (!!response && response.status === 200) {
           return { status: "success", message: "TDengine Data source is working", title: "Success" };
@@ -63,6 +79,14 @@ export class GenericDatasource {
       data: params,
       method: 'POST',
       headers: this.headers,
+    });
+  }
+
+  requestResources(url , params) {
+    return this.backendSrv.datasourceRequest({
+      url: `/api/plugins/${this.pluginId}/resources${url}`,
+      data: params,
+      method: 'POST',
     });
   }
 
@@ -104,10 +128,20 @@ export class GenericDatasource {
     
     intervalMs += "a";
     sql = sql.replace(/^\s+|\s+$/gm, '');
-    sql = sql.replace(/\$from/g, "'" + queryStart + "'");
-    sql = sql.replace(/\$begin/g, "'" + queryStart + "'");
-    sql = sql.replace(/\$to/g, "'" + queryEnd + "'");
-    sql = sql.replace(/\$end/g, "'" + queryEnd + "'");
+    if (queryStart.indexOf("now")<0) {
+      sql = sql.replace(/\$from/g, "'" + queryStart + "'");
+      sql = sql.replace(/\$begin/g, "'" + queryStart + "'");
+    }else{
+      sql = sql.replace(/\$from/g, queryStart);
+      sql = sql.replace(/\$begin/g, queryStart);
+    }
+    if (queryEnd.indexOf("now")<0) {
+      sql = sql.replace(/\$to/g, "'" + queryEnd + "'");
+      sql = sql.replace(/\$end/g, "'" + queryEnd + "'");
+    }else{
+      sql = sql.replace(/\$to/g, queryEnd);
+      sql = sql.replace(/\$end/g, queryEnd);
+    }
     sql = sql.replace(/\$interval/g, intervalMs);
     
     const allVaribles = this.templateSrv.getVariables ? this.templateSrv.getVariables() : this.templateSrv.variables||[];
@@ -305,6 +339,7 @@ export class GenericDatasource {
   }
 
   metricFindQuery(query, options) {
+    // console.log('query',query);
     // console.log('options',options);
     return this.request('/rest/sqlutc', this.generateSql(query,options)).then(res => {
       if (!res||!res.data||!res.data.data) {

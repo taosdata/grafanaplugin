@@ -20,34 +20,36 @@ type SmsConfInfo struct {
 	ListenAddr      string              `json:listenAddr`
 }
 
-var SmsConf SmsConfInfo
-
 var file_locker sync.Mutex //config file locker
 
-func InitConfig() bool {
-	conf, bl := LoadConfig("tdengine-datasource/config.json") //get config struct
-	if !bl {
-		pluginLogger.Debug("InitConfig failed")
-		return false
-	}
-	SmsConf = conf
-	return true
-}
+const fileName = "tdengine-datasource/config.json"
 
-func LoadConfig(filename string) (SmsConfInfo, bool) {
-	var conf SmsConfInfo
+func LoadConfig() (conf map[string]SmsConfInfo) {
 	file_locker.Lock()
-	data, err := io.ReadFile(filename)
+	data, err := io.ReadFile(fileName)
 	file_locker.Unlock()
 	if err != nil {
-		pluginLogger.Debug("read json file error")
-		return conf, false
+		conf = nil
+		pluginLogger.Debug("read config.json file error")
+		return
 	}
 	datajson := []byte(data)
 	err = json.Unmarshal(datajson, &conf)
 	if err != nil {
+		conf = nil
 		pluginLogger.Debug("unmarshal json file error")
-		return conf, false
+		return
 	}
-	return conf, true
+	return
+}
+
+func StoreConfig(conf []byte) (err error) {
+	file_locker.Lock()
+	err = io.WriteFile(fileName, conf, 0777)
+	file_locker.Unlock()
+	if err != nil {
+		pluginLogger.Debug("write json file error")
+		return err
+	}
+	return err
 }
