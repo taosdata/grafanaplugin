@@ -23,7 +23,7 @@ type SmsConfInfo struct {
 
 var file_locker sync.Mutex //config file locker
 
-var fileName = os.Getenv("GF_PATHS_DATA") + "tdengine-datasource-sms-config.json"
+var fileName = os.Getenv("GF_PATHS_DATA") + "/tdengine-datasource-sms-config.json"
 
 func LoadConfig() (conf map[string]SmsConfInfo) {
 	file_locker.Lock()
