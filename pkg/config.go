@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	io "io/ioutil"
+	"os"
 	"sync"
 )
 
@@ -22,7 +23,7 @@ type SmsConfInfo struct {
 
 var file_locker sync.Mutex //config file locker
 
-const fileName = "tdengine-datasource/config.json"
+var fileName = os.Getenv("GF_PATHS_DATA") + "tdengine-datasource-sms-config.json"
 
 func LoadConfig() (conf map[string]SmsConfInfo) {
 	file_locker.Lock()

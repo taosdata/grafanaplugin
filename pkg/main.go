@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"os"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend/datasource"
@@ -11,9 +12,10 @@ import (
 var pluginLogger hclog.Logger
 
 func main() {
-	f, err := os.OpenFile("tdengine_backend.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	f, err := os.OpenFile(os.Getenv("GF_PATHS_LOGS")+"/tdengine_backend.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
-		os.Exit(1)
+		fmt.Println(err.Error())
+		panic(err)
 	}
 
 	pluginLogger = hclog.New(&hclog.LoggerOptions{

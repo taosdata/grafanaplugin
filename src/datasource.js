@@ -50,12 +50,15 @@ export class GenericDatasource {
     }).then(response => {
       // console.log(response);
       if (!!response&&!!(response.data)&&!!(response.data.datasources)) {
-        this.requestResources(`/setSmsConfig`,Object.fromEntries(Object.values(response.data.datasources).filter(datasource=>datasource.type===this.pluginId).map(item=>[item.uid,item.jsonData.smsConfig]))).then(response => {
-          if (!!response && response.status === 200) {
-            return { status: "success", message: "SMS Config Success", title: "Success" };
-          }
-          return { status: "error", message: "SMS Config Success Failed", title: "Failed" };
-        });
+        let datasources = Object.values(response.data.datasources).filter(datasource=>datasource.type===this.pluginId);
+        if (datasources.length>0) {
+          this.requestResources(`/setSmsConfig`,Object.fromEntries(datasources.map(item=>[item.uid,item.jsonData.smsConfig]))).then(response => {
+            if (!!response && response.status === 200) {
+              return { status: "success", message: "SMS Config Success", title: "Success" };
+            }
+            return { status: "error", message: "SMS Config Success Failed", title: "Failed" };
+          });
+        }
       }
     },error=>{
       console.log(error);
