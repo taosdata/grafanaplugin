@@ -10,10 +10,23 @@ export class GenericDatasourceConfigCtrl {
             console.log(this.current.uid,res);
             if (!!res&&!!res.data&&!!res.data[this.current.uid]) {
                 this.current.jsonData.smsConfig = res.data[this.current.uid];
-                this.current.jsonData.smsConfig.PhoneNumberLists = this.current.jsonData.smsConfig.PhoneNumbers.join(",");
-                this.smsShowFlag = true;
-                this.scope.$apply();
+                this.current.jsonData.smsConfig.PhoneNumbersList = this.current.jsonData.smsConfig.PhoneNumbers?this.current.jsonData.smsConfig.PhoneNumbers.join(","):"";
+                this.smsShowFlag = this.current.jsonData.smsConfig.PhoneNumbersList.length>0||this.current.jsonData.smsConfig.ListenAddr.length>0||Object.values(this.current.jsonData.smsConfig.AlibabaCloudSms).join("").length>0;
+            }else{
+                datasource.jsonData.smsConfig = {
+                    AlibabaCloudSms:{
+                        AccessKeyId:"",
+                        AccessKeySecret:"",
+                        SignName:"",
+                        TemplateCode:"",
+                        TemplateParam:"",
+                    },
+                    PhoneNumbersList:"",
+                    PhoneNumbers:[],
+                    ListenAddr:"",
+                }
             }
+            this.scope.$apply();
         });
         if (!this.current.jsonData.user) {
             this.current.jsonData.user = "root";

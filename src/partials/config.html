@@ -30,34 +30,34 @@
 <div class="gf-form-group" ng-show="ctrl.smsShowFlag">
 	<div class="gf-form max-width-30">
 		<span class="gf-form-label width-7">accessKeyId</span>
-		<input type="text" class="gf-form-input" ng-model='ctrl.current.jsonData.smsConfig.AlibabaCloudSms.AccessKeyId'
+		<input type="text" class="gf-form-input" ng-model='ctrl.current.jsonData.smsConfig.AlibabaCloudSms.AccessKeyId' placeholder="xxxxxxxxxxxxxxxxxxxxxxx"
 			required></input>
 	</div>
 	<div class="gf-form max-width-30">
 		<span class="gf-form-label width-7">accessKeySecret</span>
 		<input type="text" class="gf-form-input"
-			ng-model='ctrl.current.jsonData.smsConfig.AlibabaCloudSms.AccessKeySecret' required></input>
+			ng-model='ctrl.current.jsonData.smsConfig.AlibabaCloudSms.AccessKeySecret' placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" required></input>
 	</div>
 	<div class="gf-form-inline">
 		<div class="gf-form max-width-15">
 			<span class="gf-form-label width-7">signName</span>
-			<input type="text" class="gf-form-input" ng-model='ctrl.current.jsonData.smsConfig.AlibabaCloudSms.SignName'
+			<input type="text" class="gf-form-input" ng-model='ctrl.current.jsonData.smsConfig.AlibabaCloudSms.SignName' placeholder="xxx"
 				required></input>
 		</div>
 		<div class="gf-form max-width-15">
 			<span class="gf-form-label width-7">templateCode</span>
 			<input type="text" class="gf-form-input"
-				ng-model='ctrl.current.jsonData.smsConfig.AlibabaCloudSms.TemplateCode' required></input>
+				ng-model='ctrl.current.jsonData.smsConfig.AlibabaCloudSms.TemplateCode' placeholder="SMS_xxxxxxxxxx" required></input>
 		</div>
 	</div>
 	<div class="gf-form max-width-30">
 		<span class="gf-form-label width-7">templateParam</span>
 		<input type="text" class="gf-form-input"
-			ng-model='ctrl.current.jsonData.smsConfig.AlibabaCloudSms.TemplateParam' required></input>
+			ng-model='ctrl.current.jsonData.smsConfig.AlibabaCloudSms.TemplateParam' placeholder='{\"alarm_level\":\"%s\",\"time\":\"%s\",\"name\":\"%s\",\"content\":\"%s\"}' required></input>
 	</div>
 	<div class="gf-form max-width-30">
 		<span class="gf-form-label width-7">phoneNumbers</span>
-		<input type="text" class="gf-form-input" ng-model='ctrl.current.jsonData.smsConfig.PhoneNumberLists'
+		<input type="text" class="gf-form-input" ng-model='ctrl.current.jsonData.smsConfig.PhoneNumbersList'
 			placeholder="131xxxxxxxx,132xxxxxxxx" required></input>
 	</div>
 	<div class="gf-form max-width-30">

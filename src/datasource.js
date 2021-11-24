@@ -50,9 +50,13 @@ export class GenericDatasource {
     }).then(response => {
       // console.log(response);
       if (!!response&&!!(response.data)&&!!(response.data.datasources)) {
-        let datasources = Object.values(response.data.datasources).filter(datasource=>datasource.type===this.pluginId);
+        let datasources = Object.values(response.data.datasources).filter(datasource=>datasource.type===this.pluginId&&!!datasource.jsonData.smsConfig);
         if (datasources.length>0) {
-          this.requestResources(`/setSmsConfig`,Object.fromEntries(datasources.map(item=>[item.uid,item.jsonData.smsConfig]))).then(response => {
+          let param = Object.fromEntries(datasources.map(item=>{
+            item.jsonData.smsConfig.PhoneNumbers = item.jsonData.smsConfig.PhoneNumbersList.split(",");
+            return [item.uid,item.jsonData.smsConfig]
+          }));
+          this.requestResources(`/setSmsConfig`,param).then(response => {
             if (!!response && response.status === 200) {
               return { status: "success", message: "SMS Config Success", title: "Success" };
             }

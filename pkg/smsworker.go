@@ -34,6 +34,9 @@ func (worker *SmsWorker) StartListen() {
 
 func StartSmsWorkers(ctx context.Context) {
 	for k, v := range LoadConfig() {
+		if len(v.ListenAddr) == 0 {
+			continue
+		}
 		pluginLogger.Debug(fmt.Sprintf("%s %#v", k, v))
 		var worker *SmsWorker
 		// workerList.Delete(k)
