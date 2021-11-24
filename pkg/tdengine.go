@@ -84,15 +84,16 @@ type RocksetDatasource struct {
 // The QueryDataResponse contains a map of RefID to the response for each query, and each response
 // contains Frames ([]*Frame).
 func (rd *RocksetDatasource) QueryData(ctx context.Context, req *backend.QueryDataRequest) (*backend.QueryDataResponse, error) {
-	var dat map[string]string
+	var dat map[string]interface{}
+	// pluginLogger.Debug(fmt.Sprintf("%#v", string(req.Queries[0].JSON)))
 	if err := json.Unmarshal(req.PluginContext.DataSourceInstanceSettings.JSONData, &dat); err != nil {
 		return nil, fmt.Errorf("get dataSourceInstanceSettings error: %w", err)
 	}
-	user, found := dat["user"]
+	user, found := dat["user"].(string)
 	if !found {
 		user = "root"
 	}
-	password, found := dat["password"]
+	password, found := dat["password"].(string)
 	if !found {
 		password = "taosdata"
 	}
@@ -120,10 +121,14 @@ func generateSql(query backend.DataQuery) (sql, alias string, err error) {
 	if err = json.Unmarshal(query.JSON, &queryDataJson); err != nil {
 		return "", "", fmt.Errorf("get query error: %w", err)
 	}
-	if queryDataJson["queryType"].(string) != "SQL" {
+	queryType, ok := queryDataJson["queryType"].(string)
+	if ok && queryType != "SQL" {
 		return "", "", fmt.Errorf("queryType error, only support SQL queryType")
 	}
-	sql = queryDataJson["sql"].(string)
+	sql, ok = queryDataJson["sql"].(string)
+	if !ok {
+		return "", "", fmt.Errorf("can not get SQL")
+	}
 	if timeZone, err := time.LoadLocation(""); err != nil {
 		return "", "", fmt.Errorf("get time location zone: %w", err)
 	} else {
@@ -136,10 +141,7 @@ func generateSql(query backend.DataQuery) (sql, alias string, err error) {
 	}
 
 	// pluginLogger.Debug(sql)
-	aliasJ, exist := queryDataJson["alias"]
-	if exist {
-		alias = aliasJ.(string)
-	}
+	alias, _ = queryDataJson["alias"].(string)
 	return sql, alias, nil
 }
 
@@ -280,15 +282,15 @@ func (rd *RocksetDatasource) CheckHealth(ctx context.Context, req *backend.Check
 	// pluginLogger.Debug(fmt.Sprintf("%#v", req.PluginContext))
 	// pluginLogger.Debug(fmt.Sprintf("%#v", req.PluginContext.User))
 	// pluginLogger.Debug(fmt.Sprintf("%#v", req.PluginContext.AppInstanceSettings))
-	var dat map[string]string
+	var dat map[string]interface{}
 	if err := json.Unmarshal(req.PluginContext.DataSourceInstanceSettings.JSONData, &dat); err != nil {
 		return healthError("get dataSourceInstanceSettings error: %s", err.Error()), nil
 	}
-	user, found := dat["user"]
+	user, found := dat["user"].(string)
 	if !found {
 		user = "root"
 	}
-	password, found := dat["password"]
+	password, found := dat["password"].(string)
 	if !found {
 		password = "taosdata"
 	}

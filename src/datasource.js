@@ -53,7 +53,7 @@ export class GenericDatasource {
         let datasources = Object.values(response.data.datasources).filter(datasource=>datasource.type===this.pluginId&&!!datasource.jsonData.smsConfig);
         if (datasources.length>0) {
           let param = Object.fromEntries(datasources.map(item=>{
-            item.jsonData.smsConfig.PhoneNumbers = item.jsonData.smsConfig.PhoneNumbersList.split(",");
+            item.jsonData.smsConfig.phoneNumbers = item.jsonData.smsConfig.phoneNumbersList?item.jsonData.smsConfig.phoneNumbersList.split(","):[];
             return [item.uid,item.jsonData.smsConfig]
           }));
           this.requestResources(`/setSmsConfig`,param).then(response => {

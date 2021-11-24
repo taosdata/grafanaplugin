@@ -8,17 +8,17 @@ import (
 )
 
 type AlibabaCloudSmsInfo struct {
-	AccessKeyId     string `json:accessKeyId`
-	AccessKeySecret string `json:accessKeySecret`
-	SignName        string `json:signName`
-	TemplateCode    string `json:templateCode`
-	TemplateParam   string `json:templateParam`
+	AccessKeyId     string `json:"accessKeyId"`
+	AccessKeySecret string `json:"accessKeySecret"`
+	SignName        string `json:"signName"`
+	TemplateCode    string `json:"templateCode"`
+	TemplateParam   string `json:"templateParam"`
 }
 
 type SmsConfInfo struct {
-	AlibabaCloudSms AlibabaCloudSmsInfo `json:alibabaCloudSms`
-	PhoneNumbers    []string            `json:phoneNumbers`
-	ListenAddr      string              `json:listenAddr`
+	AlibabaCloudSms AlibabaCloudSmsInfo `json:"alibabaCloudSms"`
+	PhoneNumbers    []string            `json:"phoneNumbers"`
+	ListenAddr      string              `json:"listenAddr"`
 }
 
 var file_locker sync.Mutex //config file locker

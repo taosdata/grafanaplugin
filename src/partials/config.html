@@ -30,39 +30,39 @@
 <div class="gf-form-group" ng-show="ctrl.smsShowFlag">
 	<div class="gf-form max-width-30">
 		<span class="gf-form-label width-7">accessKeyId</span>
-		<input type="text" class="gf-form-input" ng-model='ctrl.current.jsonData.smsConfig.AlibabaCloudSms.AccessKeyId' placeholder="xxxxxxxxxxxxxxxxxxxxxxx"
+		<input type="text" class="gf-form-input" ng-model='ctrl.current.jsonData.smsConfig.alibabaCloudSms.accessKeyId' placeholder="xxxxxxxxxxxxxxxxxxxxxxx"
 			required></input>
 	</div>
 	<div class="gf-form max-width-30">
 		<span class="gf-form-label width-7">accessKeySecret</span>
 		<input type="text" class="gf-form-input"
-			ng-model='ctrl.current.jsonData.smsConfig.AlibabaCloudSms.AccessKeySecret' placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" required></input>
+			ng-model='ctrl.current.jsonData.smsConfig.alibabaCloudSms.accessKeySecret' placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" required></input>
 	</div>
 	<div class="gf-form-inline">
 		<div class="gf-form max-width-15">
 			<span class="gf-form-label width-7">signName</span>
-			<input type="text" class="gf-form-input" ng-model='ctrl.current.jsonData.smsConfig.AlibabaCloudSms.SignName' placeholder="xxx"
+			<input type="text" class="gf-form-input" ng-model='ctrl.current.jsonData.smsConfig.alibabaCloudSms.signName' placeholder="xxx"
 				required></input>
 		</div>
 		<div class="gf-form max-width-15">
 			<span class="gf-form-label width-7">templateCode</span>
 			<input type="text" class="gf-form-input"
-				ng-model='ctrl.current.jsonData.smsConfig.AlibabaCloudSms.TemplateCode' placeholder="SMS_xxxxxxxxxx" required></input>
+				ng-model='ctrl.current.jsonData.smsConfig.alibabaCloudSms.templateCode' placeholder="SMS_xxxxxxxxxx" required></input>
 		</div>
 	</div>
 	<div class="gf-form max-width-30">
 		<span class="gf-form-label width-7">templateParam</span>
 		<input type="text" class="gf-form-input"
-			ng-model='ctrl.current.jsonData.smsConfig.AlibabaCloudSms.TemplateParam' placeholder='{\"alarm_level\":\"%s\",\"time\":\"%s\",\"name\":\"%s\",\"content\":\"%s\"}' required></input>
+			ng-model='ctrl.current.jsonData.smsConfig.alibabaCloudSms.templateParam' placeholder='{\"alarm_level\":\"%s\",\"time\":\"%s\",\"name\":\"%s\",\"content\":\"%s\"}' required></input>
 	</div>
 	<div class="gf-form max-width-30">
 		<span class="gf-form-label width-7">phoneNumbers</span>
-		<input type="text" class="gf-form-input" ng-model='ctrl.current.jsonData.smsConfig.PhoneNumbersList'
+		<input type="text" class="gf-form-input" ng-model='ctrl.current.jsonData.smsConfig.phoneNumbersList'
 			placeholder="131xxxxxxxx,132xxxxxxxx" required></input>
 	</div>
 	<div class="gf-form max-width-30">
 		<span class="gf-form-label width-7">listenAddr</span>
-		<input type="text" class="gf-form-input" ng-model='ctrl.current.jsonData.smsConfig.ListenAddr'
+		<input type="text" class="gf-form-input" ng-model='ctrl.current.jsonData.smsConfig.listenAddr'
 			placeholder="127.0.0.1:10610" required></input>
 	</div>
 	<div class="gf-form max-width-30">

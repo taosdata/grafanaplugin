@@ -10,20 +10,20 @@ export class GenericDatasourceConfigCtrl {
             console.log(this.current.uid,res);
             if (!!res&&!!res.data&&!!res.data[this.current.uid]) {
                 this.current.jsonData.smsConfig = res.data[this.current.uid];
-                this.current.jsonData.smsConfig.PhoneNumbersList = this.current.jsonData.smsConfig.PhoneNumbers?this.current.jsonData.smsConfig.PhoneNumbers.join(","):"";
-                this.smsShowFlag = this.current.jsonData.smsConfig.PhoneNumbersList.length>0||this.current.jsonData.smsConfig.ListenAddr.length>0||Object.values(this.current.jsonData.smsConfig.AlibabaCloudSms).join("").length>0;
+                this.current.jsonData.smsConfig.phoneNumbersList = this.current.jsonData.smsConfig.phoneNumbers?this.current.jsonData.smsConfig.phoneNumbers.join(","):"";
+                this.smsShowFlag = this.current.jsonData.smsConfig.phoneNumbersList.length>0||this.current.jsonData.smsConfig.listenAddr.length>0||Object.values(this.current.jsonData.smsConfig.alibabaCloudSms).join("").length>0;
             }else{
                 this.current.jsonData.smsConfig = {
-                    AlibabaCloudSms:{
-                        AccessKeyId:"",
-                        AccessKeySecret:"",
-                        SignName:"",
-                        TemplateCode:"",
-                        TemplateParam:"",
+                    alibabaCloudSms:{
+                        accessKeyId:"",
+                        accessKeySecret:"",
+                        signName:"",
+                        templateCode:"",
+                        templateParam:"",
                     },
-                    PhoneNumbersList:"",
-                    PhoneNumbers:[],
-                    ListenAddr:"",
+                    phoneNumbersList:"",
+                    phoneNumbers:[],
+                    listenAddr:"",
                 }
             }
             this.scope.$apply();

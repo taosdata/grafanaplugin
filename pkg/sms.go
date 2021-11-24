@@ -37,7 +37,7 @@ func SendSms(conf SmsConfInfo, templateParam string) (_err error) {
 	}
 	// pluginLogger.Debug(templateParam)
 	for i := 0; i < len(conf.PhoneNumbers); i++ {
-		if len(conf.PhoneNumbers) != 11 {
+		if len(conf.PhoneNumbers[i]) != 11 {
 			continue
 		}
 		sendSmsRequest := &dysmsapi20170525.SendSmsRequest{
