@@ -87,6 +87,7 @@ func (rd *RocksetDatasource) QueryData(ctx context.Context, req *backend.QueryDa
 	var dat map[string]interface{}
 	// pluginLogger.Debug(fmt.Sprintf("%#v", string(req.Queries[0].JSON)))
 	if err := json.Unmarshal(req.PluginContext.DataSourceInstanceSettings.JSONData, &dat); err != nil {
+		pluginLogger.Debug("get dataSourceInstanceSettings error: %w", err)
 		return nil, fmt.Errorf("get dataSourceInstanceSettings error: %w", err)
 	}
 	user, found := dat["user"].(string)
@@ -101,11 +102,14 @@ func (rd *RocksetDatasource) QueryData(ctx context.Context, req *backend.QueryDa
 	response := backend.NewQueryDataResponse()
 	for i := 0; i < len(req.Queries); i++ {
 		if sql, alias, err := generateSql(req.Queries[i]); err != nil {
+			pluginLogger.Debug("generateSql error: %w", err)
 			return nil, fmt.Errorf("generateSql error: %w", err)
 		} else {
 			if res, err := query(req.PluginContext.DataSourceInstanceSettings.URL, user, password, []byte(sql)); err != nil {
+				pluginLogger.Debug("query data: %w", err)
 				return nil, fmt.Errorf("query data: %w", err)
 			} else if resp, err := makeResponse(res, alias); err != nil {
+				pluginLogger.Debug("make reponse: %w", err)
 				return nil, fmt.Errorf("make reponse: %w", err)
 			} else {
 				response.Responses[req.Queries[i].RefID] = resp
@@ -119,17 +123,21 @@ func generateSql(query backend.DataQuery) (sql, alias string, err error) {
 	var queryDataJson map[string]interface{}
 	// pluginLogger.Debug(fmt.Sprintf("req.Queries.JSON:%+v", string(query.JSON)))
 	if err = json.Unmarshal(query.JSON, &queryDataJson); err != nil {
+		pluginLogger.Debug("get query error: %w", err)
 		return "", "", fmt.Errorf("get query error: %w", err)
 	}
 	queryType, ok := queryDataJson["queryType"].(string)
 	if ok && queryType != "SQL" {
+		pluginLogger.Debug("queryType error, only support SQL queryType")
 		return "", "", fmt.Errorf("queryType error, only support SQL queryType")
 	}
 	sql, ok = queryDataJson["sql"].(string)
 	if !ok {
-		return "", "", fmt.Errorf("can not get SQL")
+		pluginLogger.Debug("generateSql can not get SQL")
+		return "", "", fmt.Errorf("generateSql can not get SQL")
 	}
 	if timeZone, err := time.LoadLocation(""); err != nil {
+		pluginLogger.Debug("get time location zone: %w", err)
 		return "", "", fmt.Errorf("get time location zone: %w", err)
 	} else {
 		// pluginLogger.Debug("use timeZone: %v", timeZone)
@@ -249,6 +257,7 @@ func query(url, user, password string, reqBody []byte) ([]byte, error) {
 
 	req, err := http.NewRequest("POST", url+"/rest/sqlutc", reqBodyBuffer)
 	if err != nil {
+		pluginLogger.Error(fmt.Sprint("query "+url+"/rest/sqlutc error: ", err))
 		return []byte{}, err
 	}
 
@@ -257,16 +266,19 @@ func query(url, user, password string, reqBody []byte) ([]byte, error) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
+		pluginLogger.Error(fmt.Sprint("query "+url+"/rest/sqlutc error: ", err))
 		return []byte{}, err
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		pluginLogger.Error("when writing to [] received status code: %d", resp.StatusCode)
 		return []byte{}, fmt.Errorf("when writing to [] received status code: %d", resp.StatusCode)
 	}
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
+		pluginLogger.Error("when writing to [] received error: %v", err)
 		return []byte{}, fmt.Errorf("when writing to [] received error: %v", err)
 	}
 	defer resp.Body.Close()
@@ -284,6 +296,7 @@ func (rd *RocksetDatasource) CheckHealth(ctx context.Context, req *backend.Check
 	// pluginLogger.Debug(fmt.Sprintf("%#v", req.PluginContext.AppInstanceSettings))
 	var dat map[string]interface{}
 	if err := json.Unmarshal(req.PluginContext.DataSourceInstanceSettings.JSONData, &dat); err != nil {
+		pluginLogger.Error("get dataSourceInstanceSettings error: %s", err.Error())
 		return healthError("get dataSourceInstanceSettings error: %s", err.Error()), nil
 	}
 	user, found := dat["user"].(string)
@@ -296,6 +309,7 @@ func (rd *RocksetDatasource) CheckHealth(ctx context.Context, req *backend.Check
 	}
 
 	if _, err := query(req.PluginContext.DataSourceInstanceSettings.URL, user, password, []byte("show databases")); err != nil {
+		pluginLogger.Error("failed get connect to tdengine: %s", err.Error())
 		return healthError("failed get connect to tdengine: %s", err.Error()), nil
 	}
 
