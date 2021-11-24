@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"path"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend/datasource"
 	hclog "github.com/hashicorp/go-hclog"
@@ -11,7 +12,11 @@ import (
 var pluginLogger hclog.Logger
 
 func main() {
-	f, err := os.OpenFile(os.Getenv("GF_PATHS_LOGS")+"/tdengine_backend.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	logDir := os.Getenv("GF_PATHS_LOGS")
+	if logDir == "" {
+		logDir = "/var/log/grafana"
+	}
+	f, err := os.OpenFile(path.Join(logDir, "tdengine_backend.log"), os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
 		fmt.Println(err.Error())
 		panic(err)
