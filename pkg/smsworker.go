@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"sync"
@@ -33,7 +34,19 @@ func (worker *SmsWorker) StartListen() {
 }
 
 func StartSmsWorkers(ctx context.Context) {
-	for k, v := range LoadConfig() {
+	LoadGrafanaConfig()
+	conf := LoadConfig()
+	if conf == nil {
+		conf = LoadGrafanaConfig()
+		if conf != nil {
+			if confStr, err := json.Marshal(conf); err != nil {
+				pluginLogger.Debug("StartSmsWorkers Marshal json error : " + err.Error())
+			} else {
+				StoreConfig(confStr)
+			}
+		}
+	}
+	for k, v := range conf {
 		if len(v.ListenAddr) == 0 {
 			continue
 		}

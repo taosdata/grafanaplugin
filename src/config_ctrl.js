@@ -12,19 +12,6 @@ export class GenericDatasourceConfigCtrl {
                 this.current.jsonData.smsConfig = res.data[this.current.uid];
                 this.current.jsonData.smsConfig.phoneNumbersList = this.current.jsonData.smsConfig.phoneNumbers?this.current.jsonData.smsConfig.phoneNumbers.join(","):"";
                 this.smsShowFlag = this.current.jsonData.smsConfig.phoneNumbersList.length>0||this.current.jsonData.smsConfig.listenAddr.length>0||Object.values(this.current.jsonData.smsConfig.alibabaCloudSms).join("").length>0;
-            }else{
-                this.current.jsonData.smsConfig = {
-                    alibabaCloudSms:{
-                        accessKeyId:"",
-                        accessKeySecret:"",
-                        signName:"",
-                        templateCode:"",
-                        templateParam:"",
-                    },
-                    phoneNumbersList:"",
-                    phoneNumbers:[],
-                    listenAddr:"",
-                }
             }
             this.scope.$apply();
         });
