@@ -66,7 +66,6 @@ func LoadGrafanaConfig() map[string]SmsConfInfo {
 								} else {
 									conf[uid] = smsConfInfo
 									pluginLogger.Debug(fmt.Sprint(ok) + fmt.Sprintf(" %#v %#v ", conf, jsonData["smsConfig"]) + string(smsConfigStr))
-									return conf
 								}
 							}
 						}
@@ -74,6 +73,9 @@ func LoadGrafanaConfig() map[string]SmsConfInfo {
 				}
 			}
 		}
+	}
+	if len(conf) > 0 {
+		return conf
 	}
 	return nil
 }
