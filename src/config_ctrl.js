@@ -13,7 +13,7 @@ export class GenericDatasourceConfigCtrl {
                 this.current.jsonData.smsConfig.PhoneNumbersList = this.current.jsonData.smsConfig.PhoneNumbers?this.current.jsonData.smsConfig.PhoneNumbers.join(","):"";
                 this.smsShowFlag = this.current.jsonData.smsConfig.PhoneNumbersList.length>0||this.current.jsonData.smsConfig.ListenAddr.length>0||Object.values(this.current.jsonData.smsConfig.AlibabaCloudSms).join("").length>0;
             }else{
-                datasource.jsonData.smsConfig = {
+                this.current.jsonData.smsConfig = {
                     AlibabaCloudSms:{
                         AccessKeyId:"",
                         AccessKeySecret:"",
