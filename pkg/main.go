@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"os"
 
@@ -23,8 +22,6 @@ func main() {
 		Level:  hclog.LevelFromString("DEBUG"),
 		Output: f,
 	})
-	ctx := context.Background()
-	StartSmsWorkers(ctx)
 
 	pluginLogger.Debug("start")
 	// Start listening to requests send from Grafana. This call is blocking so

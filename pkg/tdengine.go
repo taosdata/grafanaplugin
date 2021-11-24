@@ -84,20 +84,24 @@ type RocksetDatasource struct {
 // The QueryDataResponse contains a map of RefID to the response for each query, and each response
 // contains Frames ([]*Frame).
 func (rd *RocksetDatasource) QueryData(ctx context.Context, req *backend.QueryDataRequest) (*backend.QueryDataResponse, error) {
-	var dat map[string]interface{}
+	var dat JsonData
+
 	// pluginLogger.Debug(fmt.Sprintf("%#v", string(req.Queries[0].JSON)))
 	if err := json.Unmarshal(req.PluginContext.DataSourceInstanceSettings.JSONData, &dat); err != nil {
 		pluginLogger.Debug("get dataSourceInstanceSettings error: %w", err)
 		return nil, fmt.Errorf("get dataSourceInstanceSettings error: %w", err)
 	}
-	user, found := dat["user"].(string)
-	if !found {
-		user = "root"
+
+	if len(dat.User) == 0 {
+		dat.User = "root"
 	}
-	password, found := dat["password"].(string)
-	if !found {
-		password = "taosdata"
+
+	if len(dat.Password) == 0 {
+		dat.Password = "taosdata"
 	}
+
+	// pluginLogger.Debug(fmt.Sprintf("DataSource: %v", req.PluginContext.DataSourceInstanceSettings))
+	go AssertSmsWorker(ctx, req.PluginContext.DataSourceInstanceSettings.ID, dat.SmsConfig)
 
 	response := backend.NewQueryDataResponse()
 	for i := 0; i < len(req.Queries); i++ {
@@ -105,7 +109,7 @@ func (rd *RocksetDatasource) QueryData(ctx context.Context, req *backend.QueryDa
 			pluginLogger.Debug("generateSql error: %w", err)
 			return nil, fmt.Errorf("generateSql error: %w", err)
 		} else {
-			if res, err := query(req.PluginContext.DataSourceInstanceSettings.URL, user, password, []byte(sql)); err != nil {
+			if res, err := query(req.PluginContext.DataSourceInstanceSettings.URL, dat.User, dat.Password, []byte(sql)); err != nil {
 				pluginLogger.Debug("query data: %w", err)
 				return nil, fmt.Errorf("query data: %w", err)
 			} else if resp, err := makeResponse(res, alias); err != nil {
@@ -344,22 +348,20 @@ func healthError(msg string, args ...string) *backend.CheckHealthResult {
 func (rd *RocksetDatasource) CallResource(ctx context.Context, req *backend.CallResourceRequest, sender backend.CallResourceResponseSender) error {
 	// pluginLogger.Debug("CallResource")
 	if req.Path == "setSmsConfig" {
-		var dat map[string]SmsConfInfo
-		if err := json.Unmarshal(req.Body, &dat); err != nil {
+		pluginLogger.Info("set sms config")
+
+		var data map[int64]SmsConfInfo
+		if err := json.Unmarshal(req.Body, &data); err != nil {
 			pluginLogger.Debug("CallResource error: " + err.Error())
 			pluginLogger.Debug("CallResource req.Body: " + string(req.Body))
 			return err
 		}
-		StoreConfig(req.Body)
-		StartSmsWorkers(ctx)
-	}
-	if req.Path == "getSmsConfig" {
-		if resp, err := json.Marshal(LoadConfig()); err != nil {
-			pluginLogger.Debug("CallResource getSmsConfig error: " + err.Error())
-			return err
-		} else {
-			sender.Send(&backend.CallResourceResponse{Status: 200, Body: resp})
-		}
+		go func() {
+			for k, v := range data {
+				RestartSmsWorker(ctx, k, &v)
+			}
+		}()
+		sender.Send(&backend.CallResourceResponse{Status: 204})
 	}
 	return nil
 }

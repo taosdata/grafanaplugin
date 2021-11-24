@@ -6,15 +6,6 @@ export class GenericDatasourceConfigCtrl {
         this.backendSrv = $injector.get("backendSrv");
         this.pluginId = this.current.type;
         this.smsShowFlag = false;
-        this.requestResources("/getSmsConfig").then(res => {
-            console.log(this.current.uid,res);
-            if (!!res&&!!res.data&&!!res.data[this.current.uid]) {
-                this.current.jsonData.smsConfig = res.data[this.current.uid];
-                this.current.jsonData.smsConfig.phoneNumbersList = this.current.jsonData.smsConfig.phoneNumbers?this.current.jsonData.smsConfig.phoneNumbers.join(","):"";
-                this.smsShowFlag = this.current.jsonData.smsConfig.phoneNumbersList.length>0||this.current.jsonData.smsConfig.listenAddr.length>0||Object.values(this.current.jsonData.smsConfig.alibabaCloudSms).join("").length>0;
-            }
-            this.scope.$apply();
-        });
         if (!this.current.jsonData.user) {
             this.current.jsonData.user = "root";
         }

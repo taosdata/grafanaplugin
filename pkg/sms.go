@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	openapi "github.com/alibabacloud-go/darabonba-openapi/client"
 	dysmsapi20170525 "github.com/alibabacloud-go/dysmsapi-20170525/v2/client"
 	"github.com/alibabacloud-go/tea/tea"
@@ -35,13 +37,15 @@ func SendSms(conf SmsConfInfo, templateParam string) (_err error) {
 	if _err != nil {
 		return _err
 	}
-	// pluginLogger.Debug(templateParam)
-	for i := 0; i < len(conf.PhoneNumbers); i++ {
-		if len(conf.PhoneNumbers[i]) != 11 {
+	pluginLogger.Debug(fmt.Sprintf("Sms template param: %v", templateParam))
+	numbers := conf.GetPhoneNumbers()
+	for i := 0; i < len(numbers); i++ {
+		if len(numbers[i]) != 11 {
 			continue
 		}
+		pluginLogger.Debug(fmt.Sprintf("Send sms to %s", numbers[i]))
 		sendSmsRequest := &dysmsapi20170525.SendSmsRequest{
-			PhoneNumbers:  tea.String(conf.PhoneNumbers[i]),
+			PhoneNumbers:  tea.String(numbers[i]),
 			TemplateCode:  tea.String(conf.AlibabaCloudSms.TemplateCode),
 			TemplateParam: tea.String(templateParam),
 			SignName:      tea.String(conf.AlibabaCloudSms.SignName),

@@ -1,11 +1,6 @@
 # config file version
 apiVersion: 1
 
-# list of datasources that should be deleted from the database
-deleteDatasources:
-  - name: TDengine
-    orgId: 1
-
 # list of datasources to insert/update depending
 # whats available in the database
 datasources:
@@ -30,6 +25,20 @@ datasources:
   # <map> fields that will be converted to json and stored in json_data
   jsonData:
     timeInterval: "5s"
+    # <string> database user, if used
+    user: $TDENGINE_USER
+    # <string> database password, if used
+    password: $TDENGINE_PASS
+    # Sms notification webhook support
+    smsConfig:
+      alibabaCloudSms:
+        accessKeyId: $SMS_ACCESS_KEY_ID
+        accessKeySecret: $SMS_ACCESS_KEY_SECRET
+        signName: $SMS_SIGN_NAME
+        templateCode: $SMS_TEMPLATE_CODE
+        templateParam: $SMS_TEMPLATE_PARAM
+      phoneNumbersList: $SMS_PHONE_NUMBERS
+      listenAddr: ${SMS_LISTEN_ADDR}
   version: 1
   # <bool> allow users to edit datasources from the UI.
   editable: true

@@ -17,9 +17,10 @@ type SmsWorker struct {
 
 func (worker *SmsWorker) StartListen() {
 	handler := http.NewServeMux()
+
 	handler.HandleFunc("/sms", HandleWebhook(func(w http.ResponseWriter, b *Body) {
-		// pluginLogger.Debug("Grafana status: " + b.Title)
-		// pluginLogger.Debug(b.Message)
+		pluginLogger.Debug("Grafana status: " + b.Title)
+		pluginLogger.Debug(b.Message)
 		if len(b.Message) > 35 {
 			b.Message = b.Message[:35]
 		}
@@ -32,29 +33,35 @@ func (worker *SmsWorker) StartListen() {
 	pluginLogger.Debug("API is listening on: " + worker.conf.ListenAddr)
 }
 
-func StartSmsWorkers(ctx context.Context) {
-	LoadGrafanaConfig()
-	conf := LoadConfig()
-	if conf == nil {
-		conf = LoadGrafanaConfig()
+var workerMutex sync.Mutex
+
+func AssertSmsWorker(ctx context.Context, id int64, conf *SmsConfInfo) {
+	uid := fmt.Sprint(id)
+	workerMutex.Lock()
+	defer workerMutex.Unlock()
+	if _, exists := workerList.Load(uid); !exists {
+		worker := &SmsWorker{server: nil, conf: *conf}
+		worker.StartListen()
+		workerList.Store(uid, worker)
 	}
-	for k, v := range conf {
-		if len(v.ListenAddr) == 0 {
-			continue
-		}
-		pluginLogger.Debug(fmt.Sprintf("%s %#v", k, v))
-		var worker *SmsWorker
-		// workerList.Delete(k)
-		if worker_v, ok := workerList.LoadAndDelete(k); ok {
-			if worker, ok = worker_v.(*SmsWorker); ok {
-				if err := worker.server.Shutdown(ctx); err != nil {
-					pluginLogger.Debug("worker shutdown error: " + err.Error())
-					break
-				}
+}
+
+func RestartSmsWorker(ctx context.Context, id int64, conf *SmsConfInfo) {
+	uid := fmt.Sprint(id)
+	pluginLogger.Info(fmt.Sprint("Restart sms worker for data source ", uid))
+	workerMutex.Lock()
+	defer workerMutex.Unlock()
+
+	var worker *SmsWorker
+	if worker_v, ok := workerList.LoadAndDelete(uid); ok {
+		if worker, ok = worker_v.(*SmsWorker); ok {
+			if err := worker.server.Shutdown(ctx); err != nil {
+				pluginLogger.Debug("worker shutdown error: " + err.Error())
 			}
 		}
-		worker = &SmsWorker{server: nil, conf: v}
-		worker.StartListen()
-		workerList.Store(k, worker)
 	}
+
+	worker = &SmsWorker{server: nil, conf: *conf}
+	worker.StartListen()
+	workerList.Store(uid, worker)
 }
