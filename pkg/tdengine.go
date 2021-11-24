@@ -237,13 +237,23 @@ func makeResponse(body []byte, alias string) (response backend.DataResponse, err
 			pluginLogger.Error(fmt.Sprint("parse error:", err))
 			return response, fmt.Errorf("ts parse error: %w", err)
 		}
+		hasNil := false
 		for j := 1; j < len(res.Data[i]); j++ {
-			// pluginLogger.Debug(fmt.Sprint("column: ", j))
+			if res.Data[i][j] == nil {
+				hasNil = true
+				break
+			}
 			typeNum := int(res.ColumnMeta[j][1].(float64))
+			// pluginLogger.Debug(fmt.Sprintf("column: %d, type: %d", j, typeNum))
 			if isIntegerTypes(typeNum) {
 				res.Data[i][j] = int64(res.Data[i][j].(float64))
+
 			}
 		}
+		if hasNil {
+			continue
+		}
+		// pluginLogger.Debug(fmt.Sprint("before appended row ", i))
 		frame.AppendRow(res.Data[i]...)
 		// pluginLogger.Debug(fmt.Sprint("appended row ", i))
 	}
@@ -299,6 +309,7 @@ func (rd *RocksetDatasource) CheckHealth(ctx context.Context, req *backend.Check
 		pluginLogger.Error("get dataSourceInstanceSettings error: %s", err.Error())
 		return healthError("get dataSourceInstanceSettings error: %s", err.Error()), nil
 	}
+
 	user, found := dat["user"].(string)
 	if !found {
 		user = "root"
