@@ -75,6 +75,11 @@ func LoadGrafanaConfig() map[string]SmsConfInfo {
 		}
 	}
 	if len(conf) > 0 {
+		if confStr, err := json.Marshal(conf); err != nil {
+			pluginLogger.Debug("StartSmsWorkers Marshal json error : " + err.Error())
+		} else {
+			StoreConfig(confStr)
+		}
 		return conf
 	}
 	return nil
