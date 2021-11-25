@@ -160,6 +160,7 @@ while true; do
     export SMS_ENABLED=true
     ;;
   -N | --sms-notifier-name)
+    shift
     export SMS_NOTIFIER_NAME=$1
     ;;
   -I | --sms-access-key-id)
