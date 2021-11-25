@@ -51,7 +51,7 @@ TDINSIGHT_NOTIFICATION_DINGING_WEBHOOK=
 TDINSIGHT_NOTIFICATION_ALERT_MANAGER_ENABLED=false
 TDINSIGHT_NOTIFICATION_ALERT_MANAGER_URL=
 
-options=$(getopt -l "help,verbose\
+options=$(getopt -l "help,verbose,\
 plugin-version:,\
 grafana-provisioning-dir:,grafana-plugins-dir:,grafana-org-id:,\
 tdengine-ds-name:,tdengine-api:,tdengine-user:,tdengine-password:,\
@@ -60,7 +60,7 @@ sms-enabled,sms-notifier-name:,\
 sms-access-key-id:,sms-access-key-secret:,\
 sms-sign-name:,sms-template-code:,sms-template-param:,sms-phone-numbers:,\
 ms-listen-addr:" \
--o "hVv:P:G:O:n:a:u:p:i:t:esN:I:K:S:C:T:B:Ly" -a -- "$@")
+-o "hVv:P:G:O:n:a:u:p:i:t:esN:I:K:S:C:T:B:L:y" -a -- "$@")
 
 usage() { # Function: Print a help message.
   cat << EOF
@@ -99,10 +99,7 @@ Aliyun SMS as Notifier:
 -L, --sms-listen-addr <string>              [default: $SMS_LISTEN_ADDR]
 EOF
 }
-exit_abnormal() { # Function: Exit with error.
-  usage
-  exit 1
-}
+
 eval set -- "$options"
 
 while true; do
@@ -117,7 +114,7 @@ while true; do
     ;;
   -v | --plugin-version)
     shift
-    export TDENGINE_PLUGIN_VERSION=$1
+    export TDENGINE_PLUGIN_VERSION=$2
     ;;
   -P | --grafana-provisioning-dir)
     shift
@@ -156,13 +153,13 @@ while true; do
     export TDINSIGHT_DASHBOARD_TITLE=$1
     ;;
   -e | --tdinsight-editable)
+    shift
     export TDINSIGHT_DASHBOARD_EDITABLE=true
     ;;
   -s | --sms-enabled)
     export SMS_ENABLED=true
     ;;
   -N | --sms-notifier-name)
-    shift
     export SMS_NOTIFIER_NAME=$1
     ;;
   -I | --sms-access-key-id)
