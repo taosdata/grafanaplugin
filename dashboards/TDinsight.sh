@@ -171,7 +171,7 @@ while true; do
     ;;
   -K | --sms-access-key-secret)
     shift
-    export S<SMS_ACCESS_KEY_SECRET=$1
+    export SMS_ACCESS_KEY_SECRET=$1
     ;;
   -S | --sms-sign-name)
     shift
