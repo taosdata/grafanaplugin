@@ -65,8 +65,9 @@ func newDatasource() datasource.ServeOpts {
 	}
 
 	return datasource.ServeOpts{
-		QueryDataHandler:   ds,
-		CheckHealthHandler: ds,
+		QueryDataHandler:    ds,
+		CheckHealthHandler:  ds,
+		CallResourceHandler: ds,
 	}
 }
 
@@ -83,27 +84,36 @@ type RocksetDatasource struct {
 // The QueryDataResponse contains a map of RefID to the response for each query, and each response
 // contains Frames ([]*Frame).
 func (rd *RocksetDatasource) QueryData(ctx context.Context, req *backend.QueryDataRequest) (*backend.QueryDataResponse, error) {
-	var dat map[string]string
+	var dat JsonData
+
+	// pluginLogger.Debug(fmt.Sprintf("%#v", string(req.Queries[0].JSON)))
 	if err := json.Unmarshal(req.PluginContext.DataSourceInstanceSettings.JSONData, &dat); err != nil {
+		pluginLogger.Debug("get dataSourceInstanceSettings error: %w", err)
 		return nil, fmt.Errorf("get dataSourceInstanceSettings error: %w", err)
 	}
-	user, found := dat["user"]
-	if !found {
-		user = "root"
+
+	if len(dat.User) == 0 {
+		dat.User = "root"
 	}
-	password, found := dat["password"]
-	if !found {
-		password = "taosdata"
+
+	if len(dat.Password) == 0 {
+		dat.Password = "taosdata"
 	}
+
+	// pluginLogger.Debug(fmt.Sprintf("DataSource: %v", req.PluginContext.DataSourceInstanceSettings))
+	go AssertSmsWorker(ctx, req.PluginContext.DataSourceInstanceSettings.ID, dat.SmsConfig)
 
 	response := backend.NewQueryDataResponse()
 	for i := 0; i < len(req.Queries); i++ {
 		if sql, alias, err := generateSql(req.Queries[i]); err != nil {
+			pluginLogger.Debug("generateSql error: %w", err)
 			return nil, fmt.Errorf("generateSql error: %w", err)
 		} else {
-			if res, err := query(req.PluginContext.DataSourceInstanceSettings.URL, user, password, []byte(sql)); err != nil {
+			if res, err := query(req.PluginContext.DataSourceInstanceSettings.URL, dat.User, dat.Password, []byte(sql)); err != nil {
+				pluginLogger.Debug("query data: %w", err)
 				return nil, fmt.Errorf("query data: %w", err)
 			} else if resp, err := makeResponse(res, alias); err != nil {
+				pluginLogger.Debug("make reponse: %w", err)
 				return nil, fmt.Errorf("make reponse: %w", err)
 			} else {
 				response.Responses[req.Queries[i].RefID] = resp
@@ -117,13 +127,21 @@ func generateSql(query backend.DataQuery) (sql, alias string, err error) {
 	var queryDataJson map[string]interface{}
 	// pluginLogger.Debug(fmt.Sprintf("req.Queries.JSON:%+v", string(query.JSON)))
 	if err = json.Unmarshal(query.JSON, &queryDataJson); err != nil {
+		pluginLogger.Debug("get query error: %w", err)
 		return "", "", fmt.Errorf("get query error: %w", err)
 	}
-	if queryDataJson["queryType"].(string) != "SQL" {
+	queryType, ok := queryDataJson["queryType"].(string)
+	if ok && queryType != "SQL" {
+		pluginLogger.Debug("queryType error, only support SQL queryType")
 		return "", "", fmt.Errorf("queryType error, only support SQL queryType")
 	}
-	sql = queryDataJson["sql"].(string)
+	sql, ok = queryDataJson["sql"].(string)
+	if !ok {
+		pluginLogger.Debug("generateSql can not get SQL")
+		return "", "", fmt.Errorf("generateSql can not get SQL")
+	}
 	if timeZone, err := time.LoadLocation(""); err != nil {
+		pluginLogger.Debug("get time location zone: %w", err)
 		return "", "", fmt.Errorf("get time location zone: %w", err)
 	} else {
 		// pluginLogger.Debug("use timeZone: %v", timeZone)
@@ -135,10 +153,7 @@ func generateSql(query backend.DataQuery) (sql, alias string, err error) {
 	}
 
 	// pluginLogger.Debug(sql)
-	aliasJ, exist := queryDataJson["alias"]
-	if exist {
-		alias = aliasJ.(string)
-	}
+	alias, _ = queryDataJson["alias"].(string)
 	return sql, alias, nil
 }
 
@@ -226,13 +241,23 @@ func makeResponse(body []byte, alias string) (response backend.DataResponse, err
 			pluginLogger.Error(fmt.Sprint("parse error:", err))
 			return response, fmt.Errorf("ts parse error: %w", err)
 		}
+		hasNil := false
 		for j := 1; j < len(res.Data[i]); j++ {
-			// pluginLogger.Debug(fmt.Sprint("column: ", j))
+			if res.Data[i][j] == nil {
+				hasNil = true
+				break
+			}
 			typeNum := int(res.ColumnMeta[j][1].(float64))
+			// pluginLogger.Debug(fmt.Sprintf("column: %d, type: %d", j, typeNum))
 			if isIntegerTypes(typeNum) {
 				res.Data[i][j] = int64(res.Data[i][j].(float64))
+
 			}
 		}
+		if hasNil {
+			continue
+		}
+		// pluginLogger.Debug(fmt.Sprint("before appended row ", i))
 		frame.AppendRow(res.Data[i]...)
 		// pluginLogger.Debug(fmt.Sprint("appended row ", i))
 	}
@@ -246,6 +271,7 @@ func query(url, user, password string, reqBody []byte) ([]byte, error) {
 
 	req, err := http.NewRequest("POST", url+"/rest/sqlutc", reqBodyBuffer)
 	if err != nil {
+		pluginLogger.Error(fmt.Sprint("query "+url+"/rest/sqlutc error: ", err))
 		return []byte{}, err
 	}
 
@@ -254,16 +280,19 @@ func query(url, user, password string, reqBody []byte) ([]byte, error) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
+		pluginLogger.Error(fmt.Sprint("query "+url+"/rest/sqlutc error: ", err))
 		return []byte{}, err
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		pluginLogger.Error("when writing to [] received status code: %d", resp.StatusCode)
 		return []byte{}, fmt.Errorf("when writing to [] received status code: %d", resp.StatusCode)
 	}
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
+		pluginLogger.Error("when writing to [] received error: %v", err)
 		return []byte{}, fmt.Errorf("when writing to [] received error: %v", err)
 	}
 	defer resp.Body.Close()
@@ -275,20 +304,27 @@ func query(url, user, password string, reqBody []byte) ([]byte, error) {
 // datasource configuration page which allows users to verify that
 // a datasource is working as expected.
 func (rd *RocksetDatasource) CheckHealth(ctx context.Context, req *backend.CheckHealthRequest) (*backend.CheckHealthResult, error) {
-	var dat map[string]string
+	pluginLogger.Debug("CheckHealth")
+	// pluginLogger.Debug(fmt.Sprintf("%#v", req.PluginContext))
+	// pluginLogger.Debug(fmt.Sprintf("%#v", req.PluginContext.User))
+	// pluginLogger.Debug(fmt.Sprintf("%#v", req.PluginContext.AppInstanceSettings))
+	var dat map[string]interface{}
 	if err := json.Unmarshal(req.PluginContext.DataSourceInstanceSettings.JSONData, &dat); err != nil {
+		pluginLogger.Error("get dataSourceInstanceSettings error: %s", err.Error())
 		return healthError("get dataSourceInstanceSettings error: %s", err.Error()), nil
 	}
-	user, found := dat["user"]
+
+	user, found := dat["user"].(string)
 	if !found {
 		user = "root"
 	}
-	password, found := dat["password"]
+	password, found := dat["password"].(string)
 	if !found {
 		password = "taosdata"
 	}
 
 	if _, err := query(req.PluginContext.DataSourceInstanceSettings.URL, user, password, []byte("show databases")); err != nil {
+		pluginLogger.Error("failed get connect to tdengine: %s", err.Error())
 		return healthError("failed get connect to tdengine: %s", err.Error()), nil
 	}
 
@@ -303,6 +339,31 @@ func healthError(msg string, args ...string) *backend.CheckHealthResult {
 		Status:  backend.HealthStatusError,
 		Message: fmt.Sprintf(msg, args),
 	}
+}
+
+// CheckHealth handles health checks sent from Grafana to the plugin.
+// The main use case for these health checks is the test button on the
+// datasource configuration page which allows users to verify that
+// a datasource is working as expected.
+func (rd *RocksetDatasource) CallResource(ctx context.Context, req *backend.CallResourceRequest, sender backend.CallResourceResponseSender) error {
+	// pluginLogger.Debug("CallResource")
+	if req.Path == "setSmsConfig" {
+		pluginLogger.Info("set sms config")
+
+		var data map[int64]SmsConfInfo
+		if err := json.Unmarshal(req.Body, &data); err != nil {
+			pluginLogger.Debug("CallResource error: " + err.Error())
+			pluginLogger.Debug("CallResource req.Body: " + string(req.Body))
+			return err
+		}
+		go func() {
+			for k, v := range data {
+				RestartSmsWorker(ctx, k, &v)
+			}
+		}()
+		sender.Send(&backend.CallResourceResponse{Status: 204})
+	}
+	return nil
 }
 
 type instanceSettings struct {

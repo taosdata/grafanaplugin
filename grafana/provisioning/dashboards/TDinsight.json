@@ -88,7 +88,7 @@
   "panels": [
     {
       "collapsed": false,
-      "datasource": "${DS_TDENGINE}",
+      "datasource": "TDengine",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -101,7 +101,7 @@
       "type": "row"
     },
     {
-      "datasource": "${DS_TDENGINE}",
+      "datasource": "TDengine",
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -156,7 +156,7 @@
       "type": "text"
     },
     {
-      "datasource": "${DS_TDENGINE}",
+      "datasource": "TDengine",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -215,7 +215,7 @@
       "type": "stat"
     },
     {
-      "datasource": "${DS_TDENGINE}",
+      "datasource": "TDengine",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -274,7 +274,7 @@
       "type": "stat"
     },
     {
-      "datasource": "${DS_TDENGINE}",
+      "datasource": "TDengine",
       "description": "MNode 被选举后经过的时长",
       "fieldConfig": {
         "defaults": {
@@ -346,7 +346,7 @@
       "type": "stat"
     },
     {
-      "datasource": "${DS_TDENGINE}",
+      "datasource": "TDengine",
       "description": "企业版授权到期时间",
       "fieldConfig": {
         "defaults": {
@@ -407,7 +407,7 @@
       "type": "stat"
     },
     {
-      "datasource": "${DS_TDENGINE}",
+      "datasource": "TDengine",
       "description": "企业版授权已用测点数",
       "fieldConfig": {
         "defaults": {
@@ -479,7 +479,7 @@
       "type": "bargauge"
     },
     {
-      "datasource": "${DS_TDENGINE}",
+      "datasource": "TDengine",
       "description": "数据库个数",
       "fieldConfig": {
         "defaults": {
@@ -571,7 +571,7 @@
       "type": "stat"
     },
     {
-      "datasource": "${DS_TDENGINE}",
+      "datasource": "TDengine",
       "description": "所有数据库的表数量之和",
       "fieldConfig": {
         "defaults": {
@@ -659,7 +659,7 @@
       "type": "stat"
     },
     {
-      "datasource": "${DS_TDENGINE}",
+      "datasource": "TDengine",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -718,7 +718,7 @@
       "type": "stat"
     },
     {
-      "datasource": "${DS_TDENGINE}",
+      "datasource": "TDengine",
       "description": "当前TDengine集群DNode数量，Alive 为存活，Total 为所有",
       "fieldConfig": {
         "defaults": {
@@ -779,7 +779,7 @@
       "type": "bargauge"
     },
     {
-      "datasource": "${DS_TDENGINE}",
+      "datasource": "TDengine",
       "description": "当前TDengine集群MNode数量，Alive 为存活，Total 为所有",
       "fieldConfig": {
         "defaults": {
@@ -840,7 +840,7 @@
       "type": "bargauge"
     },
     {
-      "datasource": "${DS_TDENGINE}",
+      "datasource": "TDengine",
       "description": "当前TDengine集群 VGroups 数量，Alive 为存活，Total 为所有",
       "fieldConfig": {
         "defaults": {
@@ -901,7 +901,7 @@
       "type": "bargauge"
     },
     {
-      "datasource": "${DS_TDENGINE}",
+      "datasource": "TDengine",
       "description": "当前TDengine集群 VNodes 数量，Alive 为存活，Total 为所有",
       "fieldConfig": {
         "defaults": {
@@ -978,7 +978,7 @@
             "query": {
               "params": [
                 "A",
-                "5m",
+                "1m",
                 "now"
               ]
             },
@@ -990,8 +990,8 @@
           }
         ],
         "executionErrorState": "alerting",
-        "for": "5m",
-        "frequency": "1m",
+        "for": "1m",
+        "frequency": "10s",
         "handler": 1,
         "name": "DNodes Alive Percent alert",
         "noDataState": "no_data",
@@ -1001,7 +1001,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_TDENGINE}",
+      "datasource": "TDengine",
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -1119,7 +1119,7 @@
             "query": {
               "params": [
                 "A",
-                "5m",
+                "1m",
                 "now"
               ]
             },
@@ -1131,8 +1131,8 @@
           }
         ],
         "executionErrorState": "alerting",
-        "for": "5m",
-        "frequency": "1m",
+        "for": "1m",
+        "frequency": "10s",
         "handler": 1,
         "name": "MNodes Alive Percent alert",
         "noDataState": "no_data",
@@ -1142,7 +1142,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_TDENGINE}",
+      "datasource": "TDengine",
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -1261,7 +1261,7 @@
             "query": {
               "params": [
                 "A",
-                "5m",
+                "1m",
                 "now"
               ]
             },
@@ -1273,8 +1273,8 @@
           }
         ],
         "executionErrorState": "alerting",
-        "for": "5m",
-        "frequency": "1m",
+        "for": "1m",
+        "frequency": "10s",
         "handler": 1,
         "name": "VGroups Alive Percent alert",
         "noDataState": "no_data",
@@ -1284,7 +1284,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_TDENGINE}",
+      "datasource": "TDengine",
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -1403,7 +1403,7 @@
             "query": {
               "params": [
                 "A",
-                "5m",
+                "1m",
                 "now"
               ]
             },
@@ -1415,8 +1415,8 @@
           }
         ],
         "executionErrorState": "alerting",
-        "for": "5m",
-        "frequency": "1m",
+        "for": "1m",
+        "frequency": "10s",
         "handler": 1,
         "name": "VNodes Alive Percent alert",
         "noDataState": "no_data",
@@ -1426,7 +1426,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_TDENGINE}",
+      "datasource": "TDengine",
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -1581,8 +1581,8 @@
           }
         ],
         "executionErrorState": "keep_state",
-        "for": "5m",
-        "frequency": "1m",
+        "for": "1m",
+        "frequency": "10s",
         "handler": 1,
         "name": "DNodes Alive Percent alert",
         "noDataState": "ok",
@@ -1592,7 +1592,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_TDENGINE}",
+      "datasource": "TDengine",
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -1739,8 +1739,8 @@
           }
         ],
         "executionErrorState": "keep_state",
-        "for": "5m",
-        "frequency": "1m",
+        "for": "1m",
+        "frequency": "10s",
         "handler": 1,
         "name": "Grants Expire Time alert",
         "noDataState": "no_data",
@@ -1750,7 +1750,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_TDENGINE}",
+      "datasource": "TDengine",
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -1886,8 +1886,8 @@
           }
         ],
         "executionErrorState": "alerting",
-        "for": "5m",
-        "frequency": "1m",
+        "for": "1m",
+        "frequency": "10s",
         "handler": 1,
         "name": "Error Rate alert",
         "noDataState": "no_data",
@@ -1897,7 +1897,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_TDENGINE}",
+      "datasource": "TDengine",
       "description": "错误率（每秒错误数）",
       "fieldConfig": {
         "defaults": {
@@ -2008,7 +2008,7 @@
       }
     },
     {
-      "datasource": "${DS_TDENGINE}",
+      "datasource": "TDengine",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2115,7 +2115,7 @@
     },
     {
       "collapsed": false,
-      "datasource": "${DS_TDENGINE}",
+      "datasource": "TDengine",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -2129,7 +2129,7 @@
       "type": "row"
     },
     {
-      "datasource": "${DS_TDENGINE}",
+      "datasource": "TDengine",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2284,7 +2284,7 @@
       "type": "table"
     },
     {
-      "datasource": "${DS_TDENGINE}",
+      "datasource": "TDengine",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2351,7 +2351,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_TDENGINE}",
+      "datasource": "TDengine",
       "fieldConfig": {
         "defaults": {
           "unit": "short"
@@ -2446,7 +2446,7 @@
       }
     },
     {
-      "datasource": "${DS_TDENGINE}",
+      "datasource": "TDengine",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2569,7 +2569,7 @@
     },
     {
       "collapsed": false,
-      "datasource": "${DS_TDENGINE}",
+      "datasource": "TDengine",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -2582,7 +2582,7 @@
       "type": "row"
     },
     {
-      "datasource": "${DS_TDENGINE}",
+      "datasource": "TDengine",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2684,7 +2684,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_TDENGINE}",
+      "datasource": "TDengine",
       "fieldConfig": {
         "defaults": {
           "unit": "short"
@@ -2780,7 +2780,7 @@
     },
     {
       "collapsed": true,
-      "datasource": "${DS_TDENGINE}",
+      "datasource": "TDengine",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -2794,7 +2794,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_TDENGINE}",
+          "datasource": "TDengine",
           "description": "Include two parts:",
           "fieldConfig": {
             "defaults": {},
@@ -2927,7 +2927,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_TDENGINE}",
+          "datasource": "TDengine",
           "fieldConfig": {
             "defaults": {
               "unit": "cps"
@@ -3036,7 +3036,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_TDENGINE}",
+          "datasource": "TDengine",
           "fieldConfig": {
             "defaults": {},
             "overrides": []
@@ -3166,7 +3166,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_TDENGINE}",
+          "datasource": "TDengine",
           "fieldConfig": {
             "defaults": {},
             "overrides": []
@@ -3301,7 +3301,7 @@
     },
     {
       "collapsed": true,
-      "datasource": "${DS_TDENGINE}",
+      "datasource": "TDengine",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -3311,7 +3311,7 @@
       "id": 92,
       "panels": [
         {
-          "datasource": "${DS_TDENGINE}",
+          "datasource": "TDengine",
           "description": "超级表的个数",
           "fieldConfig": {
             "defaults": {
@@ -3410,7 +3410,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_TDENGINE}",
+          "datasource": "TDengine",
           "fieldConfig": {
             "defaults": {},
             "overrides": []
@@ -3515,7 +3515,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_TDENGINE}",
+          "datasource": "TDengine",
           "fieldConfig": {
             "defaults": {},
             "overrides": []
@@ -3616,7 +3616,7 @@
           }
         },
         {
-          "datasource": "${DS_TDENGINE}",
+          "datasource": "TDengine",
           "description": "所有普通表的个数（包括超级表的子表）",
           "fieldConfig": {
             "defaults": {
@@ -3690,7 +3690,7 @@
           "type": "stat"
         },
         {
-          "datasource": "${DS_TDENGINE}",
+          "datasource": "TDengine",
           "description": "超级表的所有子表个数",
           "fieldConfig": {
             "defaults": {
@@ -3791,7 +3791,7 @@
     },
     {
       "collapsed": true,
-      "datasource": "${DS_TDENGINE}",
+      "datasource": "TDengine",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -3801,7 +3801,7 @@
       "id": 20,
       "panels": [
         {
-          "datasource": "${DS_TDENGINE}",
+          "datasource": "TDengine",
           "description": "启动时长",
           "fieldConfig": {
             "defaults": {
@@ -3887,7 +3887,7 @@
           "type": "stat"
         },
         {
-          "datasource": "${DS_TDENGINE}",
+          "datasource": "TDengine",
           "description": "是否有MNode",
           "fieldConfig": {
             "defaults": {
@@ -3963,7 +3963,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last(has_mnode) as has_mnode  from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval)",
+              "sql": "select last(has_mnode) as has_mnode  from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts < $to interval($interval) fill(null)",
               "target": "select metric",
               "timeshift": {
                 "period": null
@@ -3999,7 +3999,7 @@
           "type": "stat"
         },
         {
-          "datasource": "${DS_TDENGINE}",
+          "datasource": "TDengine",
           "description": "CPU 核数",
           "fieldConfig": {
             "defaults": {
@@ -4035,7 +4035,7 @@
             "orientation": "auto",
             "reduceOptions": {
               "calcs": [
-                "lastNotNull"
+                "last"
               ],
               "fields": "",
               "values": false
@@ -4074,7 +4074,7 @@
           "type": "stat"
         },
         {
-          "datasource": "${DS_TDENGINE}",
+          "datasource": "TDengine",
           "description": "VNodes 数量",
           "fieldConfig": {
             "defaults": {
@@ -4109,7 +4109,7 @@
             "orientation": "auto",
             "reduceOptions": {
               "calcs": [
-                "lastNotNull"
+                "last"
               ],
               "fields": "",
               "values": false
@@ -4133,7 +4133,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last(vnodes_num) as vnodes_num  from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)",
+              "sql": "select last(vnodes_num) as vnodes_num  from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts < $to interval($interval) fill(null)",
               "target": "select metric",
               "timeshift": {
                 "period": null
@@ -4148,7 +4148,7 @@
           "type": "stat"
         },
         {
-          "datasource": "${DS_TDENGINE}",
+          "datasource": "TDengine",
           "description": "Master VNodes 数量",
           "fieldConfig": {
             "defaults": {
@@ -4183,7 +4183,7 @@
             "orientation": "auto",
             "reduceOptions": {
               "calcs": [
-                "lastNotNull"
+                "last"
               ],
               "fields": "",
               "values": false
@@ -4207,7 +4207,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last(masters) as masters  from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)",
+              "sql": "select last(masters) as masters  from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts < $to interval($interval) fill(null)",
               "target": "select metric",
               "timeshift": {
                 "period": null
@@ -4222,7 +4222,7 @@
           "type": "stat"
         },
         {
-          "datasource": "${DS_TDENGINE}",
+          "datasource": "TDengine",
           "description": "当前 taosd 线程 CPU 使用率",
           "fieldConfig": {
             "defaults": {
@@ -4313,7 +4313,7 @@
               "formatType": "Table",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select  last(cpu_engine)  from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to",
+              "sql": "select  last(cpu_engine)  from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts < $to",
               "target": "select metric",
               "type": "timeserie"
             }
@@ -4324,7 +4324,7 @@
           "type": "gauge"
         },
         {
-          "datasource": "${DS_TDENGINE}",
+          "datasource": "TDengine",
           "description": "当前 taosd 线程 内存 使用率",
           "fieldConfig": {
             "defaults": {
@@ -4382,7 +4382,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select  last(mem_engine) as taosd, last(mem_total) as total  from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to",
+              "sql": "select  last(mem_engine) as taosd, last(mem_total) as total  from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts < $to",
               "target": "select metric",
               "type": "timeserie"
             }
@@ -4393,7 +4393,7 @@
           "type": "gauge"
         },
         {
-          "datasource": "${DS_TDENGINE}",
+          "datasource": "TDengine",
           "description": "",
           "fieldConfig": {
             "defaults": {
@@ -4464,7 +4464,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last(disk_used) as used, last(disk_total) as total,  last(disk_used) / last(disk_total) as percent  from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to",
+              "sql": "select last(disk_used) as used, last(disk_total) as total,  last(disk_used) / last(disk_total) as percent  from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts < $to",
               "target": "select metric",
               "timeshift": {
                 "period": null
@@ -4484,7 +4484,7 @@
           "cacheTimeout": null,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_TDENGINE}",
+          "datasource": "TDengine",
           "description": "CPU 资源占用情况。",
           "fieldConfig": {
             "defaults": {
@@ -4546,7 +4546,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select  avg(cpu_engine) as taosd, avg(cpu_system) as system from log.dnodes_info where dnode_ep='$fqdn' and ts >= $from and ts <= $to  interval($interval) fill(null)",
+              "sql": "select  avg(cpu_engine) as taosd, avg(cpu_system) as system from log.dnodes_info where dnode_ep='$fqdn' and ts >= $from and ts < $to  interval($interval) fill(null)",
               "target": "select metric",
               "type": "timeserie"
             }
@@ -4599,7 +4599,7 @@
           "cacheTimeout": null,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_TDENGINE}",
+          "datasource": "TDengine",
           "description": "内存资源占用情况",
           "fieldConfig": {
             "defaults": {
@@ -4660,7 +4660,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select avg(mem_engine) as taosd, avg(mem_system) as system, avg(mem_total) as total from log.dnodes_info where dnode_ep='$fqdn' and ts >= $from and ts <= $to  interval($interval) fill(null)",
+              "sql": "select avg(mem_engine) as taosd, avg(mem_system) as system, avg(mem_total) as total from log.dnodes_info where dnode_ep='$fqdn' and ts >= $from and ts < $to  interval($interval) fill(null)",
               "target": "select metric",
               "type": "timeserie"
             }
@@ -4712,7 +4712,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_TDENGINE}",
+          "datasource": "TDengine",
           "fieldConfig": {
             "defaults": {},
             "overrides": []
@@ -4777,7 +4777,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select avg(datadir_l0_used) as level0_used, avg(datadir_l0_total) as level0_total, avg(datadir_l1_used) as level1_used, avg(datadir_l1_total) as level1_total, avg(datadir_l2_used) as level2_used, avg(datadir_l2_total) as level2_total from log.disks_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)",
+              "sql": "select avg(datadir_l0_used) as level0_used, avg(datadir_l0_total) as level0_total, avg(datadir_l1_used) as level1_used, avg(datadir_l1_total) as level1_total, avg(datadir_l2_used) as level2_used, avg(datadir_l2_total) as level2_total from log.disks_info where dnode_ep = '$fqdn' and ts >= $from and ts < $to interval($interval) fill(null)",
               "target": "select metric",
               "timeshift": {
                 "period": null
@@ -4792,7 +4792,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "D",
-              "sql": "select avg(datadir_l0_used)/avg(datadir_l0_total) as level0_percent, avg(datadir_l1_used)/avg(datadir_l1_total) as level1_percent , avg(datadir_l2_used)/avg(datadir_l2_total) as level2_percent  from log.disks_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)",
+              "sql": "select avg(datadir_l0_used)/avg(datadir_l0_total) as level0_percent, avg(datadir_l1_used)/avg(datadir_l1_total) as level1_percent , avg(datadir_l2_used)/avg(datadir_l2_total) as level2_percent  from log.disks_info where dnode_ep = '$fqdn' and ts >= $from and ts < $to interval($interval) fill(null)",
               "target": "select metric",
               "timeshift": {
                 "period": null
@@ -4847,7 +4847,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_TDENGINE}",
+          "datasource": "TDengine",
           "fieldConfig": {
             "defaults": {},
             "overrides": []
@@ -4905,7 +4905,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select derivative(value, 1m, 0) from (select avg(datadir_l0_used) * 1024 as value from log.disks_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null))",
+              "sql": "select derivative(value, 1m, 0) from (select avg(datadir_l0_used) * 1024 as value from log.disks_info where dnode_ep = '$fqdn' and ts >= $from and ts < $to interval($interval) fill(null))",
               "target": "select metric",
               "timeshift": {
                 "period": null
@@ -4920,7 +4920,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "B",
-              "sql": "select derivative(value, 1m, 0) from (select avg(datadir_l1_used) * 1024 as value from log.disks_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null))",
+              "sql": "select derivative(value, 1m, 0) from (select avg(datadir_l1_used) * 1024 as value from log.disks_info where dnode_ep = '$fqdn' and ts >= $from and ts < $to interval($interval) fill(null))",
               "target": "select metric",
               "timeshift": {
                 "period": null
@@ -4935,7 +4935,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "C",
-              "sql": "select derivative(value, 1m, 0) from (select avg(datadir_l2_used) * 1024 as value from log.disks_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null))",
+              "sql": "select derivative(value, 1m, 0) from (select avg(datadir_l2_used) * 1024 as value from log.disks_info where dnode_ep = '$fqdn' and ts >= $from and ts < $to interval($interval) fill(null))",
               "target": "select metric",
               "timeshift": {
                 "period": null
@@ -4990,7 +4990,7 @@
           "cacheTimeout": null,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_TDENGINE}",
+          "datasource": "TDengine",
           "description": "io",
           "fieldConfig": {
             "defaults": {
@@ -5112,7 +5112,7 @@
           "cacheTimeout": null,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_TDENGINE}",
+          "datasource": "TDengine",
           "description": "io",
           "fieldConfig": {
             "defaults": {
@@ -5233,7 +5233,7 @@
     },
     {
       "collapsed": true,
-      "datasource": "${DS_TDENGINE}",
+      "datasource": "TDengine",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -5247,7 +5247,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_TDENGINE}",
+          "datasource": "TDengine",
           "fieldConfig": {
             "defaults": {
               "displayName": "Logins Per Minute",
@@ -5302,7 +5302,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select count(*) from log.logs where ts >= $from and ts <= $to interval (1m)",
+              "sql": "select count(*) from log.logs where ts >= $from and ts < $to interval (1m)",
               "target": "select metric",
               "type": "timeserie"
             }
@@ -5362,7 +5362,7 @@
       {
         "allValue": null,
         "current": {},
-        "datasource": "${DS_TDENGINE}",
+        "datasource": "TDengine",
         "definition": "select fqdn from log.dn",
         "description": "TDengine Nodes FQDN (Hostname)",
         "error": null,
@@ -5386,7 +5386,7 @@
       {
         "allValue": null,
         "current": {},
-        "datasource": "${DS_TDENGINE}",
+        "datasource": "TDengine",
         "definition": "select distinct(database_name) from log.vgroups_info where ts >= $from and ts <= $to",
         "description": null,
         "error": null,
@@ -5410,7 +5410,7 @@
       {
         "allValue": null,
         "current": {},
-        "datasource": "${DS_TDENGINE}",
+        "datasource": "TDengine",
         "definition": "select last(version) from log.cluster_info",
         "description": null,
         "error": null,
@@ -5434,7 +5434,7 @@
       {
         "allValue": null,
         "current": {},
-        "datasource": "${DS_TDENGINE}",
+        "datasource": "TDengine",
         "definition": "select last(first_ep) from log.cluster_info",
         "description": null,
         "error": null,
@@ -5575,5 +5575,5 @@
   "timezone": "",
   "title": "TDinsight",
   "uid": "tdinsight",
-  "version": 22
+  "version": 20
 }

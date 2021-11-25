@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	openapi "github.com/alibabacloud-go/darabonba-openapi/client"
 	dysmsapi20170525 "github.com/alibabacloud-go/dysmsapi-20170525/v2/client"
 	"github.com/alibabacloud-go/tea/tea"
@@ -22,7 +24,6 @@ func CreateClient(accessKeyId *string, accessKeySecret *string) (_result *dysmsa
 	}
 	// 访问的域名
 	config.Endpoint = tea.String("dysmsapi.aliyuncs.com")
-	_result = &dysmsapi20170525.Client{}
 	_result, _err = dysmsapi20170525.NewClient(config)
 	if _err != nil {
 		pluginLogger.Debug(_err.Error())
@@ -31,18 +32,23 @@ func CreateClient(accessKeyId *string, accessKeySecret *string) (_result *dysmsa
 	return _result, _err
 }
 
-func SendSms(templateParam string) (_err error) {
-	client, _err := CreateClient(tea.String(SmsConf.AlibabaCloudSms.AccessKeyId), tea.String(SmsConf.AlibabaCloudSms.AccessKeySecret))
+func SendSms(conf SmsConfInfo, templateParam string) (_err error) {
+	client, _err := CreateClient(tea.String(conf.AlibabaCloudSms.AccessKeyId), tea.String(conf.AlibabaCloudSms.AccessKeySecret))
 	if _err != nil {
 		return _err
 	}
-	// pluginLogger.Debug(templateParam)
-	for i := 0; i < len(SmsConf.PhoneNumbers); i++ {
+	pluginLogger.Debug(fmt.Sprintf("Sms template param: %v", templateParam))
+	numbers := conf.GetPhoneNumbers()
+	for i := 0; i < len(numbers); i++ {
+		if len(numbers[i]) != 11 {
+			continue
+		}
+		pluginLogger.Debug(fmt.Sprintf("Send sms to %s", numbers[i]))
 		sendSmsRequest := &dysmsapi20170525.SendSmsRequest{
-			PhoneNumbers:  tea.String(SmsConf.PhoneNumbers[i]),
-			TemplateCode:  tea.String(SmsConf.AlibabaCloudSms.TemplateCode),
+			PhoneNumbers:  tea.String(numbers[i]),
+			TemplateCode:  tea.String(conf.AlibabaCloudSms.TemplateCode),
 			TemplateParam: tea.String(templateParam),
-			SignName:      tea.String(SmsConf.AlibabaCloudSms.SignName),
+			SignName:      tea.String(conf.AlibabaCloudSms.SignName),
 		}
 		// 复制代码运行请自行打印 API 的返回值
 		resp, _err := client.SendSms(sendSmsRequest)

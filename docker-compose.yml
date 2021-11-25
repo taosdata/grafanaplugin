@@ -7,12 +7,18 @@ services:
       - ./dist:/var/lib/grafana/plugins/tdengine
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini
       - ./grafana/provisioning/:/etc/grafana/provisioning/
-      - ./grafana/dashboards/:/var/lib/grafana/dashboards/
       - grafana-data:/var/lib/grafana
     environment:
       TDENGINE_API: ${TDENGINE_API}
       TDENGINE_USER: ${TDENGINE_USER}
       TDENGINE_PASS: ${TDENGINE_PASS}
+      SMS_ACCESS_KEY_ID: ${SMS_ACCESS_KEY_ID}
+      SMS_ACCESS_KEY_SECRET: ${SMS_ACCESS_KEY_SECRET}
+      SMS_SIGN_NAME: ${SMS_SIGN_NAME}
+      SMS_TEMPLATE_CODE: ${SMS_TEMPLATE_CODE}
+      SMS_TEMPLATE_PARAM: "${SMS_TEMPLATE_PARAM}"
+      SMS_PHONE_NUMBERS: $SMS_PHONE_NUMBERS
+      SMS_LISTEN_ADDR: ${SMS_LISTEN_ADDR}
     ports:
       - 3000:3000
   alertmanager:

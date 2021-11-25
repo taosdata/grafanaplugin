@@ -1,0 +1,11 @@
+# config file version
+apiVersion: 1
+
+notifiers:
+  - name: sms
+    type: webhook
+    uid: sms
+    is_default: true
+    settings:
+      url: http://${SMS_LISTEN_ADDR}/sms
+      httpMethod: POST

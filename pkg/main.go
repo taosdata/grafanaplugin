@@ -2,9 +2,8 @@ package main
 
 import (
 	"fmt"
-	"net/http"
 	"os"
-	"time"
+	"path"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend/datasource"
 	hclog "github.com/hashicorp/go-hclog"
@@ -13,9 +12,14 @@ import (
 var pluginLogger hclog.Logger
 
 func main() {
-	f, err := os.OpenFile("tdengine_backend.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	logDir := os.Getenv("GF_PATHS_LOGS")
+	if logDir == "" {
+		logDir = "/var/log/grafana"
+	}
+	f, err := os.OpenFile(path.Join(logDir, "tdengine_backend.log"), os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
-		os.Exit(1)
+		fmt.Println(err.Error())
+		panic(err)
 	}
 
 	pluginLogger = hclog.New(&hclog.LoggerOptions{
@@ -24,24 +28,6 @@ func main() {
 		Output: f,
 	})
 
-	bl := InitConfig()
-	if !bl {
-		pluginLogger.Debug("init config failed")
-		return
-	}
-
-	handler := http.DefaultServeMux
-	handler.HandleFunc("/sms", HandleWebhook(func(w http.ResponseWriter, b *Body) {
-		// pluginLogger.Debug("Grafana status: " + b.Title)
-		// pluginLogger.Debug(b.Message)
-		if len(b.Message) > 35 {
-			b.Message = b.Message[:35]
-		}
-		SendSms(fmt.Sprintf(SmsConf.AlibabaCloudSms.TemplateParam, b.State, time.Now().Format("2006-01-02 15:04:05"), b.Title, b.Message))
-	}, 0))
-
-	go http.ListenAndServe(SmsConf.ListenAddr, handler)
-	pluginLogger.Debug("API is listening on: " + SmsConf.ListenAddr)
 	pluginLogger.Debug("start")
 	// Start listening to requests send from Grafana. This call is blocking so
 	// it wont finish until Grafana shuts down the process or the plugin choose
