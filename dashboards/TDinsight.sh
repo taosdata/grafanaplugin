@@ -260,7 +260,7 @@ datasources:
   basicAuth: true
 #  withCredentials:
   # <bool> mark as default datasource. Max one per org
-  isDefault: true
+  isDefault: false
   # <map> fields that will be converted to json and stored in json_data
   jsonData:
     timeInterval: "30s"
