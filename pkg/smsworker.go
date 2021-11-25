@@ -35,18 +35,18 @@ func (worker *SmsWorker) StartListen() {
 
 var workerMutex sync.Mutex
 
-func AssertSmsWorker(ctx context.Context, id int64, conf *SmsConfInfo) {
+func AssertSmsWorker(ctx context.Context, id int64, conf SmsConfInfo) {
 	uid := fmt.Sprint(id)
 	workerMutex.Lock()
 	defer workerMutex.Unlock()
 	if _, exists := workerList.Load(uid); !exists {
-		worker := &SmsWorker{server: nil, conf: *conf}
+		worker := &SmsWorker{server: nil, conf: conf}
 		worker.StartListen()
 		workerList.Store(uid, worker)
 	}
 }
 
-func RestartSmsWorker(ctx context.Context, id int64, conf *SmsConfInfo) {
+func RestartSmsWorker(id int64, conf SmsConfInfo) {
 	uid := fmt.Sprint(id)
 	pluginLogger.Info(fmt.Sprint("Restart sms worker for data source ", uid))
 	workerMutex.Lock()
@@ -55,13 +55,13 @@ func RestartSmsWorker(ctx context.Context, id int64, conf *SmsConfInfo) {
 	var worker *SmsWorker
 	if worker_v, ok := workerList.LoadAndDelete(uid); ok {
 		if worker, ok = worker_v.(*SmsWorker); ok {
-			if err := worker.server.Shutdown(ctx); err != nil {
+			if err := worker.server.Shutdown(context.Background()); err != nil {
 				pluginLogger.Debug("worker shutdown error: " + err.Error())
 			}
 		}
 	}
 
-	worker = &SmsWorker{server: nil, conf: *conf}
+	worker = &SmsWorker{server: nil, conf: conf}
 	worker.StartListen()
 	workerList.Store(uid, worker)
 }
