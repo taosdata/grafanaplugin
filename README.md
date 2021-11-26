@@ -118,40 +118,40 @@ Now it's ready for you to add your own TDengine data source and use it in a dash
 
 Point to **Configurations** -> **Data Sources** menu and then **Add data source** button.
 
-![add data source button](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/howto-add-datasource-button.png)
+![add data source button](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/howto-add-datasource-button.png)
 
 Search and choose **TDengine**.
-![add data source](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/howto-add-datasource-tdengine.png)
+![add data source](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/howto-add-datasource-tdengine.png)
 
 If TDengine is not in the list, please check the installation instructions for allowing loading unsigned plugins.
 
 Configure TDengine data source.
 
-![data source configuration](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/howto-add-datasource.png)
+![data source configuration](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/howto-add-datasource.png)
 
 Save and test it, it should say 'TDengine Data source is working'.
 
-![data source test](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/howto-add-datasource-test.png)
+![data source test](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/howto-add-datasource-test.png)
 
 ### Import Dashboard
 
-Point to **+** / **Create** - **import** (or `/dashboard/import` url).
+Point to **+** / **Create** - **import** (or `/assets/import` url).
 
-![import dashboard and config](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/import_dashboard.png)
+![import dashboard and config](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/import_dashboard.png)
 
 Now you can import dashboard with JSON file or grafana dashboard id (please make sure your network is public to <https://grafana.com>).
 
 Here is the first grafana dashboard you want to use for TDengine, the grafana dashboard id is [`15146`](https://grafana.com/grafana/dashboards/15146).
 
-![import via grafana.com](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/import-via-grafana-dot-com.png)
+![import via grafana.com](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/import-via-grafana-dot-com.png)
 
 After load:
 
-![import dashboard for tdengine](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/import-dashboard-for-tdengine.png)
+![import dashboard for tdengine](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/import-dashboard-for-tdengine.png)
 
 After import:
 
-![dashboard display](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/howto-dashboard-display.png)
+![dashboard display](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/howto-dashboard-display.png)
 
 ### Alert Feature
 
@@ -167,23 +167,23 @@ Here is the details:
 
 First, you should have a notification channel, if no, add a new one in <http://localhost:3000/alerting/notification/new>(here we use AlertManager for test, we also provides a webhook example here, in `webhook/` directory)
 
-![notification channel](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/alert-notification-channel.png)
+![notification channel](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/alert-notification-channel.png)
 
 Second, set the alert query in panel like this:
 
-![alert query](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/alert-query-demo.png)
+![alert query](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/alert-query-demo.png)
 
 Config the alert rule and notifications:
 
-![alert rule](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/alert-rule-condition-notifications.png)
+![alert rule](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/alert-rule-condition-notifications.png)
 
 Test it with **Test rule** button, it should return `firing: true`:
 
-![alert rule test](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/alert-rule-test.png)
+![alert rule test](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/alert-rule-test.png)
 
 In alert manager dashboard, you could see the alert:
 
-![alert manager](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/alert-manager-status.png)
+![alert manager](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/alert-manager-status.png)
 
 ## Monitor TDengine Database with TDengine Data Source Plugin
 

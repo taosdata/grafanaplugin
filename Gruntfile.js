@@ -16,11 +16,6 @@ module.exports = function (grunt) {
         src: ['**/*', '!**/*.js', '!**/*.scss'],
         dest: 'dist'
       },
-      dashboard_to_dist: {
-        expand: true,
-        src: ['dashboard/*'],
-        dest: 'dist'
-      },
       examples_to_dist: {
         expand: true,
         src: ['examples/**'],
@@ -86,6 +81,6 @@ module.exports = function (grunt) {
     }
   });
 
-  grunt.registerTask('default', ['clean', 'copy:src_to_dist', 'copy:dashboard_to_dist',
+  grunt.registerTask('default', ['clean', 'copy:src_to_dist', 
     'copy:examples_to_dist', 'copy:pluginDef', 'babel', 'mochaTest']);
 };
