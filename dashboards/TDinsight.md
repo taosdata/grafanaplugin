@@ -261,16 +261,7 @@ Point to **+** / **Create** - **import** (or `/dashboard/import` url).
 
 ![import dashboard and config](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/import_dashboard.png)
 
-Click on **Upload .JSON file** menu, point to your
-`dashboards/tdengine-dashboard.json` file in `grafanaplugin` directory(downloaded with git previously) and load it.
-
-![import dashboard](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/howto-import-dashboard.png)
-
-Change the options if you need, and **Import** it.
-
-![import options](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/howto-dashboard-import-options.png)
-
-Or use the dashboard id `15167` via grafana.com.
+Use the dashboard id `15167` via grafana.com.
 
 ![import via grafana.com](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/import-dashboard-15167.png)
 
