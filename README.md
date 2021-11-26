@@ -198,7 +198,7 @@ TDinsight is a simple monitoring solution for TDengine database. See [TDinsight 
 For a quick look and test, you can use `docker-compose` to start a full Grafana + AlertManager + Alert Webhook stack:
 
 ```sh
-docker-compose up -d --build
+docker-compose up -d
 ```
 
 Services:
