@@ -50,6 +50,7 @@ func SendSms(conf SmsConfInfo, templateParam string) (_err error) {
 			TemplateParam: tea.String(templateParam),
 			SignName:      tea.String(conf.AlibabaCloudSms.SignName),
 		}
+		pluginLogger.Debug(fmt.Sprintf("Sms sendSmsRequest: %#v", sendSmsRequest))
 		// 复制代码运行请自行打印 API 的返回值
 		resp, _err := client.SendSms(sendSmsRequest)
 		if _err != nil {

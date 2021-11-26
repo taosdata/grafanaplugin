@@ -101,7 +101,7 @@ func (rd *RocksetDatasource) QueryData(ctx context.Context, req *backend.QueryDa
 	}
 
 	// pluginLogger.Debug(fmt.Sprintf("DataSource: %v", req.PluginContext.DataSourceInstanceSettings))
-	go AssertSmsWorker(ctx, req.PluginContext.DataSourceInstanceSettings.ID, dat.SmsConfig)
+	AssertSmsWorker(ctx, req.PluginContext.DataSourceInstanceSettings.ID, dat.SmsConfig)
 
 	response := backend.NewQueryDataResponse()
 	for i := 0; i < len(req.Queries); i++ {
@@ -356,11 +356,10 @@ func (rd *RocksetDatasource) CallResource(ctx context.Context, req *backend.Call
 			pluginLogger.Debug("CallResource req.Body: " + string(req.Body))
 			return err
 		}
-		go func() {
-			for k, v := range data {
-				RestartSmsWorker(ctx, k, &v)
-			}
-		}()
+
+		for k, v := range data {
+			RestartSmsWorker(k, v)
+		}
 		sender.Send(&backend.CallResourceResponse{Status: 204})
 	}
 	return nil

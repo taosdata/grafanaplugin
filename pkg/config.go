@@ -28,7 +28,7 @@ func (sc *SmsConfInfo) GetPhoneNumbers() []string {
 }
 
 type JsonData struct {
-	User      string       `json:"user"`
-	Password  string       `json:"password"`
-	SmsConfig *SmsConfInfo `json:"smsConfig"`
+	User      string      `json:"user"`
+	Password  string      `json:"password"`
+	SmsConfig SmsConfInfo `json:"smsConfig"`
 }
