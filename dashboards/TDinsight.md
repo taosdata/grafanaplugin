@@ -297,7 +297,7 @@ Include cluster current infomation and status (left-right, top-down).
 
 ### DNodes Status
 
-![tdinsight-mnodes-overview](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/TDinsight-3-dnodes.png)
+![tdinsight-mnodes-overview](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/TDinsight-2-dnodes.png)
 
 - **DNodes Status**: Simple table view for `show dnodes`.
 - **DNodes Lifetime**: The time elapsed from dnode created.
