@@ -34,7 +34,7 @@ The feature-rich [Grafana] dashboard for [TDengine] (cluster or not) requires Gr
 
 For Debian or Ubuntu os, the first option is to use grafana APT repository. Here is how-to install it from scratch:
 
-```sh
+```bash
 sudo apt-get install -y apt-transport-https
 sudo apt-get install -y software-properties-common wget
 wget -q -O - https://packages.grafana.com/gpg.key |\
@@ -49,7 +49,7 @@ sudo apt-get install grafana
 
 You can install it from the official YUM repository.
 
-```sh
+```bash
 sudo tee /etc/yum.repos.d/grafana.repo << EOF
 [grafana]
 name=grafana
@@ -66,7 +66,7 @@ sudo yum install grafana
 
 Or install with RPM:
 
-```sh
+```bash
 wget https://dl.grafana.com/oss/release/grafana-7.5.11-1.x86_64.rpm
 sudo yum install grafana-7.5.11-1.x86_64.rpm
 # it's ok to use in one line
@@ -136,31 +136,31 @@ Aliyun SMS as Notifier:
 
 Most of the CLI options are environment variable recognizable.
 
-| short | long                       | env                          | description                                                                                              |
-| ----- | -------------------------- | ---------------------------- | -------------------------------------------------------------------------------------------------------- |
-| -v    | --plugin-version           | TDENGINE_PLUGIN_VERSION      | TDengine datasource plugin version, default is latest.                                                   |
-| -P    | --grafana-provisioning-dir | GF_PROVISIONING_DIR          | Grafana provisioning directory, [default: /etc/grafana/provisioning/]                                    |
-| -G    | --grafana-plugins-dir      | GF_PLUGINS_DIR               | Grafana plugins directory, default is `/var/lib/grafana/plugins`.                                        |
-| -O    | --grafana-org-id           | GF_ORG_ID                    | Grafana organization id, default is 1.                                                                   |
-| -n    | --tdengine-ds-name         | TDENGINE_DS_NAME             | TDengine datasource name, default is TDengine.                                                           |
-| -a    | --tdengine-api             | TDENGINE_API                 | TDengine REST API endpoint. default is `http://127.0.0.1:6041`.                                          |
-| -u    | --tdengine-user            | TDENGINE_USER                | TDengine user name. [default: root]                                                                      |
-| -p    | --tdengine-password        | TDENGINE_PASSWORD            | TDengine password. [default: taosdata]                                                                   |
-| -i    | --tdinsight-uid            | TDINSIGHT_DASHBOARD_UID      | TDinsight dashboard `uid`. [default: tdinsight]                                                          |
-| -t    | --tdinsight-title          | TDINSIGHT_DASHBOARD_TITLE    | TDinsight dashboard title. [default: TDinsight]                                                          |
-| -e    | --tdinsight-editable       | TDINSIGHT_DASHBOARD_EDITABLE | If the provisioning dashboard could be editable. [default: false]                                        |
-| -E    | --external-notifier        | EXTERNAL_NOTIFIER            | Apply external notifier uid to TDinsight dashboard.                                                      |
-| -s    | --sms-enabled              | SMS_ENABLED                  | To enable tdengine-datasource plugin builtin aliyun sms webhook.                                         |
-| -N    | --sms-notifier-name        | SMS_NOTIFIER_NAME            | Provisioning notifier name.[default: TDinsight Builtin SMS]                                              |
-| -U    | --sms-notifier-uid         | SMS_NOTIFIER_UID             | Provisioning notifier uid, use lowercase notifier name by default.                                       |
-| -D    | --sms-notifier-is-default  | SMS_NOTIFIER_IS_DEFAULT      | Set notifier as default.                                                                                 |
-| -I    | --sms-access-key-id        | SMS_ACCESS_KEY_ID            | Aliyun sms access key id                                                                                 |
-| -K    | --sms-access-key-secret    | SMS_ACCESS_KEY_SECRET        | Aliyun sms access key secret                                                                             |
-| -S    | --sms-sign-name            | SMS_SIGN_NAME                | Sign name                                                                                                |
-| -C    | --sms-template-code        | SMS_TEMPLATE_CODE            | Template code                                                                                            |
-| -T    | --sms-template-param       | SMS_TEMPLATE_PARAM           | Template params json format, '{"alarm_level":"%s","time":"%s","name":"%s","content":"%s"}' |
-| -B    | --sms-phone-numbers        | SMS_PHONE_NUMBERS            | Comma-separated numbers list, eg "189xxxxxxxx,132xxxxxxxx"                                               |
-| -L    | --sms-listen-addr          | SMS_LISTEN_ADDR              | The builtin sms webhook listening address, default is 127.0.0.1:9100                                     |
+| short | long                       | env                          | description                                                            |
+| ----- | -------------------------- | ---------------------------- | ---------------------------------------------------------------------- |
+| -v    | --plugin-version           | TDENGINE_PLUGIN_VERSION      | TDengine datasource plugin version, default is latest.                 |
+| -P    | --grafana-provisioning-dir | GF_PROVISIONING_DIR          | Grafana provisioning directory, [default: /etc/grafana/provisioning/]  |
+| -G    | --grafana-plugins-dir      | GF_PLUGINS_DIR               | Grafana plugins directory, default is `/var/lib/grafana/plugins`.      |
+| -O    | --grafana-org-id           | GF_ORG_ID                    | Grafana organization id, default is 1.                                 |
+| -n    | --tdengine-ds-name         | TDENGINE_DS_NAME             | TDengine datasource name, default is TDengine.                         |
+| -a    | --tdengine-api             | TDENGINE_API                 | TDengine REST API endpoint. default is `http://127.0.0.1:6041`.        |
+| -u    | --tdengine-user            | TDENGINE_USER                | TDengine user name. [default: root]                                    |
+| -p    | --tdengine-password        | TDENGINE_PASSWORD            | TDengine password. [default: taosdata]                                 |
+| -i    | --tdinsight-uid            | TDINSIGHT_DASHBOARD_UID      | TDinsight dashboard `uid`. [default: tdinsight]                        |
+| -t    | --tdinsight-title          | TDINSIGHT_DASHBOARD_TITLE    | TDinsight dashboard title. [default: TDinsight]                        |
+| -e    | --tdinsight-editable       | TDINSIGHT_DASHBOARD_EDITABLE | If the provisioning dashboard could be editable. [default: false]      |
+| -E    | --external-notifier        | EXTERNAL_NOTIFIER            | Apply external notifier uid to TDinsight dashboard.                    |
+| -s    | --sms-enabled              | SMS_ENABLED                  | To enable tdengine-datasource plugin builtin aliyun sms webhook.       |
+| -N    | --sms-notifier-name        | SMS_NOTIFIER_NAME            | Provisioning notifier name.[default: TDinsight Builtin SMS]            |
+| -U    | --sms-notifier-uid         | SMS_NOTIFIER_UID             | Provisioning notifier uid, use lowercase notifier name by default.     |
+| -D    | --sms-notifier-is-default  | SMS_NOTIFIER_IS_DEFAULT      | Set notifier as default.                                               |
+| -I    | --sms-access-key-id        | SMS_ACCESS_KEY_ID            | Aliyun sms access key id                                               |
+| -K    | --sms-access-key-secret    | SMS_ACCESS_KEY_SECRET        | Aliyun sms access key secret                                           |
+| -S    | --sms-sign-name            | SMS_SIGN_NAME                | Sign name                                                              |
+| -C    | --sms-template-code        | SMS_TEMPLATE_CODE            | Template code                                                          |
+| -T    | --sms-template-param       | SMS_TEMPLATE_PARAM           | Template params json format                                            |
+| -B    | --sms-phone-numbers        | SMS_PHONE_NUMBERS            | Comma-separated numbers list, eg `"189xxxxxxxx,132xxxxxxxx"`           |
+| -L    | --sms-listen-addr          | SMS_LISTEN_ADDR              | The builtin sms webhook listening address, default is `127.0.0.1:9100` |
 
 Suppose you are serving TDengine on host `tdengine`, with HTTP API port `6041`, user `root1`, password `pass5ord`. Use the script as:
 
@@ -183,7 +183,7 @@ sudo ./TDinsight.sh -a http://tdengine:6041 -u root1 -p pass5ord -E existing-not
 If you want to use [Aliyun SMS](https://www.aliyun.com/product/sms) service as notification channel, you should enable it with `-s` flag and the settings:
 
 - `-N`: Notification channel name, default is `TDinsight Builtin SMS`.
-- `-U`: Notification channel uid, default is lowercase of the `name` with any other characters replaced with `-`, for default `-N`, it is `tdinsight-builtin-sms`.
+- `-U`: Notification channel uid, default is lowercase of the `name` with any other characters replaced with -, for default `-N`, it is `tdinsight-builtin-sms`.
 - `-I`: Aliyun SMS access key id.
 - `-K`: Aliyun SMS access key secret.
 - `-S`: Aliyun SMS sign name.
@@ -210,7 +210,7 @@ For special use cases, `-O` would set the organization id when you use Grafana C
 
 Install the TDengine data-source plugin from GitHub.
 
-```sh
+```bash
 git clone --depth 1 https://github.com/taosdata/grafanaplugin.git
 mkdir -p /var/lib/grafana/plugins/tdengine
 cp -rf dist/* /var/lib/grafana/plugins/tdengine
@@ -227,7 +227,7 @@ allow_loading_unsigned_plugins = tdengine-datasource
 
 ### Start Grafana Service
 
-```sh
+```bash
 systemctl enable grafana-server
 systemctl start grafana-server
 ```
@@ -379,7 +379,7 @@ Currently only report login count per minute.
 
 ## An All-in-one Docker Example
 
-```sh
+```bash
 git clone --depth 1 https://github.com/taosdata/grafanaplugin.git
 cd grafanaplugin
 ```
@@ -417,7 +417,7 @@ volumes:
 
 Replace the environment variables in `docker-compose.yml` or set it `.env`, then start Grafana with [docker-compose].
 
-```sh
+```bash
 docker-compose up -d
 ```
 
