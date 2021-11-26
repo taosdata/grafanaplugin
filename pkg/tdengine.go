@@ -216,7 +216,15 @@ func makeResponse(body []byte, alias string) (response backend.DataResponse, err
 	tsLayout := res.Data[0][0].(string)
 	// pluginLogger.Debug(fmt.Sprint("tsLayout: ", tsLayout))
 
-	if len(tsLayout) == len("2006-01-02T15:04:05-07:00") {
+	if len(tsLayout) == len("2006-01-02T15:04:05Z") {
+		timeLayout = "2006-01-02T15:04:05Z"
+	} else if len(tsLayout) == len("2006-01-02T15:04:05.000Z") {
+		timeLayout = "2006-01-02T15:04:05.000Z"
+	} else if len(tsLayout) == len("2006-01-02T15:04:05.000000Z") {
+		timeLayout = "2006-01-02T15:04:05.000000Z"
+	} else if len(tsLayout) == len("2006-01-02T15:04:05.000000000Z") {
+		timeLayout = "2006-01-02T15:04:05.000000000Z"
+	} else if len(tsLayout) == len("2006-01-02T15:04:05-07:00") {
 		timeLayout = "2006-01-02T15:04:05-07:00"
 	} else if len(tsLayout) == len("2006-01-02T15:04:05-0700") {
 		timeLayout = "2006-01-02T15:04:05-0700"

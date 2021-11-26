@@ -106,39 +106,39 @@ Grafana would ask you to change the password after first login.
 
 Point to **Configurations** -> **Data Sources** menu and then **Add data source** button.
 
-![add data source button](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/howto-add-datasource-button.png)
+![add data source button](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/howto-add-datasource-button.png)
 
 Search and choose **TDengine**.
-![add data source](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/howto-add-datasource-tdengine.png)
+![add data source](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/howto-add-datasource-tdengine.png)
 
 Configure TDengine data source.
 
-![data source configuration](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/howto-add-datasource.png)
+![data source configuration](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/howto-add-datasource.png)
 
 Save and test it, it should say 'TDengine Data source is working'.
 
-![data source test](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/howto-add-datasource-test.png)
+![data source test](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/howto-add-datasource-test.png)
 
 ## Import TDengine Dashboard
 
-Point to **+** / **Create** - **import** (or `/dashboard/import` url).
+Point to **+** / **Create** - **import** (or `/assets/import` url).
 
-![import dashboard and config](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/import_dashboard.png)
+![import dashboard and config](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/import_dashboard.png)
 
 Click on **Upload .JSON file** menu, point to your
-`dashboard/tdengine-grafana-7.x.json` file in `grafanaplugin` directory(downloaded with git previously) and load it.
+`assets/tdengine-grafana-7.x.json` file in `grafanaplugin` directory(downloaded with git previously) and load it.
 
-![import dashboard](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/howto-import-dashboard.png)
+![import dashboard](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/howto-import-dashboard.png)
 
 Change the options if you need, and **Import** it.
 
-![import options](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/howto-dashboard-import-options.png)
+![import options](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/howto-dashboard-import-options.png)
 
 Then it's all done.
 
 The full page view for TDengine will like below.
 
-![display](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/howto-dashboard-display.png)
+![display](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/howto-dashboard-display.png)
 
 ## The Dashboard Details
 
