@@ -21,6 +21,9 @@ func (worker *SmsWorker) StartListen() {
 	handler.HandleFunc("/sms", HandleWebhook(func(w http.ResponseWriter, b *Body) {
 		pluginLogger.Debug("Grafana status: " + b.Title)
 		pluginLogger.Debug(b.Message)
+		if len(b.Title) > 35 {
+			b.Title = b.Title[:35]
+		}
 		if len(b.Message) > 35 {
 			b.Message = b.Message[:35]
 		}
