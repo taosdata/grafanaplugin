@@ -993,9 +993,14 @@
         "for": "5m",
         "frequency": "1m",
         "handler": 1,
-        "name": "DNodes Alive Percent alert",
+        "message": "DNodes异常",
+        "name": "DNodes Alive Percent",
         "noDataState": "no_data",
-        "notifications": []
+        "notifications": [
+          {
+            "uid": "tdinsight-builtin-sms"
+          }
+        ]
       },
       "aliasColors": {},
       "bars": false,
@@ -1134,9 +1139,14 @@
         "for": "5m",
         "frequency": "1m",
         "handler": 1,
-        "name": "MNodes Alive Percent alert",
-        "noDataState": "no_data",
-        "notifications": []
+        "message": "MNodes异常",
+        "name": "MNodes Alive Percent",
+        "noDataState": "keep_state",
+        "notifications": [
+          {
+            "uid": "tdinsight-builtin-sms"
+          }
+        ]
       },
       "aliasColors": {},
       "bars": false,
@@ -1276,9 +1286,14 @@
         "for": "5m",
         "frequency": "1m",
         "handler": 1,
-        "name": "VGroups Alive Percent alert",
-        "noDataState": "no_data",
-        "notifications": []
+        "message": "VGroups异常",
+        "name": "VGroups Alive Percent",
+        "noDataState": "keep_state",
+        "notifications": [
+          {
+            "uid": "tdinsight-builtin-sms"
+          }
+        ]
       },
       "aliasColors": {},
       "bars": false,
@@ -1418,9 +1433,14 @@
         "for": "5m",
         "frequency": "1m",
         "handler": 1,
-        "name": "VNodes Alive Percent alert",
-        "noDataState": "no_data",
-        "notifications": []
+        "message": "VNodes 异常",
+        "name": "VNodes Alive Percent",
+        "noDataState": "keep_state",
+        "notifications": [
+          {
+            "uid": "tdinsight-builtin-sms"
+          }
+        ]
       },
       "aliasColors": {},
       "bars": false,
@@ -1584,9 +1604,14 @@
         "for": "5m",
         "frequency": "1m",
         "handler": 1,
-        "name": "DNodes Alive Percent alert",
+        "message": "授权测点剩余不足5%",
+        "name": "DNodes Alive Percent",
         "noDataState": "ok",
-        "notifications": []
+        "notifications": [
+          {
+            "uid": "tdinsight-builtin-sms"
+          }
+        ]
       },
       "aliasColors": {},
       "bars": false,
@@ -1672,7 +1697,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Messuring Points Used Percent Alert",
+      "title": "Messuring Points Used",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1742,9 +1767,14 @@
         "for": "5m",
         "frequency": "1m",
         "handler": 1,
-        "name": "Grants Expire Time alert",
-        "noDataState": "no_data",
-        "notifications": []
+        "message": "授权即将过期",
+        "name": "Grants Expire Time",
+        "noDataState": "keep_state",
+        "notifications": [
+          {
+            "uid": "tdinsight-builtin-sms"
+          }
+        ]
       },
       "aliasColors": {},
       "bars": false,
@@ -1885,13 +1915,18 @@
             "type": "query"
           }
         ],
-        "executionErrorState": "alerting",
+        "executionErrorState": "keep_state",
         "for": "5m",
         "frequency": "1m",
         "handler": 1,
-        "name": "Error Rate alert",
-        "noDataState": "no_data",
-        "notifications": []
+        "message": "错误率高",
+        "name": "Error Rate",
+        "noDataState": "keep_state",
+        "notifications": [
+          {
+            "uid": "tdinsight-builtin-sms"
+          }
+        ]
       },
       "aliasColors": {},
       "bars": false,
@@ -2336,7 +2371,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select last(uptime) from log.dnodes_info where ts >= now -1m and ts <= now group by dnode_ep",
+          "sql": "select last(uptime) from log.dnodes_info where ts >= $from and ts <= $to group by dnode_ep",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -5575,5 +5610,5 @@
   "timezone": "",
   "title": "TDinsight",
   "uid": "tdinsight",
-  "version": 22
+  "version": 24
 }

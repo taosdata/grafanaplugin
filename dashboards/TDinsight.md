@@ -1,26 +1,30 @@
-# [TDengine] [Grafana] Dashboard with Alert Support
+# TDinsight - A Zero-dependency Monitoring Solution For [TDengine] with [Grafana]
 
 - [Requirements](#requirements)
 - [Install Grafana](#install-grafana)
   - [Install Grafana on Debian or Ubuntu](#install-grafana-on-debian-or-ubuntu)
   - [Install Grafana on CentOS/RHEL](#install-grafana-on-centosrhel)
-- [Install TDengine Data Source Plugin](#install-tdengine-data-source-plugin)
-- [Configure Grafana](#configure-grafana)
-- [Start Grafana Service](#start-grafana-service)
-- [Login to Grafana](#login-to-grafana)
-- [Add TDengine Data Source](#add-tdengine-data-source)
-- [Import TDengine Dashboard](#import-tdengine-dashboard)
-- [The Dashboard Details](#the-dashboard-details)
+- [Setup TDinsight Automatically](#setup-tdinsight-automatically)
+- [Setup TDinsight Manually](#setup-tdinsight-manually)
+  - [Install TDengine Data Source Plugin](#install-tdengine-data-source-plugin)
+  - [Configure Grafana](#configure-grafana)
+  - [Start Grafana Service](#start-grafana-service)
+  - [Login to Grafana](#login-to-grafana)
+  - [Add TDengine Data Source](#add-tdengine-data-source)
+  - [Import TDengine Dashboard](#import-tdengine-dashboard)
+- [TDinsight Dashboard Details](#tdinsight-dashboard-details)
   - [Cluster Status](#cluster-status)
   - [DNodes Status](#dnodes-status)
   - [MNodes Overview](#mnodes-overview)
-  - [DNode Usage for each `fqdn`](#dnode-usage-for-each-fqdn)
+  - [Requests](#requests)
+  - [Database for each `$database`](#database-for-each-database)
+  - [DNode Usage for each `$fqdn`](#dnode-usage-for-each-fqdn)
   - [Login History](#login-history)
-- [An all-in-one docker example](#an-all-in-one-docker-example)
+- [An All-in-one Docker Example](#an-all-in-one-docker-example)
 
 ## Requirements
 
-At least, you must have a single-node [TDengine] server or a [TDengine] cluster with multiple nodes, and a server host for [Grafana]. This dashboard requires new log database, including `cluster_info` `dnodes_info` `vgroups_info` tables and so on. The changes is now in branch `feature/TD-6452` via develop stage.
+At least, you must have a single-node [TDengine] server or a [TDengine] cluster with multiple nodes, and a server host for [Grafana]. This dashboard requires new log database(since v2.3.3.0), including `cluster_info` `dnodes_info` `vgroups_info` tables and so on.
 
 ## Install Grafana
 
@@ -30,7 +34,7 @@ The feature-rich [Grafana] dashboard for [TDengine] (cluster or not) requires Gr
 
 For Debian or Ubuntu os, the first option is to use grafana APT repository. Here is how-to install it from scratch:
 
-```sh
+```bash
 sudo apt-get install -y apt-transport-https
 sudo apt-get install -y software-properties-common wget
 wget -q -O - https://packages.grafana.com/gpg.key |\
@@ -45,7 +49,7 @@ sudo apt-get install grafana
 
 You can install it from the official YUM repository.
 
-```sh
+```bash
 sudo tee /etc/yum.repos.d/grafana.repo << EOF
 [grafana]
 name=grafana
@@ -62,7 +66,7 @@ sudo yum install grafana
 
 Or install with RPM:
 
-```sh
+```bash
 wget https://dl.grafana.com/oss/release/grafana-7.5.11-1.x86_64.rpm
 sudo yum install grafana-7.5.11-1.x86_64.rpm
 # it's ok to use in one line
@@ -70,17 +74,149 @@ sudo yum install \
   https://dl.grafana.com/oss/release/grafana-7.5.11-1.x86_64.rpm
 ```
 
-## Install TDengine Data Source Plugin
+## Setup TDinsight Automatically
+
+We've created a [`TDinsight.sh`](https://github.com/taosdata/grafanaplugin/releases/latest/download/TDinsight.sh) script for automation with Grafana [provisioning](https://grafana.com/docs/grafana/latest/administration/provisioning/) strategy.
+
+You can download the script by `wget` or other tools:
+
+```bash
+wget https://github.com/taosdata/grafanaplugin/releases/latest/download/TDinsight.sh
+chmod +x TDinsight.sh
+```
+
+This script will automatically download the latest [TDengine data source plugin](https://github.com/taosdata/grafanaplugin/releases/latest) and [TDinsight dashboard](https://grafana.com/grafana/dashboards/15167), covert them to provisioning configurations and setup TDinsight dashboard. With some more alert options, you will get the alert notification feature within an one-line command.
+
+For the most simple use case, suppose you're serving TDengine and Grafana on the same host with both default options. Running `./TDinsight.sh` and opening Grafana url are the only things you need to setup TDsight.
+
+Here is the usage of `TDinsight.sh`:
+
+```bash
+Usage:
+   ./TDinsight.sh
+   ./TDinsight.sh -h|--help
+   ./TDinsight.sh -n <ds-name> -a <api-url> -u <user> -p <password>
+
+Install and configure TDinsight dashboard in Grafana on ubuntu 18.04/20.04 system.
+
+-h, -help,          --help                  Display help
+
+-V, -verbose,       --verbose               Run script in verbose mode. Will print out each step of execution.
+
+-v, --plugin-version <version>              TDengine datasource plugin version, [default: latest]
+
+-P, --grafana-provisioning-dir <dir>        Grafana provisioning directory, [default: /etc/grafana/provisioning/]
+-G, --grafana-plugins-dir <dir>             Grafana plugins directory, [default: /var/lib/grafana/plugins]
+-O, --grafana-org-id <number>               Grafana orgnization id. [default: 1]
+
+-n, --tdengine-ds-name <string>             TDengine datasource name, no space. [default: TDengine]
+-a, --tdengine-api <url>                    TDengine REST API endpoint. [default: http://127.0.0.1:6041]
+-u, --tdengine-user <string>                TDengine user name. [default: root]
+-p, --tdengine-password <string>            TDengine password. [default: taosdata]
+
+-i, --tdinsight-uid <string>                Replace with a non-space ascii code as the dashboard id. [default: tdinsight]
+-t, --tdinsight-title <string>              Dashboard title. [default: TDinsight]
+-e, --tdinsight-editable                    If the provisioning dashboard could be editable. [default: false]
+
+-E, --external-notifier <string>            Apply external notifier uid to TDinsight dashboard.
+
+Aliyun SMS as Notifier:
+-s, --sms-enabled                           To enable tdengine-datasource plugin builtin aliyun sms webhook.
+-N, --sms-notifier-name <string>            Provisioning notifier name.[default: TDinsight Builtin SMS]
+-U, --sms-notifier-uid <string>             Provisioning notifier uid, use lowercase notifier name by default.
+-D, --sms-notifier-is-default               Set notifier as default.
+-I, --sms-access-key-id <string>            Aliyun sms access key id
+-K, --sms-access-key-secret <string>        Aliyun sms access key secret
+-S, --sms-sign-name <string>                Sign name
+-C, --sms-template-code <string>            Template code
+-T, --sms-template-param <string>           Template param, a escaped json string like '{"alarm_level":"%s","time":"%s","name":"%s","content":"%s"}'
+-B, --sms-phone-numbers <string>            Comma-separated numbers list, eg "189xxxxxxxx,132xxxxxxxx"
+-L, --sms-listen-addr <string>              [default: 127.0.0.1:9100]
+```
+
+Most of the CLI options are environment variable recognizable.
+
+| short | long                       | env                          | description                                                            |
+| ----- | -------------------------- | ---------------------------- | ---------------------------------------------------------------------- |
+| -v    | --plugin-version           | TDENGINE_PLUGIN_VERSION      | TDengine datasource plugin version, default is latest.                 |
+| -P    | --grafana-provisioning-dir | GF_PROVISIONING_DIR          | Grafana provisioning directory, [default: /etc/grafana/provisioning/]  |
+| -G    | --grafana-plugins-dir      | GF_PLUGINS_DIR               | Grafana plugins directory, default is `/var/lib/grafana/plugins`.      |
+| -O    | --grafana-org-id           | GF_ORG_ID                    | Grafana organization id, default is 1.                                 |
+| -n    | --tdengine-ds-name         | TDENGINE_DS_NAME             | TDengine datasource name, default is TDengine.                         |
+| -a    | --tdengine-api             | TDENGINE_API                 | TDengine REST API endpoint. default is `http://127.0.0.1:6041`.        |
+| -u    | --tdengine-user            | TDENGINE_USER                | TDengine user name. [default: root]                                    |
+| -p    | --tdengine-password        | TDENGINE_PASSWORD            | TDengine password. [default: taosdata]                                 |
+| -i    | --tdinsight-uid            | TDINSIGHT_DASHBOARD_UID      | TDinsight dashboard `uid`. [default: tdinsight]                        |
+| -t    | --tdinsight-title          | TDINSIGHT_DASHBOARD_TITLE    | TDinsight dashboard title. [default: TDinsight]                        |
+| -e    | --tdinsight-editable       | TDINSIGHT_DASHBOARD_EDITABLE | If the provisioning dashboard could be editable. [default: false]      |
+| -E    | --external-notifier        | EXTERNAL_NOTIFIER            | Apply external notifier uid to TDinsight dashboard.                    |
+| -s    | --sms-enabled              | SMS_ENABLED                  | To enable tdengine-datasource plugin builtin aliyun sms webhook.       |
+| -N    | --sms-notifier-name        | SMS_NOTIFIER_NAME            | Provisioning notifier name.[default: TDinsight Builtin SMS]            |
+| -U    | --sms-notifier-uid         | SMS_NOTIFIER_UID             | Provisioning notifier uid, use lowercase notifier name by default.     |
+| -D    | --sms-notifier-is-default  | SMS_NOTIFIER_IS_DEFAULT      | Set notifier as default.                                               |
+| -I    | --sms-access-key-id        | SMS_ACCESS_KEY_ID            | Aliyun sms access key id                                               |
+| -K    | --sms-access-key-secret    | SMS_ACCESS_KEY_SECRET        | Aliyun sms access key secret                                           |
+| -S    | --sms-sign-name            | SMS_SIGN_NAME                | Sign name                                                              |
+| -C    | --sms-template-code        | SMS_TEMPLATE_CODE            | Template code                                                          |
+| -T    | --sms-template-param       | SMS_TEMPLATE_PARAM           | Template params json format                                            |
+| -B    | --sms-phone-numbers        | SMS_PHONE_NUMBERS            | Comma-separated numbers list, eg `"189xxxxxxxx,132xxxxxxxx"`           |
+| -L    | --sms-listen-addr          | SMS_LISTEN_ADDR              | The builtin sms webhook listening address, default is `127.0.0.1:9100` |
+
+Suppose you are serving TDengine on host `tdengine`, with HTTP API port `6041`, user `root1`, password `pass5ord`. Use the script as:
+
+```bash
+sudo ./TDinsight.sh -a http://tdengine:6041 -u root1 -p pass5ord
+```
+
+We are providing a `-E` options to configure existing notification channel for TDinsight from command line. Suppose your Grafana user and password is `admin:admin`, use the following command to get the notification channels:
+
+```bash
+curl --no-progress-meter -u admin:admin http://localhost:3000/api/alert-notifications | jq
+```
+
+Here, we use `uid` property of the notification channel as `-E` input.
+
+```bash
+sudo ./TDinsight.sh -a http://tdengine:6041 -u root1 -p pass5ord -E existing-notifier
+```
+
+If you want to use [Aliyun SMS](https://www.aliyun.com/product/sms) service as notification channel, you should enable it with `-s` flag and the settings:
+
+- `-N`: Notification channel name, default is `TDinsight Builtin SMS`.
+- `-U`: Notification channel uid, default is lowercase of the `name` with any other characters replaced with -, for default `-N`, it is `tdinsight-builtin-sms`.
+- `-I`: Aliyun SMS access key id.
+- `-K`: Aliyun SMS access key secret.
+- `-S`: Aliyun SMS sign name.
+- `-C`: Aliyun SMS template id.
+- `-T`: Aliyun SMS template params JSON format, `'{"alarm_level":"%s","time":"%s","name":"%s","content":"%s"}'`. It has four params: alerting level, alerting time, the name of alert rule, and the content text of the alert rule.
+- `-B`: Target phone numbers list, separated by comma `,`.
+
+If you want to monitor multiple TDengine clusters, you need to setup multiple TDinsight dashboards. There's some required changes to setup non-default TDinsight - `-n` `-i` `-t` options are need to be changed to some other names, if you are using SMS alerting feature, `-N` and `-L` should be changed too.
+
+```bash
+sudo ./TDengine.sh -n TDengine-Env1 -a http://another:6041 -u root -p taosdata -i tdinsight-env1 -t 'TDinsight Env1'
+# if use builtin sms notifier.
+sudo ./TDengine.sh -n TDengine-Env1 -a http://another:6041 -u root -p taosdata -i tdinsight-env1 -t 'TDinsight Env1' \
+  -s -N 'Env1 SMS' -I xx -K xx -S xx -C SMS_XX -T '' -B 00000000000 -L 127.0.0.01:10611
+```
+
+Note that, the provisioning data sources, notification channels and dashboards are not changeable at frontend. You should update the configuration by this script again or change the provisioning configurations manually. The provisioning configurations are all located in `/etc/grafana/provisioning` directory (the directory is grafana default, change it with `-P` option as you need).
+
+For special use cases, `-O` would set the organization id when you use Grafana Cloud or use a different organization. `-G` let you choose the grafana plugins install directory. `-e` would set the dashboard to be editable.
+
+## Setup TDinsight Manually
+
+### Install TDengine Data Source Plugin
 
 Install the TDengine data-source plugin from GitHub.
 
-```sh
+```bash
 git clone --depth 1 https://github.com/taosdata/grafanaplugin.git
 mkdir -p /var/lib/grafana/plugins/tdengine
 cp -rf dist/* /var/lib/grafana/plugins/tdengine
 ```
 
-## Configure Grafana
+### Configure Grafana
 
 Add following lines to `/etc/grafana/grafana.ini`.
 
@@ -89,99 +225,116 @@ Add following lines to `/etc/grafana/grafana.ini`.
 allow_loading_unsigned_plugins = tdengine-datasource
 ```
 
-## Start Grafana Service
+### Start Grafana Service
 
-```sh
+```bash
 systemctl enable grafana-server
 systemctl start grafana-server
 ```
 
-## Login to Grafana
+### Login to Grafana
 
 Open the default grafana url: `http://localhost:3000` in your web browser.
 The default username/password is bot `admin`.
 Grafana would ask you to change the password after first login.
 
-## Add TDengine Data Source
+### Add TDengine Data Source
 
 Point to **Configurations** -> **Data Sources** menu and then **Add data source** button.
 
-![add data source button](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/howto-add-datasource-button.png)
+![add data source button](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/howto-add-datasource-button.png)
 
 Search and choose **TDengine**.
-![add data source](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/howto-add-datasource-tdengine.png)
+![add data source](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/howto-add-datasource-tdengine.png)
 
 Configure TDengine data source.
 
-![data source configuration](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/howto-add-datasource.png)
+![data source configuration](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/howto-add-datasource.png)
 
 Save and test it, it should say 'TDengine Data source is working'.
 
-![data source test](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/howto-add-datasource-test.png)
+![data source test](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/howto-add-datasource-test.png)
 
-## Import TDengine Dashboard
+### Import TDengine Dashboard
 
 Point to **+** / **Create** - **import** (or `/dashboard/import` url).
 
-![import dashboard and config](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/import_dashboard.png)
+![import dashboard and config](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/import_dashboard.png)
 
-Click on **Upload .JSON file** menu, point to your
-`dashboards/tdengine-dashboard.json` file in `grafanaplugin` directory(downloaded with git previously) and load it.
+Use the dashboard id `15167` via grafana.com.
 
-![import dashboard](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/howto-import-dashboard.png)
-
-Change the options if you need, and **Import** it.
-
-![import options](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/howto-dashboard-import-options.png)
-
-Or use the dashboard id `15167` via grafna.com.
-
-![import via grafana.com](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/dashboard/import-via-grafana-dot-com.png)
+![import via grafana.com](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/import-dashboard-15167.png)
 
 Then it's all done.
 
 The full page view for TDengine will like below.
 
-![display](TDinsight-full.png)
+![display](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/TDinsight-full.png)
 
-## The Dashboard Details
+## TDinsight Dashboard Details
+
+The TDinsight dashboard aims to provide TDengine cluster resources usage and status of [dnodes, mdodes, vnodes](https://www.taosdata.com/cn/documentation/architecture#cluster), or databases. There're several partitions of metrics.
 
 ### Cluster Status
 
-Include cluster current infomation and status (left-to-right).
+![tdinsight-mnodes-overview](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/TDinsight-1-cluster-status.png)
+
+Include cluster current infomation and status (left-right, top-down).
 
 - **First EP**: First EP in current TDengine cluster.
 - **Version**: Server version of MNode.
-- **Master Uptime**: time that the current master mnode elected.
+- **Master Uptime**: Time that the current master mnode elected.
 - **Expire Time** - Expire time for enterprise version.
-- **Used Measuring Points Used** - Used measuring points for enterprise version.
+- **Used Measuring Points** - Used measuring points for enterprise version.
 - **Databases** - The total number of databases.
-- **Variables**: generated by `show variables` command and displayed as Table view.
-- **Version**: TDengine version.
-- **DNodes/MNodes/VGroups/VNodes**: total number for each kind kind of resources.
-- **DNodes/MNodes/VGroups/VNodes Alive**: alive number for each kind of resources.
+- **Connections** - The connections number in current time.
+- **DNodes/MNodes/VGroups/VNodes**: Total and alive number for each kind of resources.
 - **DNodes/MNodes/VGroups/VNodes Alive Percent**: alive number / total number for each kind of resources, with alert rule enabled, by default it will be triggered when the resource is not 100% alive.
-- **Connections**: number count from connections.
-- **Number of Databases**: number count from `show databases` results.
-- **Total Number of Tables**: sum of table count of all databases.
+- **Messuring Points Used**: Used measuring points for enterprise version with alert enabled.
+- **Grants Expire Time**: Expire time for enterprise version with alert enabled.
+- **Error Rate**: The total error rate for the cluster with alert enabled.
+- **Variables**: generated by `show variables` command and displayed as Table view.
 
 ### DNodes Status
 
+![tdinsight-mnodes-overview](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/TDinsight-2-dnodes.png)
+
 - **DNodes Status**: Simple table view for `show dnodes`.
-- **Offline Reasons**: offline reasons pie chart if any dnode status is offline.
-- **DNode Uptime**: DNode uptime for current `fqdn`.
-- **DNodes Number**: dnodes number changes time-serie.
+- **DNodes Lifetime**: The time elapsed from dnode created.
+- **DNodes Number**: DNodes number changes time-series graph.
+- **Offline Reasons**: Offline reasons pie chart if any dnode status is offline.
 
 ### MNodes Overview
 
-1. `MNodes Status`: Simple table view for `show mnodes`.
-2. `MNodes Number`: like `DNodes Number`, but for mnode.
+![tdinsight-mnodes-overview](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/TDinsight-3-mnodes.png
 
-### DNode Usage for each `fqdn`
+1. **MNodes Status**: Simple table view for `show mnodes`.
+2. **MNodes Number**: like `DNodes Number`, but for mnodes.
 
-DNode resources details for specific node with grafana query type variable `$fqdn` (from `select tbname from log.dn`).
+### Requests
 
-Consist with:
+![tdinsight-requests](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/TDinsight-4-requests.png)
+
+1. **Requests (Inserts)**: Interts requests batches and couts with success rate time-series data.
+2. **Requests Rate(Inserts per Second)**: Insert count per second rate.
+3. **Requests (Selects)**: Select requests count and rate.
+4. **Requests (HTTP)**: HTTP requests count and rate.
+
+### Database for each `$database`
+
+![tdinsight-database](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/TDinsight-5-database.png)
+
+1. **STables**: Number of stables.
+2. **Total Tables**: Number of all tables.
+3. **Sub Tables**: Number of tables that is sub table of a stable.
+4. **Tables**: Tables changes time-series data.
+5. **Tables Number Foreach VGroups**: Tables number for each vgroups.
+
+### DNode Usage for each `$fqdn`
+
+![dnode-usage](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/TDinsight-6-dnode-usage.png)
+
+DNode resources details for specific node with grafana query type variable `$fqdn` (from `select tbname from log.dn`), including:
 
 - Current memory usage, cpu usage, band speed, io read and write rate, disk used, etc.
 - Max resources usage in last hour or some time.
@@ -192,13 +345,32 @@ Consist with:
 - Requests count per minute.
 - IO rate (read/write), with comparison to that in last hour.
 
+Here's the metrics list:
+
+1. **Uptime**: Elapsed time from dnode created.
+2. **Has MNodes?**: If the dnodes has mnode.
+3. **CPU Cores**: Number of CPU cores.
+4. **VNodes Number**: VNodes number of the current dnode.
+5. **VNodes Masters**: The number of vnodes that are in master role.
+6. **Current CPU Usage of taosd**: CPU usage of taosd process.
+7. **Current Memory Usage of taosd**: Memory usage of taosd process.
+8. **Disk Used**: Total disk usage percent of taosd data directory.
+9. **CPU Usage**: Process and system CPU usage.
+10. **RAM Usage**: RAM used metrics time-series view.
+11. **Disk Used**: Disk used for each level.
+12. **Disk Increasing Rate per Minute**: Disk increasing rate per minute.
+13. **Disk IO**: Process read/write bytes time-series data and view.
+14. **Net IO**: Total in/out bits for all networks except lo.
+
 ### Login History
+
+![login-history](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/TDinsight-7-login-history.png)
 
 Currently only report login count per minute.
 
-## An all-in-one docker example
+## An All-in-one Docker Example
 
-```sh
+```bash
 git clone --depth 1 https://github.com/taosdata/grafanaplugin.git
 cd grafanaplugin
 ```
@@ -212,9 +384,21 @@ services:
   grafana:
     image: grafana/grafana:7.5.10
     volumes:
-      - ./dist:/var/lib/grafana/plugins/tdengine
-      - ./grafana/:/etc/grafana/
+      - ./dist:/var/lib/grafana/plugins/tdengine-datasource
+      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
       - grafana-data:/var/lib/grafana
+    environment:
+      TDENGINE_API: ${TDENGINE_API}
+      TDENGINE_USER: ${TDENGINE_USER}
+      TDENGINE_PASS: ${TDENGINE_PASS}
+      SMS_ACCESS_KEY_ID: ${SMS_ACCESS_KEY_ID}
+      SMS_ACCESS_KEY_SECRET: ${SMS_ACCESS_KEY_SECRET}
+      SMS_SIGN_NAME: ${SMS_SIGN_NAME}
+      SMS_TEMPLATE_CODE: ${SMS_TEMPLATE_CODE}
+      SMS_TEMPLATE_PARAM: "${SMS_TEMPLATE_PARAM}"
+      SMS_PHONE_NUMBERS: $SMS_PHONE_NUMBERS
+      SMS_LISTEN_ADDR: ${SMS_LISTEN_ADDR}
     ports:
       - 3000:3000
 
@@ -222,13 +406,13 @@ volumes:
   grafana-data:
 ```
 
-Start Grafana with [docker-compose].
+Replace the environment variables in `docker-compose.yml` or set it `.env`, then start Grafana with [docker-compose].
 
-```sh
+```bash
 docker-compose up -d
 ```
 
-Now you can continue to import TDengine dashboard from login step.
+TDinsight is builtin, please go to <http://localhost:3000/d/tdinsight/> to see the dashboard.
 
 [Grafana]: https://grafana.com
 [TDengine]: https://www.taosdata.com

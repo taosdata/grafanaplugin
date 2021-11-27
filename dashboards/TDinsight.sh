@@ -5,7 +5,7 @@ verbose=0
 
 TDENGINE_PLUGIN_VERSION=${TDENGINE_PLUGIN_VERSION:-latest}
 # Grafana configurations
-GF_PROVISIONING_DIR=${GF_PROVISIONING_DIR:-/etc/grafana/provisioning/}
+GF_PROVISIONING_DIR=${GF_PROVISIONING_DIR:-/etc/grafana/provisioning}
 GF_PLUGINS_DIR=${GF_PLUGINS_DIR:-/var/lib/grafana/plugins}
 
 GF_PROVISIONING_DATASOURCES_DIR=${GF_PROVISIONING_DIR}/datasources
@@ -28,8 +28,11 @@ TDINSIGHT_DASHBOARD_UID=${TDINSIGHT_DASHBOARD_UID:-tdinsight}
 TDINSIGHT_DASHBOARD_TITLE=${TDINSIGHT_DASHBOARD_TITLE:-TDinsight}
 TDINSIGHT_DASHBOARD_EDITABLE=${TDINSIGHT_DASHBOARD_EDITABLE:-false}
 
+EXTERNAL_NOTIFIER=
+
 SMS_ENABLED=${SMS_ENABLED:-false}
-SMS_NOTIFIER_NAME=${SMS_NOTIFIER_NAME:-sms}
+SMS_NOTIFIER_NAME=${SMS_NOTIFIER_NAME:-TDinsight Builtin SMS}
+SMS_NOTIFIER_IS_DEFAULT=${SMS_NOTIFIER_IS_DEFAULT:-false}
 SMS_ACCESS_KEY_ID=${SMS_ACCESS_KEY_ID}
 SMS_ACCESS_KEY_SECRET=${SMS_ACCESS_KEY_SECRET}
 SMS_SIGN_NAME=${SMS_SIGN_NAME}
@@ -55,16 +58,19 @@ options=$(getopt -l "help,verbose,\
 plugin-version:,\
 grafana-provisioning-dir:,grafana-plugins-dir:,grafana-org-id:,\
 tdengine-ds-name:,tdengine-api:,tdengine-user:,tdengine-password:,\
-tdinsight-uid:,tdinsight-title:,tdinsight-editable,\
-sms-enabled,sms-notifier-name:,\
+tdinsight-uid:,tdinsight-title:,tdinsight-editable,external-notifier:,\
+sms-enabled,sms-notifier-name:,sms-notifier-uid:,sms-notifier-is-default,\
 sms-access-key-id:,sms-access-key-secret:,\
 sms-sign-name:,sms-template-code:,sms-template-param:,sms-phone-numbers:,\
 ms-listen-addr:" \
--o "hVv:P:G:O:n:a:u:p:i:t:esN:I:K:S:C:T:B:L:y" -a -- "$@")
+-o "hVv:P:G:O:n:a:u:p:i:t:eE:sN:U:DI:K:S:C:T:B:L:y" -a -- "$@")
 
 usage() { # Function: Print a help message.
   cat << EOF
-Usage: $0
+Usage:
+   $0
+   $0 -h|--help
+   $0 -n <ds-name> -a <api-url> -u <user> -p <password>
 
 Install and configure TDinsight dashboard in Grafana on ubuntu 18.04/20.04 system.
 
@@ -87,14 +93,18 @@ Install and configure TDinsight dashboard in Grafana on ubuntu 18.04/20.04 syste
 -t, --tdinsight-title <string>              Dashboard title. [default: $TDINSIGHT_DASHBOARD_TITLE]
 -e, --tdinsight-editable                    If the provisioning dashboard could be editable. [default: false]
 
+-E, --external-notifier <string>            Apply external notifier uid to TDinsight dashboard.
+
 Aliyun SMS as Notifier:
--s, --sms-enabled                           To enable tdengine-datasource plugin builtin aliyun sms webhook
--N, --sms-notifier-name <string>            [default: $SMS_NOTIFIER_NAME]
+-s, --sms-enabled                           To enable tdengine-datasource plugin builtin aliyun sms webhook.
+-N, --sms-notifier-name <string>            Provisioning notifier name.[default: $SMS_NOTIFIER_NAME]
+-U, --sms-notifier-uid <string>             Provisioning notifier uid, use lowercase notifier name by default.
+-D, --sms-notifier-is-default               Set notifier as default.
 -I, --sms-access-key-id <string>            Aliyun sms access key id
 -K, --sms-access-key-secret <string>        Aliyun sms access key secret
 -S, --sms-sign-name <string>                Sign name
 -C, --sms-template-code <string>            Template code
--T, --sms-template-param <string>           Template param, a escaped json string like "\\\\\"a\\\\\":\\\\\"hi\\\\\""
+-T, --sms-template-param <string>           Template params in json format like '{"alarm_level":"%s","time":"%s","name":"%s","content":"%s"}'
 -B, --sms-phone-numbers <string>            Comma-separated numbers list, eg "189xxxxxxxx,132xxxxxxxx"
 -L, --sms-listen-addr <string>              [default: $SMS_LISTEN_ADDR]
 EOF
@@ -156,12 +166,23 @@ while true; do
     shift
     export TDINSIGHT_DASHBOARD_EDITABLE=true
     ;;
+  -E | --external-notifier)
+    shift
+    export EXTERNAL_NOTIFIER=$1
+    ;;
   -s | --sms-enabled)
     export SMS_ENABLED=true
     ;;
   -N | --sms-notifier-name)
     shift
     export SMS_NOTIFIER_NAME=$1
+    ;;
+  -U | --sms-notifier-uid)
+    shift
+    export SMS_NOTIFIER_UID=$1
+    ;;
+  -D | --sms-notifier-is-default)
+    export SMS_NOTIFIER_IS_DEFAULT=true
     ;;
   -I | --sms-access-key-id)
     shift
@@ -199,6 +220,15 @@ while true; do
   shift
 done
 
+if [ "$SMS_NOTIFIER_UID" == "" ]; then
+  SMS_NOTIFIER_UID=$(echo $SMS_NOTIFIER_NAME | tr 'A-Z' 'a-z' | tr ' ' '-')
+fi
+
+if [ "$EXTERNAL_NOTIFIER" != "" ]; then
+  echo "TDinsight builtin sms is disabled by external notifier settings."
+  export SMS_ENABLED=false
+fi
+
 _assert_dir() {
   [ -d "$1" ] || mkdir -p "$1"
 }
@@ -217,7 +247,11 @@ get_dashboard_by_id() {
 }
 
 install_plugin() {
-  [ -s tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip ] || wget -c https://github.com/taosdata/grafanaplugin/releases/download/v$TDENGINE_PLUGIN_VERSION/tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip
+  # grafana-cli \
+  # --pluginUrl https://github.com/taosdata/grafanaplugin/releases/download/v$TDENGINE_PLUGIN_VERSION/tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip \
+  # plugins install tdengine-datasource
+  [ -s tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip ] || \
+    wget -c https://github.com/taosdata/grafanaplugin/releases/download/v$TDENGINE_PLUGIN_VERSION/tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip
   rm -rf /tmp/tdengine-datasource
   [ -d $GF_PLUGINS_DIR/tdengine-datasource ] && mv $GF_PLUGINS_DIR/tdengine-datasource /tmp/
   unzip -q tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip -d $GF_PLUGINS_DIR
@@ -228,7 +262,8 @@ allow_unsigned_plugin() {
   set +e
   grep -E "^allow_loading_unsigned_plugins.*tdengine-datasource" /etc/grafana/grafana.ini >/dev/null
   if [ "$?" != "0" ]; then
-    tee -a /etc/grafana/grafana.ini <<EOF
+    echo "* Configuring /etc/grafana/grafana.ini"
+    tee -a /etc/grafana/grafana.ini > /dev/null <<EOF
 [plugins]
 allow_loading_unsigned_plugins = tdengine-datasource
 EOF
@@ -238,6 +273,7 @@ EOF
 
 provisioning_datasource() {
   [ -d $GF_PROVISIONING_DATASOURCES_DIR ] || mkdir $GF_PROVISIONING_DATASOURCES_DIR
+  echo "* Provisioning $GF_PROVISIONING_DATASOURCES_DIR/$TDENGINE_DS_NAME.yaml"
   cat > $GF_PROVISIONING_DATASOURCES_DIR/$TDENGINE_DS_NAME.yaml <<EOF
 # config file version
 apiVersion: 1
@@ -273,7 +309,7 @@ datasources:
         accessKeySecret: $SMS_ACCESS_KEY_SECRET
         signName: $SMS_SIGN_NAME
         templateCode: $SMS_TEMPLATE_CODE
-        templateParam: "$SMS_TEMPLATE_PARAM"
+        templateParam: '$SMS_TEMPLATE_PARAM'
       phoneNumbersList: "$SMS_PHONE_NUMBERS"
       listenAddr: ${SMS_LISTEN_ADDR}
   version: 1
@@ -283,34 +319,45 @@ EOF
 }
 
 provisioning_notifiers() {
-  echo "Provisioning notifiers (notification channels)"
-  _assert_dir $GF_PROVISIONING_NOTIFIERS_DIR
-
-  cat > $GF_PROVISIONING_NOTIFIERS_DIR/${SMS_NOTIFIER_NAME}.yaml <<EOF
+  if [ "$SMS_ENABLED" == "true" ]; then
+    _assert_dir $GF_PROVISIONING_NOTIFIERS_DIR
+    echo "* Provisioning $GF_PROVISIONING_NOTIFIERS_DIR/${SMS_NOTIFIER_UID}.yaml"
+    tee $GF_PROVISIONING_NOTIFIERS_DIR/${SMS_NOTIFIER_UID}.yaml > /dev/null <<EOF
 # config file version
 apiVersion: 1
 
 notifiers:
   - name: ${SMS_NOTIFIER_NAME}
     type: webhook
-    uid: ${SMS_NOTIFIER_NAME}
-    is_default: true
+    uid: ${SMS_NOTIFIER_UID}
+    is_default: ${SMS_NOTIFIER_IS_DEFAULT}
     settings:
       url: http://${SMS_LISTEN_ADDR}/sms
       httpMethod: POST
 EOF
+  fi
 }
 
 provisioning_dashboard() {
-  echo "Provisioning dashboard $TDINSIGHT_DASHBOARD_ID"
+  echo "* Provisioning dashboard $TDINSIGHT_DASHBOARD_ID as $TDINSIGHT_DASHBOARD_UID"
   # 1. Download latest dashboard json file
   get_dashboard_by_id $TDINSIGHT_DASHBOARD_ID $TDINSIGHT_DASHBOARD_UID.json
 
+  if [ "$EXTERNAL_NOTIFIER" != "" ]; then
+    sed 's/tdinsight-builtin-sms/'$EXTERNAL_NOTIFIER'/' -i $TDINSIGHT_DASHBOARD_UID.json
+  else
+    if [ "$SMS_ENABLED" == "true" ] && [ "$SMS_NOTIFIER_IS_DEFAULT" == "false" ]; then
+      sed 's/tdinsight-builtin-sms/'$SMS_NOTIFIER_UID'/' -i $TDINSIGHT_DASHBOARD_UID.json
+    else
+      sed -E 's/^.*uid.*tdinsight-builtin-sms.*$//' -i $TDINSIGHT_DASHBOARD_UID.json
+    fi
+  fi
   # 2. Replace with TDengine data source name
   sed 's#"datasource": "${DS_TDENGINE}"#"datasource": "'$TDENGINE_DS_NAME'"#g' -i $TDINSIGHT_DASHBOARD_UID.json
-  sed 's/tdinsight/'$TDINSIGHT_DASHBOARD_UID'/' -i $TDINSIGHT_DASHBOARD_UID.json
-  sed 's/TDinsight/'$TDINSIGHT_DASHBOARD_TITLE'/' -i $TDINSIGHT_DASHBOARD_UID.json
+  sed 's/"tdinsight"/"'$TDINSIGHT_DASHBOARD_UID'"/' -i $TDINSIGHT_DASHBOARD_UID.json
+  sed 's/"TDinsight"/"'"$TDINSIGHT_DASHBOARD_TITLE"'"/' -i $TDINSIGHT_DASHBOARD_UID.json
   sed 's/"gnetId": 15167/"gnetId": null/' -i $TDINSIGHT_DASHBOARD_UID.json
+
 
   # 4. Add dashboard config
   cat > $TDINSIGHT_DASHBOARD_UID.yaml <<EOF
@@ -325,8 +372,9 @@ EOF
 
   # 3. Add this to provisioning directory
   [ -d $GF_PROVISIONING_DASHBOARDS_DIR ] || mkdir -p $GF_PROVISIONING_DASHBOARDS_DIR
+  echo "** Provisioning $GF_PROVISIONING_DASHBOARDS_DIR/$TDINSIGHT_DASHBOARD_UID.{json,yaml}"
   mv $TDINSIGHT_DASHBOARD_UID.{json,yaml} $GF_PROVISIONING_DASHBOARDS_DIR
-  echo "Provisioning dashboard $TDINSIGHT_DASHBOARD_ID done."
+  echo "** Provisioning done."
 }
 
 ####################################
@@ -347,9 +395,7 @@ allow_unsigned_plugin
 provisioning_datasource
 
 # Provisioning TDengine notification channels
-if [ "$SMS_ENABLED" == "true" ]; then
-  provisioning_notifiers
-fi
+provisioning_notifiers
 
 # Provisioning TDinsight dashboard
 provisioning_dashboard
