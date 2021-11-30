@@ -28,7 +28,7 @@ TDinsight 是使用 [TDengine] 原生监控数据库和 [Grafana] 对 TDengine �
 
 ## 系统要求
 
-要部署TDinsight，需要一个单节点的TDengine服务器或一个多节点的 [TDengine] 集群，以及一个[Grafana]服务器。此仪表盘需要 TDengine 2.3.3.0 及以上，并启用 `log` 数据库（`monitor = 1`），包括 `cluster_info` `dnodes_info` `vgroups_info` 表等新增的数据表库表。
+要部署TDinsight，需要一个单节点的TDengine服务器或一个多节点的 [TDengine] 集群，以及一个[Grafana]服务器。此仪表盘需要 TDengine 2.3.3.0 及以上，并启用 `log` 数据库（`monitor = 1`）。
 
 ## 安装 Grafana
 
@@ -39,7 +39,7 @@ TDinsight 是使用 [TDengine] 原生监控数据库和 [Grafana] 对 TDengine �
 对于 Debian 或 Ubuntu 操作系统，建议使用 Grafana 镜像仓库。使用如下命令从零开始安装：
 
 ```bash
-须藤 apt-get install -y apt-transport-https
+sudo apt-get install -y apt-transport-https
 sudo apt-get install -y software-properties-common wget
 wget -q -O - https://packages.grafana.com/gpg.key |\
   sudo apt-key add -
@@ -89,7 +89,7 @@ wget https://github.com/taosdata/grafanaplugin/releases/latest/download/TDinsigh
 chmod +x TDinsight.sh
 ```
 
-这个脚本会自动下载最新的[Grafana TDengine 数据源插件](https://github.com/taosdata/grafanaplugin/releases/latest) 和 [TDinsight 仪表盘](https://grafana.com/grafana/dashboards/15167) ，将命令行选项中的可配置参数转为 [Grafana Provisioning](https://grafana.com/docs/grafana/latest/administration/provisioning/) 配置文件，以进行自动化部署及更新等操作。使用该脚本提供的告警设置选项，你还可以获得内置的告警通知支持。
+这个脚本会自动下载最新的[Grafana TDengine 数据源插件](https://github.com/taosdata/grafanaplugin/releases/latest) 和 [TDinsight 仪表盘](https://grafana.com/grafana/dashboards/15167) ，将命令行选项中的可配置参数转为 [Grafana Provisioning](https://grafana.com/docs/grafana/latest/administration/provisioning/) 配置文件，以进行自动化部署及更新等操作。利用该脚本提供的告警设置选项，你还可以获得内置的阿里云短信告警通知支持。
 
 假设您在同一台主机上使用 TDengine 和 Grafana 的默认服务。运行 `./TDinsight.sh` 并打开 Grafana 浏览器窗口就可以看到 TDinsight 仪表盘了。
 
