@@ -5,6 +5,7 @@ Languages: _[English](https://github.com/taosdata/grafanaplugin/blob/master/dash
 - [系统要求](#系统要求)
 - [安装 Grafana](#安装-grafana)
   - [在 Debian 或 Ubuntu 上安装 Grafana](#在-debian-或-ubuntu-上安装-grafana)
+  - [在 CentOS/RHEL 上安装 Grafana](#在-centosrhel-上安装-grafana)
 - [自动部署 TDinsight](#自动部署-tdinsight)
 - [手动设置 TDinsight](#手动设置-tdinsight)
   - [安装TDengine数据源插件](#安装tdengine数据源插件)
@@ -46,7 +47,7 @@ echo "deb https://packages.grafana.com/oss/deb stable main" |\
   sudo tee -a /etc/apt/sources.list.d/grafana.list
 sudo apt-get update
 sudo apt-get install grafana
-``
+```
 
 ### 在 CentOS/RHEL 上安装 Grafana
 
@@ -187,7 +188,7 @@ sudo ./TDinsight.sh -a http://tdengine:6041 -u root1 -p pass5ord -E existing-not
 如果你想使用[阿里云短信](https://www.aliyun.com/product/sms)服务作为通知渠道，你应该使用`-s`标志启用并添加以下参数：
 
 - `-N`：Notification Channel 名，默认为`TDinsight Builtin SMS`。
-- `-U`：Channel uid，默认是 `name` 的小写，任何其他字符都替换为 “-”，对于默认的 `-N`，其 uid 为 `tdinsight-builtin-sms`。
+- `-U`：Channel uid，默认是 `name` 的小写，任何其他字符都替换为 - ，对于默认的 `-N`，其 uid 为 `tdinsight-builtin-sms`。
 - `-I`：阿里云短信访问密钥id。
 - `-K`：阿里云短信访问秘钥。
 - `-S`：阿里云短信签名。
