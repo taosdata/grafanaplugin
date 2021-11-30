@@ -1,5 +1,7 @@
 # TDinsight - A Zero-dependency Monitoring Solution For [TDengine] with [Grafana]
 
+Languages: _English_ _[简体中文 ](https://github.com/taosdata/grafanaplugin/blob/master/dashboards/TDinsight-CN.md)_
+
 - [Requirements](#requirements)
 - [Install Grafana](#install-grafana)
   - [Install Grafana on Debian or Ubuntu](#install-grafana-on-debian-or-ubuntu)
@@ -315,7 +317,7 @@ Include cluster current infomation and status (left-right, top-down).
 
 ![tdinsight-requests](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/TDinsight-4-requests.png)
 
-1. **Requests (Inserts)**: Interts requests batches and couts with success rate time-series data.
+1. **Requests (Inserts)**: Inserts requests batches and counts with success rate time-series data.
 2. **Requests Rate(Inserts per Second)**: Insert count per second rate.
 3. **Requests (Selects)**: Select requests count and rate.
 4. **Requests (HTTP)**: HTTP requests count and rate.
