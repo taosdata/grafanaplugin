@@ -87,7 +87,7 @@ sudo yum install \
 ```bash
 wget https://github.com/taosdata/grafanaplugin/releases/latest/download/TDinsight.sh
 chmod +x TDinsight.sh
-``
+```
 
 这个脚本会自动下载最新的[Grafana TDengine 数据源插件](https://github.com/taosdata/grafanaplugin/releases/latest) 和 [TDinsight 仪表盘](https://grafana.com/grafana/dashboards/15167) ，将命令行选项中的可配置参数转为 [Grafana Provisioning](https://grafana.com/docs/grafana/latest/administration/provisioning/) 配置文件，以进行自动化部署及更新等操作。使用该脚本提供的告警设置选项，你还可以获得内置的告警通知支持。
 
@@ -142,7 +142,7 @@ Aliyun SMS as Notifier:
 大多数命令行选项都可以通过环境变量获得同样的效果。
 
 | 短选项 | 长选项                     | 环境变量                     | 说明                                                                        |
-| ------ | -------------------------- | ---------------------------- | --------------------------------------------------------------------------- |  |
+| ------ | -------------------------- | ---------------------------- | --------------------------------------------------------------------------- |
 | -v     | --plugin-version           | TDENGINE_PLUGIN_VERSION      | TDengine 数据源插件版本，默认使用最新版。                                   |
 | -P     | --grafana-provisioning-dir | GF_PROVISIONING_DIR          | Grafana 配置目录，默认为`/etc/grafana/provisioning/`                        |
 | -G     | --grafana-plugins-dir      | GF_PLUGINS_DIR               | Grafana 插件目录，默认为`/var/lib/grafana/plugins`。                        |
