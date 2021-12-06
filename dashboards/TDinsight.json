@@ -5094,7 +5094,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select  avg(io_read_disk) as io_read_taosd, avg(io_write_disk) as io_write_taosd from log.dnodes_info where dnode_ep = '$fqdn' and ts >= now-1h and ts < now  interval($interval) fill(null)",
+              "sql": "select  avg(io_read_disk) as io_read_taosd, avg(io_write_disk) as io_write_taosd from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)",
               "target": "select metric",
               "type": "timeserie"
             }
@@ -5214,7 +5214,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select  avg(net_in) as net_in, avg(net_out) as net_out from log.dnodes_info where dnode_ep = '$fqdn' and ts >= now-1h and ts < now  interval($interval) fill(null)",
+              "sql": "select  avg(net_in) as net_in, avg(net_out) as net_out from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)",
               "target": "select metric",
               "type": "timeserie"
             }
