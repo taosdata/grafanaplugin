@@ -4587,9 +4587,9 @@
             }
           ],
           "thresholds": [],
-          "timeFrom": "1h",
+          "timeFrom": null,
           "timeRegions": [],
-          "timeShift": "30s",
+          "timeShift": null,
           "title": "CPU Usage",
           "tooltip": {
             "shared": true,
@@ -4701,9 +4701,9 @@
             }
           ],
           "thresholds": [],
-          "timeFrom": "1h",
+          "timeFrom": null,
           "timeRegions": [],
-          "timeShift": "30s",
+          "timeShift": null,
           "title": "RAM Usage",
           "tooltip": {
             "shared": true,
@@ -5100,9 +5100,9 @@
             }
           ],
           "thresholds": [],
-          "timeFrom": "1h",
+          "timeFrom": null,
           "timeRegions": [],
-          "timeShift": "30s",
+          "timeShift": null,
           "title": "Disk IO",
           "tooltip": {
             "shared": true,
@@ -5220,9 +5220,9 @@
             }
           ],
           "thresholds": [],
-          "timeFrom": "1h",
+          "timeFrom": null,
           "timeRegions": [],
-          "timeShift": "30s",
+          "timeShift": null,
           "title": "Net",
           "tooltip": {
             "shared": true,
@@ -5610,5 +5610,5 @@
   "timezone": "",
   "title": "TDinsight",
   "uid": "tdinsight",
-  "version": 25
+  "version": 26
 }
