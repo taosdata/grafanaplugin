@@ -2904,7 +2904,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "C",
-              "sql": "select sum(req_insert_success)  / sum(req_insert) as success_rate from log.dnodes_info where ts >= $from and ts <= $to interval($interval) fill(null) group by dnode_ep"
+              "sql": "select sum(req_insert_success) / sum(req_insert) as success_rate from log.dnodes_info where ts >= $from and ts <= $to interval($interval) fill(null) group by dnode_ep"
             },
             {
               "colNameFormatStr": "",
@@ -2913,7 +2913,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "D",
-              "sql": "select sum(req_insert_success)  / sum(req_insert) as success_rate from log.dnodes_info where ts >= $from and ts <= $to interval($interval) fill(null)"
+              "sql": "select sum(req_insert_success) / sum(req_insert) as success_rate from log.dnodes_info where ts >= $from and ts <= $to interval($interval) fill(null)"
             }
           ],
           "thresholds": [],
@@ -3022,7 +3022,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "B",
-              "sql": "select avg(insert_rate) as cluster_insert_rate, avg(batch_rate) as cluster_batch_rate from (select sum(req_insert_rate) as insert_rate,  sum(req_insert_batch_rate) as batch_rate from log.dnodes_info where ts >= $from and ts <= $to interval(1s)) where ts >= $from and ts <= $to interval($interval) fill(null)"
+              "sql": "select avg(insert_rate) as cluster_insert_rate, avg(batch_rate) as cluster_batch_rate from (select sum(req_insert_rate) as insert_rate, sum(req_insert_batch_rate) as batch_rate from log.dnodes_info where ts >= $from and ts <= $to interval(1s)) where ts >= $from and ts <= $to interval($interval) fill(null)"
             }
           ],
           "thresholds": [],
@@ -3896,7 +3896,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last(uptime) as uptime  from log.dnodes_info where dnode_ep = '$fqdn'",
+              "sql": "select last(uptime) as uptime from log.dnodes_info where dnode_ep = '$fqdn'",
               "target": "select metric",
               "timeshift": {
                 "period": null
@@ -3998,7 +3998,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last(has_mnode) as has_mnode  from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval)",
+              "sql": "select last(has_mnode) as has_mnode from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval)",
               "target": "select metric",
               "timeshift": {
                 "period": null
@@ -4094,7 +4094,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last(cpu_cores) as uptime  from log.dnodes_info where dnode_ep = '$fqdn' interval ($interval)",
+              "sql": "select last(cpu_cores) as uptime from log.dnodes_info where dnode_ep = '$fqdn' interval ($interval)",
               "target": "select metric",
               "timeshift": {
                 "period": null
@@ -4168,7 +4168,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last(vnodes_num) as vnodes_num  from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)",
+              "sql": "select last(vnodes_num) as vnodes_num from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)",
               "target": "select metric",
               "timeshift": {
                 "period": null
@@ -4242,7 +4242,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last(masters) as masters  from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)",
+              "sql": "select last(masters) as masters from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)",
               "target": "select metric",
               "timeshift": {
                 "period": null
@@ -4348,14 +4348,14 @@
               "formatType": "Table",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select  last(cpu_engine)  from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to",
+              "sql": "select last(cpu_engine) from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to",
               "target": "select metric",
               "type": "timeserie"
             }
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Current CPU  Usage of taosd",
+          "title": "Current CPU Usage of taosd",
           "type": "gauge"
         },
         {
@@ -4417,7 +4417,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select  last(mem_engine) as taosd, last(mem_total) as total  from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to",
+              "sql": "select last(mem_engine) as taosd, last(mem_total) as total from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to",
               "target": "select metric",
               "type": "timeserie"
             }
@@ -4499,7 +4499,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last(disk_used) as used, last(disk_total) as total,  last(disk_used) / last(disk_total) as percent  from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to",
+              "sql": "select last(disk_used) as used, last(disk_total) as total, last(disk_used) / last(disk_total) as percent from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to",
               "target": "select metric",
               "timeshift": {
                 "period": null
@@ -4581,15 +4581,15 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select  avg(cpu_engine) as taosd, avg(cpu_system) as system from log.dnodes_info where dnode_ep='$fqdn' and ts >= $from and ts <= $to  interval($interval) fill(null)",
+              "sql": "select avg(cpu_engine) as taosd, avg(cpu_system) as system from log.dnodes_info where dnode_ep='$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)",
               "target": "select metric",
               "type": "timeserie"
             }
           ],
           "thresholds": [],
-          "timeFrom": "1h",
+          "timeFrom": null,
           "timeRegions": [],
-          "timeShift": "30s",
+          "timeShift": null,
           "title": "CPU Usage",
           "tooltip": {
             "shared": true,
@@ -4695,15 +4695,15 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select avg(mem_engine) as taosd, avg(mem_system) as system, avg(mem_total) as total from log.dnodes_info where dnode_ep='$fqdn' and ts >= $from and ts <= $to  interval($interval) fill(null)",
+              "sql": "select avg(mem_engine) as taosd, avg(mem_system) as system, avg(mem_total) as total from log.dnodes_info where dnode_ep='$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)",
               "target": "select metric",
               "type": "timeserie"
             }
           ],
           "thresholds": [],
-          "timeFrom": "1h",
+          "timeFrom": null,
           "timeRegions": [],
-          "timeShift": "30s",
+          "timeShift": null,
           "title": "RAM Usage",
           "tooltip": {
             "shared": true,
@@ -4827,7 +4827,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "D",
-              "sql": "select avg(datadir_l0_used)/avg(datadir_l0_total) as level0_percent, avg(datadir_l1_used)/avg(datadir_l1_total) as level1_percent , avg(datadir_l2_used)/avg(datadir_l2_total) as level2_percent  from log.disks_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)",
+              "sql": "select avg(datadir_l0_used)/avg(datadir_l0_total) as level0_percent, avg(datadir_l1_used)/avg(datadir_l1_total) as level1_percent , avg(datadir_l2_used)/avg(datadir_l2_total) as level2_percent from log.disks_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)",
               "target": "select metric",
               "timeshift": {
                 "period": null
@@ -5094,15 +5094,15 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select  avg(io_read_disk) as io_read_taosd, avg(io_write_disk) as io_write_taosd from log.dnodes_info where dnode_ep = '$fqdn' and ts >= now-1h and ts < now  interval($interval) fill(null)",
+              "sql": "select avg(io_read_disk) as io_read_taosd, avg(io_write_disk) as io_write_taosd from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)",
               "target": "select metric",
               "type": "timeserie"
             }
           ],
           "thresholds": [],
-          "timeFrom": "1h",
+          "timeFrom": null,
           "timeRegions": [],
-          "timeShift": "30s",
+          "timeShift": null,
           "title": "Disk IO",
           "tooltip": {
             "shared": true,
@@ -5214,15 +5214,15 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select  avg(net_in) as net_in, avg(net_out) as net_out from log.dnodes_info where dnode_ep = '$fqdn' and ts >= now-1h and ts < now  interval($interval) fill(null)",
+              "sql": "select avg(net_in) as net_in, avg(net_out) as net_out from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)",
               "target": "select metric",
               "type": "timeserie"
             }
           ],
           "thresholds": [],
-          "timeFrom": "1h",
+          "timeFrom": null,
           "timeRegions": [],
-          "timeShift": "30s",
+          "timeShift": null,
           "title": "Net",
           "tooltip": {
             "shared": true,
@@ -5610,5 +5610,5 @@
   "timezone": "",
   "title": "TDinsight",
   "uid": "tdinsight",
-  "version": 24
+  "version": 26
 }
