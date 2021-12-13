@@ -5422,7 +5422,7 @@
         "allValue": null,
         "current": {},
         "datasource": "${DS_TDENGINE}",
-        "definition": "select distinct(database_name) from log.vgroups_info where ts >= $from and ts <= $to",
+        "definition": "show databases",
         "description": null,
         "error": null,
         "hide": 0,
@@ -5431,13 +5431,12 @@
         "multi": true,
         "name": "database",
         "options": [],
-        "query": "select distinct(database_name) from log.vgroups_info where ts >= $from and ts <= $to",
+        "query": "show databases",
         "refresh": 1,
-        "regex": "",
+        "regex": "/([^,]+),/",
         "skipUrlSync": false,
         "sort": 1,
         "tagValuesQuery": "",
-        "tags": [],
         "tagsQuery": "",
         "type": "query",
         "useTags": false
@@ -5610,5 +5609,5 @@
   "timezone": "",
   "title": "TDinsight",
   "uid": "tdinsight",
-  "version": 26
+  "version": 27
 }
