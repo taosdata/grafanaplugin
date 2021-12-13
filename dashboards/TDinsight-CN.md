@@ -368,7 +368,7 @@ TDinsight 仪表盘旨在提供TDengine 相关资源使用情况[dnodes, mdodes,
 ```bash
 git clone --depth 1 https://github.com/taosdata/grafanaplugin.git
 cd grafanaplugin
-``
+```
 
 根据需要在 `docker-compose.yml` 文件中修改：
 
