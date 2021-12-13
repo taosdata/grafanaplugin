@@ -246,32 +246,32 @@ sudo systemctl enable grafana-server
 
 指向 **Configurations** -> **Data Sources** 菜单，然后点击 **Add data source** 按钮。
 
-![添加数据源按钮](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/howto-add-datasource-button.png)
+![添加数据源按钮](../assets/howto-add-datasource-button.png)
 
 搜索并选择**TDengine**。
-![添加数据源](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/howto-add-datasource-tdengine.png)
+![添加数据源](../assets/howto-add-datasource-tdengine.png)
 
 配置TDengine数据源。
 
-![数据源配置](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/howto-add-datasource.png)
+![数据源配置](../assets/howto-add-datasource.png)
 
 保存并测试，正常情况下会报告 'TDengine Data source is working'。
 
-![数据源测试](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/howto-add-datasource-test.png)
+![数据源测试](../assets/howto-add-datasource-test.png)
 
 ### 导入仪表盘
 
 指向 **+** / **Create** - **import**（或 `/dashboard/import` url）。
 
-![导入仪表盘和配置](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/import_dashboard.png)
+![导入仪表盘和配置](../assets/import_dashboard.png)
 
 在 **Import via grafana.com** 位置键入仪表盘 ID `15167` 并 **Load**。
 
-![通过 grafana.com 导入](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/import-dashboard-15167.png)
+![通过 grafana.com 导入](../assets/import-dashboard-15167.png)
 
 导入完成后，TDinsight 的完整页面视图如下所示。
 
-![显示](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/TDinsight-full.png)
+![显示](../assets/TDinsight-full.png)
 
 ## TDinsight 仪表盘详细信息
 
@@ -281,7 +281,7 @@ TDinsight 仪表盘旨在提供TDengine 相关资源使用情况[dnodes, mdodes,
 
 ### 集群状态
 
-![tdinsight-mnodes-overview](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/TDinsight-1-cluster-status.png)
+![tdinsight-mnodes-overview](../assets/TDinsight-1-cluster-status.png)
 
 这部分包括集群当前信息和状态，告警信息也在此处（从左到右，从上到下）。
 
@@ -301,7 +301,7 @@ TDinsight 仪表盘旨在提供TDengine 相关资源使用情况[dnodes, mdodes,
 
 ### DNodes 状态
 
-![tdinsight-mnodes-overview](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/TDinsight-2-dnodes.png)
+![tdinsight-mnodes-overview](../assets/TDinsight-2-dnodes.png)
 
 - **DNodes Status**：`show dnodes` 的简单表格视图。
 - **DNodes Lifetime**：从创建 dnode 开始经过的时间。
@@ -310,14 +310,14 @@ TDinsight 仪表盘旨在提供TDengine 相关资源使用情况[dnodes, mdodes,
 
 ### MNode 概述
 
-![tdinsight-mnodes-overview](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/TDinsight-3-mnodes.png)
+![tdinsight-mnodes-overview](../assets/TDinsight-3-mnodes.png)
 
 1. **MNodes Status**：`show mnodes` 的简单表格视图。
 2. **MNodes Number**：类似于`DNodes Number`，MNodes 数量变化。
 
 ### 请求
 
-![tdinsight-requests](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/TDinsight-4-requests.png)
+![tdinsight-requests](../assets/TDinsight-4-requests.png)
 
 1. **Requests (Inserts)**：插入请求数、插入记录数随时间变化情况。
 2. **Requests Rate(Inserts per Second)**：平均每秒插入次数。
@@ -326,7 +326,7 @@ TDinsight 仪表盘旨在提供TDengine 相关资源使用情况[dnodes, mdodes,
 
 ### 数据库
 
-![tdinsight-database](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/TDinsight-5-database.png)
+![tdinsight-database](../assets/TDinsight-5-database.png)
 
 数据库使用情况，对变量 `$database` 的每个值即每个数据库进行重复多行展示。
 
@@ -338,7 +338,7 @@ TDinsight 仪表盘旨在提供TDengine 相关资源使用情况[dnodes, mdodes,
 
 ### DNode 资源使用情况
 
-![dnode-usage](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/TDinsight-6-dnode-usage.png)
+![dnode-usage](../assets/TDinsight-6-dnode-usage.png)
 
 数据节点资源使用情况展示，对变量 `$fqdn` 即每个数据节点进行重复多行展示。包括：
 
@@ -359,7 +359,7 @@ TDinsight 仪表盘旨在提供TDengine 相关资源使用情况[dnodes, mdodes,
 
 ### 登录历史
 
-![登录历史](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/TDinsight-7-login-history.png)
+![登录历史](../assets/TDinsight-7-login-history.png)
 
 目前只报告每分钟登录次数。
 
@@ -368,7 +368,7 @@ TDinsight 仪表盘旨在提供TDengine 相关资源使用情况[dnodes, mdodes,
 ```bash
 git clone --depth 1 https://github.com/taosdata/grafanaplugin.git
 cd grafanaplugin
-``
+```
 
 根据需要在 `docker-compose.yml` 文件中修改：
 
