@@ -1,28 +1,6 @@
-# TDinsight - 基于[Grafana] 的 [TDengine]零依赖监控解决方案
+# TDinsight - 基于[Grafana]的[TDengine]零依赖监控解决方案
 
-Languages: _[English](https://github.com/taosdata/grafanaplugin/blob/master/dashboards/TDinsight.md)_ _简体中文_
-
-- [系统要求](#系统要求)
-- [安装 Grafana](#安装-grafana)
-  - [在 Debian 或 Ubuntu 上安装 Grafana](#在-debian-或-ubuntu-上安装-grafana)
-  - [在 CentOS/RHEL 上安装 Grafana](#在-centosrhel-上安装-grafana)
-- [自动部署 TDinsight](#自动部署-tdinsight)
-- [手动设置 TDinsight](#手动设置-tdinsight)
-  - [安装TDengine数据源插件](#安装tdengine数据源插件)
-  - [配置 Grafana](#配置-grafana)
-  - [启动 Grafana 服务](#启动-grafana-服务)
-  - [登录到 Grafana](#登录到-grafana)
-  - [添加TDengine数据源](#添加tdengine数据源)
-  - [导入仪表盘](#导入仪表盘)
-- [TDinsight 仪表盘详细信息](#tdinsight-仪表盘详细信息)
-  - [集群状态](#集群状态)
-  - [DNodes 状态](#dnodes-状态)
-  - [MNode 概述](#mnode-概述)
-  - [请求](#请求)
-  - [数据库](#数据库)
-  - [DNode 资源使用情况](#dnode-资源使用情况)
-  - [登录历史](#登录历史)
-- [整合的Docker示例](#整合的docker示例)
+语言: _[English](https://www.taosdata.com/en/documentation/tools/insight)_ _简体中文_
 
 TDinsight 是使用 [TDengine] 原生监控数据库和 [Grafana] 对 TDengine 进行监控的解决方案。
 
@@ -249,6 +227,7 @@ sudo systemctl enable grafana-server
 ![添加数据源按钮](../assets/howto-add-datasource-button.png)
 
 搜索并选择**TDengine**。
+
 ![添加数据源](../assets/howto-add-datasource-tdengine.png)
 
 配置TDengine数据源。
