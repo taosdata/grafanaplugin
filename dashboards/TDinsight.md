@@ -1,28 +1,6 @@
 # TDinsight - A Zero-dependency Monitoring Solution For [TDengine] with [Grafana]
 
-Languages: _English_ _[简体中文 ](https://github.com/taosdata/grafanaplugin/blob/master/dashboards/TDinsight-CN.md)_
-
-- [Requirements](#requirements)
-- [Install Grafana](#install-grafana)
-  - [Install Grafana on Debian or Ubuntu](#install-grafana-on-debian-or-ubuntu)
-  - [Install Grafana on CentOS/RHEL](#install-grafana-on-centosrhel)
-- [Setup TDinsight Automatically](#setup-tdinsight-automatically)
-- [Setup TDinsight Manually](#setup-tdinsight-manually)
-  - [Install TDengine Data Source Plugin](#install-tdengine-data-source-plugin)
-  - [Configure Grafana](#configure-grafana)
-  - [Start Grafana Service](#start-grafana-service)
-  - [Login to Grafana](#login-to-grafana)
-  - [Add TDengine Data Source](#add-tdengine-data-source)
-  - [Import TDengine Dashboard](#import-tdengine-dashboard)
-- [TDinsight Dashboard Details](#tdinsight-dashboard-details)
-  - [Cluster Status](#cluster-status)
-  - [DNodes Status](#dnodes-status)
-  - [MNodes Overview](#mnodes-overview)
-  - [Requests](#requests)
-  - [Database for each `$database`](#database-for-each-database)
-  - [DNode Usage for each `$fqdn`](#dnode-usage-for-each-fqdn)
-  - [Login History](#login-history)
-- [An All-in-one Docker Example](#an-all-in-one-docker-example)
+Languages: _English_ _[简体中文](https://www.taosdata.com/cn/documentation/tools/insight)_
 
 ## Requirements
 
@@ -247,6 +225,7 @@ Point to **Configurations** -> **Data Sources** menu and then **Add data source*
 ![add data source button](../assets/howto-add-datasource-button.png)
 
 Search and choose **TDengine**.
+
 ![add data source](../assets/howto-add-datasource-tdengine.png)
 
 Configure TDengine data source.
