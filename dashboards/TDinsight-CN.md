@@ -2,6 +2,30 @@
 
 语言: _[English](https://www.taosdata.com/en/documentation/tools/insight)_ _简体中文_
 
+- [系统要求](#系统要求)
+- [安装 Grafana](#安装-grafana)
+  - [在 Debian 或 Ubuntu 上安装 Grafana](#在-debian-或-ubuntu-上安装-grafana)
+  - [在 CentOS / RHEL 上安装 Grafana](#在-centos--rhel-上安装-grafana)
+- [自动部署 TDinsight](#自动部署-tdinsight)
+- [手动设置 TDinsight](#手动设置-tdinsight)
+  - [安装TDengine数据源插件](#安装tdengine数据源插件)
+  - [配置 Grafana](#配置-grafana)
+  - [启动 Grafana 服务](#启动-grafana-服务)
+  - [登录到 Grafana](#登录到-grafana)
+  - [添加TDengine数据源](#添加tdengine数据源)
+  - [导入仪表盘](#导入仪表盘)
+- [TDinsight 仪表盘详细信息](#tdinsight-仪表盘详细信息)
+  - [集群状态](#集群状态)
+  - [DNodes 状态](#dnodes-状态)
+  - [MNode 概述](#mnode-概述)
+  - [请求](#请求)
+  - [数据库](#数据库)
+  - [DNode 资源使用情况](#dnode-资源使用情况)
+  - [登录历史](#登录历史)
+- [升级](#升级)
+- [卸载](#卸载)
+- [整合的Docker示例](#整合的docker示例)
+
 TDinsight 是使用 [TDengine] 原生监控数据库和 [Grafana] 对 TDengine 进行监控的解决方案。
 
 ## 系统要求
@@ -27,7 +51,7 @@ sudo apt-get update
 sudo apt-get install grafana
 ```
 
-### 在 CentOS/RHEL 上安装 Grafana
+### 在 CentOS / RHEL 上安装 Grafana
 
 您可以从官方 YUM 镜像仓库安装。
 
@@ -72,7 +96,6 @@ chmod +x TDinsight.sh
 假设您在同一台主机上使用 TDengine 和 Grafana 的默认服务。运行 `./TDinsight.sh` 并打开 Grafana 浏览器窗口就可以看到 TDinsight 仪表盘了。
 
 下面是 TDinsight.sh 的用法说明：
-
 
 ```bash
 Usage:
@@ -341,6 +364,22 @@ TDinsight 仪表盘旨在提供TDengine 相关资源使用情况[dnodes, mdodes,
 ![登录历史](../assets/TDinsight-7-login-history.png)
 
 目前只报告每分钟登录次数。
+
+## 升级
+
+通过 `TDinsight.sh` 脚本安装的 TDinsight，可以通过重新运行该脚本就可以升级到最新的Grafana插件和TDinsight Dashboard。
+
+手动安装的情况下，可按照上述步骤自行安装新的Grafana插件和Dashboard。
+
+## 卸载
+
+通过 `TDinsight.sh` 脚本安装的 TDinsight，可以使用命令行 `TDinsight.sh -R` 清理相关资源。
+
+手动安装时，要完全卸载TDinsight，需要清理以下内容：
+
+1. Grafana 中的 TDinsight Dashboard。
+2. Grafana 中的 Data Source 数据源。
+3. 从插件安装目录删除 `tdengine-datasource` 插件。
 
 ## 整合的Docker示例
 
