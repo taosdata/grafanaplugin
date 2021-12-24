@@ -349,6 +349,22 @@ Here's the metrics list:
 
 Currently only report login count per minute.
 
+## Upgrade
+
+Re install with `TDinsight.sh` will upgrade Grafana plugin and TDinsight dashboard.
+
+In other cases, users should install new TDengine data source plugin, then remove and install new TDinsight dashboard.
+
+## Uninstall
+
+With `TDinsight.sh`, just run `TDinsight.sh -R` to cleanup all installed components.
+
+Follow the next steps to cleanup if you have installed TDinsight manually.
+
+1. Remove TDinsight dashboard in Grafana webpage.
+2. Remove TDengine from Grafana data sources.
+3. Remove the `tdengine-datasource` plugin from Grafana plugins directory.
+
 ## An All-in-one Docker Example
 
 ```bash

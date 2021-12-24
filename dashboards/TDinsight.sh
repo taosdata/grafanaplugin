@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -e
 verbose=0
+REMOVE=0
 [ -f .env ] && source .env
 
 TDENGINE_PLUGIN_VERSION=${TDENGINE_PLUGIN_VERSION:-latest}
@@ -54,7 +55,7 @@ TDINSIGHT_NOTIFICATION_DINGING_WEBHOOK=
 TDINSIGHT_NOTIFICATION_ALERT_MANAGER_ENABLED=false
 TDINSIGHT_NOTIFICATION_ALERT_MANAGER_URL=
 
-options=$(getopt -l "help,verbose,\
+options=$(getopt -l "help,verbose,remove,\
 plugin-version:,\
 grafana-provisioning-dir:,grafana-plugins-dir:,grafana-org-id:,\
 tdengine-ds-name:,tdengine-api:,tdengine-user:,tdengine-password:,\
@@ -63,7 +64,7 @@ sms-enabled,sms-notifier-name:,sms-notifier-uid:,sms-notifier-is-default,\
 sms-access-key-id:,sms-access-key-secret:,\
 sms-sign-name:,sms-template-code:,sms-template-param:,sms-phone-numbers:,\
 ms-listen-addr:" \
--o "hVv:P:G:O:n:a:u:p:i:t:eE:sN:U:DI:K:S:C:T:B:L:y" -a -- "$@")
+-o "hVRv:P:G:O:n:a:u:p:i:t:eE:sN:U:DI:K:S:C:T:B:L:y" -a -- "$@")
 
 usage() { # Function: Print a help message.
   cat << EOF
@@ -74,11 +75,13 @@ Usage:
 
 Install and configure TDinsight dashboard in Grafana on ubuntu 18.04/20.04 system.
 
--h, -help,          --help                  Display help
+-h, --help                                  Display help
 
--V, -verbose,       --verbose               Run script in verbose mode. Will print out each step of execution.
+-V, --verbose                               Run script in verbose mode. Will print out each step of execution.
+-R, --remove                                Remove TDinsight dashboard, TDengine data source and the plugin.
 
 -v, --plugin-version <version>              TDengine datasource plugin version, [default: $TDENGINE_PLUGIN_VERSION]
+
 
 -P, --grafana-provisioning-dir <dir>        Grafana provisioning directory, [default: $GF_PROVISIONING_DIR]
 -G, --grafana-plugins-dir <dir>             Grafana plugins directory, [default: $GF_PLUGINS_DIR]
@@ -121,6 +124,9 @@ while true; do
   -V | --verbose)
     export verbose=1
     set -xv # Set xtrace and verbose mode.
+    ;;
+  -R | --remove)
+    export REMOVE=1
     ;;
   -v | --plugin-version)
     shift
@@ -271,6 +277,13 @@ EOF
   set -e
 }
 
+remove_plugin() {
+  set +e
+  sed -i "s/tdengine-datasource//g" /etc/grafana/grafana.ini
+  rm -rf $GF_PLUGINS_DIR/tdengine-datasource
+  set -e
+}
+
 provisioning_datasource() {
   [ -d $GF_PROVISIONING_DATASOURCES_DIR ] || mkdir $GF_PROVISIONING_DATASOURCES_DIR
   echo "* Provisioning $GF_PROVISIONING_DATASOURCES_DIR/$TDENGINE_DS_NAME.yaml"
@@ -318,6 +331,10 @@ datasources:
 EOF
 }
 
+remove_datasource() {
+  rm $GF_PROVISIONING_DATASOURCES_DIR/$TDENGINE_DS_NAME.yaml
+}
+
 provisioning_notifiers() {
   if [ "$SMS_ENABLED" == "true" ]; then
     _assert_dir $GF_PROVISIONING_NOTIFIERS_DIR
@@ -336,6 +353,12 @@ notifiers:
       httpMethod: POST
 EOF
   fi
+}
+
+remove_notifier() {
+  set +e
+  [ -e "$GF_PROVISIONING_NOTIFIERS_DIR/${SMS_NOTIFIER_UID}.yaml" ] && rm "$GF_PROVISIONING_NOTIFIERS_DIR/${SMS_NOTIFIER_UID}.yaml"
+  set -e
 }
 
 provisioning_dashboard() {
@@ -376,6 +399,20 @@ EOF
   mv $TDINSIGHT_DASHBOARD_UID.{json,yaml} $GF_PROVISIONING_DASHBOARDS_DIR
   echo "** Provisioning done."
 }
+
+remove_dashboard() {
+  set +e
+  rm $GF_PROVISIONING_DASHBOARDS_DIR/$TDINSIGHT_DASHBOARD_UID.{json,yaml}
+  set -e
+}
+
+if [ "$REMOVE" == "1" ]; then
+  remove_dashboard
+  remove_notifier
+  remove_datasource
+  remove_plugin
+  exit 0
+fi
 
 ####################################
 # main scripts
