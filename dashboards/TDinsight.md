@@ -353,7 +353,7 @@ Currently only report login count per minute.
 
 Reinstall with `TDinsight.sh` will upgrade Grafana plugin and TDinsight dashboard.
 
-In other cases, users should install new TDengine data source plugin, then remove and install new TDinsight dashboard.
+In other cases, users should install the new TDengine data source plugin first, then remove and install the new TDinsight dashboard.
 
 ## Uninstall
 
