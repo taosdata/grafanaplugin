@@ -357,9 +357,9 @@ In other cases, users should install the new TDengine data source plugin first, 
 
 ## Uninstall
 
-With `TDinsight.sh`, just run `TDinsight.sh -R` to cleanup all installed components.
+With `TDinsight.sh`, just run `TDinsight.sh -R` to clean up all installed components.
 
-Follow the next steps to cleanup if you have installed TDinsight manually.
+Follow the next steps to clean up if you have installed TDinsight manually.
 
 1. Remove TDinsight dashboard in Grafana webpage.
 2. Remove TDengine from Grafana data sources.
