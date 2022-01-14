@@ -30,6 +30,6 @@
   },
 
   "dependencies": {
-    "grafanaDependency": ">=6.2.0"
+    "grafanaDependency": ">=5.2.4"
   }
 }

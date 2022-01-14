@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 export class GenericDatasourceConfigCtrl {
     /** @ngInject */
     constructor($scope, $injector, $q) {
@@ -6,10 +8,13 @@ export class GenericDatasourceConfigCtrl {
         this.backendSrv = $injector.get("backendSrv");
         this.pluginId = this.current.type;
         this.smsShowFlag = false;
-        if (!this.current.jsonData.user) {
+        if (!_.has(this.current, "jsonData")) {
+          this.current.jsonData = {};
+        }
+        if (!_.has(this.current.jsonData, "user")) {
             this.current.jsonData.user = "root";
         }
-        if (!this.current.jsonData.password) {
+        if (!_.has(this.current.jsonData, "password")) {
             this.current.jsonData.password = "taosdata";
         }
     }
