@@ -2,6 +2,7 @@ version: "3.7"
 
 services:
   grafana:
+    #image: grafana/grafana:5.2.4
     image: grafana/grafana:7.5.10
     volumes:
       - ./dist:/var/lib/grafana/plugins/tdengine-datasource

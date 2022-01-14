@@ -25,11 +25,11 @@
       { "name": "GitHub", "url": "https://github.com/taosdata/grafanaplugin" },
       { "name": "AGPL-3.0", "url": "https://github.com/taosdata/grafanaplugin/blob/master/LICENSE" }
     ],
-    "version": "3.1.3",
+    "version": "3.1.4",
     "updated": "2021-11-26"
   },
 
   "dependencies": {
-    "grafanaDependency": ">=6.2.0"
+    "grafanaDependency": ">=5.2.4"
   }
 }
