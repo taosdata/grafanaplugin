@@ -65,6 +65,7 @@ export class GenericDatasource {
         console.log("catch error while setting sms config", err);
         if (err.status == 404) {
           console.log("Aliyun SMS config is not supported in current Grafana version");
+          return { status: "success", message: "SMS Config Invalid", title: "Unsupported" };
         }
         return { status: "error", message: "SMS Config Success Failed", title: "Failed" };
       });
