@@ -43,7 +43,7 @@
   },
   "dependencies": {
     "@grafana/toolkit": "^7.3.5",
-    "lodash": "^4.17.19"
+    "lodash": "^4.17.21"
   },
   "homepage": "https://github.com/taosdata/grafanaplugin"
 }
