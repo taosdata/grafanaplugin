@@ -2,6 +2,8 @@
 
 Languages: _English_ _[简体中文](https://www.taosdata.com/cn/documentation/tools/insight)_
 
+TDinsight use TDengine builtin database(`log`) and [Grafana] to monitor TDengine itself.
+
 ## Requirements
 
 At least, you must have a single-node [TDengine] server or a [TDengine] cluster with multiple nodes, and a server host for [Grafana]. This dashboard requires new log database(since v2.3.3.0), including `cluster_info` `dnodes_info` `vgroups_info` tables and so on.
