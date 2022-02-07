@@ -192,12 +192,18 @@ sudo ./TDengine.sh -n TDengine-Env1 -a http://another:6041 -u root -p taosdata -
 
 ### 安装TDengine数据源插件
 
-从 GitHub 安装 TDengine 数据源插件。
+从 GitHub 安装 TDengine 最新版数据源插件。
 
 ```bash
-git clone --depth 1 https://github.com/taosdata/grafanaplugin.git
-mkdir -p /var/lib/grafana/plugins/tdengine
-cp -rf dist/* /var/lib/grafana/plugins/tdengine
+get_latest_release() {
+  curl --silent "https://api.github.com/repos/taosdata/grafanaplugin/releases/latest" |
+    grep '"tag_name":' |
+    sed -E 's/.*"v([^"]+)".*/\1/'
+}
+TDENGINE_PLUGIN_VERSION=$(get_latest_release)
+sudo grafana-cli \
+  --pluginUrl https://github.com/taosdata/grafanaplugin/releases/download/v$TDENGINE_PLUGIN_VERSION/tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip \
+  plugins install tdengine-datasource
 ```
 
 ### 配置 Grafana
