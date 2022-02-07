@@ -192,12 +192,18 @@ For special use cases, `-O` would set the organization id when you use Grafana C
 
 ### Install TDengine Data Source Plugin
 
-Install the TDengine data-source plugin from GitHub.
+Install the latest version of TDengine data-source plugin from GitHub.
 
 ```bash
-git clone --depth 1 https://github.com/taosdata/grafanaplugin.git
-mkdir -p /var/lib/grafana/plugins/tdengine
-cp -rf dist/* /var/lib/grafana/plugins/tdengine
+get_latest_release() {
+  curl --silent "https://api.github.com/repos/taosdata/grafanaplugin/releases/latest" |
+    grep '"tag_name":' |
+    sed -E 's/.*"v([^"]+)".*/\1/'
+}
+TDENGINE_PLUGIN_VERSION=$(get_latest_release)
+sudo grafana-cli \
+  --pluginUrl https://github.com/taosdata/grafanaplugin/releases/download/v$TDENGINE_PLUGIN_VERSION/tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip \
+  plugins install tdengine-datasource
 ```
 
 ### Configure Grafana
@@ -291,7 +297,7 @@ Include cluster current infomation and status (left-right, top-down).
 
 ### MNodes Overview
 
-![tdinsight-mnodes-overview](../assets/TDinsight-3-mnodes.png
+![tdinsight-mnodes-overview](../assets/TDinsight-3-mnodes.png)
 
 1. **MNodes Status**: Simple table view for `show mnodes`.
 2. **MNodes Number**: like `DNodes Number`, but for mnodes.
