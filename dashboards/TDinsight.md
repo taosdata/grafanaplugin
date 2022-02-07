@@ -2,7 +2,9 @@
 
 Languages: _English_ _[简体中文](https://www.taosdata.com/cn/documentation/tools/insight)_
 
-TDinsight use TDengine builtin database(`log`) and [Grafana] to monitor TDengine itself.
+TDinsight uses TDengine's built-in database(`log`) and [Grafana] to monitor TDengine itself.
+
+After TDengine starts, it will automatically create a database named `log`, and regularly record the server's CPU, memory, disk usage, network bandwidth, number of requests, disk reading/writing throughput, slow queries, and other information for monitoring purposes. It also records important system operations(such as logging in, creating or deleting databases, etc.) and errors. TDinsight will visualize the TDengine cluster status, nodes information, insertion and query requests, resource usage, etc., with [Grafana] and [TDengine data source plugin for Grafana](https://github.com/taosdata/grafanaplugin/releases). It also supports abnormal status alarms of nodes including vnode, dnode, and mnode, which provides convenience for the operators to monitor the running status of TDengine clusters in real-time. In this document, we'll guide users to install the Grafana server, and then install the TDengine data source plugin and deploy the TDinsight visualization dashboard through the `TDinsight.sh` script automatically or manually.
 
 ## Requirements
 
