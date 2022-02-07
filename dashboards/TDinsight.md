@@ -192,7 +192,7 @@ For special use cases, `-O` would set the organization id when you use Grafana C
 
 ### Install TDengine Data Source Plugin
 
-Install the TDengine data-source plugin from GitHub.
+Install the latest version of TDengine data-source plugin from GitHub.
 
 ```bash
 get_latest_release() {
@@ -297,7 +297,7 @@ Include cluster current infomation and status (left-right, top-down).
 
 ### MNodes Overview
 
-![tdinsight-mnodes-overview](../assets/TDinsight-3-mnodes.png
+![tdinsight-mnodes-overview](../assets/TDinsight-3-mnodes.png)
 
 1. **MNodes Status**: Simple table view for `show mnodes`.
 2. **MNodes Number**: like `DNodes Number`, but for mnodes.
