@@ -419,7 +419,7 @@ Replace the environment variables in `docker-compose.yml` or set it `.env`, then
 docker-compose up -d
 ```
 
-TDinsight is builtin, please go to <http://localhost:3000/d/tdinsight/> to see the dashboard.
+TDinsight is builtin, please go to http://localhost:3000/d/tdinsight/ to see the dashboard.
 
 [Grafana]: https://grafana.com
 [TDengine]: https://www.taosdata.com
