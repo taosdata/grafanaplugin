@@ -408,7 +408,7 @@ volumes:
 docker-compose up -d
 ```
 
-TDinsight 已经通过 Provisioning 部署完毕，请到 <http://localhost:3000/d/tdinsight/> 查看仪表盘。
+TDinsight 已经通过 Provisioning 部署完毕，请到 http://localhost:3000/d/tdinsight/ 查看仪表盘。
 
 [Grafana]: https://grafana.com
 [TDengine]: https://www.taosdata.com
