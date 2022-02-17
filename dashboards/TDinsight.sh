@@ -253,18 +253,26 @@ get_dashboard_by_id() {
 }
 
 install_plugin() {
-  # grafana-cli \
-  # --pluginUrl https://github.com/taosdata/grafanaplugin/releases/download/v$TDENGINE_PLUGIN_VERSION/tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip \
-  # plugins install tdengine-datasource
+  which grafana-cli > /dev/null || (echo "Grafana has not been installed in the server, install it first."; exit 1)
   [ -s tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip ] || \
     wget -c https://github.com/taosdata/grafanaplugin/releases/download/v$TDENGINE_PLUGIN_VERSION/tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip
-  rm -rf /tmp/tdengine-datasource
-  [ -d $GF_PLUGINS_DIR/tdengine-datasource ] && mv $GF_PLUGINS_DIR/tdengine-datasource /tmp/
-  unzip -q tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip -d $GF_PLUGINS_DIR
-  chmod +x $GF_PLUGINS_DIR/tdengine-datasource/tdengine-datasource*
+  # open a simple server for local url
+  port=$(shuf -i 2000-65000 -n 1)
+  python3 -m http.server $port &
+  pid=$!
+  sleep 1
+  set +e
+  grafana-cli --pluginUrl http://localhost:$port/tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip plugins install tdengine-datasource
+  status=$?
+  kill $pid
+  set -e
+  if [ "$status" != "0" ]; then
+    exit $status
+  fi
 }
 
 allow_unsigned_plugin() {
+  [ -f /etc/grafana/grafana.ini ] || (echo "seems Grafana is not installed, please check"; exit 1)
   set +e
   grep -E "^allow_loading_unsigned_plugins.*tdengine-datasource" /etc/grafana/grafana.ini >/dev/null
   if [ "$?" != "0" ]; then
