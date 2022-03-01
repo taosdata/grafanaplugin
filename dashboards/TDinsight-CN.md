@@ -305,10 +305,9 @@ TDinsight 仪表盘旨在提供TDengine 相关资源使用情况[dnodes, mdodes,
 
 ![tdinsight-requests](../assets/TDinsight-4-requests.png)
 
-1. **Requests (Inserts)**：插入请求数、插入记录数随时间变化情况。
-2. **Requests Rate(Inserts per Second)**：平均每秒插入次数。
-3. **Requests (Selects)**：查询请求数及变化率（count of second）。
-4. **Requests (HTTP)**：HTTP 请求数和请求速率（count of second）。
+1. **Requests Rate(Inserts per Second)**：平均每秒插入次数。
+2. **Requests (Selects)**：查询请求数及变化率（count of second）。
+3. **Requests (HTTP)**：HTTP 请求数和请求速率（count of second）。
 
 ### 数据库
 

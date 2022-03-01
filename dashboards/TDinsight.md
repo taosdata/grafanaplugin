@@ -306,10 +306,9 @@ Include cluster current infomation and status (left-right, top-down).
 
 ![tdinsight-requests](../assets/TDinsight-4-requests.png)
 
-1. **Requests (Inserts)**: Inserts requests batches and counts with success rate time-series data.
-2. **Requests Rate(Inserts per Second)**: Insert count per second rate.
-3. **Requests (Selects)**: Select requests count and rate.
-4. **Requests (HTTP)**: HTTP requests count and rate.
+1. **Requests Rate(Inserts per Second)**: Insert count per second rate.
+2. **Requests (Selects)**: Select requests count and rate.
+3. **Requests (HTTP)**: HTTP requests count and rate.
 
 ### Database for each `$database`
 
