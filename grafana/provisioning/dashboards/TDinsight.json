@@ -5250,8 +5250,8 @@
                 "lineWidth": 1,
                 "fillOpacity": 0,
                 "gradientMode": "none",
-                "spanNulls": false,
-                "showPoints": "auto",
+                "spanNulls": true,
+                "showPoints": "never",
                 "pointSize": 5,
                 "stacking": {
                   "mode": "none",
