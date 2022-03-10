@@ -358,6 +358,21 @@ Here's the metrics list:
 
 Currently only report login count per minute.
 
+### TaosAdapter
+
+![taosadapter](../assets/TDinsight-8-taosadaper.png)
+
+Includes taosAdapter http request statistics and status information
+
+Here's the metrics list:
+
+1. **http_request**: include total http requests, faild http requests and http requests in flight.
+2. **top 3 request endpoint**: top 3 total requests number and the corresponding endpoint. 
+3. **Memory Used**: taosAdapter memory usage
+4. **latency_quantile(ms)**: Quantiles for each stages (1, 2, 5, 9, 99)
+5. **top 3 failed request endpoint**: top 3 request failure number and the corresponding endpoint.
+6. **CPU Used**: taosAdapter cpu usage
+
 ## Upgrade
 
 Reinstall with `TDinsight.sh` will upgrade Grafana plugin and TDinsight dashboard.

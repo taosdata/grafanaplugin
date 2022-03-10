@@ -348,6 +348,18 @@ TDinsight 仪表盘旨在提供TDengine 相关资源使用情况[dnodes, mdodes,
 
 目前只报告每分钟登录次数。
 
+### TaosAdapter
+![taosadapter](../assets/TDinsight-8-taosadaper.png)
+
+包含 taosAdapter 请求统计和状态详情。包括：
+
+1. **http_request**: 包含总请求数，请求失败数以及正在处理的请求数
+2. **top 3 request endpoint**: 按终端分组，请求排名前三的数据
+3. **Memory Used**: taosAdapter 内存使用情况
+4. **latency_quantile(ms)**: (1, 2, 5, 9, 99)阶段的分位数
+5. **top 3 failed request endpoint**: 按终端分组，请求失败排名前三的数据
+6. **CPU Used**: taosAdapter cpu 使用情况
+
 ## 升级
 
 通过 `TDinsight.sh` 脚本安装的 TDinsight，可以通过重新运行该脚本就可以升级到最新的Grafana插件和TDinsight Dashboard。

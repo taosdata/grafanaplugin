@@ -5253,6 +5253,537 @@
       ],
       "title": "Login History",
       "type": "row"
+    },
+    {
+      "id": 64,
+      "collapsed": true,
+      "datasource": "${DS_TDENGINE}",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 43
+      },
+      "panels": [
+        {
+          "id": 1,
+          "gridPos": {
+            "h": 5,
+            "w": 12,
+            "x": 0,
+            "y": 0
+          },
+          "type": "timeseries",
+          "title": "http_request",
+          "description": "http请求统计",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "drawStyle": "line",
+                "lineInterpolation": "linear",
+                "barAlignment": 0,
+                "lineWidth": 1,
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "spanNulls": false,
+                "showPoints": "auto",
+                "pointSize": 5,
+                "stacking": {
+                  "mode": "none",
+                  "group": "A"
+                },
+                "axisPlacement": "auto",
+                "axisLabel": "",
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "hideFrom": {
+                  "tooltip": false,
+                  "viz": false,
+                  "legend": false
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "color": {
+                "mode": "palette-classic"
+              },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "mappings": []
+            },
+            "overrides": []
+          },
+          "options": {
+            "tooltip": {
+              "mode": "single"
+            },
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom",
+              "calcs": []
+            }
+          },
+          "targets": [
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select avg(count) as request_total from log.taosadapter_restful_http_total where ts >= $from and ts <= $to interval($interval)"
+            },
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
+              "formatType": "Time series",
+              "hide": false,
+              "queryType": "SQL",
+              "refId": "B",
+              "sql": "select avg(count) as request_fail from log.taosadapter_restful_http_fail where  ts >= $from and ts <= $to interval($interval)"
+            },
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
+              "formatType": "Time series",
+              "hide": false,
+              "queryType": "SQL",
+              "refId": "C",
+              "sql": "select avg(count) as request_in_flight from log.taosadapter_restful_http_request_in_flight where ts >= $from and ts <= $to interval($interval)"
+            }
+          ],
+          "datasource": null
+        },
+        {
+          "id": 7,
+          "gridPos": {
+            "h": 5,
+            "w": 8,
+            "x": 12,
+            "y": 0
+          },
+          "type": "table",
+          "title": "top 3 request endpoint",
+          "transformations": [
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "field": "id"
+                  }
+                ]
+              }
+            }
+          ],
+          "pluginVersion": "7.5.10",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "align": "center",
+                "displayMode": "auto",
+                "filterable": false
+              },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "mappings": [],
+              "color": {
+                "mode": "thresholds"
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "showHeader": true,
+            "footer": {
+              "show": false,
+              "reducer": [
+                "sum"
+              ],
+              "fields": ""
+            },
+            "sortBy": []
+          },
+          "targets": [
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "formatType": "Table",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select * from (select avg(count) as count from log.taosadapter_restful_http_total where  ts >= $from and ts <= $to group by endpoint) order by count desc limit 3",
+              "target": "select metric",
+              "type": "timeserie",
+              "datasource": "${DS_TDENGINE}"
+            }
+          ],
+          "datasource": null
+        },
+        {
+          "id": 3,
+          "gridPos": {
+            "h": 5,
+            "w": 4,
+            "x": 20,
+            "y": 0
+          },
+          "type": "gauge",
+          "title": "Memory Used",
+          "transformations": [],
+          "datasource": "${DS_TDENGINE}",
+          "pluginVersion": "7.5.10",
+          "fieldConfig": {
+            "defaults": {
+              "thresholds": {
+                "mode": "percentage",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  },
+                  {
+                    "color": "dark-red",
+                    "value": 90
+                  }
+                ]
+              },
+              "mappings": [],
+              "color": {
+                "mode": "thresholds"
+              },
+              "max": 1,
+              "min": 0,
+              "unit": "percentunit"
+            },
+            "overrides": []
+          },
+          "options": {
+            "reduceOptions": {
+              "values": false,
+              "calcs": [
+                "last"
+              ],
+              "fields": "/^mem_percent$/"
+            },
+            "orientation": "auto",
+            "showThresholdLabels": true,
+            "showThresholdMarkers": true,
+            "text": {}
+          },
+          "targets": [
+            {
+              "alias": "disk_used",
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select last(mem_percent) as mem_percent from log.taosadapter_system where ts >= $from and ts <= $to",
+              "target": "select metric",
+              "timeshift": {},
+              "type": "timeserie"
+            }
+          ],
+          "description": ""
+        },
+        {
+          "id": 4,
+          "gridPos": {
+            "h": 5,
+            "w": 12,
+            "x": 0,
+            "y": 5
+          },
+          "type": "graph",
+          "title": "latency_quantile(ms)",
+          "thresholds": [],
+          "pluginVersion": "7.5.10",
+          "description": "延迟分位数",
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "aliasColors": {},
+          "dashLength": 10,
+          "fill": 1,
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "pointradius": 2,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "targets": [
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
+              "formatType": "Time series",
+              "hide": false,
+              "queryType": "SQL",
+              "refId": "B",
+              "sql": "select avg(quantile_1) as quantile_1 from log.taosadapter_restful_http_request_latency where ts >= $from and ts <= $to and request_uri != '/rest/ws' interval($interval)"
+            },
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
+              "formatType": "Time series",
+              "hide": false,
+              "queryType": "SQL",
+              "refId": "C",
+              "sql": "select avg(quantile_2) as quantile_2 from log.taosadapter_restful_http_request_latency where ts >= $from and ts <= $to and request_uri != '/rest/ws' interval($interval)"
+            },
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
+              "formatType": "Time series",
+              "hide": false,
+              "queryType": "SQL",
+              "refId": "D",
+              "sql": "select avg(quantile_5) as quantile_5 from log.taosadapter_restful_http_request_latency where ts >= $from and ts <= $to and request_uri != '/rest/ws' interval($interval)"
+            },
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
+              "formatType": "Time series",
+              "hide": false,
+              "queryType": "SQL",
+              "refId": "E",
+              "sql": "select avg(quantile_9) as quantile_9 from log.taosadapter_restful_http_request_latency where ts >= $from and ts <= $to and request_uri != '/rest/ws' interval($interval)"
+            },
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
+              "formatType": "Time series",
+              "hide": false,
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select avg(quantile_99) as quantile_99 from log.taosadapter_restful_http_request_latency where ts >= $from and ts <= $to and request_uri != '/rest/ws' interval($interval)"
+            }
+          ],
+          "timeRegions": [],
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "xaxis": {
+            "mode": "time",
+            "show": true,
+            "values": [],
+            "name": null,
+            "buckets": null
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false
+          },
+          "bars": false,
+          "dashes": false,
+          "fillGradient": 0,
+          "hiddenSeries": false,
+          "percentage": false,
+          "points": false,
+          "stack": false,
+          "steppedLine": false,
+          "timeFrom": null,
+          "timeShift": null,
+          "datasource": null
+        },
+        {
+          "id": 5,
+          "gridPos": {
+            "h": 5,
+            "w": 8,
+            "x": 12,
+            "y": 5
+          },
+          "type": "table",
+          "title": "top 3 failed request endpoint",
+          "transformations": [
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "field": "id"
+                  }
+                ]
+              }
+            }
+          ],
+          "pluginVersion": "7.5.10",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "align": "center",
+                "displayMode": "auto",
+                "filterable": false
+              },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "mappings": [],
+              "color": {
+                "mode": "thresholds"
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "showHeader": true,
+            "footer": {
+              "show": false,
+              "reducer": [
+                "sum"
+              ],
+              "fields": ""
+            },
+            "sortBy": []
+          },
+          "targets": [
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "formatType": "Table",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select * from (select avg(count) as count from log.taosadapter_restful_http_fail where ts >= $from and ts <= $to group by endpoint) order by count desc limit 3",
+              "target": "select metric",
+              "type": "timeserie",
+              "datasource": "${DS_TDENGINE}"
+            }
+          ],
+          "datasource": null
+        },
+        {
+          "id": 6,
+          "gridPos": {
+            "h": 5,
+            "w": 4,
+            "x": 20,
+            "y": 5
+          },
+          "type": "gauge",
+          "title": "CPU Used",
+          "transformations": [],
+          "pluginVersion": "7.5.10",
+          "description": "CPU 使用率",
+          "fieldConfig": {
+            "defaults": {
+              "thresholds": {
+                "mode": "percentage",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "#EAB839",
+                    "value": 60
+                  },
+                  {
+                    "color": "red",
+                    "value": 90
+                  }
+                ]
+              },
+              "mappings": [],
+              "color": {
+                "mode": "thresholds"
+              },
+              "max": 1,
+              "min": 0,
+              "unit": "percentunit"
+            },
+            "overrides": []
+          },
+          "options": {
+            "reduceOptions": {
+              "values": false,
+              "calcs": [
+                "last"
+              ],
+              "fields": "/^cpu_percent$/"
+            },
+            "orientation": "auto",
+            "showThresholdLabels": true,
+            "showThresholdMarkers": true,
+            "text": {}
+          },
+          "targets": [
+            {
+              "alias": "disk_used",
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select last(cpu_percent) as cpu_percent from log.taosadapter_system where ts >= $from and ts <= $to",
+              "target": "select metric",
+              "timeshift": {},
+              "type": "timeserie",
+              "datasource": "${DS_TDENGINE}"
+            }
+          ],
+          "datasource": null
+        }
+      ],
+      "title": "TaosAdapter",
+      "type": "row"
     }
   ],
   "refresh": "30s",
