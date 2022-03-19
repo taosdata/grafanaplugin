@@ -5501,7 +5501,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last(mem_percent) as mem_percent from log.taosadapter_system where ts >= $from and ts <= $to",
+              "sql": "select last(mem_percent)/100 as mem_percent from log.taosadapter_system where ts >= $from and ts <= $to",
               "target": "select metric",
               "timeshift": {},
               "type": "timeserie"
@@ -5772,7 +5772,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last(cpu_percent) as cpu_percent from log.taosadapter_system where ts >= $from and ts <= $to",
+              "sql": "select last(cpu_percent)/100 as cpu_percent from log.taosadapter_system where ts >= $from and ts <= $to",
               "target": "select metric",
               "timeshift": {},
               "type": "timeserie",
