@@ -5439,9 +5439,9 @@
               "color": {
                 "mode": "thresholds"
               },
-              "max": 1,
+              "max": 100,
               "min": 0,
-              "unit": "percentunit"
+              "unit": "percent"
             },
             "overrides": []
           },
@@ -5710,9 +5710,9 @@
               "color": {
                 "mode": "thresholds"
               },
-              "max": 1,
+              "max": 100,
               "min": 0,
-              "unit": "percentunit"
+              "unit": "percent"
             },
             "overrides": []
           },
