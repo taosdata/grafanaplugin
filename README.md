@@ -1,6 +1,7 @@
 # Grafana Plugin for TDengine
 
 - [Installation](#installation)
+  - [Installation on macOS](#installation-on-macos)
 - [Usage](#usage)
   - [Add Data Source](#add-data-source)
   - [Import Dashboard](#import-dashboard)
@@ -109,6 +110,65 @@ For SysVInit based system (CentOS 6 etc.):
 ```sh
 sudo service grafana-server restart
 ```
+
+### Installation on macOS
+
+The best way to install Grafana is to use [Homebrew](https://brew.sh/) with which to install the most recent released version of Grafana using Homebrew package.
+
+Open a terminal and enter:
+
+```sh
+brew update
+brew install grafana
+```
+
+Next, add TDengine’s plugin with the following command:
+
+```sh
+sudo grafana-cli --pluginsDir /opt/homebrew/var/lib/grafana/plugins --pluginUrl\
+  https://github.com/taosdata/grafanaplugin/releases/download/v3.1.3/tdengine-datasource-3.1.3.zip \
+  plugins install tdengine-datasource
+```
+
+The `pluginsDir` option `/opt/homebrew/var/lib/grafana/plugins` should be override if the directory not exist(that will depend on how you install the Grafana service).
+
+You can check the plugins directory to see if tdengine-datasource plugin installed:
+
+```sh
+$ ls /opt/homebrew/var/lib/grafana/plugins
+tdengine-datasource
+```
+
+TDengine plugin has not been signed, so you should change the grafana configuration to allow unsigned plugin.
+
+Since you are using macOS with Homebrew, Grafana instances installed using Homebrew require you to edit the `grafana.ini` file directly. The way to change the `grafana.ini` file is to run the following command:
+
+```sh
+open -a textedit /opt/homebrew/etc/grafana/grafana.ini
+```
+
+After opening the file, search for
+
+```ini
+;allow_loading_unsigned_plugins
+```
+
+Delete the semicolon to uncomment it, and change the line to:
+
+```ini
+allow_loading_unsigned_plugins = tdengine-datasource
+```
+
+After then, go ahead and save the configuration file.
+
+(Re-)start Grafana service:
+
+```sh
+# brew services start grafana
+brew services restart grafana
+```
+
+Point to plugins pages to search and check TDengine plugin is in the list.
 
 ## Usage
 
