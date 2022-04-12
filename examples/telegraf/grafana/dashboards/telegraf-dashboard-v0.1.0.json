@@ -92,7 +92,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "SELECT last(uptime) FROM $database.system WHERE host = '$server' and _ts >= now - 1h and _ts <= now interval($interval) fill(null)",
+          "sql": "SELECT last(uptime) FROM $database.system WHERE host = '$server' and ts >= now - 1h and ts <= now interval($interval) fill(null)",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -162,7 +162,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "SELECT last(load5) FROM $database.system WHERE host = '$server' and _ts >= $from and _ts <= $to interval($interval) fill(null)",
+          "sql": "SELECT last(load5) FROM $database.system WHERE host = '$server' and ts >= $from and ts <= $to interval($interval) fill(null)",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -232,7 +232,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "SELECT last(zombies) FROM $database.processes WHERE host = '$server' and _ts >= $from and _ts <= $to interval($interval) fill(PREV)",
+          "sql": "SELECT last(zombies) FROM $database.processes WHERE host = '$server' and ts >= $from and ts <= $to interval($interval) fill(PREV)",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -302,7 +302,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "SELECT last(total) FROM $database.processes WHERE host = '$server' and _ts >= $from and _ts <= $to interval($interval) fill(null)",
+          "sql": "SELECT last(total) FROM $database.processes WHERE host = '$server' and ts >= $from and ts <= $to interval($interval) fill(null)",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -372,7 +372,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "SELECT last(total_threads) FROM $database.processes WHERE host = '$server' and _ts >= $from and _ts <= $to interval($interval) fill(null)",
+          "sql": "SELECT last(total_threads) FROM $database.processes WHERE host = '$server' and ts >= $from and ts <= $to interval($interval) fill(null)",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -441,7 +441,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "SELECT last(usage_idle) * -1 + 100 FROM $database.cpu WHERE (host = '$server' and cpu = 'cpu-total') and _ts >= $from and _ts <= $to interval($interval) fill(null)",
+          "sql": "SELECT last(usage_idle) * -1 + 100 FROM $database.cpu WHERE (host = '$server' and cpu = 'cpu-total') and ts >= $from and ts <= $to interval($interval) fill(null)",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -510,7 +510,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "SELECT last(used_percent) FROM $database.mem WHERE (host = '$server') and _ts >= $from and _ts <= $to interval($interval) fill(null)",
+          "sql": "SELECT last(used_percent) FROM $database.mem WHERE (host = '$server') and ts >= $from and ts <= $to interval($interval) fill(null)",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -580,7 +580,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "SELECT last(used_percent) FROM $database.swap WHERE (host = '$server') and _ts >= $from and _ts <= $to interval($interval) fill(null)",
+          "sql": "SELECT last(used_percent) FROM $database.swap WHERE (host = '$server') and ts >= $from and ts <= $to interval($interval) fill(null)",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -650,7 +650,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "SELECT last(used_percent) FROM $database.disk WHERE (host = '$server' and path = '/') and _ts >= $from and _ts <= $to interval($interval) fill(null)",
+          "sql": "SELECT last(used_percent) FROM $database.disk WHERE (host = '$server' and path = '/') and ts >= $from and ts <= $to interval($interval) fill(null)",
           "target": "select metric",
           "timeshift": {
             "period": null
@@ -724,7 +724,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "SELECT last(usage_iowait) FROM $database.cpu WHERE (host = '$server' and cpu = 'cpu-total') and _ts >= $from and _ts <= $to interval($interval) fill(null)",
+          "sql": "SELECT last(usage_iowait) FROM $database.cpu WHERE (host = '$server' and cpu = 'cpu-total') and ts >= $from and ts <= $to interval($interval) fill(null)",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -810,7 +810,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "SELECT avg(usage_user) as _user, avg(usage_system) as system, avg(usage_softirq) as softirq, avg(usage_steal) as steal, avg(usage_nice) as nice, avg(usage_irq) as irq, avg(usage_iowait) as iowait, avg(usage_guest) as guest, avg(usage_guest_nice) as guest_nice FROM $database.cpu WHERE host = '$server' and cpu = 'cpu-total' and _ts >= $from and _ts <= $to interval($interval)",
+          "sql": "SELECT avg(usage_user) as _user, avg(usage_system) as system, avg(usage_softirq) as softirq, avg(usage_steal) as steal, avg(usage_nice) as nice, avg(usage_irq) as irq, avg(usage_iowait) as iowait, avg(usage_guest) as guest, avg(usage_guest_nice) as guest_nice FROM $database.cpu WHERE host = '$server' and cpu = 'cpu-total' and ts >= $from and ts <= $to interval($interval)",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -916,7 +916,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "SELECT avg(load1) as short,avg(load5) as medium,avg(load15) as long FROM $database.system WHERE host = '$server' and _ts >= $from and _ts <= $to interval($interval)",
+          "sql": "SELECT avg(load1) as short,avg(load5) as medium,avg(load15) as long FROM $database.system WHERE host = '$server' and ts >= $from and ts <= $to interval($interval)",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -1020,7 +1020,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "SELECT avg(running) as running, avg(blocked) as blocked, avg(sleeping) as sleeping, avg(stopped) as stopped, avg(zombies) as zombies, avg(paging) as paging, avg(unknown) as unknown FROM $database.processes WHERE host = '$server' and _ts >= $from and _ts <= $to interval($interval)",
+          "sql": "SELECT avg(running) as running, avg(blocked) as blocked, avg(sleeping) as sleeping, avg(stopped) as stopped, avg(zombies) as zombies, avg(paging) as paging, avg(unknown) as unknown FROM $database.processes WHERE host = '$server' and ts >= $from and ts <= $to interval($interval)",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -1150,7 +1150,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "SELECT avg(total) as total, avg(used) as used, avg(cached) as cached, avg(free) as free, avg(buffered) as buffered FROM $database.mem WHERE host = '$server' and _ts >= $from and _ts <= $to interval($interval)",
+          "sql": "SELECT avg(total) as total, avg(used) as used, avg(cached) as cached, avg(free) as free, avg(buffered) as buffered FROM $database.mem WHERE host = '$server' and ts >= $from and ts <= $to interval($interval)",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -1269,7 +1269,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select derivative(context_switches, 1s, 0) as context FROM (SELECT avg(context_switches) as context_switches FROM $database.kernel WHERE host = '$server' and _ts >= $from and _ts <= $to interval($interval) )",
+          "sql": "select derivative(context_switches, 1s, 0) as context FROM (SELECT avg(context_switches) as context_switches FROM $database.kernel WHERE host = '$server' and ts >= $from and ts <= $to interval($interval) )",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -1388,7 +1388,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select derivative(processes_forked, 1s, 0) as context FROM (SELECT avg(processes_forked) as processes_forked FROM $database.kernel WHERE host = '$server' and _ts >= $from and _ts <= $to interval($interval))",
+          "sql": "select derivative(processes_forked, 1s, 0) as context FROM (SELECT avg(processes_forked) as processes_forked FROM $database.kernel WHERE host = '$server' and ts >= $from and ts <= $to interval($interval))",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -1507,7 +1507,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "SELECT avg(file_max) as max FROM $database.linux_sysctl_fs WHERE host = '$server' and _ts >= $from and _ts <= $to interval($interval) fill(null)",
+          "sql": "SELECT avg(file_max) as max FROM $database.linux_sysctl_fs WHERE host = '$server' and ts >= $from and ts <= $to interval($interval) fill(null)",
           "target": "select metric",
           "type": "timeserie"
         },
@@ -1517,7 +1517,7 @@
           "hide": false,
           "queryType": "SQL",
           "refId": "B",
-          "sql": "SELECT avg(file_nr) as opened FROM $database.linux_sysctl_fs WHERE host = '$server' and _ts >= $from and _ts <= $to interval($interval) fill(null)",
+          "sql": "SELECT avg(file_nr) as opened FROM $database.linux_sysctl_fs WHERE host = '$server' and ts >= $from and ts <= $to interval($interval) fill(null)",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -1634,7 +1634,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "B",
-              "sql": "SELECT derivative(total, 1s, 0) as total FROM (SELECT avg(total) as total FROM $database.interrupts WHERE host = '$server' and irq = '$irq' and _ts >= $from and _ts <= $to interval($interval))",
+              "sql": "SELECT derivative(total, 1s, 0) as total FROM (SELECT avg(total) as total FROM $database.interrupts WHERE host = '$server' and irq = '$irq' and ts >= $from and ts <= $to interval($interval))",
               "target": "select metric",
               "timeshift": {
                 "period": null
@@ -1771,7 +1771,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "SELECT avg(usage_user) as usage_user, avg(usage_system) as system, avg(usage_softirq) as softirq, avg(usage_steal) as steal, avg(usage_nice) as nice, avg(usage_irq) as irq, avg(usage_iowait) as iowait, avg(usage_guest) as guest, avg(usage_guest_nice) as guest_nice FROM $database.cpu WHERE host = '$server' and cpu = '$cpu' and _ts >= $from and _ts <= $to interval($interval)",
+          "sql": "SELECT avg(usage_user) as usage_user, avg(usage_system) as system, avg(usage_softirq) as softirq, avg(usage_steal) as steal, avg(usage_nice) as nice, avg(usage_irq) as irq, avg(usage_iowait) as iowait, avg(usage_guest) as guest, avg(usage_guest_nice) as guest_nice FROM $database.cpu WHERE host = '$server' and cpu = '$cpu' and ts >= $from and ts <= $to interval($interval)",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -1906,7 +1906,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "SELECT avg(ip_conntrack_count) as current FROM $database.conntrack WHERE (host = '$server') and _ts >= $from and _ts <= $to interval($interval) fill(null)",
+          "sql": "SELECT avg(ip_conntrack_count) as current FROM $database.conntrack WHERE (host = '$server') and ts >= $from and ts <= $to interval($interval) fill(null)",
           "target": "select metric",
           "type": "timeserie"
         },
@@ -1916,7 +1916,7 @@
           "hide": false,
           "queryType": "SQL",
           "refId": "B",
-          "sql": "SELECT avg(ip_conntrack_max) as max FROM $database.conntrack WHERE (host = '$server') and _ts >= $from and _ts <= $to interval($interval) fill(null)",
+          "sql": "SELECT avg(ip_conntrack_max) as max FROM $database.conntrack WHERE (host = '$server') and ts >= $from and ts <= $to interval($interval) fill(null)",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -2042,7 +2042,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "SELECT avg(tcp_close) as CLOSED, avg(tcp_close_wait) as CLOSE_WAIT, avg(tcp_closing) as CLOSING, avg(tcp_established) as ESTABLISHED, avg(tcp_fin_wait1) as FIN_WAIT1, avg(tcp_fin_wait2) as FIN_WAIT2, avg(tcp_last_ack) as LAST_ACK, avg(tcp_syn_recv) as SYN_RECV, avg(tcp_syn_sent) as SYN_SENT, avg(tcp_time_wait) as TIME_WAIT FROM $database.netstat WHERE host = '$server' and _ts >= $from and _ts <= $to interval($interval)",
+          "sql": "SELECT avg(tcp_close) as CLOSED, avg(tcp_close_wait) as CLOSE_WAIT, avg(tcp_closing) as CLOSING, avg(tcp_established) as ESTABLISHED, avg(tcp_fin_wait1) as FIN_WAIT1, avg(tcp_fin_wait2) as FIN_WAIT2, avg(tcp_last_ack) as LAST_ACK, avg(tcp_syn_recv) as SYN_RECV, avg(tcp_syn_sent) as SYN_SENT, avg(tcp_time_wait) as TIME_WAIT FROM $database.netstat WHERE host = '$server' and ts >= $from and ts <= $to interval($interval)",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -2142,7 +2142,7 @@
           "hide": false,
           "queryType": "SQL",
           "refId": "A",
-          "sql": "SELECT derivative(tcp_estabresets, 1s, 0) as tcp_estabresets FROM (SELECT avg(tcp_estabresets) as tcp_estabresets FROM $database.net WHERE host = '$server' and _ts >= $from and _ts <= $to interval($interval))",
+          "sql": "SELECT derivative(tcp_estabresets, 1s, 0) as tcp_estabresets FROM (SELECT avg(tcp_estabresets) as tcp_estabresets FROM $database.net WHERE host = '$server' and ts >= $from and ts <= $to interval($interval))",
           "target": "select metric",
           "type": "timeserie"
         },
@@ -2152,7 +2152,7 @@
           "hide": false,
           "queryType": "SQL",
           "refId": "B",
-          "sql": "SELECT derivative(tcp_activeopens, 1s, 0) as tcp_activeopens FROM (SELECT avg(tcp_activeopens) as tcp_activeopens FROM $database.net WHERE host = '$server' and _ts >= $from and _ts <= $to interval($interval))",
+          "sql": "SELECT derivative(tcp_activeopens, 1s, 0) as tcp_activeopens FROM (SELECT avg(tcp_activeopens) as tcp_activeopens FROM $database.net WHERE host = '$server' and ts >= $from and ts <= $to interval($interval))",
           "target": "select metric",
           "type": "timeserie"
         },
@@ -2162,7 +2162,7 @@
           "hide": false,
           "queryType": "SQL",
           "refId": "C",
-          "sql": "SELECT derivative(tcp_outrsts, 1s, 0) as tcp_outrsts FROM (SELECT avg(tcp_outrsts) as tcp_outrsts FROM $database.net WHERE host = '$server' and _ts >= $from and _ts <= $to interval($interval))",
+          "sql": "SELECT derivative(tcp_outrsts, 1s, 0) as tcp_outrsts FROM (SELECT avg(tcp_outrsts) as tcp_outrsts FROM $database.net WHERE host = '$server' and ts >= $from and ts <= $to interval($interval))",
           "target": "select metric",
           "type": "timeserie"
         },
@@ -2171,7 +2171,7 @@
           "hide": false,
           "queryType": "SQL",
           "refId": "D",
-          "sql": "SELECT derivative(tcp_passiveopens, 1s, 0) as tcp_passiveopens FROM (SELECT avg(tcp_passiveopens) as tcp_passiveopens FROM $database.net WHERE host = '$server' and _ts >= $from and _ts <= $to interval($interval))",
+          "sql": "SELECT derivative(tcp_passiveopens, 1s, 0) as tcp_passiveopens FROM (SELECT avg(tcp_passiveopens) as tcp_passiveopens FROM $database.net WHERE host = '$server' and ts >= $from and ts <= $to interval($interval))",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -2302,7 +2302,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "SELECT derivative(ip_indiscards, 1s, 0) FROM (SELECT avg(ip_indiscards) as ip_indiscards from $database.net WHERE (host = '$server') and _ts >= $from and _ts <= $to interval($interval))",
+          "sql": "SELECT derivative(ip_indiscards, 1s, 0) FROM (SELECT avg(ip_indiscards) as ip_indiscards from $database.net WHERE (host = '$server') and ts >= $from and ts <= $to interval($interval))",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -2417,7 +2417,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "SELECT derivative(ip6indiscards, 1s, 1) as ip6indiscards FROM (SELECT avg(ip6indiscards) as ip6indiscards FROM $database.nstat WHERE (host = '$server') and _ts >= $from and _ts <= $to interval($interval))",
+          "sql": "SELECT derivative(ip6indiscards, 1s, 1) as ip6indiscards FROM (SELECT avg(ip6indiscards) as ip6indiscards FROM $database.nstat WHERE (host = '$server') and ts >= $from and ts <= $to interval($interval))",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -2529,7 +2529,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "SELECT derivative(udp_indatagrams, 1s, 1) as in_datagrams FROM (select avg(udp_indatagrams) as udp_indatagrams  FROM $database.net WHERE host = '$server' and _ts >= $from and _ts <= $to interval( $interval))",
+          "sql": "SELECT derivative(udp_indatagrams, 1s, 1) as in_datagrams FROM (select avg(udp_indatagrams) as udp_indatagrams  FROM $database.net WHERE host = '$server' and ts >= $from and ts <= $to interval( $interval))",
           "target": "select metric",
           "type": "timeserie"
         },
@@ -2538,7 +2538,7 @@
           "hide": false,
           "queryType": "SQL",
           "refId": "B",
-          "sql": "SELECT derivative(udp_outdatagrams, 1s, 1) as out_datagrams FROM (select avg(udp_outdatagrams) as udp_outdatagrams  FROM $database.net WHERE host = '$server' and _ts >= $from and _ts <= $to interval( $interval))",
+          "sql": "SELECT derivative(udp_outdatagrams, 1s, 1) as out_datagrams FROM (select avg(udp_outdatagrams) as udp_outdatagrams  FROM $database.net WHERE host = '$server' and ts >= $from and ts <= $to interval( $interval))",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -2679,7 +2679,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "SELECT derivative(bytes_recv,1s, 1) as bytes_in FROM $database.net WHERE host = '$server' and interface = '$netif' and _ts >= $from and _ts <= $to group by tbname",
+          "sql": "SELECT derivative(bytes_recv,1s, 1) as bytes_in FROM $database.net WHERE host = '$server' and interface = '$netif' and ts >= $from and ts <= $to group by tbname",
           "target": "select metric",
           "type": "timeserie"
         },
@@ -2689,7 +2689,7 @@
           "hide": false,
           "queryType": "SQL",
           "refId": "B",
-          "sql": "SELECT derivative(bytes_sent,1s, 1) as bytes_out FROM $database.net WHERE host = '$server' and interface = '$netif' and _ts >= $from and _ts <= $to group by tbname",
+          "sql": "SELECT derivative(bytes_sent,1s, 1) as bytes_out FROM $database.net WHERE host = '$server' and interface = '$netif' and ts >= $from and ts <= $to group by tbname",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -2812,7 +2812,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "SELECT derivative(packets_recv,1s, 0) as packets_recv FROM (SELECT avg(packets_recv) as packets_recv FROM $database.net WHERE host = '$server' and interface = '$netif' and _ts >= $from and _ts <= $to interval($interval))",
+          "sql": "SELECT derivative(packets_recv,1s, 0) as packets_recv FROM (SELECT avg(packets_recv) as packets_recv FROM $database.net WHERE host = '$server' and interface = '$netif' and ts >= $from and ts <= $to interval($interval))",
           "target": "select metric",
           "type": "timeserie"
         },
@@ -2821,7 +2821,7 @@
           "hide": false,
           "queryType": "SQL",
           "refId": "B",
-          "sql": "SELECT derivative(packets_sent,1s, 0) as packets_sent FROM (SELECT avg(packets_sent) as packets_sent FROM $database.net WHERE host = '$server' and interface = '$netif' and _ts >= $from and _ts <= $to interval($interval))",
+          "sql": "SELECT derivative(packets_sent,1s, 0) as packets_sent FROM (SELECT avg(packets_sent) as packets_sent FROM $database.net WHERE host = '$server' and interface = '$netif' and ts >= $from and ts <= $to interval($interval))",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -2981,7 +2981,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "SELECT derivative(drop_in,1s, 1) as drop_in FROM (SELECT avg(drop_in) as drop_in FROM $database.net WHERE host = '$server' and interface = '$netif' and _ts >= $from and _ts <= $to interval($interval))",
+          "sql": "SELECT derivative(drop_in,1s, 1) as drop_in FROM (SELECT avg(drop_in) as drop_in FROM $database.net WHERE host = '$server' and interface = '$netif' and ts >= $from and ts <= $to interval($interval))",
           "target": "select metric",
           "type": "timeserie"
         },
@@ -2990,7 +2990,7 @@
           "hide": false,
           "queryType": "SQL",
           "refId": "B",
-          "sql": "SELECT derivative(drop_out,1s, 1) as drop_out FROM (SELECT avg(drop_out) as drop_out FROM $database.net WHERE host = '$server' and interface = '$netif' and _ts >= $from and _ts <= $to interval($interval))",
+          "sql": "SELECT derivative(drop_out,1s, 1) as drop_out FROM (SELECT avg(drop_out) as drop_out FROM $database.net WHERE host = '$server' and interface = '$netif' and ts >= $from and ts <= $to interval($interval))",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -3110,7 +3110,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "SELECT derivative(err_in,1s, 1) as err_in FROM (SELECT avg(err_in) as err_in FROM $database.net WHERE host = '$server' and interface = '$netif' and _ts >= $from and _ts <= $to interval($interval))",
+          "sql": "SELECT derivative(err_in,1s, 1) as err_in FROM (SELECT avg(err_in) as err_in FROM $database.net WHERE host = '$server' and interface = '$netif' and ts >= $from and ts <= $to interval($interval))",
           "target": "select metric",
           "type": "timeserie"
         },
@@ -3119,7 +3119,7 @@
           "hide": false,
           "queryType": "SQL",
           "refId": "B",
-          "sql": "SELECT derivative(err_out,1s, 1) as err_out FROM (SELECT avg(err_out) as err_out FROM $database.net WHERE host = '$server' and interface = '$netif' and _ts >= $from and _ts <= $to interval($interval))",
+          "sql": "SELECT derivative(err_out,1s, 1) as err_out FROM (SELECT avg(err_out) as err_out FROM $database.net WHERE host = '$server' and interface = '$netif' and ts >= $from and ts <= $to interval($interval))",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -3261,7 +3261,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "SELECT derivative(_in, 1s, 0) as swap_in FROM (SELECT avg(_in) as _in from $database.swap WHERE host = '$server'  and _ts >= $from and _ts <= $to interval($interval))",
+          "sql": "SELECT derivative(_in, 1s, 0) as swap_in FROM (SELECT avg(_in) as _in from $database.swap WHERE host = '$server'  and ts >= $from and ts <= $to interval($interval))",
           "target": "select metric",
           "type": "timeserie"
         },
@@ -3270,7 +3270,7 @@
           "hide": false,
           "queryType": "SQL",
           "refId": "B",
-          "sql": "SELECT derivative(out, 1s, 0) as swap_out FROM (SELECT avg(out) as out from $database.swap WHERE host = '$server'  and _ts >= $from and _ts <= $to interval($interval))",
+          "sql": "SELECT derivative(out, 1s, 0) as swap_out FROM (SELECT avg(out) as out from $database.swap WHERE host = '$server'  and ts >= $from and ts <= $to interval($interval))",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -3397,7 +3397,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "SELECT avg(used) as used, avg(total) as total FROM $database.swap WHERE host = '$server' and _ts >= $from and _ts <= $to interval($interval)",
+          "sql": "SELECT avg(used) as used, avg(total) as total FROM $database.swap WHERE host = '$server' and ts >= $from and ts <= $to interval($interval)",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -3528,7 +3528,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "SELECT derivative(reads,1s, 0) as read  FROM (SELECT avg(reads) as reads FROM $database.diskio WHERE host = '$server' and name = '$disk' and _ts >= $from and _ts <= $to interval($interval))",
+          "sql": "SELECT derivative(reads,1s, 0) as read  FROM (SELECT avg(reads) as reads FROM $database.diskio WHERE host = '$server' and name = '$disk' and ts >= $from and ts <= $to interval($interval))",
           "target": "select metric",
           "type": "timeserie"
         },
@@ -3537,7 +3537,7 @@
           "hide": false,
           "queryType": "SQL",
           "refId": "B",
-          "sql": "SELECT derivative(writes,1s, 0) as write  FROM (SELECT avg(writes) as writes FROM $database.diskio WHERE host = '$server' and name = '$disk' and _ts >= $from and _ts <= $to interval($interval))",
+          "sql": "SELECT derivative(writes,1s, 0) as write  FROM (SELECT avg(writes) as writes FROM $database.diskio WHERE host = '$server' and name = '$disk' and ts >= $from and ts <= $to interval($interval))",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -3653,7 +3653,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "SELECT derivative(read_bytes, 1s, 0) as read FROM (SELECT avg(read_bytes) as read_bytes FROM $database.diskio WHERE host = '$server' and name = '$disk' and _ts >= $from and _ts <= $to interval($interval))",
+          "sql": "SELECT derivative(read_bytes, 1s, 0) as read FROM (SELECT avg(read_bytes) as read_bytes FROM $database.diskio WHERE host = '$server' and name = '$disk' and ts >= $from and ts <= $to interval($interval))",
           "target": "select metric",
           "type": "timeserie"
         },
@@ -3662,7 +3662,7 @@
           "hide": false,
           "queryType": "SQL",
           "refId": "B",
-          "sql": "SELECT derivative(write_bytes,1s, 0) as write FROM (SELECT avg(write_bytes) as write_bytes FROM $database.diskio WHERE host = '$server' and name = '$disk' and _ts >= $from and _ts <= $to interval($interval))",
+          "sql": "SELECT derivative(write_bytes,1s, 0) as write FROM (SELECT avg(write_bytes) as write_bytes FROM $database.diskio WHERE host = '$server' and name = '$disk' and ts >= $from and ts <= $to interval($interval))",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -3778,7 +3778,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "SELECT derivative(read_time,1s, 0) as read  FROM (SELECT avg(read_time) as read_time FROM $database.diskio WHERE host = '$server' and name = '$disk' and _ts >= $from and _ts <= $to interval($interval))",
+          "sql": "SELECT derivative(read_time,1s, 0) as read  FROM (SELECT avg(read_time) as read_time FROM $database.diskio WHERE host = '$server' and name = '$disk' and ts >= $from and ts <= $to interval($interval))",
           "target": "select metric",
           "type": "timeserie"
         },
@@ -3787,7 +3787,7 @@
           "hide": false,
           "queryType": "SQL",
           "refId": "B",
-          "sql": "SELECT derivative(write_time,1s, 0) as write  FROM (SELECT avg(write_time) as write_time FROM $database.diskio WHERE host = '$server' and name = '$disk' and _ts >= $from and _ts <= $to interval($interval))",
+          "sql": "SELECT derivative(write_time,1s, 0) as write  FROM (SELECT avg(write_time) as write_time FROM $database.diskio WHERE host = '$server' and name = '$disk' and ts >= $from and ts <= $to interval($interval))",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -3919,7 +3919,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "SELECT avg(total) AS total, avg(used) as used FROM $database.disk WHERE host = '$server' and path = '$mountpoint' and _ts >= $from and _ts <= $to interval($interval)",
+          "sql": "SELECT avg(total) AS total, avg(used) as used FROM $database.disk WHERE host = '$server' and path = '$mountpoint' and ts >= $from and ts <= $to interval($interval)",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -4043,7 +4043,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "SELECT avg(inodes_used) as used FROM $database.disk WHERE host = '$server' and path = '$mountpoint' and _ts >= $from and _ts <= $to interval($interval)",
+          "sql": "SELECT avg(inodes_used) as used FROM $database.disk WHERE host = '$server' and path = '$mountpoint' and ts >= $from and ts <= $to interval($interval)",
           "target": "select metric",
           "type": "timeserie"
         },
@@ -4052,7 +4052,7 @@
           "hide": false,
           "queryType": "SQL",
           "refId": "B",
-          "sql": "SELECT avg(inodes_free) + avg(inodes_used) as total FROM $database.disk WHERE host = '$server' and path = '$mountpoint' and _ts >= $from and _ts <= $to interval($interval)",
+          "sql": "SELECT avg(inodes_free) + avg(inodes_used) as total FROM $database.disk WHERE host = '$server' and path = '$mountpoint' and ts >= $from and ts <= $to interval($interval)",
           "target": "select metric",
           "type": "timeserie"
         }
