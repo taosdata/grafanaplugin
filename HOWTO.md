@@ -144,7 +144,7 @@ The full page view for TDengine will like below.
 
 ### Cluster Status
 
-Include cluster current infomation and status (left-to-right).
+Include cluster current information and status (left-to-right).
 
 - **Master MNode**: the current master mnode displayed as text(with grafana `Stat` view).
 - **Master MNode Create Time**: time that the current master mnode created.

@@ -8,16 +8,16 @@ The CollectD dashboard comes from the top 1 downloaded [dashboard](https://grafa
 
 ## Start
 
-Suppose you have latest [TDengine](http://taosdata.com/) **2.3+** installed and both `taosd` and `blm3` service started.
+Suppose you have latest [TDengine](http://taosdata.com/) **2.3+** installed and both `taosd` and `taosadapter` service started.
 
-You could check if port `6041` is ready to be connected with `telenet` or `curl` or so.
+You could check if port `6041` is ready to be connected with `telnet` or `curl` or so.
 
 Add these lines in `collectd.conf`.
 
 ```conf
 LoadPlugin network
 <Plugin network>
-  Server "192.168.17.180" "25826"
+  Server "192.168.17.180" "6045"
 </Plugin>
 ```
 
@@ -45,7 +45,7 @@ docker-compose up
 
 - Port: 6041 (HTTP API)
 - User: root
-- Password: datadata
+- Password: taosdata
 - Database: collectd
 
 Open grafana with dashboard name **CollectD Server Metrics with TDengine** and everything done.
