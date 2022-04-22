@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
+BIN=$(realpath $(dirname $0))
 set -e
 verbose=0
 REMOVE=0
+OFFLINE=0
+DOWNLOAD_ONLY=0
+
 [ -f .env ] && source .env
 
 TDENGINE_PLUGIN_VERSION=${TDENGINE_PLUGIN_VERSION:-latest}
@@ -55,7 +59,7 @@ TDINSIGHT_NOTIFICATION_DINGING_WEBHOOK=
 TDINSIGHT_NOTIFICATION_ALERT_MANAGER_ENABLED=false
 TDINSIGHT_NOTIFICATION_ALERT_MANAGER_URL=
 
-options=$(getopt -l "help,verbose,remove,\
+options=$(getopt -l "help,verbose,remove,offline,download-only,\
 plugin-version:,\
 grafana-provisioning-dir:,grafana-plugins-dir:,grafana-org-id:,\
 tdengine-ds-name:,tdengine-api:,tdengine-user:,tdengine-password:,\
@@ -64,7 +68,7 @@ sms-enabled,sms-notifier-name:,sms-notifier-uid:,sms-notifier-is-default,\
 sms-access-key-id:,sms-access-key-secret:,\
 sms-sign-name:,sms-template-code:,sms-template-param:,sms-phone-numbers:,\
 ms-listen-addr:" \
--o "hVRv:P:G:O:n:a:u:p:i:t:eE:sN:U:DI:K:S:C:T:B:L:y" -a -- "$@")
+-o "hVRFv:P:G:O:n:a:u:p:i:t:eE:sN:U:DI:K:S:C:T:B:L:y" -a -- "$@")
 
 usage() { # Function: Print a help message.
   cat << EOF
@@ -79,6 +83,8 @@ Install and configure TDinsight dashboard in Grafana on ubuntu 18.04/20.04 syste
 
 -V, --verbose                               Run script in verbose mode. Will print out each step of execution.
 -R, --remove                                Remove TDinsight dashboard, TDengine data source and the plugin.
+-F, --offline                               Use file in local path (the directory this script located in or just cwd).
+    --download-only                         Download plugin and dashboard json file into current directory.
 
 -v, --plugin-version <version>              TDengine datasource plugin version, [default: $TDENGINE_PLUGIN_VERSION]
 
@@ -127,6 +133,12 @@ while true; do
     ;;
   -R | --remove)
     export REMOVE=1
+    ;;
+  -F | --offline)
+    export OFFLINE=1
+    ;;
+  --download-only)
+    export DOWNLOAD_ONLY=1
     ;;
   -v | --plugin-version)
     shift
@@ -246,16 +258,26 @@ get_latest_release() {
 }
 
 get_dashboard_by_id() {
-  echo "** Get dashboard json file by id $1 to $2"
+  [ "$verbose" = "0" ] || echo "** Get dashboard json file by id $1 to $2"
   id=$1
   file=$2
   wget -qO $file https://grafana.com/api/dashboards/${id}/revisions/latest/download
 }
 
-install_plugin() {
-  which grafana-cli > /dev/null || (echo "Grafana has not been installed in the server, install it first."; exit 1)
+download_plugin() {
+  [ "$verbose" = "0" ] || echo "** download plugin version $TDENGINE_PLUGIN_VERSION"
   [ -s tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip ] || \
     wget -c https://github.com/taosdata/grafanaplugin/releases/download/v$TDENGINE_PLUGIN_VERSION/tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip
+  
+}
+
+install_plugin() {
+  which grafana-cli > /dev/null || (echo "Grafana has not been installed in the server, install it first."; exit 1)
+  if [ "$OFFLINE" = 0 ]; then
+    download_plugin
+  else
+    [ -s tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip ] || (echo "use offline cache, but plugin not exist"; exit 1)
+  fi
   # open a simple server for local url
   port=$(shuf -i 2000-65000 -n 1)
   python3 -m http.server $port &
@@ -369,10 +391,25 @@ remove_notifier() {
   set -e
 }
 
+download_dashboard() {
+  get_dashboard_by_id $TDINSIGHT_DASHBOARD_ID TDinsight-$TDINSIGHT_DASHBOARD_ID.json
+}
+
 provisioning_dashboard() {
   echo "* Provisioning dashboard $TDINSIGHT_DASHBOARD_ID as $TDINSIGHT_DASHBOARD_UID"
-  # 1. Download latest dashboard json file
-  get_dashboard_by_id $TDINSIGHT_DASHBOARD_ID $TDINSIGHT_DASHBOARD_UID.json
+  # 1. Download latest dashboard json file or use cached file
+  if [ "$OFFLINE" = "0" ]; then
+    get_dashboard_by_id $TDINSIGHT_DASHBOARD_ID $TDINSIGHT_DASHBOARD_UID.json
+  else
+    if [ -e "TDinsight-$TDINSIGHT_DASHBOARD_ID.json" ]; then
+      cp "TDinsight-$TDINSIGHT_DASHBOARD_ID.json" $TDINSIGHT_DASHBOARD_UID.json
+    elif [ -e "$BIN/TDinsight-$TDINSIGHT_DASHBOARD_ID.json" ]; then
+      cp "$BIN/TDinsight-$TDINSIGHT_DASHBOARD_ID.json" $TDINSIGHT_DASHBOARD_UID.json
+    else
+      echo "** in offline mode bug no cached files there"
+      exit 1
+    fi
+  fi
 
   if [ "$EXTERNAL_NOTIFIER" != "" ]; then
     sed 's/tdinsight-builtin-sms/'$EXTERNAL_NOTIFIER'/' -i $TDINSIGHT_DASHBOARD_UID.json
@@ -380,7 +417,8 @@ provisioning_dashboard() {
     if [ "$SMS_ENABLED" == "true" ] && [ "$SMS_NOTIFIER_IS_DEFAULT" == "false" ]; then
       sed 's/tdinsight-builtin-sms/'$SMS_NOTIFIER_UID'/' -i $TDINSIGHT_DASHBOARD_UID.json
     else
-      sed -E 's/^.*uid.*tdinsight-builtin-sms.*$//' -i $TDINSIGHT_DASHBOARD_UID.json
+      #sed -E 's/^.*uid.*tdinsight-builtin-sms.*$//' -i $TDINSIGHT_DASHBOARD_UID.json
+      sed -E 's/"tdinsight-builtin-sms"/"__fake__"/' -i $TDINSIGHT_DASHBOARD_UID.json
     fi
   fi
   # 2. Replace with TDengine data source name
@@ -425,7 +463,26 @@ fi
 ####################################
 # main scripts
 ####################################
-if [ "$TDENGINE_PLUGIN_VERSION" == "latest" ]; then
+if [ "$DOWNLOAD_ONLY" = "1" ]; then
+  if [ "$TDENGINE_PLUGIN_VERSION" = "latest" ]; then
+    TDENGINE_PLUGIN_VERSION=$(get_latest_release)
+  fi
+  download_plugin
+  download_dashboard
+  echo "DENGINE_PLUGIN_VERSION=$DENGINE_PLUGIN_VERSION" > .tdinsight.cache
+
+  echo .tdinsight.cache
+  echo TDinsight-$TDINSIGHT_DASHBOARD_ID.json
+  echo tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip
+  exit 0
+fi
+
+if [ "$OFFLINE" = "1" ]; then
+  [ -e "$BIN/.tdinsight.cache" ] && source $BIN/.tdinsight.cache
+  [ -e ".tdinsight.cache" ] && source .tdinsight.cache
+fi
+
+if [ "$TDENGINE_PLUGIN_VERSION" = "latest" ]; then
   TDENGINE_PLUGIN_VERSION=$(get_latest_release)
   echo using tdengine-datasource plugin $TDENGINE_PLUGIN_VERSION
 fi
