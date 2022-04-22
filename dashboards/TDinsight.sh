@@ -276,7 +276,7 @@ install_plugin() {
   if [ "$OFFLINE" = 0 ]; then
     download_plugin
   else
-    [ -s tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip ] || (echo "use offline cache, bug plugin not exist"; exit 1)
+    [ -s tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip ] || (echo "use offline cache, but plugin not exist"; exit 1)
   fi
   # open a simple server for local url
   port=$(shuf -i 2000-65000 -n 1)
