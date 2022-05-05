@@ -12,10 +12,10 @@
   "info": {
     "screenshots": [{ "name": "config", "path": "img/howto-add-datasource.png" }],
     "keywords": ["taosdata", "TDengine"],
-    "description": "grafana datasource plugin for tdengine",
+    "description": "Grafana datasource plugin for TDengine",
     "author": {
-      "name": "Taosdata Inc.",
-      "url": "https://www.taosdata.com"
+      "name": "TAOS Data Inc.",
+      "url": "https://tdengine.com"
     },
     "logos": {
       "small": "img/taosdata_logo.png",
@@ -25,8 +25,8 @@
       { "name": "GitHub", "url": "https://github.com/taosdata/grafanaplugin" },
       { "name": "AGPL-3.0", "url": "https://github.com/taosdata/grafanaplugin/blob/master/LICENSE" }
     ],
-    "version": "3.1.5",
-    "updated": "2021-11-26"
+    "version": "3.1.6",
+    "updated": "2022-05-05"
   },
 
   "dependencies": {

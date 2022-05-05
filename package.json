@@ -1,8 +1,8 @@
 {
   "name": "tdengine-grafana-datasource-plugin",
   "private": false,
-  "version": "3.1.4",
-  "description": "grafana data-source plugin for TDengine",
+  "version": "3.1.6",
+  "description": "Grafana data-source plugin for TDengine",
   "scripts": {
     "build": "grunt",
     "build:dist": "grunt && mage",
@@ -14,7 +14,7 @@
     "type": "git",
     "url": "git+https://github.com/taosdata/grafanaplugin.git"
   },
-  "author": "https://www.taosdata.com",
+  "author": "https://www.tdengine.com",
   "license": "AGPL-3.0",
   "bugs": {
     "url": "https://github.com/taosdata/grafanaplugin/issues"
@@ -45,5 +45,5 @@
     "@grafana/toolkit": "^7.3.5",
     "lodash": "^4.17.21"
   },
-  "homepage": "https://github.com/taosdata/grafanaplugin"
+  "homepage": "https://tdengine.com"
 }
