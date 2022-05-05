@@ -10,7 +10,7 @@
   "executable": "tdengine-datasource",
 
   "info": {
-    "screenshots": [{ "name": "config", "path": "dashboard/howto-add-datasource.png" }],
+    "screenshots": [{ "name": "config", "path": "img/howto-add-datasource.png" }],
     "keywords": ["taosdata", "TDengine"],
     "description": "grafana datasource plugin for tdengine",
     "author": {

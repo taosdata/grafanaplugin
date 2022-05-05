@@ -5363,7 +5363,7 @@
               "sql": "select avg(count) as request_in_flight from log.taosadapter_restful_http_request_in_flight where ts >= $from and ts <= $to interval($interval)"
             }
           ],
-          "datasource": null
+          "datasource": "${DS_TDENGINE}"
         },
         {
           "id": 7,
@@ -5436,7 +5436,7 @@
               "datasource": "${DS_TDENGINE}"
             }
           ],
-          "datasource": null
+          "datasource": "${DS_TDENGINE}"
         },
         {
           "id": 3,
@@ -5634,7 +5634,7 @@
           "steppedLine": false,
           "timeFrom": null,
           "timeShift": null,
-          "datasource": null
+          "datasource": "${DS_TDENGINE}"
         },
         {
           "id": 5,
@@ -5707,7 +5707,7 @@
               "datasource": "${DS_TDENGINE}"
             }
           ],
-          "datasource": null
+          "datasource": "${DS_TDENGINE}"
         },
         {
           "id": 6,
@@ -5779,7 +5779,7 @@
               "datasource": "${DS_TDENGINE}"
             }
           ],
-          "datasource": null
+          "datasource": "${DS_TDENGINE}"
         }
       ],
       "title": "TaosAdapter",
