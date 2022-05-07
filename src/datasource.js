@@ -11,7 +11,9 @@ export class GenericDatasource {
     this.backendSrv = backendSrv;
     this.templateSrv = templateSrv;
     this.headers = { 'Content-Type': 'application/json' };
-    this.headers.Authorization = this.getAuthorization(instanceSettings.jsonData);
+    let jsonData = instanceSettings.jsonData;
+    this.headers.Authorization = this.getAuthorization(jsonData);
+    this.requestUrl = this.getUrl(jsonData);
     this.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     this.generateSqlList = {};
   }
@@ -28,7 +30,7 @@ export class GenericDatasource {
     return Promise.all(targets.map(target => {
       let sql = this.generateSql(target.sql, options);
       this.generateSqlList[target.refId] = sql;
-      return this.request('/rest/sqlutc', sql).then(res => this.postQuery(target, res, options));
+      return this.request(this.requestUrl, sql).then(res => this.postQuery(target, res, options));
     }))
       .then(data => {
         let result = this.arithmeticQueries(data, options).flat();
@@ -72,7 +74,7 @@ export class GenericDatasource {
     }, error => {
       console.log(error);
     });
-    return this.request('/rest/sqlutc', 'show databases').then(response => {
+    return this.request(this.requestUrl, 'show databases').then(response => {
       if (!!response && response.status === 200) {
         return { status: "success", message: "TDengine Data source is working", title: "Success" };
       }
@@ -339,6 +341,15 @@ export class GenericDatasource {
     return "Basic " + this.encode(defaultUser + ":" + defaultPassword);
   }
 
+  getUrl(jsonData) {
+    if (_.has(jsonData, "token") && !!jsonData.token) {
+      console.log("/rest/sqlutc?token=" + jsonData.token);
+      return "/rest/sqlutc?token=" + jsonData.token;
+    } else {
+      return "/rest/sqlutc";
+    }
+  }
+
   generateTimeshift(options, target) {
     var alias = target.alias || "";
     alias = this.templateSrv.replace(alias, options.scopedVars, 'csv');
@@ -353,7 +364,7 @@ export class GenericDatasource {
   metricFindQuery(query, options) {
     // console.log('query',query);
     // console.log('options',options);
-    return this.request('/rest/sqlutc', this.generateSql(query, options)).then(res => {
+    return this.request(this.requestUrl, this.generateSql(query, options)).then(res => {
       if (!res || !res.data || !res.data.data) {
         return [];
       } else {
