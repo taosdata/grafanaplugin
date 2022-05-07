@@ -9,13 +9,16 @@ export class GenericDatasourceConfigCtrl {
         this.pluginId = this.current.type;
         this.smsShowFlag = false;
         if (!_.has(this.current, "jsonData")) {
-          this.current.jsonData = {};
+            this.current.jsonData = {};
         }
         if (!_.has(this.current.jsonData, "user")) {
             this.current.jsonData.user = "root";
         }
         if (!_.has(this.current.jsonData, "password")) {
             this.current.jsonData.password = "taosdata";
+        }
+        if (!_.has(this.current.jsonData, "token")) {
+            this.current.jsonData.token = null;
         }
     }
     requestResources(url, params) {
