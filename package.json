@@ -5,8 +5,9 @@
   "description": "Grafana data-source plugin for TDengine",
   "scripts": {
     "build": "grunt",
+    "sign": "grafana-toolkit plugin:sign",
     "build:dist": "grunt && mage",
-    "build:all": "grunt && mage && scripts/package.sh",
+    "build:all": "grunt && mage && grafana-toolkit plugin:sign && scripts/package.sh",
     "package": "scripts/package.sh",
     "test": "grunt mochaTest"
   },
