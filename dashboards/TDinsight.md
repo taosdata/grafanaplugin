@@ -262,7 +262,7 @@ The full page view for TDengine will like below.
 
 ## TDinsight Dashboard Details
 
-The TDinsight dashboard aims to provide TDengine cluster resources usage and status of [dnodes, mdodes, vnodes](https://www.taosdata.com/cn/documentation/architecture#cluster), or databases. There're several partitions of metrics.
+The TDinsight dashboard aims to provide TDengine cluster resources usage and status of [dnodes, mnodes, vnodes](https://www.taosdata.com/cn/documentation/architecture#cluster), or databases. There're several partitions of metrics.
 
 ### Cluster Status
 

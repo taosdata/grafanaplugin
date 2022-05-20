@@ -259,7 +259,7 @@ sudo systemctl enable grafana-server
 
 ## TDinsight 仪表盘详细信息
 
-TDinsight 仪表盘旨在提供TDengine 相关资源使用情况[dnodes, mdodes, vnodes](https://www.taosdata.com/cn/documentation/architecture#cluster)或数据库的使用情况和状态。
+TDinsight 仪表盘旨在提供TDengine 相关资源使用情况[dnodes, mnodes, vnodes](https://www.taosdata.com/cn/documentation/architecture#cluster)或数据库的使用情况和状态。
 
 指标详情如下：
 
