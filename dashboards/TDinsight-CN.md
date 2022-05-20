@@ -206,9 +206,7 @@ sudo grafana-cli \
   plugins install tdengine-datasource
 ```
 
-### 配置 Grafana
-
-将以下设置添加到配置文件 `/etc/grafana/grafana.ini`，以启用未签名插件。
+**NOTE**: 插件版本 3.1.7 以下，需要在配置文件 `/etc/grafana/grafana.ini` 中添加如下设置，以启用未签名插件。
 
 ```ini
 [plugins]

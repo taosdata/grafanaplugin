@@ -35,7 +35,7 @@ Option 2, you can install the plugin manually.
 # make sure to use the right plugins directory
 GF_PLUGINS_DIR=/var/lib/grafana/plugins
 # install plugin
-V=3.1.3
+V=3.1.7
 wget -c https://github.com/taosdata/grafanaplugin/releases/download/v$V/tdengine-datasource-$V.zip
 sudo -u grafana unzip -oq tdengine-datasource-$V.zip -d $GF_PLUGINS_DIR
 sudo -u grafana sh -c "chmod +x $GF_PLUGINS_DIR/tdengine-datasource/tdengine-datasource*"
@@ -147,13 +147,15 @@ Since you are using macOS with Homebrew, Grafana instances installed using Homeb
 open -a textedit /opt/homebrew/etc/grafana/grafana.ini
 ```
 
-After opening the file, search for
+Note that, this plugin is signed since v3.1.7. If you are using an older version, please configure to allow loading unsigned plugins:
+
+First, open the file, search for
 
 ```ini
 ;allow_loading_unsigned_plugins
 ```
 
-Delete the semicolon to uncomment it, and change the line to:
+Second, delete the semicolon to uncomment it, and change the line to:
 
 ```ini
 allow_loading_unsigned_plugins = tdengine-datasource

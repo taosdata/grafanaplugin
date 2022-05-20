@@ -206,9 +206,7 @@ sudo grafana-cli \
   plugins install tdengine-datasource
 ```
 
-### Configure Grafana
-
-Add following lines to `/etc/grafana/grafana.ini`.
+**NOTE**: If you're using an older version before v3.1.7, please configure to allow using unsigned plugins by add following lines to `/etc/grafana/grafana.ini`.
 
 ```ini
 [plugins]
