@@ -155,13 +155,13 @@ First, open the file, search for
 ;allow_loading_unsigned_plugins
 ```
 
-Second, delete the semicolon to uncomment it, and change the line to:
+Then, delete the semicolon to uncomment it, and change the line to:
 
 ```ini
 allow_loading_unsigned_plugins = tdengine-datasource
 ```
 
-After then, go ahead and save the configuration file.
+After that, go ahead and save the configuration file.
 
 (Re-)start Grafana service:
 
