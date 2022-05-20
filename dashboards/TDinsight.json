@@ -474,7 +474,7 @@
           "type": "timeserie"
         }
       ],
-      "title": "Used Meassuring Points",
+      "title": "Used Measuring Points",
       "transformations": [],
       "type": "bargauge"
     },
@@ -1697,7 +1697,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Messuring Points Used",
+      "title": "Measuring Points Used",
       "tooltip": {
         "shared": true,
         "sort": 0,

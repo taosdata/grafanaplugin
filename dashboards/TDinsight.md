@@ -16,7 +16,7 @@ The feature-rich [Grafana] dashboard for [TDengine] (cluster or not) requires Gr
 
 ### Install Grafana on Debian or Ubuntu
 
-For Debian or Ubuntu os, the first option is to use grafana APT repository. Here is how-to install it from scratch:
+For Debian or Ubuntu OS, the first option is to use grafana APT repository. Here is how-to install it from scratch:
 
 ```bash
 sudo apt-get install -y apt-transport-https
@@ -71,7 +71,7 @@ chmod +x TDinsight.sh
 
 This script will automatically download the latest [TDengine data source plugin](https://github.com/taosdata/grafanaplugin/releases/latest) and [TDinsight dashboard](https://grafana.com/grafana/dashboards/15167), covert them to provisioning configurations and setup TDinsight dashboard. With some more alert options, you will get the alert notification feature within an one-line command.
 
-For the most simple use case, suppose you're serving TDengine and Grafana on the same host with both default options. Running `./TDinsight.sh` and opening Grafana url are the only things you need to setup TDsight.
+For the most simple use case, suppose you're serving TDengine and Grafana on the same host with both default options. Running `./TDinsight.sh` and opening Grafana url are the only things you need to setup TDinsight.
 
 Here is the usage of `TDinsight.sh`:
 
@@ -81,7 +81,7 @@ Usage:
    ./TDinsight.sh -h|--help
    ./TDinsight.sh -n <ds-name> -a <api-url> -u <user> -p <password>
 
-Install and configure TDinsight dashboard in Grafana on ubuntu 18.04/20.04 system.
+Install and configure TDinsight dashboard in Grafana on Ubuntu 18.04/20.04 system.
 
 -h, -help,          --help                  Display help
 
@@ -91,14 +91,14 @@ Install and configure TDinsight dashboard in Grafana on ubuntu 18.04/20.04 syste
 
 -P, --grafana-provisioning-dir <dir>        Grafana provisioning directory, [default: /etc/grafana/provisioning/]
 -G, --grafana-plugins-dir <dir>             Grafana plugins directory, [default: /var/lib/grafana/plugins]
--O, --grafana-org-id <number>               Grafana orgnization id. [default: 1]
+-O, --grafana-org-id <number>               Grafana organization id. [default: 1]
 
 -n, --tdengine-ds-name <string>             TDengine datasource name, no space. [default: TDengine]
 -a, --tdengine-api <url>                    TDengine REST API endpoint. [default: http://127.0.0.1:6041]
 -u, --tdengine-user <string>                TDengine user name. [default: root]
 -p, --tdengine-password <string>            TDengine password. [default: taosdata]
 
--i, --tdinsight-uid <string>                Replace with a non-space ascii code as the dashboard id. [default: tdinsight]
+-i, --tdinsight-uid <string>                Replace with a non-space ASCII code as the dashboard id. [default: tdinsight]
 -t, --tdinsight-title <string>              Dashboard title. [default: TDinsight]
 -e, --tdinsight-editable                    If the provisioning dashboard could be editable. [default: false]
 
@@ -206,9 +206,7 @@ sudo grafana-cli \
   plugins install tdengine-datasource
 ```
 
-### Configure Grafana
-
-Add following lines to `/etc/grafana/grafana.ini`.
+**NOTE**: If you're using an older version before v3.1.7, please configure to allow using unsigned plugins by add following lines to `/etc/grafana/grafana.ini`.
 
 ```ini
 [plugins]
@@ -225,7 +223,7 @@ systemctl start grafana-server
 ### Login to Grafana
 
 Open the default grafana url: `http://localhost:3000` in your web browser.
-The default username/password is bot `admin`.
+The default username/password is both `admin`.
 Grafana would ask you to change the password after first login.
 
 ### Add TDengine Data Source
@@ -264,13 +262,13 @@ The full page view for TDengine will like below.
 
 ## TDinsight Dashboard Details
 
-The TDinsight dashboard aims to provide TDengine cluster resources usage and status of [dnodes, mdodes, vnodes](https://www.taosdata.com/cn/documentation/architecture#cluster), or databases. There're several partitions of metrics.
+The TDinsight dashboard aims to provide TDengine cluster resources usage and status of [dnodes, mnodes, vnodes](https://www.taosdata.com/cn/documentation/architecture#cluster), or databases. There're several partitions of metrics.
 
 ### Cluster Status
 
 ![tdinsight-mnodes-overview](../assets/TDinsight-1-cluster-status.png)
 
-Include cluster current infomation and status (left-right, top-down).
+Include cluster current information and status (left-right, top-down).
 
 - **First EP**: First EP in current TDengine cluster.
 - **Version**: Server version of MNode.
@@ -281,7 +279,7 @@ Include cluster current infomation and status (left-right, top-down).
 - **Connections** - The connections number in current time.
 - **DNodes/MNodes/VGroups/VNodes**: Total and alive number for each kind of resources.
 - **DNodes/MNodes/VGroups/VNodes Alive Percent**: alive number / total number for each kind of resources, with alert rule enabled, by default it will be triggered when the resource is not 100% alive.
-- **Messuring Points Used**: Used measuring points for enterprise version with alert enabled.
+- **Measuring Points Used**: Used measuring points for enterprise version with alert enabled.
 - **Grants Expire Time**: Expire time for enterprise version with alert enabled.
 - **Error Rate**: The total error rate for the cluster with alert enabled.
 - **Variables**: generated by `show variables` command and displayed as Table view.
@@ -366,7 +364,7 @@ Includes taosAdapter http request statistics and status information
 
 Here's the metrics list:
 
-1. **http_request**: include total http requests, faild http requests and http requests in flight.
+1. **http_request**: include total http requests, failed http requests and http requests in flight.
 2. **top 3 request endpoint**: top 3 total requests number and the corresponding endpoint. 
 3. **Memory Used**: taosAdapter memory usage
 4. **latency_quantile(ms)**: Quantiles for each stages (1, 2, 5, 9, 99)
