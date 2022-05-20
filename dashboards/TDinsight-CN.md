@@ -81,7 +81,7 @@ Usage:
    ./TDinsight.sh -h|--help
    ./TDinsight.sh -n <ds-name> -a <api-url> -u <user> -p <password>
 
-Install and configure TDinsight dashboard in Grafana on ubuntu 18.04/20.04 system.
+Install and configure TDinsight dashboard in Grafana on Ubuntu 18.04/20.04 system.
 
 -h, -help,          --help                  Display help
 
@@ -91,21 +91,21 @@ Install and configure TDinsight dashboard in Grafana on ubuntu 18.04/20.04 syste
 
 -P, --grafana-provisioning-dir <dir>        Grafana provisioning directory, [default: /etc/grafana/provisioning/]
 -G, --grafana-plugins-dir <dir>             Grafana plugins directory, [default: /var/lib/grafana/plugins]
--O, --grafana-org-id <number>               Grafana orgnization id. [default: 1]
+-O, --grafana-org-id <number>               Grafana organization id. [default: 1]
 
 -n, --tdengine-ds-name <string>             TDengine datasource name, no space. [default: TDengine]
 -a, --tdengine-api <url>                    TDengine REST API endpoint. [default: http://127.0.0.1:6041]
 -u, --tdengine-user <string>                TDengine user name. [default: root]
 -p, --tdengine-password <string>            TDengine password. [default: taosdata]
 
--i, --tdinsight-uid <string>                Replace with a non-space ascii code as the dashboard id. [default: tdinsight]
+-i, --tdinsight-uid <string>                Replace with a non-space ASCII code as the dashboard id. [default: tdinsight]
 -t, --tdinsight-title <string>              Dashboard title. [default: TDinsight]
 -e, --tdinsight-editable                    If the provisioning dashboard could be editable. [default: false]
 
 -E, --external-notifier <string>            Apply external notifier uid to TDinsight dashboard.
 
 Aliyun SMS as Notifier:
--s, --sms-enabled                           To enable tdengine-datasource plugin builtin aliyun sms webhook.
+-s, --sms-enabled                           To enable tdengine-datasource plugin builtin Aliyun sms webhook.
 -N, --sms-notifier-name <string>            Provisioning notifier name.[default: TDinsight Builtin SMS]
 -U, --sms-notifier-uid <string>             Provisioning notifier uid, use lowercase notifier name by default.
 -D, --sms-notifier-is-default               Set notifier as default.
@@ -278,7 +278,7 @@ TDinsight 仪表盘旨在提供TDengine 相关资源使用情况[dnodes, mnodes,
 - **Connections** - 当前连接个数。
 - **DNodes/MNodes/VGroups/VNodes**：每种资源的总数和存活数。
 - **DNodes/MNodes/VGroups/VNodes Alive Percent**：每种资源的存活数/总数的比例，启用告警规则，并在资源存活率（1分钟内平均健康资源比例）不足100%时触发。
-- **Messuring Points Used**：启用告警规则的测点数用量（社区版无数据，默认情况下是健康的）。
+- **Measuring Points Used**：启用告警规则的测点数用量（社区版无数据，默认情况下是健康的）。
 - **Grants Expire Time**：启用告警规则的企业版过期时间（社区版无数据，默认情况是健康的）。
 - **Error Rate**：启用警报的集群总合错误率（每秒平均错误数）。
 - **Variables**：`show variables` 表格展示。
@@ -346,7 +346,7 @@ TDinsight 仪表盘旨在提供TDengine 相关资源使用情况[dnodes, mnodes,
 
 目前只报告每分钟登录次数。
 
-### TaosAdapter
+### taosAdapter
 ![taosadapter](../assets/TDinsight-8-taosadaper.png)
 
 包含 taosAdapter 请求统计和状态详情。包括：
