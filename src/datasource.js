@@ -168,10 +168,116 @@ export class GenericDatasource {
     return sql;
   }
 
+  long2wide(recv, by) {
+    let data = recv.data;
+    let header = recv.column_meta;
+    let rows = recv.rows;
+    if (_.size(by) == 0) {
+      return recv;
+    }
+    
+    let name2idx = _(header).map((h, i) => [h[0], i]).fromPairs().value();
+    _.remove(by, k => !_.has(name2idx, k));
+
+    if (_.size(by) == 0) {
+      return recv;
+    }
+
+    let [colKick, colLock] = _(header).slice(1).partition(h => _.includes(by, h[0])).value();
+
+    let newHeader = [header[0]];
+
+    let fields = _.map(colLock, (h, i) => {
+      let colValue = _(colKick).map(col => {
+        let idx = name2idx[col[0]];
+        return _(data).map(row => row[idx]).uniq().map(v => _.fromPairs([[col[0], v]])).value();
+      }).reduce((acc, cur) => {
+        return _(acc).map(o => {
+          return _.map(cur, n => _.extend({}, o, n))
+        }).flatten().value()
+      });
+      return { field: h, name: h[0], labels: colValue };
+    });
+
+    let ts = _(data).map(row => row[0]).orderBy().uniq().value();
+
+    // values long to wide
+    _.forEach(fields, field => {
+      let col = name2idx[field.name];
+      _.forEach(field.labels, label => {
+        let values = _(data).filter(row => {
+          return _(label).map((v, f) => row[name2idx[f]] == v).reduce((acc, cur) => acc && cur)
+        }).map(row => [row[0], row[col]]).fromPairs().value();
+        if (_.size(values) > 0) {
+          _.extend(label, { __values__: values });
+        } else {
+          _.remove(field.labels, label);
+        }
+      });
+    });
+
+    // rebuild headers
+    _.forEach(fields, field => {
+      _.forEach(field.labels, label => {
+        let newField = _.cloneDeep(field.field);
+        let labelName = _(label).keys().filter(k => k != '__values__').map(key => [key, label[key]]).fromPairs().value();
+        console.log("label:", label, labelName);
+
+        newField[0] = field.name + " " + JSON.stringify(labelName);
+        newHeader.push(newField);
+      })
+    })
+
+    // construct new data
+    let newData = _.map(ts, t => {
+      let row = [t];
+      _.forEach(fields, field => {
+        _.forEach(field.labels, label => {
+          row.push(_.get(label.__values__, t));
+        })
+      });
+      return row;
+    })
+
+    return { data: newData, column_meta: newHeader, rows: _.size(ts) };;
+  }
   groupDataByColName(dataRecv, query, options) {
+    if (query.formatType === "Time series" && query.queryType === "SQL") {
+      let groupBy = null;
+      if (!!query.colNameToGroup) {
+        groupBy = _.trim(query.colNameToGroup);
+      } else {
+
+        let m = query.sql.match(/group +by +([^()\s,]+(,\s*\S+)*)\s*[^(,)]*$/);
+        if (m) {
+          groupBy = m[1];
+        } else {
+          return [dataRecv];
+        }
+
+        let by = _(groupBy).split(",").map(s => _.trim(s)).value();
+        if (_.size(by) > 0) {
+          return [this.long2wide(dataRecv, by)];
+        } else {
+          return [dataRecv];
+        }
+      }
+      if (!groupBy || query.colNameToGroup.length == 0) {
+        return [dataRecv];
+      }
+
+      let by = _(groupBy).split(",").map(s => _.trim(s)).value();
+      if (_.size(by) > 0) {
+        return [this.long2wide(dataRecv, by)];
+      } else {
+        return [dataRecv];
+      }
+    }
+
     if (!query.colNameToGroup || query.colNameToGroup.length == 0) {
       return [dataRecv];
     }
+
     for (let index = 0; index < dataRecv.column_meta.length; index++) {
       if (dataRecv.column_meta[index][0] == query.colNameToGroup) {
         let groupData = {};

@@ -2884,7 +2884,7 @@
             },
             {
               "colNameFormatStr": "",
-              "colNameToGroup": "dnode_ep",
+              "colNameToGroup": "",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -6007,5 +6007,5 @@
   "timezone": "",
   "title": "TDinsight",
   "uid": "tdinsight",
-  "version": 28
+  "version": 31
 }
