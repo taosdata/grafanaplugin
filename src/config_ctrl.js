@@ -8,17 +8,17 @@ export class GenericDatasourceConfigCtrl {
         this.backendSrv = $injector.get("backendSrv");
         this.pluginId = this.current.type;
         this.smsShowFlag = false;
-        if (!_.has(this.current, "jsonData")) {
-            this.current.jsonData = {};
+        if (!_.has(this.current, "secureJsonData")) {
+            this.current.secureJsonData = {};
         }
-        if (!_.has(this.current.jsonData, "user")) {
-            this.current.jsonData.user = "root";
+        if (!_.has(this.current.secureJsonData, "user")) {
+            this.current.secureJsonData.user = "root";
         }
-        if (!_.has(this.current.jsonData, "password")) {
-            this.current.jsonData.password = "taosdata";
+        if (!_.has(this.current.secureJsonData, "password")) {
+            this.current.secureJsonData.password = "taosdata";
         }
-        if (!_.has(this.current.jsonData, "token")) {
-            this.current.jsonData.token = null;
+        if (!_.has(this.current.secureJsonData, "token")) {
+            this.current.secureJsonData.token = null;
         }
     }
     requestResources(url, params) {

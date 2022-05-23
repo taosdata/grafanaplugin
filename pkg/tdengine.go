@@ -87,18 +87,17 @@ func (rd *RocksetDatasource) QueryData(ctx context.Context, req *backend.QueryDa
 	var dat JsonData
 
 	// pluginLogger.Debug(fmt.Sprintf("%#v", string(req.Queries[0].JSON)))
-	if err := json.Unmarshal(req.PluginContext.DataSourceInstanceSettings.JSONData, &dat); err != nil {
-		pluginLogger.Debug("get dataSourceInstanceSettings error: %w", err)
-		return nil, fmt.Errorf("get dataSourceInstanceSettings error: %w", err)
-	}
+	decryptedJSONData := req.PluginContext.DataSourceInstanceSettings.DecryptedSecureJSONData
 
+	dat.User = decryptedJSONData["user"]
 	if len(dat.User) == 0 {
 		dat.User = "root"
 	}
-
+	dat.Password = decryptedJSONData["password"]
 	if len(dat.Password) == 0 {
 		dat.Password = "taosdata"
 	}
+	dat.Token = decryptedJSONData["password"]
 
 	// pluginLogger.Debug(fmt.Sprintf("DataSource: %v", req.PluginContext.DataSourceInstanceSettings))
 	AssertSmsWorker(ctx, req.PluginContext.DataSourceInstanceSettings.ID, dat.SmsConfig)
@@ -109,7 +108,7 @@ func (rd *RocksetDatasource) QueryData(ctx context.Context, req *backend.QueryDa
 			pluginLogger.Debug("generateSql error: %w", err)
 			return nil, fmt.Errorf("generateSql error: %w", err)
 		} else {
-			if res, err := query(req.PluginContext.DataSourceInstanceSettings.URL, dat.User, dat.Password, []byte(sql)); err != nil {
+			if res, err := query(req.PluginContext.DataSourceInstanceSettings.URL, dat.User, dat.Password, dat.Token, []byte(sql)); err != nil {
 				pluginLogger.Debug("query data: %w", err)
 				return nil, fmt.Errorf("query data: %w", err)
 			} else if resp, err := makeResponse(res, alias); err != nil {
@@ -274,10 +273,14 @@ func makeResponse(body []byte, alias string) (response backend.DataResponse, err
 	// pluginLogger.Debug(fmt.Sprint("response is", string(json)))
 	return response, nil
 }
-func query(url, user, password string, reqBody []byte) ([]byte, error) {
+func query(url, user, password, token string, reqBody []byte) ([]byte, error) {
 	var reqBodyBuffer io.Reader = bytes.NewBuffer(reqBody)
 
-	req, err := http.NewRequest("POST", url+"/rest/sqlutc", reqBodyBuffer)
+  sqlUtcUrl := url+"/rest/sqlutc"
+  if token != "" {
+    sqlUtcUrl = sqlUtcUrl+"?token="+token
+  }
+	req, err := http.NewRequest("POST", sqlUtcUrl, reqBodyBuffer)
 	if err != nil {
 		pluginLogger.Error(fmt.Sprint("query "+url+"/rest/sqlutc error: ", err))
 		return []byte{}, err
@@ -330,8 +333,12 @@ func (rd *RocksetDatasource) CheckHealth(ctx context.Context, req *backend.Check
 	if !found {
 		password = "taosdata"
 	}
+  token, found := dat["token"].(string)
+  if !found {
+    token = ""
+  }
 
-	if _, err := query(req.PluginContext.DataSourceInstanceSettings.URL, user, password, []byte("show databases")); err != nil {
+	if _, err := query(req.PluginContext.DataSourceInstanceSettings.URL, user, password, token, []byte("show databases")); err != nil {
 		pluginLogger.Error("failed get connect to tdengine: %s", err.Error())
 		return healthError("failed get connect to tdengine: %s", err.Error()), nil
 	}

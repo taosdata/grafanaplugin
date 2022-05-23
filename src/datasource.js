@@ -11,9 +11,9 @@ export class GenericDatasource {
     this.backendSrv = backendSrv;
     this.templateSrv = templateSrv;
     this.headers = { 'Content-Type': 'application/json' };
-    let jsonData = instanceSettings.jsonData;
-    this.headers.Authorization = this.getAuthorization(jsonData);
-    this.requestUrl = this.getUrl(jsonData);
+    let secureJsonData = instanceSettings.secureJsonData;
+    this.headers.Authorization = this.getAuthorization(secureJsonData);
+    this.requestUrl = this.getUrl(secureJsonData);
     this.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     this.generateSqlList = {};
   }
@@ -439,18 +439,18 @@ export class GenericDatasource {
     return output;
   }
 
-  getAuthorization(jsonData) {
-    jsonData = jsonData || {};
-    var defaultUser = jsonData.user || "root";
-    var defaultPassword = jsonData.password || "taosdata";
+  getAuthorization(secureJsonData) {
+    secureJsonData = secureJsonData || {};
+    var defaultUser = secureJsonData.user || "root";
+    var defaultPassword = secureJsonData.password || "taosdata";
 
     return "Basic " + this.encode(defaultUser + ":" + defaultPassword);
   }
 
-  getUrl(jsonData) {
-    if (_.has(jsonData, "token") && !!jsonData.token) {
-      console.log("/rest/sqlutc?token=" + jsonData.token);
-      return "/rest/sqlutc?token=" + jsonData.token;
+  getUrl(secureJsonData) {
+    if (_.has(secureJsonData, "token") && !!secureJsonData.token) {
+      console.log("/rest/sqlutc?token=" + secureJsonData.token);
+      return "/rest/sqlutc?token=" + secureJsonData.token;
     } else {
       return "/rest/sqlutc";
     }
