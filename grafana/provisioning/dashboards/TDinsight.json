@@ -978,7 +978,7 @@
             "query": {
               "params": [
                 "A",
-                "1m",
+                "5m",
                 "now"
               ]
             },
@@ -990,12 +990,17 @@
           }
         ],
         "executionErrorState": "alerting",
-        "for": "1m",
-        "frequency": "10s",
+        "for": "5m",
+        "frequency": "1m",
         "handler": 1,
-        "name": "DNodes Alive Percent alert",
+        "message": "DNodes异常",
+        "name": "DNodes Alive Percent",
         "noDataState": "no_data",
-        "notifications": []
+        "notifications": [
+          {
+            "uid": "tdinsight-builtin-sms"
+          }
+        ]
       },
       "aliasColors": {},
       "bars": false,
@@ -1119,7 +1124,7 @@
             "query": {
               "params": [
                 "A",
-                "1m",
+                "5m",
                 "now"
               ]
             },
@@ -1131,12 +1136,17 @@
           }
         ],
         "executionErrorState": "alerting",
-        "for": "1m",
-        "frequency": "10s",
+        "for": "5m",
+        "frequency": "1m",
         "handler": 1,
-        "name": "MNodes Alive Percent alert",
-        "noDataState": "no_data",
-        "notifications": []
+        "message": "MNodes异常",
+        "name": "MNodes Alive Percent",
+        "noDataState": "keep_state",
+        "notifications": [
+          {
+            "uid": "tdinsight-builtin-sms"
+          }
+        ]
       },
       "aliasColors": {},
       "bars": false,
@@ -1261,7 +1271,7 @@
             "query": {
               "params": [
                 "A",
-                "1m",
+                "5m",
                 "now"
               ]
             },
@@ -1273,12 +1283,17 @@
           }
         ],
         "executionErrorState": "alerting",
-        "for": "1m",
-        "frequency": "10s",
+        "for": "5m",
+        "frequency": "1m",
         "handler": 1,
-        "name": "VGroups Alive Percent alert",
-        "noDataState": "no_data",
-        "notifications": []
+        "message": "VGroups异常",
+        "name": "VGroups Alive Percent",
+        "noDataState": "keep_state",
+        "notifications": [
+          {
+            "uid": "tdinsight-builtin-sms"
+          }
+        ]
       },
       "aliasColors": {},
       "bars": false,
@@ -1403,7 +1418,7 @@
             "query": {
               "params": [
                 "A",
-                "1m",
+                "5m",
                 "now"
               ]
             },
@@ -1415,12 +1430,17 @@
           }
         ],
         "executionErrorState": "alerting",
-        "for": "1m",
-        "frequency": "10s",
+        "for": "5m",
+        "frequency": "1m",
         "handler": 1,
-        "name": "VNodes Alive Percent alert",
-        "noDataState": "no_data",
-        "notifications": []
+        "message": "VNodes 异常",
+        "name": "VNodes Alive Percent",
+        "noDataState": "keep_state",
+        "notifications": [
+          {
+            "uid": "tdinsight-builtin-sms"
+          }
+        ]
       },
       "aliasColors": {},
       "bars": false,
@@ -1581,12 +1601,17 @@
           }
         ],
         "executionErrorState": "keep_state",
-        "for": "1m",
-        "frequency": "10s",
+        "for": "5m",
+        "frequency": "1m",
         "handler": 1,
-        "name": "DNodes Alive Percent alert",
+        "message": "授权测点剩余不足5%",
+        "name": "DNodes Alive Percent",
         "noDataState": "ok",
-        "notifications": []
+        "notifications": [
+          {
+            "uid": "tdinsight-builtin-sms"
+          }
+        ]
       },
       "aliasColors": {},
       "bars": false,
@@ -1672,7 +1697,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Measuring Points Used Percent Alert",
+      "title": "Measuring Points Used",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1739,12 +1764,17 @@
           }
         ],
         "executionErrorState": "keep_state",
-        "for": "1m",
-        "frequency": "10s",
+        "for": "5m",
+        "frequency": "1m",
         "handler": 1,
-        "name": "Grants Expire Time alert",
-        "noDataState": "no_data",
-        "notifications": []
+        "message": "授权即将过期",
+        "name": "Grants Expire Time",
+        "noDataState": "keep_state",
+        "notifications": [
+          {
+            "uid": "tdinsight-builtin-sms"
+          }
+        ]
       },
       "aliasColors": {},
       "bars": false,
@@ -1885,13 +1915,18 @@
             "type": "query"
           }
         ],
-        "executionErrorState": "alerting",
-        "for": "1m",
-        "frequency": "10s",
+        "executionErrorState": "keep_state",
+        "for": "5m",
+        "frequency": "1m",
         "handler": 1,
-        "name": "Error Rate alert",
-        "noDataState": "no_data",
-        "notifications": []
+        "message": "错误率高",
+        "name": "Error Rate",
+        "noDataState": "keep_state",
+        "notifications": [
+          {
+            "uid": "tdinsight-builtin-sms"
+          }
+        ]
       },
       "aliasColors": {},
       "bars": false,
@@ -2336,7 +2371,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select last(uptime) from log.dnodes_info where ts >= now -1m and ts <= now group by dnode_ep",
+          "sql": "select last(uptime) from log.dnodes_info where ts >= $from and ts <= $to group by dnode_ep",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -2849,12 +2884,12 @@
             },
             {
               "colNameFormatStr": "",
-              "colNameToGroup": "dnode_ep",
+              "colNameToGroup": "",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
               "refId": "B",
-              "sql": "select avg(insert_rate) as cluster_insert_rate, avg(batch_rate) as cluster_batch_rate from (select sum(req_insert_rate) as insert_rate,  sum(req_insert_batch_rate) as batch_rate from log.dnodes_info where ts >= $from and ts <= $to interval(1s)) where ts >= $from and ts <= $to interval($interval) fill(null)"
+              "sql": "select avg(insert_rate) as cluster_insert_rate, avg(batch_rate) as cluster_batch_rate from (select sum(req_insert_rate) as insert_rate, sum(req_insert_batch_rate) as batch_rate from log.dnodes_info where ts >= $from and ts <= $to interval(1s)) where ts >= $from and ts <= $to interval($interval) fill(null)"
             }
           ],
           "thresholds": [],
@@ -3728,7 +3763,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last(uptime) as uptime  from log.dnodes_info where dnode_ep = '$fqdn'",
+              "sql": "select last(uptime) as uptime from log.dnodes_info where dnode_ep = '$fqdn'",
               "target": "select metric",
               "timeshift": {
                 "period": null
@@ -3830,7 +3865,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last(has_mnode) as has_mnode  from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts < $to interval($interval) fill(null)",
+              "sql": "select last(has_mnode) as has_mnode from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval)",
               "target": "select metric",
               "timeshift": {
                 "period": null
@@ -3902,7 +3937,7 @@
             "orientation": "auto",
             "reduceOptions": {
               "calcs": [
-                "last"
+                "lastNotNull"
               ],
               "fields": "",
               "values": false
@@ -3926,7 +3961,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last(cpu_cores) as uptime  from log.dnodes_info where dnode_ep = '$fqdn' interval ($interval)",
+              "sql": "select last(cpu_cores) as uptime from log.dnodes_info where dnode_ep = '$fqdn' interval ($interval)",
               "target": "select metric",
               "timeshift": {
                 "period": null
@@ -3976,7 +4011,7 @@
             "orientation": "auto",
             "reduceOptions": {
               "calcs": [
-                "last"
+                "lastNotNull"
               ],
               "fields": "",
               "values": false
@@ -4000,7 +4035,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last(vnodes_num) as vnodes_num  from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts < $to interval($interval) fill(null)",
+              "sql": "select last(vnodes_num) as vnodes_num from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)",
               "target": "select metric",
               "timeshift": {
                 "period": null
@@ -4050,7 +4085,7 @@
             "orientation": "auto",
             "reduceOptions": {
               "calcs": [
-                "last"
+                "lastNotNull"
               ],
               "fields": "",
               "values": false
@@ -4074,7 +4109,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last(masters) as masters  from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts < $to interval($interval) fill(null)",
+              "sql": "select last(masters) as masters from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)",
               "target": "select metric",
               "timeshift": {
                 "period": null
@@ -4180,14 +4215,14 @@
               "formatType": "Table",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select  last(cpu_engine)  from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts < $to",
+              "sql": "select last(cpu_engine) from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to",
               "target": "select metric",
               "type": "timeserie"
             }
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Current CPU  Usage of taosd",
+          "title": "Current CPU Usage of taosd",
           "type": "gauge"
         },
         {
@@ -4249,7 +4284,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select  last(mem_engine) as taosd, last(mem_total) as total  from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts < $to",
+              "sql": "select last(mem_engine) as taosd, last(mem_total) as total from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to",
               "target": "select metric",
               "type": "timeserie"
             }
@@ -4331,7 +4366,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last(disk_used) as used, last(disk_total) as total,  last(disk_used) / last(disk_total) as percent  from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts < $to",
+              "sql": "select last(disk_used) as used, last(disk_total) as total, last(disk_used) / last(disk_total) as percent from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to",
               "target": "select metric",
               "timeshift": {
                 "period": null
@@ -4413,15 +4448,15 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select  avg(cpu_engine) as taosd, avg(cpu_system) as system from log.dnodes_info where dnode_ep='$fqdn' and ts >= $from and ts < $to  interval($interval) fill(null)",
+              "sql": "select avg(cpu_engine) as taosd, avg(cpu_system) as system from log.dnodes_info where dnode_ep='$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)",
               "target": "select metric",
               "type": "timeserie"
             }
           ],
           "thresholds": [],
-          "timeFrom": "1h",
+          "timeFrom": null,
           "timeRegions": [],
-          "timeShift": "30s",
+          "timeShift": null,
           "title": "CPU Usage",
           "tooltip": {
             "shared": true,
@@ -4527,15 +4562,15 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select avg(mem_engine) as taosd, avg(mem_system) as system, avg(mem_total) as total from log.dnodes_info where dnode_ep='$fqdn' and ts >= $from and ts < $to  interval($interval) fill(null)",
+              "sql": "select avg(mem_engine) as taosd, avg(mem_system) as system, avg(mem_total) as total from log.dnodes_info where dnode_ep='$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)",
               "target": "select metric",
               "type": "timeserie"
             }
           ],
           "thresholds": [],
-          "timeFrom": "1h",
+          "timeFrom": null,
           "timeRegions": [],
-          "timeShift": "30s",
+          "timeShift": null,
           "title": "RAM Usage",
           "tooltip": {
             "shared": true,
@@ -4644,7 +4679,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select avg(datadir_l0_used) as level0_used, avg(datadir_l0_total) as level0_total, avg(datadir_l1_used) as level1_used, avg(datadir_l1_total) as level1_total, avg(datadir_l2_used) as level2_used, avg(datadir_l2_total) as level2_total from log.disks_info where dnode_ep = '$fqdn' and ts >= $from and ts < $to interval($interval) fill(null)",
+              "sql": "select avg(datadir_l0_used) as level0_used, avg(datadir_l0_total) as level0_total, avg(datadir_l1_used) as level1_used, avg(datadir_l1_total) as level1_total, avg(datadir_l2_used) as level2_used, avg(datadir_l2_total) as level2_total from log.disks_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)",
               "target": "select metric",
               "timeshift": {
                 "period": null
@@ -4659,7 +4694,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "D",
-              "sql": "select avg(datadir_l0_used)/avg(datadir_l0_total) as level0_percent, avg(datadir_l1_used)/avg(datadir_l1_total) as level1_percent , avg(datadir_l2_used)/avg(datadir_l2_total) as level2_percent  from log.disks_info where dnode_ep = '$fqdn' and ts >= $from and ts < $to interval($interval) fill(null)",
+              "sql": "select avg(datadir_l0_used)/avg(datadir_l0_total) as level0_percent, avg(datadir_l1_used)/avg(datadir_l1_total) as level1_percent , avg(datadir_l2_used)/avg(datadir_l2_total) as level2_percent from log.disks_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)",
               "target": "select metric",
               "timeshift": {
                 "period": null
@@ -4772,7 +4807,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select derivative(value, 1m, 0) from (select avg(datadir_l0_used) * 1024 as value from log.disks_info where dnode_ep = '$fqdn' and ts >= $from and ts < $to interval($interval) fill(null))",
+              "sql": "select derivative(value, 1m, 0) from (select avg(datadir_l0_used) * 1024 as value from log.disks_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null))",
               "target": "select metric",
               "timeshift": {
                 "period": null
@@ -4787,7 +4822,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "B",
-              "sql": "select derivative(value, 1m, 0) from (select avg(datadir_l1_used) * 1024 as value from log.disks_info where dnode_ep = '$fqdn' and ts >= $from and ts < $to interval($interval) fill(null))",
+              "sql": "select derivative(value, 1m, 0) from (select avg(datadir_l1_used) * 1024 as value from log.disks_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null))",
               "target": "select metric",
               "timeshift": {
                 "period": null
@@ -4802,7 +4837,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "C",
-              "sql": "select derivative(value, 1m, 0) from (select avg(datadir_l2_used) * 1024 as value from log.disks_info where dnode_ep = '$fqdn' and ts >= $from and ts < $to interval($interval) fill(null))",
+              "sql": "select derivative(value, 1m, 0) from (select avg(datadir_l2_used) * 1024 as value from log.disks_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null))",
               "target": "select metric",
               "timeshift": {
                 "period": null
@@ -4926,15 +4961,15 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select  avg(io_read_disk) as io_read_taosd, avg(io_write_disk) as io_write_taosd from log.dnodes_info where dnode_ep = '$fqdn' and ts >= now-1h and ts < now  interval($interval) fill(null)",
+              "sql": "select avg(io_read_disk) as io_read_taosd, avg(io_write_disk) as io_write_taosd from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)",
               "target": "select metric",
               "type": "timeserie"
             }
           ],
           "thresholds": [],
-          "timeFrom": "1h",
+          "timeFrom": null,
           "timeRegions": [],
-          "timeShift": "30s",
+          "timeShift": null,
           "title": "Disk IO",
           "tooltip": {
             "shared": true,
@@ -5046,15 +5081,15 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select  avg(net_in) as net_in, avg(net_out) as net_out from log.dnodes_info where dnode_ep = '$fqdn' and ts >= now-1h and ts < now  interval($interval) fill(null)",
+              "sql": "select avg(net_in) as net_in, avg(net_out) as net_out from log.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)",
               "target": "select metric",
               "type": "timeserie"
             }
           ],
           "thresholds": [],
-          "timeFrom": "1h",
+          "timeFrom": null,
           "timeRegions": [],
-          "timeShift": "30s",
+          "timeShift": null,
           "title": "Net",
           "tooltip": {
             "shared": true,
@@ -5169,7 +5204,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select count(*) from log.logs where ts >= $from and ts < $to interval (1m)",
+              "sql": "select count(*) from log.logs where ts >= $from and ts <= $to interval (1m)",
               "target": "select metric",
               "type": "timeserie"
             }
@@ -5222,7 +5257,7 @@
     {
       "id": 64,
       "collapsed": true,
-      "datasource": "${DS_TDENGINE}",
+      "datasource": "TDengine",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -5250,8 +5285,8 @@
                 "lineWidth": 1,
                 "fillOpacity": 0,
                 "gradientMode": "none",
-                "spanNulls": true,
-                "showPoints": "never",
+                "spanNulls": false,
+                "showPoints": "auto",
                 "pointSize": 5,
                 "stacking": {
                   "mode": "none",
@@ -5301,7 +5336,7 @@
             {
               "colNameFormatStr": "",
               "colNameToGroup": "",
-              "datasource": "${DS_TDENGINE}",
+              "datasource": "TDengine",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -5310,7 +5345,7 @@
             {
               "colNameFormatStr": "",
               "colNameToGroup": "",
-              "datasource": "${DS_TDENGINE}",
+              "datasource": "TDengine",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -5320,7 +5355,7 @@
             {
               "colNameFormatStr": "",
               "colNameToGroup": "",
-              "datasource": "${DS_TDENGINE}",
+              "datasource": "TDengine",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -5328,7 +5363,7 @@
               "sql": "select avg(count) as request_in_flight from log.taosadapter_restful_http_request_in_flight where ts >= $from and ts <= $to interval($interval)"
             }
           ],
-          "datasource": null
+          "datasource": "TDengine"
         },
         {
           "id": 7,
@@ -5398,10 +5433,10 @@
               "sql": "select * from (select avg(count) as count from log.taosadapter_restful_http_total where  ts >= $from and ts <= $to group by endpoint) order by count desc limit 3",
               "target": "select metric",
               "type": "timeserie",
-              "datasource": "${DS_TDENGINE}"
+              "datasource": "TDengine"
             }
           ],
-          "datasource": null
+          "datasource": "TDengine"
         },
         {
           "id": 3,
@@ -5414,7 +5449,7 @@
           "type": "gauge",
           "title": "Memory Used",
           "transformations": [],
-          "datasource": "${DS_TDENGINE}",
+          "datasource": "TDengine",
           "pluginVersion": "7.5.10",
           "fieldConfig": {
             "defaults": {
@@ -5513,7 +5548,7 @@
             {
               "colNameFormatStr": "",
               "colNameToGroup": "",
-              "datasource": "${DS_TDENGINE}",
+              "datasource": "TDengine",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -5523,7 +5558,7 @@
             {
               "colNameFormatStr": "",
               "colNameToGroup": "",
-              "datasource": "${DS_TDENGINE}",
+              "datasource": "TDengine",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -5533,7 +5568,7 @@
             {
               "colNameFormatStr": "",
               "colNameToGroup": "",
-              "datasource": "${DS_TDENGINE}",
+              "datasource": "TDengine",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -5543,7 +5578,7 @@
             {
               "colNameFormatStr": "",
               "colNameToGroup": "",
-              "datasource": "${DS_TDENGINE}",
+              "datasource": "TDengine",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -5553,7 +5588,7 @@
             {
               "colNameFormatStr": "",
               "colNameToGroup": "",
-              "datasource": "${DS_TDENGINE}",
+              "datasource": "TDengine",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -5599,7 +5634,7 @@
           "steppedLine": false,
           "timeFrom": null,
           "timeShift": null,
-          "datasource": null
+          "datasource": "TDengine"
         },
         {
           "id": 5,
@@ -5669,10 +5704,10 @@
               "sql": "select * from (select avg(count) as count from log.taosadapter_restful_http_fail where ts >= $from and ts <= $to group by endpoint) order by count desc limit 3",
               "target": "select metric",
               "type": "timeserie",
-              "datasource": "${DS_TDENGINE}"
+              "datasource": "TDengine"
             }
           ],
-          "datasource": null
+          "datasource": "TDengine"
         },
         {
           "id": 6,
@@ -5741,10 +5776,10 @@
               "target": "select metric",
               "timeshift": {},
               "type": "timeserie",
-              "datasource": "${DS_TDENGINE}"
+              "datasource": "TDengine"
             }
           ],
-          "datasource": null
+          "datasource": "TDengine"
         }
       ],
       "title": "TaosAdapter",
@@ -5785,7 +5820,7 @@
         "allValue": null,
         "current": {},
         "datasource": "TDengine",
-        "definition": "select distinct(database_name) from log.vgroups_info where ts >= $from and ts <= $to",
+        "definition": "show databases",
         "description": null,
         "error": null,
         "hide": 0,
@@ -5794,13 +5829,12 @@
         "multi": true,
         "name": "database",
         "options": [],
-        "query": "select distinct(database_name) from log.vgroups_info where ts >= $from and ts <= $to",
+        "query": "show databases",
         "refresh": 1,
-        "regex": "",
+        "regex": "/([^,]+),/",
         "skipUrlSync": false,
         "sort": 1,
         "tagValuesQuery": "",
-        "tags": [],
         "tagsQuery": "",
         "type": "query",
         "useTags": false
@@ -5973,5 +6007,5 @@
   "timezone": "",
   "title": "TDinsight",
   "uid": "tdinsight",
-  "version": 20
+  "version": 31
 }
