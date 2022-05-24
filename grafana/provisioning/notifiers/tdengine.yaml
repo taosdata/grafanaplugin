@@ -2,9 +2,9 @@
 apiVersion: 1
 
 notifiers:
-  - name: sms
+  - name: tdinsight-builtin-sms
     type: webhook
-    uid: sms
+    uid: tdinsight-builtin-sms
     is_default: true
     settings:
       url: http://${SMS_LISTEN_ADDR}/sms

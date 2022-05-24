@@ -36,3 +36,4 @@ profile.cov
 /dist/test/
 dist
 .vscode
+tdengine-datasource*

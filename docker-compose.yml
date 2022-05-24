@@ -12,11 +12,11 @@ services:
       - ./dist:/var/lib/grafana/plugins/tdengine-datasource
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini
       - ./grafana/provisioning/:/etc/grafana/provisioning/
-      - grafana-data:/var/lib/grafana
+      #- grafana-data:/var/lib/grafana
     environment:
       TDENGINE_API: ${TDENGINE_API}
-      TDENGINE_USER: ${TDENGINE_USER}
-      TDENGINE_PASS: ${TDENGINE_PASS}
+      # use base64(user:password) for Basic Authorization
+      TDENGINE_BASIC_AUTH: ${TDENGINE_BASIC_AUTH}
       SMS_ACCESS_KEY_ID: ${SMS_ACCESS_KEY_ID}
       SMS_ACCESS_KEY_SECRET: ${SMS_ACCESS_KEY_SECRET}
       SMS_SIGN_NAME: ${SMS_SIGN_NAME}

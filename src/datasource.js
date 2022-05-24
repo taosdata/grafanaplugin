@@ -1,5 +1,6 @@
 import _ from "lodash";
 var moment = require('./js/moment-timezone-with-data');
+
 export class GenericDatasource {
 
   constructor(instanceSettings, $q, backendSrv, templateSrv) {
@@ -11,14 +12,12 @@ export class GenericDatasource {
     this.backendSrv = backendSrv;
     this.templateSrv = templateSrv;
     this.headers = { 'Content-Type': 'application/json' };
-    let secureJsonData = instanceSettings.secureJsonData;
-    this.headers.Authorization = this.getAuthorization(secureJsonData);
-    this.requestUrl = this.getUrl(secureJsonData);
     this.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     this.generateSqlList = {};
   }
 
   query(options) {
+
     // console.log('options',options);
     if (options.timezone) {
       this.timezone = options.timezone == "browser" ? Intl.DateTimeFormat().resolvedOptions().timeZone : options.timezone;
@@ -30,7 +29,7 @@ export class GenericDatasource {
     return Promise.all(targets.map(target => {
       let sql = this.generateSql(target.sql, options);
       this.generateSqlList[target.refId] = sql;
-      return this.request(this.requestUrl, sql).then(res => this.postQuery(target, res, options));
+      return this.request(sql).then(res => this.postQuery(target, res, options));
     }))
       .then(data => {
         let result = this.arithmeticQueries(data, options).flat();
@@ -47,34 +46,7 @@ export class GenericDatasource {
   }
 
   testDatasource() {
-    this.backendSrv.datasourceRequest({
-      url: `/api/frontend/settings`,
-    }).then(response => {
-      let params = _(_.get(response, "data.datasources"))
-        .values()
-        .filter(datasource => datasource.type === this.pluginId && _.has(datasource, 'jsonData.smsConfig'))
-        .map(item => [
-          item.id, item.jsonData.smsConfig
-        ])
-        .fromPairs()
-        .value();
-      return this.requestResources(`/setSmsConfig`, params).then(response => {
-        if (!!response && response.status === 204) {
-          return { status: "success", message: "SMS Config Success", title: "Success" };
-        }
-        return { status: "error", message: "SMS Config Success Failed", title: "Failed" };
-      }).catch(err => {
-        console.log("catch error while setting sms config", err);
-        if (err.status == 404) {
-          console.log("Aliyun SMS config is not supported in current Grafana version");
-          return { status: "success", message: "SMS Config Invalid", title: "Unsupported" };
-        }
-        return { status: "error", message: "SMS Config Success Failed", title: "Failed" };
-      });
-    }, error => {
-      console.log(error);
-    });
-    return this.request(this.requestUrl, 'show databases').then(response => {
+    return this.request('show databases').then(response => {
       if (!!response && response.status === 200) {
         return { status: "success", message: "TDengine Data source is working", title: "Success" };
       }
@@ -82,17 +54,16 @@ export class GenericDatasource {
     });
   }
 
-  request(url, params) {
+  request(params) {
     if (!params) {
       return new Promise((resolve, reject) => {
         resolve();
       });
     }
     return this.backendSrv.datasourceRequest({
-      url: `${this.url}${url}`,
+      url: this.url + "/sqlutc",
       data: params,
       method: 'POST',
-      headers: this.headers,
     });
   }
 
@@ -175,7 +146,7 @@ export class GenericDatasource {
     if (_.size(by) == 0) {
       return recv;
     }
-    
+
     let name2idx = _(header).map((h, i) => [h[0], i]).fromPairs().value();
     _.remove(by, k => !_.has(name2idx, k));
 
@@ -439,23 +410,6 @@ export class GenericDatasource {
     return output;
   }
 
-  getAuthorization(secureJsonData) {
-    secureJsonData = secureJsonData || {};
-    var defaultUser = secureJsonData.user || "root";
-    var defaultPassword = secureJsonData.password || "taosdata";
-
-    return "Basic " + this.encode(defaultUser + ":" + defaultPassword);
-  }
-
-  getUrl(secureJsonData) {
-    if (_.has(secureJsonData, "token") && !!secureJsonData.token) {
-      console.log("/rest/sqlutc?token=" + secureJsonData.token);
-      return "/rest/sqlutc?token=" + secureJsonData.token;
-    } else {
-      return "/rest/sqlutc";
-    }
-  }
-
   generateTimeshift(options, target) {
     var alias = target.alias || "";
     alias = this.templateSrv.replace(alias, options.scopedVars, 'csv');
@@ -470,7 +424,7 @@ export class GenericDatasource {
   metricFindQuery(query, options) {
     // console.log('query',query);
     // console.log('options',options);
-    return this.request(this.requestUrl, this.generateSql(query, options)).then(res => {
+    return this.request(this.generateSql(query, options)).then(res => {
       if (!res || !res.data || !res.data.data) {
         return [];
       } else {

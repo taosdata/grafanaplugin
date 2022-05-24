@@ -32,8 +32,8 @@ func CreateClient(accessKeyId *string, accessKeySecret *string) (_result *dysmsa
 	return _result, _err
 }
 
-func SendSms(conf SmsConfInfo, templateParam string) (_err error) {
-	client, _err := CreateClient(tea.String(conf.AlibabaCloudSms.AccessKeyId), tea.String(conf.AlibabaCloudSms.AccessKeySecret))
+func SendSms(conf JsonData, templateParam string) (_err error) {
+	client, _err := CreateClient(tea.String(conf.AccessKeyId), tea.String(conf.AccessKeySecret))
 	if _err != nil {
 		return _err
 	}
@@ -46,9 +46,9 @@ func SendSms(conf SmsConfInfo, templateParam string) (_err error) {
 		pluginLogger.Debug(fmt.Sprintf("Send sms to %s", numbers[i]))
 		sendSmsRequest := &dysmsapi20170525.SendSmsRequest{
 			PhoneNumbers:  tea.String(numbers[i]),
-			TemplateCode:  tea.String(conf.AlibabaCloudSms.TemplateCode),
+			TemplateCode:  tea.String(conf.TemplateCode),
 			TemplateParam: tea.String(templateParam),
-			SignName:      tea.String(conf.AlibabaCloudSms.SignName),
+			SignName:      tea.String(conf.SignName),
 		}
 		pluginLogger.Debug(fmt.Sprintf("Sms sendSmsRequest: %#v", sendSmsRequest))
 		// 复制代码运行请自行打印 API 的返回值

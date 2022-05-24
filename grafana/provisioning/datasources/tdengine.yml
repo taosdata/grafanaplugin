@@ -13,8 +13,6 @@ datasources:
   orgId: 1
   # <string> url
   url: $TDENGINE_API
-  # <string> database password, if used
-  password: $TDENGINE_PASS
   # <string> database user, if used
   user: $TDENGINE_USER
   # <bool> enable/disable basic auth
@@ -23,22 +21,22 @@ datasources:
   # <bool> mark as default datasource. Max one per org
   isDefault: true
   # <map> fields that will be converted to json and stored in json_data
-  jsonData:
+  secureJsonData:
     timeInterval: "5s"
+    url: $TDENGINE_API
     # <string> database user, if used
     user: $TDENGINE_USER
     # <string> database password, if used
     password: $TDENGINE_PASS
+    basicAuth: "${TDENGINE_BASIC_AUTH}"
     # Sms notification webhook support
-    smsConfig:
-      alibabaCloudSms:
-        accessKeyId: $SMS_ACCESS_KEY_ID
-        accessKeySecret: $SMS_ACCESS_KEY_SECRET
-        signName: $SMS_SIGN_NAME
-        templateCode: $SMS_TEMPLATE_CODE
-        templateParam: $SMS_TEMPLATE_PARAM
-      phoneNumbersList: $SMS_PHONE_NUMBERS
-      listenAddr: ${SMS_LISTEN_ADDR}
+    aliSmsAccessKeyId: $SMS_ACCESS_KEY_ID
+    aliSmsAccessKeySecret: $SMS_ACCESS_KEY_SECRET
+    aliSmsSignName: $SMS_SIGN_NAME
+    aliSmsTemplateCode: $SMS_TEMPLATE_CODE
+    aliSmsTemplateParam: $SMS_TEMPLATE_PARAM
+    aliSmsPhoneNumbersList: $SMS_PHONE_NUMBERS
+    aliSmsListenAddr: ${SMS_LISTEN_ADDR}
   version: 1
   # <bool> allow users to edit datasources from the UI.
   editable: true
