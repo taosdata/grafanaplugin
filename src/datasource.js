@@ -204,16 +204,16 @@ export class GenericDatasource {
     // values long to wide
     _.forEach(fields, field => {
       let col = name2idx[field.name];
-      _.forEach(field.labels, label => {
+      field.labels = _(field.labels).map(label => {
         let values = _(data).filter(row => {
-          return _(label).map((v, f) => row[name2idx[f]] == v).reduce((acc, cur) => acc && cur)
+          return _(label).map((v, f) => row[name2idx[f]] === v).reduce((acc, cur) => acc && cur)
         }).map(row => [row[0], row[col]]).fromPairs().value();
         if (_.size(values) > 0) {
-          _.extend(label, { __values__: values });
+          return _.extend(label, { __values__: values });
         } else {
-          _.remove(field.labels, label);
+          return null;
         }
-      });
+      }).filter().value();
     });
 
     // rebuild headers
