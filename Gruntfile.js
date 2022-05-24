@@ -21,6 +21,11 @@ module.exports = function (grunt) {
         src: ['examples/**'],
         dest: 'dist'
       },
+      dashboards: {
+        expand: true,
+        src: ["dashboards/TDinsight.json"],
+        dest: 'dist/'
+      },
       pluginDef: {
         src: ['PLUGIN-README.md'],
         dest: 'dist/README.md'
@@ -80,6 +85,6 @@ module.exports = function (grunt) {
     }
   });
 
-  grunt.registerTask('default', ['clean', 'copy:src_to_dist', 
+  grunt.registerTask('default', ['clean', 'copy:src_to_dist', "copy:dashboards",
     'copy:examples_to_dist', 'copy:pluginDef', 'babel', 'mochaTest']);
 };

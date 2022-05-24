@@ -22,6 +22,13 @@
       ]
     }
   ],
+  "includes": [
+    {
+      "type": "dashboard",
+      "name": "TDinsight",
+      "path": "dashboards/TDinsight.json"
+    }
+  ],
   "info": {
     "screenshots": [{ "name": "config", "path": "img/howto-add-datasource.png" }],
     "keywords": ["taosdata", "TDengine"],
