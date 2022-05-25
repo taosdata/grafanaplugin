@@ -6,6 +6,8 @@
   - [Add Data Source](#add-data-source)
   - [Import Dashboard](#import-dashboard)
   - [Alert Feature](#alert-feature)
+- [Important changes](#important-changes)
+  - [v3.2.0](#v320)
 - [Monitor TDengine Database with TDengine Data Source Plugin](#monitor-tdengine-database-with-tdengine-data-source-plugin)
   - [TDinsight](#tdinsight)
 - [Docker Stack](#docker-stack)
@@ -246,6 +248,69 @@ Test it with **Test rule** button, it should return `firing: true`:
 In alert manager dashboard, you could see the alert:
 
 ![alert manager](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/alert-manager-status.png)
+
+## Important changes
+
+### [v3.2.0](https://github.com/taosdata/grafanaplugin/releases/tag/v3.2.0)
+
+1. TDengine data source plugin uses secureJsonData to store sensitive data. It will cause a breaking change when you upgrading from an older version:
+
+    The simple way to migrate from older version is to reconfigure the data source like adding a data source from scratch.
+
+    If you're using Grafana provisioning configurations, you should change the data source provisioning configuration file to use `secureJsonData`:
+
+    ```yaml
+    apiVersion: 1
+    datasources:
+      # <string, required> name of the datasource. Required
+    - name: TDengine
+      # <string, required> datasource type. Required
+      type: tdengine-datasource
+      # <string, required> access mode. direct or proxy. Required
+      # <int> org id. will default to orgId 1 if not specified
+      orgId: 1
+      
+      # <string> url to TDengine rest api, eg. http://td1:6041
+      url: "$TDENGINE_API"
+
+      # <bool> mark as default datasource. Max one per org
+      isDefault: true
+
+      # <map> 
+      secureJsonData:
+        # <string> a redundant url configuration. Required.
+        url: "$TDENGINE_API"
+        # <string> database user.
+        user: "$TDENGINE_USER"
+        # <string> database password.
+        password: "$TDENGINE_PASS"
+        # <string> basic authorization token. Required, can be build like
+        #   `echo root:taosdata|base64`
+        basicAuth: "${TDENGINE_BASIC_AUTH}"
+        # aliSms* is configuration options for builtin sms notifier powered by Aliyun Cloud SMS
+
+        # <string> the key id from Aliyun.
+        aliSmsAccessKeyId: "$SMS_ACCESS_KEY_ID"
+        # <string> key secret paired to key id.
+        aliSmsAccessKeySecret: "$SMS_ACCESS_KEY_SECRET"
+        aliSmsSignName: "$SMS_SIGN_NAME"
+        # <string> sms template code from Aliyun. eg. SMS_123010240
+        aliSmsTemplateCode: "$SMS_TEMPLATE_CODE"
+        # <string> serialized json string for sms template parameters. eg.
+        #  `'{"alarm_level":"%s","time":"%s","name":"%s","content":"%s"}'`
+        aliSmsTemplateParam: "$SMS_TEMPLATE_PARAM"
+        # <string> phone number list, separated by comma `,`
+        aliSmsPhoneNumbersList: "$SMS_PHONE_NUMBERS"
+        # <string> builtin sms notifier webhook address.
+        aliSmsListenAddr: "$SMS_LISTEN_ADDR"
+      version: 1
+      # <bool> allow users to edit datasources from the UI.
+      editable: true
+    ```
+
+2. Now users can quickly import TDinsight dashboard in **Dashboards** tab in a datasource configuration page.
+
+    ![import-tdinsight-from-tdengine-ds](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/import-tdinsight-from-tdengine-ds.png)
 
 ## Monitor TDengine Database with TDengine Data Source Plugin
 
