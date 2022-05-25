@@ -11,7 +11,7 @@ import (
 var workerList sync.Map
 
 type SmsWorker struct {
-	conf   SmsConfInfo
+	conf   JsonData
 	server *http.Server
 }
 
@@ -27,7 +27,7 @@ func (worker *SmsWorker) StartListen() {
 		if len(b.Message) > 35 {
 			b.Message = b.Message[:35]
 		}
-		SendSms(worker.conf, fmt.Sprintf(worker.conf.AlibabaCloudSms.TemplateParam, b.State, time.Now().Format("2006-01-02 15:04:05"), b.Title, b.Message))
+		SendSms(worker.conf, fmt.Sprintf(worker.conf.TemplateParam, b.State, time.Now().Format("2006-01-02 15:04:05"), b.Title, b.Message))
 	}, 0))
 
 	worker.server = &http.Server{Addr: worker.conf.ListenAddr, Handler: handler}
@@ -38,7 +38,7 @@ func (worker *SmsWorker) StartListen() {
 
 var workerMutex sync.Mutex
 
-func AssertSmsWorker(ctx context.Context, id int64, conf SmsConfInfo) {
+func AssertSmsWorker(ctx context.Context, id int64, conf JsonData) {
 	uid := fmt.Sprint(id)
 	workerMutex.Lock()
 	defer workerMutex.Unlock()
@@ -49,7 +49,7 @@ func AssertSmsWorker(ctx context.Context, id int64, conf SmsConfInfo) {
 	}
 }
 
-func RestartSmsWorker(id int64, conf SmsConfInfo) {
+func RestartSmsWorker(id int64, conf JsonData) {
 	uid := fmt.Sprint(id)
 	pluginLogger.Info(fmt.Sprint("Restart sms worker for data source ", uid))
 	workerMutex.Lock()

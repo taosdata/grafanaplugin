@@ -79,6 +79,12 @@ type RocksetDatasource struct {
 	im instancemgmt.InstanceManager
 }
 
+func transcode(in, out interface{}) {
+	buf := new(bytes.Buffer)
+	json.NewEncoder(buf).Encode(in)
+	json.NewDecoder(buf).Decode(out)
+}
+
 // QueryData handles multiple queries and returns multiple responses.
 // req contains the queries []DataQuery (where each query contains RefID as a unique identifer).
 // The QueryDataResponse contains a map of RefID to the response for each query, and each response
@@ -87,21 +93,19 @@ func (rd *RocksetDatasource) QueryData(ctx context.Context, req *backend.QueryDa
 	var dat JsonData
 
 	// pluginLogger.Debug(fmt.Sprintf("%#v", string(req.Queries[0].JSON)))
-	if err := json.Unmarshal(req.PluginContext.DataSourceInstanceSettings.JSONData, &dat); err != nil {
-		pluginLogger.Debug("get dataSourceInstanceSettings error: %w", err)
-		return nil, fmt.Errorf("get dataSourceInstanceSettings error: %w", err)
-	}
-
+	decryptedJSONData := req.PluginContext.DataSourceInstanceSettings.DecryptedSecureJSONData
+	pluginLogger.Info("secureJsonData: %v", decryptedJSONData)
+	transcode(decryptedJSONData, &dat)
+	pluginLogger.Info("JsonData: %v", dat)
 	if len(dat.User) == 0 {
 		dat.User = "root"
 	}
-
 	if len(dat.Password) == 0 {
 		dat.Password = "taosdata"
 	}
 
 	// pluginLogger.Debug(fmt.Sprintf("DataSource: %v", req.PluginContext.DataSourceInstanceSettings))
-	AssertSmsWorker(ctx, req.PluginContext.DataSourceInstanceSettings.ID, dat.SmsConfig)
+	AssertSmsWorker(ctx, req.PluginContext.DataSourceInstanceSettings.ID, dat)
 
 	response := backend.NewQueryDataResponse()
 	for i := 0; i < len(req.Queries); i++ {
@@ -109,7 +113,7 @@ func (rd *RocksetDatasource) QueryData(ctx context.Context, req *backend.QueryDa
 			pluginLogger.Debug("generateSql error: %w", err)
 			return nil, fmt.Errorf("generateSql error: %w", err)
 		} else {
-			if res, err := query(req.PluginContext.DataSourceInstanceSettings.URL, dat.User, dat.Password, []byte(sql)); err != nil {
+			if res, err := query(req.PluginContext.DataSourceInstanceSettings.URL, dat.User, dat.Password, dat.Token, []byte(sql)); err != nil {
 				pluginLogger.Debug("query data: %w", err)
 				return nil, fmt.Errorf("query data: %w", err)
 			} else if resp, err := makeResponse(res, alias); err != nil {
@@ -274,10 +278,14 @@ func makeResponse(body []byte, alias string) (response backend.DataResponse, err
 	// pluginLogger.Debug(fmt.Sprint("response is", string(json)))
 	return response, nil
 }
-func query(url, user, password string, reqBody []byte) ([]byte, error) {
+func query(url, user, password, token string, reqBody []byte) ([]byte, error) {
 	var reqBodyBuffer io.Reader = bytes.NewBuffer(reqBody)
 
-	req, err := http.NewRequest("POST", url+"/rest/sqlutc", reqBodyBuffer)
+	sqlUtcUrl := url + "/rest/sqlutc"
+	if token != "" {
+		sqlUtcUrl = sqlUtcUrl + "?token=" + token
+	}
+	req, err := http.NewRequest("POST", sqlUtcUrl, reqBodyBuffer)
 	if err != nil {
 		pluginLogger.Error(fmt.Sprint("query "+url+"/rest/sqlutc error: ", err))
 		return []byte{}, err
@@ -330,8 +338,12 @@ func (rd *RocksetDatasource) CheckHealth(ctx context.Context, req *backend.Check
 	if !found {
 		password = "taosdata"
 	}
+	token, found := dat["token"].(string)
+	if !found {
+		token = ""
+	}
 
-	if _, err := query(req.PluginContext.DataSourceInstanceSettings.URL, user, password, []byte("show databases")); err != nil {
+	if _, err := query(req.PluginContext.DataSourceInstanceSettings.URL, user, password, token, []byte("show databases")); err != nil {
 		pluginLogger.Error("failed get connect to tdengine: %s", err.Error())
 		return healthError("failed get connect to tdengine: %s", err.Error()), nil
 	}
@@ -358,7 +370,7 @@ func (rd *RocksetDatasource) CallResource(ctx context.Context, req *backend.Call
 	if req.Path == "setSmsConfig" {
 		pluginLogger.Info("set sms config")
 
-		var data map[int64]SmsConfInfo
+		var data map[int64]JsonData
 		if err := json.Unmarshal(req.Body, &data); err != nil {
 			pluginLogger.Debug("CallResource error: " + err.Error())
 			pluginLogger.Debug("CallResource req.Body: " + string(req.Body))
@@ -369,6 +381,18 @@ func (rd *RocksetDatasource) CallResource(ctx context.Context, req *backend.Call
 			RestartSmsWorker(k, v)
 		}
 		sender.Send(&backend.CallResourceResponse{Status: 204})
+	} else if req.Path == "getConfig" {
+		pluginLogger.Info("get secure json data")
+		ds := req.PluginContext.DataSourceInstanceSettings
+		// jsonData := req.PluginContext.DataSourceInstanceSettings.DecryptedSecureJSONData
+		pluginLogger.Info("decrypted: %v", ds)
+		toJson, err := json.Marshal(&ds)
+		if err != nil {
+			sender.Send(&backend.CallResourceResponse{Status: 400, Body: []byte(err.Error())})
+		} else {
+			sender.Send(&backend.CallResourceResponse{Status: 200, Body: toJson})
+		}
+
 	}
 	return nil
 }

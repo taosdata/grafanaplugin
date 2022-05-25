@@ -9,6 +9,26 @@
   "backend": true,
   "executable": "tdengine-datasource",
 
+  "routes": [
+    {
+      "path": "sqlutc",
+      "url": "{{ .SecureJsonData.url }}/rest/sqlutc?token={{ .SecureJsonData.token }}",
+      "method": "POST",
+      "headers": [
+        {
+          "name": "Authorization",
+          "content": "Basic {{ .SecureJsonData.basicAuth }}"
+        }
+      ]
+    }
+  ],
+  "includes": [
+    {
+      "type": "dashboard",
+      "name": "TDinsight",
+      "path": "dashboards/TDinsight.json"
+    }
+  ],
   "info": {
     "screenshots": [{ "name": "config", "path": "img/howto-add-datasource.png" }],
     "keywords": ["taosdata", "TDengine"],
