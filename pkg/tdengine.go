@@ -11,6 +11,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/araddon/dateparse"
+
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/datasource"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/instancemgmt"
@@ -94,9 +96,7 @@ func (rd *RocksetDatasource) QueryData(ctx context.Context, req *backend.QueryDa
 
 	// pluginLogger.Debug(fmt.Sprintf("%#v", string(req.Queries[0].JSON)))
 	decryptedJSONData := req.PluginContext.DataSourceInstanceSettings.DecryptedSecureJSONData
-	pluginLogger.Info("secureJsonData: %v", decryptedJSONData)
 	transcode(decryptedJSONData, &dat)
-	pluginLogger.Info("JsonData: %v", dat)
 	if len(dat.User) == 0 {
 		dat.User = "root"
 	}
@@ -220,31 +220,9 @@ func makeResponse(body []byte, alias string) (response backend.DataResponse, err
 	tsLayout := res.Data[0][0].(string)
 	// pluginLogger.Debug(fmt.Sprint("tsLayout: ", tsLayout))
 
-	if len(tsLayout) == len("2006-01-02T15:04:05Z") {
-		timeLayout = "2006-01-02T15:04:05Z"
-	} else if len(tsLayout) == len("2006-01-02T15:04:05.000Z") {
-		timeLayout = "2006-01-02T15:04:05.000Z"
-	} else if len(tsLayout) == len("2006-01-02T15:04:05.000000Z") {
-		timeLayout = "2006-01-02T15:04:05.000000Z"
-	} else if len(tsLayout) == len("2006-01-02T15:04:05.000000000Z") {
-		timeLayout = "2006-01-02T15:04:05.000000000Z"
-	} else if len(tsLayout) == len("2006-01-02T15:04:05-07:00") {
-		timeLayout = "2006-01-02T15:04:05-07:00"
-	} else if len(tsLayout) == len("2006-01-02T15:04:05-0700") {
-		timeLayout = "2006-01-02T15:04:05-0700"
-	} else if len(tsLayout) == len("2006-01-02T15:04:05.000-07:00") {
-		timeLayout = "2006-01-02T15:04:05.000-07:00"
-	} else if len(tsLayout) == len("2006-01-02T15:04:05.000-0700") {
-		timeLayout = "2006-01-02T15:04:05.000-0700"
-	} else if len(tsLayout) == len("2006-01-02T15:04:05.000000-07:00") {
-		timeLayout = "2006-01-02T15:04:05.000000-07:00"
-	} else if len(tsLayout) == len("2006-01-02T15:04:05.000000-0700") {
-		timeLayout = "2006-01-02T15:04:05.000000-0700"
-	} else if len(tsLayout) == len("2006-01-02T15:04:05.000000000-07:00") {
-		timeLayout = "2006-01-02T15:04:05.000000000-07:00"
-	} else if len(tsLayout) == len("2006-01-02T15:04:05.000000000-0700") {
-		timeLayout = "2006-01-02T15:04:05.000000000-0700"
-	} else {
+	timeLayout, err = dateparse.ParseFormat(tsLayout)
+
+	if err != nil {
 		return response, fmt.Errorf("ts parse layout error %s", tsLayout)
 	}
 	// pluginLogger.Debug(fmt.Sprint("frame: ", frame))
@@ -381,18 +359,6 @@ func (rd *RocksetDatasource) CallResource(ctx context.Context, req *backend.Call
 			RestartSmsWorker(k, v)
 		}
 		sender.Send(&backend.CallResourceResponse{Status: 204})
-	} else if req.Path == "getConfig" {
-		pluginLogger.Info("get secure json data")
-		ds := req.PluginContext.DataSourceInstanceSettings
-		// jsonData := req.PluginContext.DataSourceInstanceSettings.DecryptedSecureJSONData
-		pluginLogger.Info("decrypted: %v", ds)
-		toJson, err := json.Marshal(&ds)
-		if err != nil {
-			sender.Send(&backend.CallResourceResponse{Status: 400, Body: []byte(err.Error())})
-		} else {
-			sender.Send(&backend.CallResourceResponse{Status: 200, Body: toJson})
-		}
-
 	}
 	return nil
 }
