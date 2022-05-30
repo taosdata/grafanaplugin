@@ -47,7 +47,7 @@ export class GenericDatasource {
 
   testDatasource() {
     return this.request('show databases').then(response => {
-      if (!!response && response.status === 200) {
+      if (!!response && response.status === 200 && !_.get(response, 'data.code')) {
         return { status: "success", message: "TDengine Data source is working", title: "Success" };
       }
       return { status: "error", message: "TDengine Data source is not working", title: "Failed" };

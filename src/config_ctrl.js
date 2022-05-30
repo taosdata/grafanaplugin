@@ -8,7 +8,6 @@ export class GenericDatasourceConfigCtrl {
         this.backendSrv = $injector.get("backendSrv");
         this.pluginId = this.current.type;
         this.smsShowFlag = false;
-        this.current.secureJsonData = {};
     }
     requestResources(url, params) {
         return this.backendSrv.datasourceRequest({
@@ -21,11 +20,19 @@ export class GenericDatasourceConfigCtrl {
         this.smsShowFlag = !this.smsShowFlag;
     }
     onHostChange() {
-        this.current.secureJsonData.url = this.current.url;
+        if (_.has(this.current, "secureJsonData")) {
+            this.current.secureJsonData.url = this.current.url;
+        } else {
+            this.current.secureJsonData = { url: this.current.url };
+        }
     }
     onAuthChange() {
-        this.current.secureJsonData.basicAuth = 
-          this.encode(this.current.secureJsonData.user + ":" + this.current.secureJsonData.password);
+        let basicAuth = this.encode(this.current.secureJsonData.user + ":" + this.current.secureJsonData.password);
+        if (_.has(this.current, "secureJsonData")) {
+            this.current.secureJsonData.basicAuth = basicAuth;
+        } else {
+            this.current.secureJsonData = { basicAuth };
+        }
     }
     encode(input) {
         var _keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
