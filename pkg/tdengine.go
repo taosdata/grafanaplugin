@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"context"
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -97,12 +96,6 @@ func (rd *RocksetDatasource) QueryData(ctx context.Context, req *backend.QueryDa
 	// pluginLogger.Debug(fmt.Sprintf("%#v", string(req.Queries[0].JSON)))
 	decryptedJSONData := req.PluginContext.DataSourceInstanceSettings.DecryptedSecureJSONData
 	transcode(decryptedJSONData, &dat)
-	if len(dat.User) == 0 {
-		dat.User = "root"
-	}
-	if len(dat.Password) == 0 {
-		dat.Password = "taosdata"
-	}
 
 	// pluginLogger.Debug(fmt.Sprintf("DataSource: %v", req.PluginContext.DataSourceInstanceSettings))
 	AssertSmsWorker(ctx, req.PluginContext.DataSourceInstanceSettings.ID, dat)
@@ -113,7 +106,7 @@ func (rd *RocksetDatasource) QueryData(ctx context.Context, req *backend.QueryDa
 			pluginLogger.Debug("generateSql error: %w", err)
 			return nil, fmt.Errorf("generateSql error: %w", err)
 		} else {
-			if res, err := query(req.PluginContext.DataSourceInstanceSettings.URL, dat.User, dat.Password, dat.Token, []byte(sql)); err != nil {
+			if res, err := query(req.PluginContext.DataSourceInstanceSettings.URL, dat.BasicAuth, dat.Token, []byte(sql)); err != nil {
 				pluginLogger.Debug("query data: %w", err)
 				return nil, fmt.Errorf("query data: %w", err)
 			} else if resp, err := makeResponse(res, alias); err != nil {
@@ -256,7 +249,7 @@ func makeResponse(body []byte, alias string) (response backend.DataResponse, err
 	// pluginLogger.Debug(fmt.Sprint("response is", string(json)))
 	return response, nil
 }
-func query(url, user, password, token string, reqBody []byte) ([]byte, error) {
+func query(url, basicAuth, token string, reqBody []byte) ([]byte, error) {
 	var reqBodyBuffer io.Reader = bytes.NewBuffer(reqBody)
 
 	sqlUtcUrl := url + "/rest/sqlutc"
@@ -269,7 +262,7 @@ func query(url, user, password, token string, reqBody []byte) ([]byte, error) {
 		return []byte{}, err
 	}
 
-	req.Header.Set("Authorization", "Basic "+base64.StdEncoding.EncodeToString([]byte(user+":"+password))) // cm9vdDp0YW9zZGF0YQ==
+	req.Header.Set("Authorization", "Basic "+basicAuth) // cm9vdDp0YW9zZGF0YQ==
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
@@ -308,20 +301,14 @@ func (rd *RocksetDatasource) CheckHealth(ctx context.Context, req *backend.Check
 		return healthError("get dataSourceInstanceSettings error: %s", err.Error()), nil
 	}
 
-	user, found := dat["user"].(string)
-	if !found {
-		user = "root"
-	}
-	password, found := dat["password"].(string)
-	if !found {
-		password = "taosdata"
-	}
+	basicAuth, _ := dat["basicAuth"].(string)
+
 	token, found := dat["token"].(string)
 	if !found {
 		token = ""
 	}
 
-	if _, err := query(req.PluginContext.DataSourceInstanceSettings.URL, user, password, token, []byte("show databases")); err != nil {
+	if _, err := query(req.PluginContext.DataSourceInstanceSettings.URL, basicAuth, token, []byte("show databases")); err != nil {
 		pluginLogger.Error("failed get connect to tdengine: %s", err.Error())
 		return healthError("failed get connect to tdengine: %s", err.Error()), nil
 	}

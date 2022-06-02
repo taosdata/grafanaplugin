@@ -5,9 +5,8 @@ import (
 )
 
 type JsonData struct {
-	User     string `json:"user"`
-	Password string `json:"password"`
-	Token    string `json:"token"`
+	BasicAuth string `json:"basicAuth"`
+	Token     string `json:"token"`
 
 	AccessKeyId      string   `json:"aliSmsAccessKeyId"`
 	AccessKeySecret  string   `json:"aliSmsAccessKeySecret"`

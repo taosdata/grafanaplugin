@@ -280,10 +280,6 @@ In alert manager dashboard, you could see the alert:
       secureJsonData:
         # <string> a redundant url configuration. Required.
         url: "$TDENGINE_API"
-        # <string> database user.
-        user: "$TDENGINE_USER"
-        # <string> database password.
-        password: "$TDENGINE_PASS"
         # <string> basic authorization token. Required, can be build like
         #   `printf root:taosdata|base64`
         basicAuth: "${TDENGINE_BASIC_AUTH}"
