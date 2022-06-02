@@ -285,8 +285,11 @@ In alert manager dashboard, you could see the alert:
         # <string> database password.
         password: "$TDENGINE_PASS"
         # <string> basic authorization token. Required, can be build like
-        #   `echo root:taosdata|base64`
+        #   `printf root:taosdata|base64`
         basicAuth: "${TDENGINE_BASIC_AUTH}"
+        # <string> cloud service token of TDengine,  optional.
+        token: "$TDENGINE_CLOUD_TOKEN"
+
         # aliSms* is configuration options for builtin sms notifier powered by Aliyun Cloud SMS
 
         # <string> the key id from Aliyun.
