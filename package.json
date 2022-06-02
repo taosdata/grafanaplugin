@@ -1,7 +1,7 @@
 {
   "name": "tdengine-grafana-datasource-plugin",
   "private": false,
-  "version": "3.2.2",
+  "version": "3.2.3",
   "description": "Grafana data-source plugin for TDengine",
   "scripts": {
     "build": "grunt",
