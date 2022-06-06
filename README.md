@@ -342,6 +342,7 @@ Here is a short list:
 - [15146](https://grafana.com/grafana/dashboards/15146): Multiple TDengines Monitoring Dashboard
 - [15155](https://grafana.com/grafana/dashboards/15155): TDengine Alert Demo
 - [15167](https://grafana.com/grafana/dashboards/15167): TDinsight
+- [16388](https://grafana.com/grafana/dashboards/16388): Telegraf Dashboard with TDengine
 
 You could open a pr to add one if you want to share your dashboard with TDengine community, we appreciate your contribution!
 
