@@ -9,8 +9,12 @@ verbose=0
 REMOVE=0
 OFFLINE=0
 DOWNLOAD_ONLY=0
+INSTALL_FROM_GRAFANA=0
+SUDO=$(command -v sudo)
 
 [ -f .env ] && source .env
+
+TDENGINE_PLUGIN_VERSION=${TDENGINE_PLUGIN_VERSION:-latest}
 
 # Grafana configurations
 GF_PROVISIONING_DIR=${GF_PROVISIONING_DIR:-/etc/grafana/provisioning}
@@ -46,7 +50,7 @@ SMS_PHONE_NUMBERS=${SMS_PHONE_NUMBERS}
 SMS_LISTEN_ADDR=${SMS_LISTEN_ADDR:-127.0.0.1:9100}
 
 options=$(getopt -l "help,verbose,remove,offline,download-only,\
-plugin-version:,\
+plugin-version:,from-grafana,\
 grafana-provisioning-dir:,grafana-plugins-dir:,grafana-org-id:,\
 tdengine-ds-name:,tdengine-api:,tdengine-user:,tdengine-password:,tdengine-cloud-token:,\
 editable,\
@@ -70,6 +74,11 @@ Install and configure TDinsight dashboard in Grafana on ubuntu 18.04/20.04 syste
 
 -V, --verbose                               Run script in verbose mode. Will print out each step of execution.
 -R, --remove                                Remove TDengine data source and the plugin.
+-F, --offline                               Use file in local path (the directory this script located in or just cwd).
+    --download-only                         Download plugin and dashboard json file into current directory.
+    --from-grafana                          Do not download plugin, use grafana-cli latest plugin version.
+
+-v, --plugin-version <version>              TDengine datasource plugin version, [default: $TDENGINE_PLUGIN_VERSION]
 
 -P, --grafana-provisioning-dir <dir>        Grafana provisioning directory, [default: $GF_PROVISIONING_DIR]
 -G, --grafana-plugins-dir <dir>             Grafana plugins directory, [default: $GF_PLUGINS_DIR]
@@ -117,6 +126,9 @@ while true; do
     ;;
   --download-only)
     export DOWNLOAD_ONLY=1
+    ;;
+  --from-grafana)
+    export INSTALL_FROM_GRAFANA=1
     ;;
   -v | --plugin-version)
     shift
@@ -222,8 +234,9 @@ if [ "$EXTERNAL_NOTIFIER" != "" ]; then
 fi
 
 _assert_dir() {
-  [ -d "$1" ] || mkdir -p "$1"
+  [ -d "$1" ] || $SUDO mkdir -p "$1"
 }
+
 
 get_latest_release() {
   curl --silent "https://api.github.com/repos/taosdata/grafanaplugin/releases/latest" | # Get latest release from GitHub api
@@ -242,22 +255,46 @@ download_plugin() {
   [ "$verbose" = "0" ] || echo "** download plugin version $TDENGINE_PLUGIN_VERSION"
   [ -s tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip ] || \
     wget -c https://github.com/taosdata/grafanaplugin/releases/download/v$TDENGINE_PLUGIN_VERSION/tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip
+  
 }
 
 install_plugin() {
   which grafana-cli > /dev/null || (echo "Grafana has not been installed in the server, install it first."; exit 1)
-  grafana-cli plugins install tdengine-datasource
+  if [ "$OFFLINE" = 0 ]; then
+    download_plugin
+  else
+    [ -s tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip ] || (echo "use offline cache, but plugin not exist"; exit 1)
+  fi
+  # open a simple server for local url
+  port=$(shuf -i 2000-65000 -n 1)
+  python3 -m http.server $port &
+  pid=$!
+  sleep 1
+  set +e
+  $SUDO grafana-cli --pluginUrl http://localhost:$port/tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip plugins install tdengine-datasource
+  status=$?
+  kill $pid
+  set -e
+  if [ "$status" != "0" ]; then
+    exit $status
+  fi
+}
+
+install_plugin_from_grafana() {
+  which grafana-cli > /dev/null || (echo "Grafana has not been installed in the server, install it first."; exit 1)
+  echo "* install tdengine-datasource plugin from Grafana"
+  $SUDO grafana-cli plugins install tdengine-datasource
 }
 
 remove_plugin() {
-  rm -rf $GF_PLUGINS_DIR/tdengine-datasource
+  $SUDO rm -rf $GF_PLUGINS_DIR/tdengine-datasource
 }
 
 provisioning_datasource() {
   [ -d $GF_PROVISIONING_DATASOURCES_DIR ] || mkdir $GF_PROVISIONING_DATASOURCES_DIR
   echo "* Provisioning $GF_PROVISIONING_DATASOURCES_DIR/$TDENGINE_DS_NAME.yaml"
   TDENGINE_BASIC_AUTH=$(printf "$TDENGINE_USER:$TDENGINE_PASSWORD" | base64)
-  cat > $GF_PROVISIONING_DATASOURCES_DIR/$TDENGINE_DS_NAME.yaml <<EOF
+  tee $TDENGINE_DS_NAME.yaml > /dev/null  <<EOF
 # config file version
 apiVersion: 1
 
@@ -301,17 +338,19 @@ datasources:
   # <bool> allow users to edit datasources from the UI.
   editable: $TDENGINE_EDITABLE
 EOF
+   $SUDO cp -f $TDENGINE_DS_NAME.yaml $GF_PROVISIONING_DATASOURCES_DIR/
+   rm $TDENGINE_DS_NAME.yaml
 }
 
 remove_datasource() {
-  rm $GF_PROVISIONING_DATASOURCES_DIR/$TDENGINE_DS_NAME.yaml
+  $SUDO rm -f $GF_PROVISIONING_DATASOURCES_DIR/$TDENGINE_DS_NAME.yaml
 }
 
 provisioning_notifiers() {
   if [ "$SMS_ENABLED" == "true" ]; then
     _assert_dir $GF_PROVISIONING_NOTIFIERS_DIR
     echo "* Provisioning $GF_PROVISIONING_NOTIFIERS_DIR/${SMS_NOTIFIER_UID}.yaml"
-    tee $GF_PROVISIONING_NOTIFIERS_DIR/${SMS_NOTIFIER_UID}.yaml > /dev/null <<EOF
+    tee ${SMS_NOTIFIER_UID}.yaml > /dev/null <<EOF
 # config file version
 apiVersion: 1
 
@@ -324,17 +363,18 @@ notifiers:
       url: http://${SMS_LISTEN_ADDR}/sms
       httpMethod: POST
 EOF
+    $SUDO cp -f ${SMS_NOTIFIER_UID}.yaml $GF_PROVISIONING_NOTIFIERS_DIR/
+    rm ${SMS_NOTIFIER_UID}.yaml
   fi
 }
 
 remove_notifier() {
   set +e
-  [ -e "$GF_PROVISIONING_NOTIFIERS_DIR/${SMS_NOTIFIER_UID}.yaml" ] && rm "$GF_PROVISIONING_NOTIFIERS_DIR/${SMS_NOTIFIER_UID}.yaml"
+  [ -e "$GF_PROVISIONING_NOTIFIERS_DIR/${SMS_NOTIFIER_UID}.yaml" ] && $SUDO rm -f "$GF_PROVISIONING_NOTIFIERS_DIR/${SMS_NOTIFIER_UID}.yaml"
   set -e
 }
 
 if [ "$REMOVE" == "1" ]; then
-  remove_dashboard
   remove_notifier
   remove_datasource
   remove_plugin
@@ -344,9 +384,38 @@ fi
 ####################################
 # main scripts
 ####################################
+if [ "$DOWNLOAD_ONLY" = "1" ]; then
+  if [ "$TDENGINE_PLUGIN_VERSION" = "latest" ]; then
+    TDENGINE_PLUGIN_VERSION=$(get_latest_release)
+  fi
+  download_plugin
+  download_dashboard
+  echo "DENGINE_PLUGIN_VERSION=$DENGINE_PLUGIN_VERSION" > .tdinsight.cache
+
+  echo .tdinsight.cache
+  echo TDinsight-$TDINSIGHT_DASHBOARD_ID.json
+  echo tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip
+  exit 0
+fi
 
 # Install tdengine-datasource plugin
-install_plugin
+if [ "$INSTALL_FROM_GRAFANA" = "1" ]; then
+  install_plugin_from_grafana
+else
+
+  if [ "$OFFLINE" = "1" ]; then
+    [ -e "$BIN/.tdinsight.cache" ] && source $BIN/.tdinsight.cache
+    [ -e ".tdinsight.cache" ] && source .tdinsight.cache
+  fi
+
+  if [ "$TDENGINE_PLUGIN_VERSION" = "latest" ]; then
+    TDENGINE_PLUGIN_VERSION=$(get_latest_release)
+    echo using tdengine-datasource plugin $TDENGINE_PLUGIN_VERSION
+  fi
+
+  install_plugin
+
+fi
 
 # Provisioning TDengine data source
 provisioning_datasource
