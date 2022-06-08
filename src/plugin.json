@@ -12,13 +12,16 @@
   "routes": [
     {
       "path": "sqlutc",
-      "url": "{{ .SecureJsonData.url }}/rest/sqlutc?token={{ .SecureJsonData.token }}",
+      "url": "{{ .SecureJsonData.url }}/rest/sqlutc",
       "method": "POST",
       "headers": [
         {
           "name": "Authorization",
           "content": "Basic {{ .SecureJsonData.basicAuth }}"
         }
+      ],
+      "urlParams": [
+        { "name": "token", "content": "{{ .SecureJsonData.token }}" }
       ]
     }
   ],
