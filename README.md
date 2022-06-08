@@ -1,6 +1,8 @@
 # Grafana Plugin for TDengine
 
 - [Installation](#installation)
+  - [One-line installer](#one-line-installer)
+  - [Install Manually](#install-manually)
   - [Installation on macOS](#installation-on-macos)
 - [Usage](#usage)
   - [Add Data Source](#add-data-source)
@@ -20,6 +22,16 @@
 At first, please refer to [Add a data source](https://grafana.com/docs/grafana/latest/datasources/add-a-data-source/) for instructions on how to add a data source to Grafana. Note that, only users with the organization admin role can add data sources.
 
 ## Installation
+
+### One-line installer
+
+```bash
+TDENGINE_CLOUD_URL= \
+  TDENGINE_CLOUD_TOKEN= \
+  bash -c "$(curl -fsSL https://raw.githubusercontent.com/taosdata/grafanaplugin/master/install.sh)"
+```
+
+### Install Manually
 
 We recommend you use the prebuilt package of the plugin in [github latest release download page](https://github.com/taosdata/grafanaplugin/releases/latest).
 
