@@ -5,6 +5,7 @@ verbose=0
 REMOVE=0
 OFFLINE=0
 DOWNLOAD_ONLY=0
+INSTALL_FROM_GRAFANA=0
 
 [ -f .env ] && source .env
 
@@ -31,7 +32,7 @@ LOG_REPLICA=${LOG_REPLICA:1}
 TDINSIGHT_DASHBOARD_ID=15167
 TDINSIGHT_DASHBOARD_UID=${TDINSIGHT_DASHBOARD_UID:-tdinsight}
 TDINSIGHT_DASHBOARD_TITLE=${TDINSIGHT_DASHBOARD_TITLE:-TDinsight}
-TDINSIGHT_DASHBOARD_EDITABLE=${TDINSIGHT_DASHBOARD_EDITABLE:-false}
+TDENGINE_EDITABLE=${TDENGINE_EDITABLE:-false}
 
 EXTERNAL_NOTIFIER=
 
@@ -60,9 +61,9 @@ TDINSIGHT_NOTIFICATION_ALERT_MANAGER_ENABLED=false
 TDINSIGHT_NOTIFICATION_ALERT_MANAGER_URL=
 
 options=$(getopt -l "help,verbose,remove,offline,download-only,\
-plugin-version:,\
+plugin-version:,from-grafana,\
 grafana-provisioning-dir:,grafana-plugins-dir:,grafana-org-id:,\
-tdengine-ds-name:,tdengine-api:,tdengine-user:,tdengine-password:,\
+tdengine-ds-name:,tdengine-api:,tdengine-user:,tdengine-password:,tdengine-cloud-token:\
 tdinsight-uid:,tdinsight-title:,tdinsight-editable,external-notifier:,\
 sms-enabled,sms-notifier-name:,sms-notifier-uid:,sms-notifier-is-default,\
 sms-access-key-id:,sms-access-key-secret:,\
@@ -88,7 +89,6 @@ Install and configure TDinsight dashboard in Grafana on ubuntu 18.04/20.04 syste
 
 -v, --plugin-version <version>              TDengine datasource plugin version, [default: $TDENGINE_PLUGIN_VERSION]
 
-
 -P, --grafana-provisioning-dir <dir>        Grafana provisioning directory, [default: $GF_PROVISIONING_DIR]
 -G, --grafana-plugins-dir <dir>             Grafana plugins directory, [default: $GF_PLUGINS_DIR]
 -O, --grafana-org-id <number>               Grafana orgnization id. [default: $GF_ORG_ID]
@@ -97,6 +97,7 @@ Install and configure TDinsight dashboard in Grafana on ubuntu 18.04/20.04 syste
 -a, --tdengine-api <url>                    TDengine REST API endpoint. [default: $TDENGINE_API]
 -u, --tdengine-user <string>                TDengine user name. [default: $TDENGINE_USER]
 -p, --tdengine-password <string>            TDengine password. [default: $TDENGINE_PASSWORD]
+    --tdengine-cloud-token <string>         TDengine cloud token. [env: \$TDENGINE_CLOUD_TOKEN]
 
 -i, --tdinsight-uid <string>                Replace with a non-space ascii code as the dashboard id. [default: $TDINSIGHT_DASHBOARD_UID]
 -t, --tdinsight-title <string>              Dashboard title. [default: $TDINSIGHT_DASHBOARD_TITLE]
@@ -140,9 +141,12 @@ while true; do
   --download-only)
     export DOWNLOAD_ONLY=1
     ;;
+  --from-grafana)
+    export INSTALL_FROM_GRAFANA=1
+    ;;
   -v | --plugin-version)
     shift
-    export TDENGINE_PLUGIN_VERSION=$2
+    export TDENGINE_PLUGIN_VERSION=$1
     ;;
   -P | --grafana-provisioning-dir)
     shift
@@ -172,6 +176,10 @@ while true; do
     shift
     export TDENGINE_PASSWORD=$1
     ;;
+  --tdengine-cloud-token)
+    shift
+    export TDENGINE_CLOUD_TOKEN=$1
+    ;;
   -i | --tdinsight-uid)
     shift
     export TDINSIGHT_DASHBOARD_UID=$1
@@ -182,7 +190,7 @@ while true; do
     ;;
   -e | --tdinsight-editable)
     shift
-    export TDINSIGHT_DASHBOARD_EDITABLE=true
+    export TDENGINE_EDITABLE=true
     ;;
   -E | --external-notifier)
     shift
@@ -317,6 +325,7 @@ remove_plugin() {
 provisioning_datasource() {
   [ -d $GF_PROVISIONING_DATASOURCES_DIR ] || mkdir $GF_PROVISIONING_DATASOURCES_DIR
   echo "* Provisioning $GF_PROVISIONING_DATASOURCES_DIR/$TDENGINE_DS_NAME.yaml"
+  TDENGINE_BASIC_AUTH=$(printf "$TDENGINE_USER:$TDENGINE_PASSWORD" | base64)
   cat > $GF_PROVISIONING_DATASOURCES_DIR/$TDENGINE_DS_NAME.yaml <<EOF
 # config file version
 apiVersion: 1
@@ -333,31 +342,33 @@ datasources:
   orgId: $GF_ORG_ID
   # <string> url
   url: $TDENGINE_API
-  # <bool> enable/disable basic auth
-  basicAuth: true
-#  withCredentials:
-  # <bool> mark as default datasource. Max one per org
-  isDefault: false
   # <map> fields that will be converted to json and stored in json_data
-  jsonData:
+  secureJsonData:
     timeInterval: "30s"
-    # <string> database user, if used
-    user: $TDENGINE_USER
-    # <string> database password, if used
-    password: $TDENGINE_PASSWORD
-    # Sms notification webhook support
-    smsConfig:
-      alibabaCloudSms:
-        accessKeyId: $SMS_ACCESS_KEY_ID
-        accessKeySecret: $SMS_ACCESS_KEY_SECRET
-        signName: $SMS_SIGN_NAME
-        templateCode: $SMS_TEMPLATE_CODE
-        templateParam: '$SMS_TEMPLATE_PARAM'
-      phoneNumbersList: "$SMS_PHONE_NUMBERS"
-      listenAddr: ${SMS_LISTEN_ADDR}
+    url: $TDENGINE_API
+    basicAuth: $TDENGINE_BASIC_AUTH
+    # <string> cloud service token of TDengine,  optional.
+    token: $TDENGINE_CLOUD_TOKEN
+
+    # aliSms* is configuration options for builtin sms notifier powered by Aliyun Cloud SMS
+
+    # <string> the key id from Aliyun.
+    aliSmsAccessKeyId: "$SMS_ACCESS_KEY_ID"
+    # <string> key secret paired to key id.
+    aliSmsAccessKeySecret: "$SMS_ACCESS_KEY_SECRET"
+    aliSmsSignName: "$SMS_SIGN_NAME"
+    # <string> sms template code from Aliyun. eg. SMS_123010240
+    aliSmsTemplateCode: "$SMS_TEMPLATE_CODE"
+    # <string> serialized json string for sms template parameters. eg.
+    #  '{"alarm_level":"%s","time":"%s","name":"%s","content":"%s"}'
+    aliSmsTemplateParam: '$SMS_TEMPLATE_PARAM'
+    # <string> phone number list, separated by comma ,
+    aliSmsPhoneNumbersList: "$SMS_PHONE_NUMBERS"
+    # <string> builtin sms notifier webhook address.
+    aliSmsListenAddr: "$SMS_LISTEN_ADDR"
   version: 1
   # <bool> allow users to edit datasources from the UI.
-  editable: $TDINSIGHT_DASHBOARD_EDITABLE
+  editable: $TDENGINE_EDITABLE
 EOF
 }
 
@@ -477,18 +488,25 @@ if [ "$DOWNLOAD_ONLY" = "1" ]; then
   exit 0
 fi
 
-if [ "$OFFLINE" = "1" ]; then
-  [ -e "$BIN/.tdinsight.cache" ] && source $BIN/.tdinsight.cache
-  [ -e ".tdinsight.cache" ] && source .tdinsight.cache
-fi
-
-if [ "$TDENGINE_PLUGIN_VERSION" = "latest" ]; then
-  TDENGINE_PLUGIN_VERSION=$(get_latest_release)
-  echo using tdengine-datasource plugin $TDENGINE_PLUGIN_VERSION
-fi
-
 # Install tdengine-datasource plugin
-install_plugin
+if [ "$INSTALL_FROM_GRAFANA" = "1" ]; then
+  install_plugin_from_grafana
+else
+
+  if [ "$OFFLINE" = "1" ]; then
+    [ -e "$BIN/.tdinsight.cache" ] && source $BIN/.tdinsight.cache
+    [ -e ".tdinsight.cache" ] && source .tdinsight.cache
+  fi
+
+  if [ "$TDENGINE_PLUGIN_VERSION" = "latest" ]; then
+    TDENGINE_PLUGIN_VERSION=$(get_latest_release)
+    echo using tdengine-datasource plugin $TDENGINE_PLUGIN_VERSION
+  fi
+
+  install_plugin
+
+fi
+
 
 # Config allow_loading_unsigned_plugins
 allow_unsigned_plugin
