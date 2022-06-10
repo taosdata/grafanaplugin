@@ -17,7 +17,6 @@ datasources:
   isDefault: true
   # <map> to store sensitive informations
   secureJsonData:
-    timeInterval: "5s"
     # <string> a redundant url configuration. Required.
     url: $TDENGINE_API
     # <string> basic authorization token. Required, can be build like
