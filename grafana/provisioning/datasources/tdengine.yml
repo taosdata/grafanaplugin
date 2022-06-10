@@ -17,20 +17,12 @@ datasources:
   isDefault: true
   # <map> to store sensitive informations
   secureJsonData:
-    timeInterval: "5s"
     # <string> a redundant url configuration. Required.
     url: $TDENGINE_API
     # <string> basic authorization token. Required, can be build like
     #   `printf root:taosdata|base64`
     basicAuth: "${TDENGINE_BASIC_AUTH}"
-    # Sms notification webhook support
-    aliSmsAccessKeyId: $SMS_ACCESS_KEY_ID
-    aliSmsAccessKeySecret: $SMS_ACCESS_KEY_SECRET
-    aliSmsSignName: $SMS_SIGN_NAME
-    aliSmsTemplateCode: $SMS_TEMPLATE_CODE
-    aliSmsTemplateParam: $SMS_TEMPLATE_PARAM
-    aliSmsPhoneNumbersList: $SMS_PHONE_NUMBERS
-    aliSmsListenAddr: ${SMS_LISTEN_ADDR}
+    token: ${TDENGINE_CLOUD_TOKEN}
   version: 1
   # <bool> allow users to edit datasources from the UI.
   editable: true

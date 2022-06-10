@@ -312,7 +312,6 @@ datasources:
   url: $TDENGINE_API
   # <map> fields that will be converted to json and stored in json_data
   secureJsonData:
-    timeInterval: "30s"
     url: $TDENGINE_API
     basicAuth: $TDENGINE_BASIC_AUTH
     # <string> cloud service token of TDengine,  optional.

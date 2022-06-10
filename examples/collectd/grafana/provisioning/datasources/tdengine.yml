@@ -18,18 +18,16 @@ datasources:
   orgId: 1
   # <string> url
   url: $TDENGINE_API
-  # <string> database password, if used
-  password: $TDENGINE_PASS
-  # <string> database user, if used
-  user: $TDENGINE_USER
-  # <bool> enable/disable basic auth
-  basicAuth: true
-#  withCredentials:
   # <bool> mark as default datasource. Max one per org
   isDefault: true
-  # <map> fields that will be converted to json and stored in json_data
-  jsonData:
-    timeInterval: "5s"
+  # <map> to store sensitive informations
+  secureJsonData:
+    # <string> a redundant url configuration. Required.
+    url: $TDENGINE_API
+    # <string> basic authorization token. Required, can be build like
+    #   `printf root:taosdata|base64`
+    basicAuth: "${TDENGINE_BASIC_AUTH}"
+    token: ${TDENGINE_CLOUD_TOKEN}
   version: 1
   # <bool> allow users to edit datasources from the UI.
   editable: true
