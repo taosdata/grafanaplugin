@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.2.5] - 2022-06-10
+
+### Bug Fixes
+
+- Auto detect sudo command in installer (#135)
+- Fix --plugin-version bug and support cloud token like install.sh (#136)
+
+### Enhancements
+
+- Remove unused timeInterval in provisioning configurations
+
+## [3.2.4] - 2022-06-08
+
+### Bug Fixes
+
+- Fix url params lost with cloud token in secure json data
+
+### Features
+
+- Improve telegraf example and publish to Grafana (#133)
+- Add install.sh as one-line installer
+
 ## [3.2.3] - 2022-06-02
 
 ### Bug Fixes
