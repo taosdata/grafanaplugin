@@ -260,23 +260,33 @@ download_plugin() {
 
 install_plugin() {
   which grafana-cli > /dev/null || (echo "Grafana has not been installed in the server, install it first."; exit 1)
-  if [ "$OFFLINE" = 0 ]; then
-    download_plugin
-  else
-    [ -s tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip ] || (echo "use offline cache, but plugin not exist"; exit 1)
-  fi
-  # open a simple server for local url
-  port=$(shuf -i 2000-65000 -n 1)
-  python3 -m http.server $port &
-  pid=$!
-  sleep 1
   set +e
-  $SUDO grafana-cli --pluginUrl http://localhost:$port/tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip plugins install tdengine-datasource
-  status=$?
-  kill $pid
+  py=$(command -v python3)
   set -e
-  if [ "$status" != "0" ]; then
-    exit $status
+  if [ "$py" = "" ]; then
+    echo "install plugin from github"
+    $SUDO grafana-cli --pluginUrl \
+      https://github.com/taosdata/grafanaplugin/releases/download/v$TDENGINE_PLUGIN_VERSION/tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip \
+      plugins install tdengine-datasource
+  else
+    if [ "$OFFLINE" = 0 ]; then
+      download_plugin
+    else
+      [ -s tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip ] || (echo "use offline cache, but plugin not exist"; exit 1)
+    fi
+    # open a simple server for local url
+    port=$(shuf -i 2000-65000 -n 1)
+    python3 -m http.server $port &
+    pid=$!
+    sleep 1
+    set +e
+    $SUDO grafana-cli --pluginUrl http://localhost:$port/tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip plugins install tdengine-datasource
+    status=$?
+    kill $pid
+    set -e
+    if [ "$status" != "0" ]; then
+      exit $status
+    fi
   fi
 }
 
