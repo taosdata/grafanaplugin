@@ -1,0 +1,32 @@
+name: "Release PR Merged"
+
+on:
+  pull_request:
+    branches:
+    - develop
+    types:
+      - closed
+
+jobs:
+  release:
+    if: github.event.pull_request.merged == true && contains(github.event.pull_request.title, '<release>')
+    runs-on: ubuntu-20.04
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: develop
+          fetch-depth: 0
+
+      - name: Extract version
+        id: extract-version
+        run: |
+          version=$(echo "${{ github.event.pull_request.title }}" | grep -o -P 'chore(release):\s*(\d+\.\d+\.\d+)(-\S+)?' |sed -E 's/chore(release):\s*//')
+          echo $version
+          echo ::set-output name=version::$version
+      - name: Version bump
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ./scripts/release.sh ${{ steps.extract-version.outputs.version }}
