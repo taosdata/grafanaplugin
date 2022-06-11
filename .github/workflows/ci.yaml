@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    if: ${{ !startsWith(github.event.pull_request.title, 'release:')) }}
+    if: ${{ !startsWith(github.event.pull_request.title, 'release:') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
