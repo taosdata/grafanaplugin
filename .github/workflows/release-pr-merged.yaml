@@ -3,26 +3,26 @@ name: "Release PR Merged"
 on:
   pull_request:
     branches:
-    - develop
+    - master
     types:
       - closed
 
 jobs:
   release:
-    if: github.event.pull_request.merged == true && contains(github.event.pull_request.title, '<release>')
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.title, 'release:')
     runs-on: ubuntu-20.04
     
     steps:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          ref: develop
+          ref: master
           fetch-depth: 0
 
       - name: Extract version
         id: extract-version
         run: |
-          version=$(echo "${{ github.event.pull_request.title }}" | grep -o -P 'chore(release):\s*(\d+\.\d+\.\d+)(-\S+)?' |sed -E 's/chore(release):\s*//')
+          version=$(echo "${{ github.event.pull_request.title }}" | grep -o -P '(\d+\.\d+\.\d+)(-\S+)?')
           echo $version
           echo ::set-output name=version::$version
       - name: Version bump
