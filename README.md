@@ -26,10 +26,18 @@ At first, please refer to [Add a data source](https://grafana.com/docs/grafana/l
 ### One-line installer
 
 ```bash
-TDENGINE_CLOUD_URL= \
-  TDENGINE_CLOUD_TOKEN= \
-  bash -c "$(curl -fsSL https://raw.githubusercontent.com/taosdata/grafanaplugin/master/install.sh)"
+TDENGINE_DS_NAME=TDengine
+TDENGINE_CLOUD_URL=
+TDENGINE_CLOUD_TOKEN=
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/taosdata/grafanaplugin/master/install.sh)"
 ```
+
+- `TDengine_DS_NAME`: The data source name to create
+- `TDENGINE_CLOUD_URL`: The TDengine url, eg. `http://localhost:6041`
+- `TDENGINE_CLOUD_TOKEN`: The TDengine cloud service token, optional.
+- `TDENGINE_USER`/`TDENGINE_PASSWORD`: The TDengine username/password, optional.
+
+Type `install.sh --help` for the full usage of the script.
 
 ### Install Manually
 
