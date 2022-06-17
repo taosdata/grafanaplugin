@@ -58,7 +58,7 @@ sms-enabled,sms-notifier-name:,sms-notifier-uid:,sms-notifier-is-default,\
 sms-access-key-id:,sms-access-key-secret:,\
 sms-sign-name:,sms-template-code:,sms-template-param:,sms-phone-numbers:,\
 ms-listen-addr:" \
--o "hVRFv:P:G:O:n:a:u:t:esN:U:DI:K:S:C:T:B:L:y" -a -- "$@")
+-o "hVRFv:P:G:O:n:a:u:p:t:esN:U:DI:K:S:C:T:B:L:y" -a -- "$@")
 
 usage() { # Function: Print a help message.
   cat << EOF
