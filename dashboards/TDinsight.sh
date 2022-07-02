@@ -290,6 +290,9 @@ install_plugin() {
   port=$(shuf -i 2000-65000 -n 1)
 
   if [ "$(command -v python3)" = "" ]; then
+    if [ "$(command -v python2)" = "" ]; then
+      echo "Grafana plugin installation requires python2 or python3, please install one first!"; exit 1
+    fi
     python2 -m SimpleHTTPServer $port &
     pid=$!
   else
