@@ -11,6 +11,9 @@ OFFLINE=0
 DOWNLOAD_ONLY=0
 INSTALL_FROM_GRAFANA=0
 SUDO=$(command -v sudo)
+if [ "$SUDO" != "" ]; then
+  SUDO_GRAFANA="$SUDO -u grafana"
+fi
 
 [ -f .env ] && source .env
 
@@ -265,7 +268,7 @@ install_plugin() {
   set -e
   if [ "$py" = "" ]; then
     echo "install plugin from github"
-    $SUDO grafana-cli --pluginUrl \
+    $SUDO_GRAFANA grafana-cli --pluginUrl \
       https://github.com/taosdata/grafanaplugin/releases/download/v$TDENGINE_PLUGIN_VERSION/tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip \
       plugins install tdengine-datasource
   else
@@ -280,7 +283,7 @@ install_plugin() {
     pid=$!
     sleep 1
     set +e
-    $SUDO grafana-cli --pluginUrl http://localhost:$port/tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip plugins install tdengine-datasource
+    $SUDO_GRAFANA grafana-cli --pluginUrl http://localhost:$port/tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip plugins install tdengine-datasource
     status=$?
     kill $pid
     set -e
