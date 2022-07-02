@@ -288,8 +288,17 @@ install_plugin() {
   fi
   # open a simple server for local url
   port=$(shuf -i 2000-65000 -n 1)
-  python3 -m http.server $port &
-  pid=$!
+
+  if [ "$(command -v python3)" = "" ]; then
+    if [ "$(command -v python2)" = "" ]; then
+      echo "Grafana plugin installation requires python2 or python3, please install one first!"; exit 1
+    fi
+    python2 -m SimpleHTTPServer $port &
+    pid=$!
+  else
+    python3 -m http.server $port &
+    pid=$!
+  fi
   sleep 1
   set +e
   grafana-cli --pluginUrl http://localhost:$port/tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip plugins install tdengine-datasource
@@ -479,7 +488,7 @@ if [ "$DOWNLOAD_ONLY" = "1" ]; then
   fi
   download_plugin
   download_dashboard
-  echo "DENGINE_PLUGIN_VERSION=$DENGINE_PLUGIN_VERSION" > .tdinsight.cache
+  echo "TDENGINE_PLUGIN_VERSION=$TDENGINE_PLUGIN_VERSION" > .tdinsight.cache
 
   echo .tdinsight.cache
   echo TDinsight-$TDINSIGHT_DASHBOARD_ID.json
