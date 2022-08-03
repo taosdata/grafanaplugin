@@ -285,8 +285,10 @@ install_plugin() {
         exit 1
       fi
       python2 -m SimpleHTTPServer $port &
+      pid=$!
     else
       python3 -m http.server $port &
+      pid=$!
     fi
     pid=$!
     sleep 1
