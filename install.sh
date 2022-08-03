@@ -279,7 +279,15 @@ install_plugin() {
     fi
     # open a simple server for local url
     port=$(shuf -i 2000-65000 -n 1)
-    python3 -m http.server $port &
+    if [ "$(command -v python3)" == "" ]; then
+      if [ "$(command -v python2)" == "" ]; then
+        echo "Grafana plugin installation requires python2 or python3, please install one first!"
+        exit 1
+      fi
+      python2 -m SimpleHTTPServer $port &
+    else
+      python3 -m http.server $port &
+    fi
     pid=$!
     sleep 1
     set +e
@@ -296,7 +304,7 @@ install_plugin() {
 install_plugin_from_grafana() {
   which grafana-cli > /dev/null || (echo "Grafana has not been installed in the server, install it first."; exit 1)
   echo "* install tdengine-datasource plugin from Grafana"
-  $SUDO grafana-cli plugins install tdengine-datasource
+  $SUDO_GRAFANA grafana-cli plugins install tdengine-datasource
 }
 
 remove_plugin() {
