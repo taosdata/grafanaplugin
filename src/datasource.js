@@ -1,4 +1,5 @@
 import _ from "lodash";
+
 var moment = require('./js/moment-timezone-with-data');
 
 export class GenericDatasource {
@@ -11,20 +12,20 @@ export class GenericDatasource {
     this.q = $q;
     this.backendSrv = backendSrv;
     this.templateSrv = templateSrv;
-    this.headers = { 'Content-Type': 'application/json' };
+    this.headers = {'Content-Type': 'application/json'};
     this.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     this.generateSqlList = {};
+    this.serverVersion = 0;
   }
 
   query(options) {
-
     // console.log('options',options);
     if (options.timezone) {
-      this.timezone = options.timezone == "browser" ? Intl.DateTimeFormat().resolvedOptions().timeZone : options.timezone;
+      this.timezone = options.timezone === "browser" ? Intl.DateTimeFormat().resolvedOptions().timeZone : options.timezone;
     }
     const targets = options.targets.filter((target) => (!target.queryType || target.queryType === "SQL") && target.sql && !(target.hide === true));
     if (targets.length <= 0) {
-      return this.q.when({ data: [] });
+      return this.q.when({data: []});
     }
     return Promise.all(targets.map(target => {
       let sql = this.generateSql(target.sql, options);
@@ -34,7 +35,7 @@ export class GenericDatasource {
       .then(data => {
         let result = this.arithmeticQueries(data, options).flat();
         // console.log('result',result);
-        return { data: result };
+        return {data: result};
       }, (err) => {
         console.log(err);
         if (err.data && err.data.desc) {
@@ -47,10 +48,17 @@ export class GenericDatasource {
 
   testDatasource() {
     return this.request('show databases').then(response => {
-      if (!!response && response.status === 200 && !_.get(response, 'data.code')) {
-        return { status: "success", message: "TDengine Data source is working", title: "Success" };
+      if (this.serverVersion === 3) {
+        if (!!response && response.code === 0 && !_.get(response, 'data.code')) {
+          return {status: "success", message: "TDengine Data source is working", title: "Success"};
+        }
+        return {status: "error", message: "TDengine Data source is not working", title: "Failed"};
+      } else {
+        if (!!response && response.status === 200 && !_.get(response, 'data.code')) {
+          return {status: "success", message: "TDengine Data source is working", title: "Success"};
+        }
+        return {status: "error", message: "TDengine Data source is not working", title: "Failed"};
       }
-      return { status: "error", message: "TDengine Data source is not working", title: "Failed" };
     });
   }
 
@@ -60,11 +68,57 @@ export class GenericDatasource {
         resolve();
       });
     }
+    if (this.serverVersion === 0) {
+      const result = this.backendSrv.datasourceRequest({
+        url: this.url + "/sql",
+        data: "select server_version()",
+        method: 'POST',
+      });
+      if (result.data[0][0].startsWith("3")) {
+        console.log("server version 3");
+        this.serverVersion = 3;
+        return this.querySql(params);
+      } else {
+        console.log("server version 2");
+        this.serverVersion = 2;
+        return this.querySqlUtc(params);
+      }
+    } else if (this.serverVersion === 3) {
+      return this.querySql(params);
+    } else {
+      return this.querySqlUtc(params);
+    }
+  }
+
+  querySql(params) {
+    const result = this.backendSrv.datasourceRequest({
+      url: this.url + "/sql",
+      data: params,
+      method: 'POST',
+    });
+    return this.convertResult(result);
+  }
+
+  querySqlUtc(params) {
     return this.backendSrv.datasourceRequest({
       url: this.url + "/sqlutc",
       data: params,
       method: 'POST',
     });
+  }
+
+  convertResult(src) {
+    var dist = {}
+    if (src.code === 0) {
+      dist.status = "succ";
+      dist.head = src.column_meta;
+      dist.data = src.data;
+    } else {
+      dist.status = "error";
+      dist.code = src.code;
+      dist.desc = src.desc;
+    }
+    return dist;
   }
 
   requestResources(url, params) {
@@ -86,9 +140,10 @@ export class GenericDatasource {
       return replaceObject[group] || match;
     });
   }
+
   generateSql(sql, options) {
     // console.log('sql',sql);
-    if (!sql || sql.length == 0) {
+    if (!sql || sql.length === 0) {
       return sql;
     }
 
@@ -143,14 +198,14 @@ export class GenericDatasource {
     let data = recv.data;
     let header = recv.column_meta;
     let rows = recv.rows;
-    if (_.size(by) == 0) {
+    if (_.size(by) === 0) {
       return recv;
     }
 
     let name2idx = _(header).map((h, i) => [h[0], i]).fromPairs().value();
     _.remove(by, k => !_.has(name2idx, k));
 
-    if (_.size(by) == 0) {
+    if (_.size(by) === 0) {
       return recv;
     }
 
@@ -167,7 +222,7 @@ export class GenericDatasource {
           return _.map(cur, n => _.extend({}, o, n))
         }).flatten().value()
       });
-      return { field: h, name: h[0], labels: colValue };
+      return {field: h, name: h[0], labels: colValue};
     });
 
     let ts = _(data).map(row => row[0]).orderBy().uniq().value();
@@ -180,7 +235,7 @@ export class GenericDatasource {
           return _(label).map((v, f) => row[name2idx[f]] === v).reduce((acc, cur) => acc && cur)
         }).map(row => [row[0], row[col]]).fromPairs().value();
         if (_.size(values) > 0) {
-          return _.extend(label, { __values__: values });
+          return _.extend(label, {__values__: values});
         } else {
           return null;
         }
@@ -191,7 +246,7 @@ export class GenericDatasource {
     _.forEach(fields, field => {
       _.forEach(field.labels, label => {
         let newField = _.cloneDeep(field.field);
-        let labelName = _(label).keys().filter(k => k != '__values__').map(key => [key, label[key]]).fromPairs().value();
+        let labelName = _(label).keys().filter(k => k !== '__values__').map(key => [key, label[key]]).fromPairs().value();
         console.log("label:", label, labelName);
 
         newField[0] = field.name + " " + JSON.stringify(labelName);
@@ -210,8 +265,10 @@ export class GenericDatasource {
       return row;
     })
 
-    return { data: newData, column_meta: newHeader, rows: _.size(ts) };;
+    return {data: newData, column_meta: newHeader, rows: _.size(ts)};
+    ;
   }
+
   groupDataByColName(dataRecv, query, options) {
     if (query.formatType === "Time series" && query.queryType === "SQL") {
       let groupBy = null;
@@ -233,7 +290,7 @@ export class GenericDatasource {
           return [dataRecv];
         }
       }
-      if (!groupBy || query.colNameToGroup.length == 0) {
+      if (!groupBy || query.colNameToGroup.length === 0) {
         return [dataRecv];
       }
 
@@ -245,12 +302,12 @@ export class GenericDatasource {
       }
     }
 
-    if (!query.colNameToGroup || query.colNameToGroup.length == 0) {
+    if (!query.colNameToGroup || query.colNameToGroup.length === 0) {
       return [dataRecv];
     }
 
     for (let index = 0; index < dataRecv.column_meta.length; index++) {
-      if (dataRecv.column_meta[index][0] == query.colNameToGroup) {
+      if (dataRecv.column_meta[index][0] === query.colNameToGroup) {
         let groupData = {};
         let headers = dataRecv.column_meta;
         const data = dataRecv.data;
@@ -259,12 +316,15 @@ export class GenericDatasource {
         for (let rowsIndex = 0; rowsIndex < rows; rowsIndex++) {
           let groupColValue = data[rowsIndex][index];
           if (!groupData[groupColValue]) {
-            groupData[groupColValue] = { column_meta: [], data: [], rows: 0 };
+            groupData[groupColValue] = {column_meta: [], data: [], rows: 0};
             for (let k = 0; k < dataRecv.column_meta.length; k++) {
-              if (k != index) {
+              if (k !== index) {
                 let header = [...dataRecv.column_meta[k]];
-                if (!(k == 0 && header[1] == 9)) {
-                  header[0] = this.getRowAlias(query.colNameFormatStr || "{{colName}}_{{groupValue}}", { colName: header[0], groupValue: groupColValue }, options);
+                if (!(k === 0 && header[1] === 9)) {
+                  header[0] = this.getRowAlias(query.colNameFormatStr || "{{colName}}_{{groupValue}}", {
+                    colName: header[0],
+                    groupValue: groupColValue
+                  }, options);
                 }
                 groupData[groupColValue].column_meta.push(header);
               }
@@ -303,19 +363,26 @@ export class GenericDatasource {
       const cols = headers.length;
       if (!!headers && !!headers[0] && !!headers[0][1]) {
         const timeSeriesIndex = headers.findIndex(item => item[1] === 9);
-        if (timeSeriesIndex == -1 || query.formatType == 'Table') {
-          result.push({ columns: headers.map(item => ({ text: item[0] })), rows: data, type: 'table', refId: query.refId, target: this.getRowAlias(aliasList[0], { col: headers[0][0] }, options), hide: !!query.hide });
+        if (timeSeriesIndex === -1 || query.formatType === 'Table') {
+          result.push({
+            columns: headers.map(item => ({text: item[0]})),
+            rows: data,
+            type: 'table',
+            refId: query.refId,
+            target: this.getRowAlias(aliasList[0], {col: headers[0][0]}, options),
+            hide: !!query.hide
+          });
         } else {
           for (let i = 0; i < cols; i++) {
-            if (i == timeSeriesIndex) {
+            if (i === timeSeriesIndex) {
               continue;
             }
             let aliasRow = headers[i][0];
             if (aliasListIndex < aliasList.length) {
-              aliasRow = this.getRowAlias(aliasList[aliasListIndex], { col: aliasRow }, options);
+              aliasRow = this.getRowAlias(aliasList[aliasListIndex], {col: aliasRow}, options);
               aliasListIndex++;
             }
-            let resultItem = { datapoints: [], refId: query.refId, target: aliasRow, hide: !!query.hide };
+            let resultItem = {datapoints: [], refId: query.refId, target: aliasRow, hide: !!query.hide};
             for (let k = 0; k < rows; k++) {
               let timeShiftDuration = moment.duration();
               if (query.timeshift && query.timeshift.period && query.timeshift.unit) {
@@ -331,17 +398,18 @@ export class GenericDatasource {
     // console.log('result',result);
     return result;
   }
+
   arithmeticQueries(data, options) {
     const arithmeticQueries = options.targets.filter((target) => target.queryType === "Arithmetic" && target.expression && !(target.hide === true));
-    if (arithmeticQueries.length == 0) return data;
-    let targetRefIds = data.flatMap((item) => item.flatMap((field, index) => (index == 0 ? [field.refId, field.refId + '__' + index] : [field.refId + '__' + index])));
+    if (arithmeticQueries.length === 0) return data;
+    let targetRefIds = data.flatMap((item) => item.flatMap((field, index) => (index === 0 ? [field.refId, field.refId + '__' + index] : [field.refId + '__' + index])));
     // console.log('targetRefIds',targetRefIds);
     let targetResults = {};
     data.forEach((item) => {
       item.forEach((field, index) => {
         field.datapoints.forEach(datapoint => {
           targetResults[datapoint[1]] = targetResults[datapoint[1]] || [];
-          if (index == 0) {
+          if (index === 0) {
             targetResults[datapoint[1]].push(datapoint[0]);
           }
           targetResults[datapoint[1]].push(datapoint[0]);
@@ -355,7 +423,7 @@ export class GenericDatasource {
         let functionBody = "return (" + target.expression + ");";
         let expressionFunction = new Function(functionArgs, functionBody);
         let result = null;
-        const aliasList = (target.alias || '').split(',').map(alias => this.getRowAlias(alias, { col: target.refId }, options));
+        const aliasList = (target.alias || '').split(',').map(alias => this.getRowAlias(alias, {col: target.refId}, options));
 
         const aliasListResult = [];
         Object.entries(targetResults).forEach(args => {
@@ -373,7 +441,12 @@ export class GenericDatasource {
             result = [result];
           }
           result.forEach((item, index) => {
-            aliasListResult[index] = aliasListResult[index] || { datapoints: [], refId: target.refId, target: aliasList[index] || (target.refId + '__' + index), hide: !!target.hide };
+            aliasListResult[index] = aliasListResult[index] || {
+              datapoints: [],
+              refId: target.refId,
+              target: aliasList[index] || (target.refId + '__' + index),
+              hide: !!target.hide
+            };
             aliasListResult[index].datapoints.push([item, parseInt(args[0])]);
           })
         });
@@ -415,6 +488,7 @@ export class GenericDatasource {
     alias = this.templateSrv.replace(alias, options.scopedVars, 'csv');
     return alias;
   }
+
   generateAlias(options, target) {
     var alias = target.alias || "";
     alias = this.templateSrv.replace(alias, options.scopedVars, 'csv');
@@ -431,7 +505,7 @@ export class GenericDatasource {
         // console.log('res',res);
         let values = [];
         for (let i = 0; i < res.data.data.length; i++) {
-          values.push({ text: '' + res.data.data[i] });
+          values.push({text: '' + res.data.data[i]});
         }
         return values;
       }
