@@ -1,4 +1,5 @@
 import _ from "lodash";
+import {stringify} from "mocha/lib/utils";
 
 var moment = require('./js/moment-timezone-with-data');
 
@@ -70,21 +71,22 @@ export class GenericDatasource {
       });
     }
     if (this.serverVersion === 0) {
-      const result = this.backendSrv.datasourceRequest({
+      this.backendSrv.datasourceRequest({
         url: this.url + "/sql",
         data: "select server_version()",
         method: 'POST',
+      }).then((res) => {
+        console.log("server_version" + JSON.stringify(res));
+        if (result.data[0][0].startsWith("3")) {
+          console.log("server version 3");
+          this.serverVersion = 3;
+          return this.querySql(params);
+        } else {
+          console.log("server version 2");
+          this.serverVersion = 2;
+          return this.querySqlUtc(params);
+        }
       });
-      console.log("server_version" + result);
-      if (result.data[0][0].startsWith("3")) {
-        console.log("server version 3");
-        this.serverVersion = 3;
-        return this.querySql(params);
-      } else {
-        console.log("server version 2");
-        this.serverVersion = 2;
-        return this.querySqlUtc(params);
-      }
     } else if (this.serverVersion === 3) {
       return this.querySql(params);
     } else {
