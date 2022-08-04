@@ -63,6 +63,7 @@ export class GenericDatasource {
   }
 
   request(params) {
+    console.log("start request...");
     if (!params) {
       return new Promise((resolve, reject) => {
         resolve();
@@ -74,6 +75,7 @@ export class GenericDatasource {
         data: "select server_version()",
         method: 'POST',
       });
+      console.log("server_version" + result);
       if (result.data[0][0].startsWith("3")) {
         console.log("server version 3");
         this.serverVersion = 3;
