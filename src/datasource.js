@@ -1,5 +1,4 @@
 import _ from "lodash";
-import {stringify} from "mocha/lib/utils";
 
 var moment = require('./js/moment-timezone-with-data');
 
