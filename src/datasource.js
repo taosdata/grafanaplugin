@@ -48,40 +48,29 @@ export class GenericDatasource {
 
   testDatasource() {
     return this.request('show databases').then(response => {
-      if (this.serverVersion === 3) {
-        if (!!response && response.code === 0 && !_.get(response, 'data.code')) {
-          return {status: "success", message: "TDengine Data source is working", title: "Success"};
-        }
-        return {status: "error", message: "TDengine Data source is not working", title: "Failed"};
-      } else {
-        if (!!response && response.status === 200 && !_.get(response, 'data.code')) {
-          return {status: "success", message: "TDengine Data source is working", title: "Success"};
-        }
-        return {status: "error", message: "TDengine Data source is not working", title: "Failed"};
+      if (!!response && response.status === 200 && !_.get(response, 'data.code')) {
+        return { status: "success", message: "TDengine Data source is working", title: "Success" };
       }
+      return { status: "error", message: "TDengine Data source is not working", title: "Failed" };
     });
   }
 
   request(params) {
-    console.log("start request...");
     if (!params) {
       return new Promise((resolve, reject) => {
         resolve();
       });
     }
     if (this.serverVersion === 0) {
-      this.backendSrv.datasourceRequest({
+      return this.backendSrv.datasourceRequest({
         url: this.url + "/sql",
         data: "select server_version()",
         method: 'POST',
       }).then((res) => {
-        console.log("server_version" + JSON.stringify(res));
-        if (result.data[0][0].startsWith("3")) {
-          console.log("server version 3");
+        if (res.data.data[0][0].startsWith("3")) {
           this.serverVersion = 3;
           return this.querySql(params);
         } else {
-          console.log("server version 2");
           this.serverVersion = 2;
           return this.querySqlUtc(params);
         }
@@ -94,12 +83,16 @@ export class GenericDatasource {
   }
 
   querySql(params) {
-    const result = this.backendSrv.datasourceRequest({
+    return this.backendSrv.datasourceRequest({
       url: this.url + "/sql",
       data: params,
       method: 'POST',
+    }).then((result) => {
+      result.data = this.convertResult(result.data);
+      return result;
+    }).catch(err => {
+      console.log("catch error: ", err);
     });
-    return this.convertResult(result);
   }
 
   querySqlUtc(params) {
@@ -114,8 +107,9 @@ export class GenericDatasource {
     var dist = {}
     if (src.code === 0) {
       dist.status = "succ";
-      dist.head = src.column_meta;
+      dist.column_meta = src.column_meta;
       dist.data = src.data;
+      dist.rows = src.rows;
     } else {
       dist.status = "error";
       dist.code = src.code;
