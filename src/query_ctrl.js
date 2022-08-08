@@ -28,7 +28,7 @@ export class GenericDatasourceQueryCtrl extends QueryCtrl {
   }
 
   validateArithmeticQuery(target, errs) {
-    if (!target.expression || target.expression.length == 0) {
+    if (!target.expression || target.expression.length === 0) {
       errs.expression = "Must specify a javascript expression";
       return false;
     }

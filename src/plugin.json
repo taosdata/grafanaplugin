@@ -23,6 +23,20 @@
       "urlParams": [
         { "name": "token", "content": "{{ .SecureJsonData.token }}" }
       ]
+    },
+    {
+      "path": "sql",
+      "url": "{{ .SecureJsonData.url }}/rest/sql",
+      "method": "POST",
+      "headers": [
+        {
+          "name": "Authorization",
+          "content": "Basic {{ .SecureJsonData.basicAuth }}"
+        }
+      ],
+      "urlParams": [
+        { "name": "token", "content": "{{ .SecureJsonData.token }}" }
+      ]
     }
   ],
   "includes": [
