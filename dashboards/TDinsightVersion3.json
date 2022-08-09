@@ -4655,7 +4655,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 43
+        "y": 48
       },
       "panels": [
         {
@@ -4664,7 +4664,7 @@
             "h": 5,
             "w": 12,
             "x": 0,
-            "y": 0
+            "y": 49
           },
           "type": "timeseries",
           "title": "http_request",
@@ -4764,7 +4764,7 @@
             "h": 5,
             "w": 4,
             "x": 16,
-            "y": 48
+            "y": 49
           },
           "type": "gauge",
           "title": "Memory Used",
@@ -4835,7 +4835,7 @@
             "h": 5,
             "w": 4,
             "x": 12,
-            "y": 48
+            "y": 49
           },
           "type": "gauge",
           "title": "CPU Used",
