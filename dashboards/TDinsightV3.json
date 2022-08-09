@@ -4662,12 +4662,12 @@
           "id": 1,
           "gridPos": {
             "h": 5,
-            "w": 12,
+            "w": 8,
             "x": 0,
             "y": 0
           },
           "type": "timeseries",
-          "title": "http_request",
+          "title": "http_request_inflight",
           "description": "http请求统计",
           "fieldConfig": {
             "defaults": {
@@ -4731,10 +4731,106 @@
               "colNameToGroup": "",
               "datasource": "${DS_TDENGINE}",
               "formatType": "Time series",
+              "hide": false,
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, avg(gauge) as request_total from $database.taosadapter_restful_http_request_total where _ts >= $from and _ts <= $to interval($interval)"
+              "sql": "select _wstart as ts, avg(gauge) as request_in_flight from $database.taosadapter_restful_http_request_in_flight where _ts >= $from and _ts <= $to interval($interval)"
+            }
+          ],
+          "datasource": "${DS_TDENGINE}"
+        },
+        {
+          "id": 2,
+          "gridPos": {
+            "h": 5,
+            "w": 3,
+            "x": 8,
+            "y": 0
+          },
+          "type": "stat",
+          "title": "http_request_total",
+          "description": "http请求总数统计",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "mappings": []
             },
+            "overrides": []
+          },
+          "options": {
+            "tooltip": {
+              "mode": "single"
+            },
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom",
+              "calcs": []
+            }
+          },
+          "targets": [
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select last_row(gauge) as request_total from $database.taosadapter_restful_http_request_total"
+            }
+          ],
+          "datasource": "${DS_TDENGINE}"
+        },
+        {
+          "id": 4,
+          "gridPos": {
+            "h": 5,
+            "w": 3,
+            "x": 11,
+            "y": 0
+          },
+          "type": "stat",
+          "title": "http_request_fail",
+          "description": "http请求失败统计",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "mappings": []
+            },
+            "overrides": []
+          },
+          "options": {
+            "tooltip": {
+              "mode": "single"
+            },
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom",
+              "calcs": []
+            }
+          },
+          "targets": [
             {
               "colNameFormatStr": "",
               "colNameToGroup": "",
@@ -4743,17 +4839,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "B",
-              "sql": "select _wstart as ts, avg(gauge) as request_fail from $database.taosadapter_restful_http_request_fail where _ts >= $from and _ts <= $to interval($interval)"
-            },
-            {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
-              "datasource": "${DS_TDENGINE}",
-              "formatType": "Time series",
-              "hide": false,
-              "queryType": "SQL",
-              "refId": "C",
-              "sql": "select _wstart as ts, avg(gauge) as request_in_flight from $database.taosadapter_restful_http_request_in_flight where _ts >= $from and _ts <= $to interval($interval)"
+              "sql": "select last_row(gauge) as request_fail from $database.taosadapter_restful_http_request_fail"
             }
           ],
           "datasource": "${DS_TDENGINE}"
@@ -4763,7 +4849,7 @@
           "gridPos": {
             "h": 5,
             "w": 4,
-            "x": 16,
+            "x": 17,
             "y": 48
           },
           "type": "gauge",
@@ -4833,8 +4919,8 @@
           "id": 6,
           "gridPos": {
             "h": 5,
-            "w": 4,
-            "x": 12,
+            "w": 3,
+            "x": 14,
             "y": 48
           },
           "type": "gauge",
