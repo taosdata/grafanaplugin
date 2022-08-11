@@ -411,7 +411,8 @@ remove_notifier() {
 }
 
 download_dashboard() {
-  get_dashboard_by_id $TDINSIGHT_DASHBOARD_ID TDinsight-$TDINSIGHT_DASHBOARD_ID.json
+  #get_dashboard_by_id $TDINSIGHT_DASHBOARD_ID TDinsight-$TDINSIGHT_DASHBOARD_ID.json
+  wget -c https://github.com/taosdata/grafanaplugin/releases/latest/TDinsight.json TDinsight-$TDINSIGHT_DASHBOARD_ID.json
 }
 
 provisioning_dashboard() {
