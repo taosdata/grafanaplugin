@@ -157,7 +157,7 @@ jobs:
           asset_content_type: text/plain
 
       - name: Add TDinsight.json to release
-        id: upload-tdinsight-script
+        id: upload-tdinsight-json
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
