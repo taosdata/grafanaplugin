@@ -114,6 +114,11 @@ export class GenericDatasource {
     if (src.code === 0) {
       dist.status = "succ";
       dist.column_meta = src.column_meta;
+      dist.column_meta.forEach(element => {
+        if (element[1] === "TIMESTAMP") {
+          element[1] = 9;
+        }
+      });
       dist.data = src.data;
       dist.rows = src.rows;
     } else {

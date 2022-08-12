@@ -4201,7 +4201,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select ts, derivative(value1, 1m, 0) as level0 from (select _wstart as ts, avg(used) * 1024 as value1 from $database.data_dir where dnode_ep = '$fqdn' and ts >= $from and ts <= $to and level = 0 interval($interval) fill(null))",
+              "sql": "select ts, derivative(value1, 1m, 0) as level0 from (select _wstart as ts, avg(used) as value1 from $database.data_dir where dnode_ep = '$fqdn' and ts >= $from and ts <= $to and level = 0 interval($interval) fill(null))",
               "target": "select metric",
               "timeshift": {
                 "period": null
@@ -4216,7 +4216,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "B",
-              "sql": "select ts, derivative(value1, 1m, 0) as level1 from (select _wstart as ts, avg(used) * 1024 as value1 from $database.data_dir where dnode_ep = '$fqdn' and ts >= $from and ts <= $to and level = 1 interval($interval) fill(null))",
+              "sql": "select ts, derivative(value1, 1m, 0) as level1 from (select _wstart as ts, avg(used) as value1 from $database.data_dir where dnode_ep = '$fqdn' and ts >= $from and ts <= $to and level = 1 interval($interval) fill(null))",
               "target": "select metric",
               "timeshift": {
                 "period": null
@@ -4231,7 +4231,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "C",
-              "sql": "select ts, derivative(value1, 1m, 0) as level2 from (select _wstart as ts, avg(used) * 1024 as value1 from $database.data_dir where dnode_ep = '$fqdn' and ts >= $from and ts <= $to and level =2 interval($interval) fill(null))",
+              "sql": "select ts, derivative(value1, 1m, 0) as level2 from (select _wstart as ts, avg(used) as value1 from $database.data_dir where dnode_ep = '$fqdn' and ts >= $from and ts <= $to and level =2 interval($interval) fill(null))",
               "target": "select metric",
               "timeshift": {
                 "period": null
@@ -5013,7 +5013,6 @@
         "options": [],
         "query": "show databases",
         "refresh": 1,
-        "regex": "/([^,]+),/",
         "skipUrlSync": false,
         "sort": 1,
         "tagValuesQuery": "",
