@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.2.6] - 2022-08-12
+
+### Bug Fixes
+
+- Install.sh -p not work
+- Fix offline plugin not found error (#146)
+- Compatible with python2 (#148)
+- Modify taosAdapter http_request_total dashboard
+- Add error reason
+- Add V3 dashboard
+- Timestamp code
+
+### CI
+
+- Fix ci syntax error
+
+### Documentation
+
+- Update README for data source name settings
+
+### Enhancements
+
+- Do not cache zip file when there's no python in system (#138)
+- Anyone can request a release by pr
+- Match 3.0 (#149)
+
 ## [3.2.5] - 2022-06-10
 
 ### Bug Fixes
@@ -11,7 +37,7 @@ All notable changes to this project will be documented in this file.
 
 ### Enhancements
 
-- Remove unused timeInterval in provisioning configurations
+- Remove unused timeInterval in provisioning configurations (#137)
 
 ## [3.2.4] - 2022-06-08
 

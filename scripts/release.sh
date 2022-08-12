@@ -5,7 +5,7 @@ if [ "$newv" = "" ]; then
   echo "$0 <version>"
   exit 1
 fi
-sed -Ei 's#"version":\s*.*$#"version": "'$newv'"#' package.json src/plugin.json
+sed -Ei 's#"version":\s*.*$#"version": "'$newv'",#' package.json src/plugin.json
 sed -Ei 's#"updated":\s*.*$#"updated": "'`date +%F`'"#' src/plugin.json
 
 command -v git-cliff > /dev/null || \
