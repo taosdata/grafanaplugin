@@ -49,9 +49,13 @@ export class GenericDatasource {
   testDatasource() {
     return this.request('show databases').then(response => {
       if (!!response && response.status === 200 && !_.get(response, 'data.code')) {
-        return { status: "success", message: "TDengine Data source is working", title: "Success" };
+        return {status: "success", message: "TDengine Data source is working", title: "Success"};
       }
-      return { status: "error", message: "TDengine Data source is not working", title: "Failed" };
+      return {
+        status: "error",
+        message: "TDengine Data source is not working, reason: " + response.data.message,
+        title: "Failed"
+      };
     });
   }
 
@@ -74,6 +78,8 @@ export class GenericDatasource {
           this.serverVersion = 2;
           return this.querySqlUtc(params);
         }
+      }).catch(err => {
+        return err;
       });
     } else if (this.serverVersion === 3) {
       return this.querySql(params);
@@ -108,6 +114,11 @@ export class GenericDatasource {
     if (src.code === 0) {
       dist.status = "succ";
       dist.column_meta = src.column_meta;
+      dist.column_meta.forEach(element => {
+        if (element[1] === "TIMESTAMP") {
+          element[1] = 9;
+        }
+      });
       dist.data = src.data;
       dist.rows = src.rows;
     } else {

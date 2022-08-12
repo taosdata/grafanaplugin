@@ -23,7 +23,7 @@ module.exports = function (grunt) {
       },
       dashboards: {
         expand: true,
-        src: ["dashboards/TDinsight.json"],
+        src: ["dashboards/TDinsight.json","dashboards/TDinsightV3.json"],
         dest: 'dist/'
       },
       pluginDef: {

@@ -44,6 +44,11 @@
       "type": "dashboard",
       "name": "TDinsight",
       "path": "dashboards/TDinsight.json"
+    },
+    {
+      "type": "dashboard",
+      "name": "TDinsightV3",
+      "path": "dashboards/TDinsightV3.json"
     }
   ],
   "info": {
@@ -62,8 +67,8 @@
       { "name": "GitHub", "url": "https://github.com/taosdata/grafanaplugin" },
       { "name": "AGPL-3.0", "url": "https://github.com/taosdata/grafanaplugin/blob/master/LICENSE" }
     ],
-    "version": "3.2.5",
-    "updated": "2022-06-10"
+    "version": "3.2.6",
+    "updated": "2022-08-12"
   },
 
   "dependencies": {

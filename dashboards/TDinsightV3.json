@@ -2684,368 +2684,320 @@
       "id": 92,
       "panels": [
         {
-          "datasource": "${DS_TDENGINE}",
-          "description": "超级表的个数",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "thresholds"
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  }
-                ]
-              }
-            },
-            "overrides": []
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "PCDB1A4F820EAA3DF"
           },
-          "gridPos": {
-            "h": 3,
-            "w": 3,
-            "x": 0,
-            "y": 73
-          },
-          "id": 96,
-          "options": {
-            "colorMode": "value",
-            "graphMode": "area",
-            "justifyMode": "auto",
-            "orientation": "auto",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": true
-            },
-            "text": {},
-            "textMode": "auto"
-          },
-          "pluginVersion": "7.5.10",
-          "repeatDirection": "h",
-          "scopedVars": {
-            "database": {
-              "selected": false,
-              "text": "demo",
-              "value": "demo"
-            }
-          },
-          "targets": [
-            {
-              "alias": "dnodes",
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
-              "formatType": "Time series",
-              "queryType": "SQL",
-              "refId": "A",
-              "sql": "select last(stbs_total) from $database.cluster_info",
-              "target": "select metric",
-              "timeshift": {
-                "period": null
-              },
-              "type": "timeserie"
-            }
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "STables",
-          "transformations": [
-          ],
-          "type": "stat"
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${DS_TDENGINE}",
-          "fieldConfig": {
-            "defaults": {},
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 6,
-            "w": 9,
-            "x": 3,
-            "y": 73
-          },
-          "hiddenSeries": false,
-          "id": 94,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.5.10",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "scopedVars": {
-            "database": {
-              "selected": false,
-              "text": "demo",
-              "value": "demo"
-            }
-          },
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "alias": "",
-              "colName": "vgroup_id",
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
-              "formatType": "Time series",
-              "groupDataByColName": "",
-              "queryType": "SQL",
-              "refId": "A",
-              "sql": "select _wstart as ts, last(tables_num) as tables_num from $database.vgroups_info where ts > $from and ts <= $to interval($interval) fill(null)"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Tables",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${DS_TDENGINE}",
-          "fieldConfig": {
-            "defaults": {},
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 6,
-            "w": 12,
-            "x": 12,
-            "y": 73
-          },
-          "hiddenSeries": false,
-          "id": 95,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.5.10",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "scopedVars": {
-            "database": {
-              "selected": false,
-              "text": "demo",
-              "value": "demo"
-            }
-          },
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "alias": "",
-              "colName": "vgroup_id",
-              "colNameFormatStr": "vgoup{{groupValue}}",
-              "colNameToGroup": "vgroup_id",
-              "formatType": "Time series",
-              "groupDataByColName": "",
-              "queryType": "SQL",
-              "refId": "A",
-              "sql": "select _wstart as ts, max(tables_num) as tables_num from $database.vgroups_info where ts > $from and ts <= $to partition by vgroup_id interval($interval) fill(null)"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Tables Number Foreach VGroups",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "datasource": "${DS_TDENGINE}",
-          "description": "所有普通表的个数（包括超级表的子表）",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "thresholds"
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  }
-                ]
-              }
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 3,
-            "w": 3,
-            "x": 0,
-            "y": 76
-          },
-          "id": 98,
-          "options": {
-            "colorMode": "value",
-            "graphMode": "area",
-            "justifyMode": "auto",
-            "orientation": "auto",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": true
-            },
-            "text": {},
-            "textMode": "auto"
-          },
-          "pluginVersion": "7.5.10",
-          "repeatDirection": "h",
-          "scopedVars": {
-            "database": {
-              "selected": false,
-              "text": "demo",
-              "value": "demo"
-            }
-          },
-          "targets": [
-            {
-              "alias": "dnodes",
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
-              "formatType": "Time series",
-              "queryType": "SQL",
-              "refId": "A",
-              "sql": "select last(tbs_total) as tbs_total from $database.cluster_info where first_ep = '$fqdn';",
-              "target": "select metric",
-              "timeshift": {
-                "period": null
-              },
-              "type": "timeserie"
-            }
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Total Tables",
-          "transformations": [],
-          "type": "stat"
+          "refId": "A"
         }
       ],
-      "repeat": "database",
-      "title": "Database: [ $database ]",
+      "title": "Tables Summary from [ $database ]",
       "type": "row"
+    },
+    {
+      "datasource": "${DS_TDENGINE}",
+      "description": "超级表的个数",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 0,
+        "y": 39
+      },
+      "id": 96,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": true
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "7.5.10",
+      "repeatDirection": "h",
+      "targets": [
+        {
+          "alias": "dnodes",
+          "colNameFormatStr": "",
+          "colNameToGroup": "",
+          "datasource":"${DS_TDENGINE}",
+          "formatType": "Time series",
+          "queryType": "SQL",
+          "refId": "A",
+          "sql": "select last(stbs_total) from $database.cluster_info",
+          "target": "select metric",
+          "timeshift": {},
+          "type": "timeserie"
+        }
+      ],
+      "title": "STables",
+      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${DS_TDENGINE}",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 6,
+        "w": 9,
+        "x": 3,
+        "y": 39
+      },
+      "hiddenSeries": false,
+      "id": 94,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "7.5.10",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "",
+          "colName": "vgroup_id",
+          "colNameFormatStr": "",
+          "colNameToGroup": "",
+          "datasource": "${DS_TDENGINE}",
+          "formatType": "Time series",
+          "groupDataByColName": "",
+          "queryType": "SQL",
+          "refId": "A",
+          "sql": "select _wstart as ts, last(tables_num) as tables_num from $database.vgroups_info where ts > $from and ts <= $to interval($interval) fill(null)"
+        }
+      ],
+      "thresholds": [],
+      "timeRegions": [],
+      "title": "Tables",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "logBase": 1,
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${DS_TDENGINE}",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 39
+      },
+      "hiddenSeries": false,
+      "id": 95,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "7.5.10",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "",
+          "colName": "vgroup_id",
+          "colNameFormatStr": "vgoup{{groupValue}}",
+          "colNameToGroup": "vgroup_id",
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "${DS_TDENGINE}"
+          },
+          "formatType": "Time series",
+          "groupDataByColName": "",
+          "queryType": "SQL",
+          "refId": "A",
+          "sql": "select _wstart as ts, max(tables_num) as tables_num from $database.vgroups_info where ts > $from and ts <= $to partition by vgroup_id interval($interval) fill(null)"
+        }
+      ],
+      "thresholds": [],
+      "timeRegions": [],
+      "title": "Tables Number Foreach VGroups",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "logBase": 1,
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
+    },
+    {
+      "datasource": {
+        "type": "tdengine-datasource",
+        "uid": "${DS_TDENGINE}"
+      },
+      "description": "所有普通表的个数（包括超级表的子表）",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 0,
+        "y": 42
+      },
+      "id": 98,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": true
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "7.5.10",
+      "repeatDirection": "h",
+      "targets": [
+        {
+          "alias": "dnodes",
+          "colNameFormatStr": "",
+          "colNameToGroup": "",
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "${DS_TDENGINE}"
+          },
+          "formatType": "Time series",
+          "queryType": "SQL",
+          "refId": "A",
+          "sql": "select last(tbs_total) as tbs_total from $database.cluster_info where first_ep = '$fqdn';",
+          "target": "select metric",
+          "timeshift": {},
+          "type": "timeserie"
+        }
+      ],
+      "title": "Total Tables",
+      "transformations": [],
+      "type": "stat"
     },
     {
       "collapsed": true,
@@ -4201,7 +4153,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select ts, derivative(value1, 1m, 0) as level0 from (select _wstart as ts, avg(used) * 1024 as value1 from $database.data_dir where dnode_ep = '$fqdn' and ts >= $from and ts <= $to and level = 0 interval($interval) fill(null))",
+              "sql": "select ts, derivative(value1, 1m, 0) as level0 from (select _wstart as ts, avg(used) as value1 from $database.data_dir where dnode_ep = '$fqdn' and ts >= $from and ts <= $to and level = 0 interval($interval) fill(null))",
               "target": "select metric",
               "timeshift": {
                 "period": null
@@ -4216,7 +4168,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "B",
-              "sql": "select ts, derivative(value1, 1m, 0) as level1 from (select _wstart as ts, avg(used) * 1024 as value1 from $database.data_dir where dnode_ep = '$fqdn' and ts >= $from and ts <= $to and level = 1 interval($interval) fill(null))",
+              "sql": "select ts, derivative(value1, 1m, 0) as level1 from (select _wstart as ts, avg(used) as value1 from $database.data_dir where dnode_ep = '$fqdn' and ts >= $from and ts <= $to and level = 1 interval($interval) fill(null))",
               "target": "select metric",
               "timeshift": {
                 "period": null
@@ -4231,7 +4183,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "C",
-              "sql": "select ts, derivative(value1, 1m, 0) as level2 from (select _wstart as ts, avg(used) * 1024 as value1 from $database.data_dir where dnode_ep = '$fqdn' and ts >= $from and ts <= $to and level =2 interval($interval) fill(null))",
+              "sql": "select ts, derivative(value1, 1m, 0) as level2 from (select _wstart as ts, avg(used) as value1 from $database.data_dir where dnode_ep = '$fqdn' and ts >= $from and ts <= $to and level =2 interval($interval) fill(null))",
               "target": "select metric",
               "timeshift": {
                 "period": null
@@ -4662,12 +4614,12 @@
           "id": 1,
           "gridPos": {
             "h": 5,
-            "w": 12,
+            "w": 8,
             "x": 0,
             "y": 0
           },
           "type": "timeseries",
-          "title": "http_request",
+          "title": "http_request_inflight",
           "description": "http请求统计",
           "fieldConfig": {
             "defaults": {
@@ -4731,10 +4683,106 @@
               "colNameToGroup": "",
               "datasource": "${DS_TDENGINE}",
               "formatType": "Time series",
+              "hide": false,
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, avg(gauge) as request_total from $database.taosadapter_restful_http_request_total where _ts >= $from and _ts <= $to interval($interval)"
+              "sql": "select _wstart as ts, avg(gauge) as request_in_flight from $database.taosadapter_restful_http_request_in_flight where _ts >= $from and _ts <= $to interval($interval)"
+            }
+          ],
+          "datasource": "${DS_TDENGINE}"
+        },
+        {
+          "id": 2,
+          "gridPos": {
+            "h": 5,
+            "w": 3,
+            "x": 8,
+            "y": 0
+          },
+          "type": "stat",
+          "title": "http_request_total",
+          "description": "http请求总数统计",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "mappings": []
             },
+            "overrides": []
+          },
+          "options": {
+            "tooltip": {
+              "mode": "single"
+            },
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom",
+              "calcs": []
+            }
+          },
+          "targets": [
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select last_row(gauge) as request_total from $database.taosadapter_restful_http_request_total"
+            }
+          ],
+          "datasource": "${DS_TDENGINE}"
+        },
+        {
+          "id": 4,
+          "gridPos": {
+            "h": 5,
+            "w": 3,
+            "x": 11,
+            "y": 0
+          },
+          "type": "stat",
+          "title": "http_request_fail",
+          "description": "http请求失败统计",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "mappings": []
+            },
+            "overrides": []
+          },
+          "options": {
+            "tooltip": {
+              "mode": "single"
+            },
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom",
+              "calcs": []
+            }
+          },
+          "targets": [
             {
               "colNameFormatStr": "",
               "colNameToGroup": "",
@@ -4743,17 +4791,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "B",
-              "sql": "select _wstart as ts, avg(gauge) as request_fail from $database.taosadapter_restful_http_request_fail where _ts >= $from and _ts <= $to interval($interval)"
-            },
-            {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
-              "datasource": "${DS_TDENGINE}",
-              "formatType": "Time series",
-              "hide": false,
-              "queryType": "SQL",
-              "refId": "C",
-              "sql": "select _wstart as ts, avg(gauge) as request_in_flight from $database.taosadapter_restful_http_request_in_flight where _ts >= $from and _ts <= $to interval($interval)"
+              "sql": "select last_row(gauge) as request_fail from $database.taosadapter_restful_http_request_fail"
             }
           ],
           "datasource": "${DS_TDENGINE}"
@@ -4763,7 +4801,7 @@
           "gridPos": {
             "h": 5,
             "w": 4,
-            "x": 16,
+            "x": 17,
             "y": 48
           },
           "type": "gauge",
@@ -4833,8 +4871,8 @@
           "id": 6,
           "gridPos": {
             "h": 5,
-            "w": 4,
-            "x": 12,
+            "w": 3,
+            "x": 14,
             "y": 48
           },
           "type": "gauge",
@@ -4916,18 +4954,15 @@
         "allValue": null,
         "current": {},
         "datasource": "${DS_TDENGINE}",
-        "definition": "show databases",
-        "description": null,
-        "error": null,
+        "definition": "select name from information_schema.ins_databases where `vgroups` is not null",
         "hide": 0,
         "includeAll": true,
-        "label": "Database",
+        "label": "Log from",
         "multi": true,
         "name": "database",
         "options": [],
-        "query": "show databases",
+        "query": "select name from information_schema.ins_databases where `vgroups` is not null",
         "refresh": 1,
-        "regex": "/([^,]+),/",
         "skipUrlSync": false,
         "sort": 1,
         "tagValuesQuery": "",
@@ -4937,6 +4972,26 @@
       },
       {
         "allValue": null,
+        "current": {},
+        "datasource": "${DS_TDENGINE}",
+        "definition": "select name from information_schema.ins_databases where `vgroups` is not null",
+        "hide": 0,
+        "includeAll": true,
+        "label": "User databases",
+        "multi": true,
+        "name": "userdb",
+        "options": [],
+        "query": "select name from information_schema.ins_databases where `vgroups` is not null",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
         "current": {},
         "datasource": "${DS_TDENGINE}",
         "definition": "select first_ep from $database.cluster_info group by cluster_id, first_ep;",
@@ -5125,7 +5180,7 @@
     ]
   },
   "timezone": "",
-  "title": "TDinsight",
-  "uid": "tdinsight",
+  "title": "TDinsight for 3.x",
+  "uid": "tdinsight-3x",
   "version": 31
 }
