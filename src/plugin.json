@@ -44,6 +44,11 @@
       "type": "dashboard",
       "name": "TDinsight",
       "path": "dashboards/TDinsight.json"
+    },
+    {
+      "type": "dashboard",
+      "name": "TDinsightV3",
+      "path": "dashboards/TDinsightV3.json"
     }
   ],
   "info": {
