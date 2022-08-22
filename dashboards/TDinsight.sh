@@ -6,6 +6,10 @@ REMOVE=0
 OFFLINE=0
 DOWNLOAD_ONLY=0
 INSTALL_FROM_GRAFANA=0
+SUDO=$(command -v sudo)
+if [ "$SUDO" != "" ]; then
+  SUDO_GRAFANA="$SUDO -u grafana"
+fi
 
 [ -f .env ] && source .env
 
@@ -256,7 +260,7 @@ if [ "$EXTERNAL_NOTIFIER" != "" ]; then
 fi
 
 _assert_dir() {
-  [ -d "$1" ] || mkdir -p "$1"
+  [ -d "$1" ] || $SUDO mkdir -p "$1"
 }
 
 get_latest_release() {
@@ -272,11 +276,20 @@ get_dashboard_by_id() {
   wget -qO $file https://grafana.com/api/dashboards/${id}/revisions/latest/download
 }
 
+echoerr() {
+  echo $@ >&2
+}
+
 download_plugin() {
-  [ "$verbose" = "0" ] || echo "** download plugin version $TDENGINE_PLUGIN_VERSION"
-  [ -s tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip ] || \
-    wget -c https://github.com/taosdata/grafanaplugin/releases/download/v$TDENGINE_PLUGIN_VERSION/tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip
-  
+  [ "$verbose" = "0" ] || echoerr "** download plugin version $TDENGINE_PLUGIN_VERSION"
+  if [ -s tdengine-datasource.zip.md5sum ] && md5sum -c tdengine-datasource.zip.md5sum >/dev/null; then
+    echoerr "** plugin has been downloaded"
+  else
+    echoerr "** downloading from github"
+    wget -c -o /dev/stderr https://github.com/taosdata/grafanaplugin/releases/download/v$TDENGINE_PLUGIN_VERSION/tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip \
+      -O tdengine-datasource.zip
+    md5sum tdengine-datasource.zip > tdengine-datasource.zip.md5sum
+  fi
 }
 
 install_plugin() {
@@ -284,7 +297,7 @@ install_plugin() {
   if [ "$OFFLINE" = 0 ]; then
     download_plugin
   else
-    [ -s tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip ] || (echo "use offline cache, but plugin not exist"; exit 1)
+    [ -s tdengine-datasource.zip ] || (echo "use offline cache, but plugin not exist"; exit 1)
   fi
   # open a simple server for local url
   port=$(shuf -i 2000-65000 -n 1)
@@ -301,7 +314,7 @@ install_plugin() {
   fi
   sleep 1
   set +e
-  grafana-cli --pluginUrl http://localhost:$port/tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip plugins install tdengine-datasource
+  $SUDO_GRAFANA grafana-cli --pluginUrl http://localhost:$port/tdengine-datasource.zip plugins install tdengine-datasource
   status=$?
   kill $pid
   set -e
@@ -310,32 +323,18 @@ install_plugin() {
   fi
 }
 
-allow_unsigned_plugin() {
-  [ -f /etc/grafana/grafana.ini ] || (echo "seems Grafana is not installed, please check"; exit 1)
-  set +e
-  grep -E "^allow_loading_unsigned_plugins.*tdengine-datasource" /etc/grafana/grafana.ini >/dev/null
-  if [ "$?" != "0" ]; then
-    echo "* Configuring /etc/grafana/grafana.ini"
-    tee -a /etc/grafana/grafana.ini > /dev/null <<EOF
-[plugins]
-allow_loading_unsigned_plugins = tdengine-datasource
-EOF
-  fi
-  set -e
-}
-
 remove_plugin() {
   set +e
   sed -i "s/tdengine-datasource//g" /etc/grafana/grafana.ini
-  rm -rf $GF_PLUGINS_DIR/tdengine-datasource
+  $SUDO rm -rf $GF_PLUGINS_DIR/tdengine-datasource
   set -e
 }
 
 provisioning_datasource() {
-  [ -d $GF_PROVISIONING_DATASOURCES_DIR ] || mkdir $GF_PROVISIONING_DATASOURCES_DIR
+  [ -d $GF_PROVISIONING_DATASOURCES_DIR ] || $SUDO mkdir $GF_PROVISIONING_DATASOURCES_DIR
   echo "* Provisioning $GF_PROVISIONING_DATASOURCES_DIR/$TDENGINE_DS_NAME.yaml"
   TDENGINE_BASIC_AUTH=$(printf "$TDENGINE_USER:$TDENGINE_PASSWORD" | base64)
-  cat > $GF_PROVISIONING_DATASOURCES_DIR/$TDENGINE_DS_NAME.yaml <<EOF
+  $SUDO tee $GF_PROVISIONING_DATASOURCES_DIR/$TDENGINE_DS_NAME.yaml >/dev/null <<EOF
 # config file version
 apiVersion: 1
 
@@ -381,14 +380,14 @@ EOF
 }
 
 remove_datasource() {
-  rm $GF_PROVISIONING_DATASOURCES_DIR/$TDENGINE_DS_NAME.yaml
+  $SUDO rm $GF_PROVISIONING_DATASOURCES_DIR/$TDENGINE_DS_NAME.yaml
 }
 
 provisioning_notifiers() {
   if [ "$SMS_ENABLED" == "true" ]; then
     _assert_dir $GF_PROVISIONING_NOTIFIERS_DIR
     echo "* Provisioning $GF_PROVISIONING_NOTIFIERS_DIR/${SMS_NOTIFIER_UID}.yaml"
-    tee $GF_PROVISIONING_NOTIFIERS_DIR/${SMS_NOTIFIER_UID}.yaml > /dev/null <<EOF
+    $SUDO tee $GF_PROVISIONING_NOTIFIERS_DIR/${SMS_NOTIFIER_UID}.yaml > /dev/null <<EOF
 # config file version
 apiVersion: 1
 
@@ -406,13 +405,15 @@ EOF
 
 remove_notifier() {
   set +e
-  [ -e "$GF_PROVISIONING_NOTIFIERS_DIR/${SMS_NOTIFIER_UID}.yaml" ] && rm "$GF_PROVISIONING_NOTIFIERS_DIR/${SMS_NOTIFIER_UID}.yaml"
+  [ -e "$GF_PROVISIONING_NOTIFIERS_DIR/${SMS_NOTIFIER_UID}.yaml" ] && $SUDO rm "$GF_PROVISIONING_NOTIFIERS_DIR/${SMS_NOTIFIER_UID}.yaml"
   set -e
 }
 
 download_dashboard() {
   #get_dashboard_by_id $TDINSIGHT_DASHBOARD_ID TDinsight-$TDINSIGHT_DASHBOARD_ID.json
-  wget -c https://github.com/taosdata/grafanaplugin/releases/latest/TDinsight.json TDinsight-$TDINSIGHT_DASHBOARD_ID.json
+  #wget -c https://github.com/taosdata/grafanaplugin/releases/download/v$TDENGINE_PLUGIN_VERSION/TDinsight.json -O TDinsight-$TDINSIGHT_DASHBOARD_ID.json
+  echo "**deprecated: 3.2.6 will not download dashboard from grafana, use builtin dashboards via grafana datasource settings.**" >&2
+  true
 }
 
 provisioning_dashboard() {
@@ -422,9 +423,9 @@ provisioning_dashboard() {
     get_dashboard_by_id $TDINSIGHT_DASHBOARD_ID $TDINSIGHT_DASHBOARD_UID.json
   else
     if [ -e "TDinsight-$TDINSIGHT_DASHBOARD_ID.json" ]; then
-      cp "TDinsight-$TDINSIGHT_DASHBOARD_ID.json" $TDINSIGHT_DASHBOARD_UID.json
+      $SUDO cp "TDinsight-$TDINSIGHT_DASHBOARD_ID.json" $TDINSIGHT_DASHBOARD_UID.json
     elif [ -e "$BIN/TDinsight-$TDINSIGHT_DASHBOARD_ID.json" ]; then
-      cp "$BIN/TDinsight-$TDINSIGHT_DASHBOARD_ID.json" $TDINSIGHT_DASHBOARD_UID.json
+      $SUDO cp "$BIN/TDinsight-$TDINSIGHT_DASHBOARD_ID.json" $TDINSIGHT_DASHBOARD_UID.json
     else
       echo "** in offline mode bug no cached files there"
       exit 1
@@ -460,7 +461,7 @@ providers:
 EOF
 
   # 3. Add this to provisioning directory
-  [ -d $GF_PROVISIONING_DASHBOARDS_DIR ] || mkdir -p $GF_PROVISIONING_DASHBOARDS_DIR
+  [ -d $GF_PROVISIONING_DASHBOARDS_DIR ] || $SUDO mkdir -p $GF_PROVISIONING_DASHBOARDS_DIR
   echo "** Provisioning $GF_PROVISIONING_DASHBOARDS_DIR/$TDINSIGHT_DASHBOARD_UID.{json,yaml}"
   mv $TDINSIGHT_DASHBOARD_UID.{json,yaml} $GF_PROVISIONING_DASHBOARDS_DIR
   echo "** Provisioning done."
@@ -468,7 +469,7 @@ EOF
 
 remove_dashboard() {
   set +e
-  rm $GF_PROVISIONING_DASHBOARDS_DIR/$TDINSIGHT_DASHBOARD_UID.{json,yaml}
+  $SUDO rm $GF_PROVISIONING_DASHBOARDS_DIR/$TDINSIGHT_DASHBOARD_UID.{json,yaml}
   set -e
 }
 
@@ -487,13 +488,10 @@ if [ "$DOWNLOAD_ONLY" = "1" ]; then
   if [ "$TDENGINE_PLUGIN_VERSION" = "latest" ]; then
     TDENGINE_PLUGIN_VERSION=$(get_latest_release)
   fi
+  cd $BIN
   download_plugin
-  download_dashboard
-  echo "TDENGINE_PLUGIN_VERSION=$TDENGINE_PLUGIN_VERSION" > .tdinsight.cache
-
-  echo .tdinsight.cache
-  echo TDinsight-$TDINSIGHT_DASHBOARD_ID.json
-  echo tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip
+  echo tdengine-datasource.zip
+  echo tdengine-datasource.zip.md5sum
   exit 0
 fi
 
@@ -502,14 +500,14 @@ if [ "$INSTALL_FROM_GRAFANA" = "1" ]; then
   install_plugin_from_grafana
 else
 
-  if [ "$OFFLINE" = "1" ]; then
-    [ -e "$BIN/.tdinsight.cache" ] && source $BIN/.tdinsight.cache
-    [ -e ".tdinsight.cache" ] && source .tdinsight.cache
-  fi
-
-  if [ "$TDENGINE_PLUGIN_VERSION" = "latest" ]; then
+  if [ "$OFFLINE" = "1" ] && [ -f "$BIN/tdengine-datasource.zip.md5sum" ]; then
+    echoerr using offline plugin
+    cd $BIN
+  elif [ "$TDENGINE_PLUGIN_VERSION" = "latest" ]; then
     TDENGINE_PLUGIN_VERSION=$(get_latest_release)
-    echo using tdengine-datasource plugin $TDENGINE_PLUGIN_VERSION
+    echoerr using tdengine-datasource plugin $TDENGINE_PLUGIN_VERSION
+  else
+    echoerr using tdengine-datasource plugin $TDENGINE_PLUGIN_VERSION
   fi
 
   install_plugin
@@ -517,14 +515,13 @@ else
 fi
 
 
-# Config allow_loading_unsigned_plugins
-allow_unsigned_plugin
-
 # Provisioning TDengine data source
 provisioning_datasource
 
 # Provisioning TDengine notification channels
-provisioning_notifiers
+echoerr "**Notifier deprecated: use user-defined notifiers please**"
+#provisioning_notifiers
 
 # Provisioning TDinsight dashboard
-provisioning_dashboard
+echoerr "**Dashboard deprecated: use user-defined dashboard provisioning please**"
+#provisioning_dashboard
