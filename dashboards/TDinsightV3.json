@@ -2066,7 +2066,7 @@
           "formatType": "Table",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select dnode_ep, last(status) as status from hlb.d_info partition by dnode_ep, cluster_id;",
+          "sql": "select dnode_ep, last(status) as status from $database.d_info partition by dnode_ep, cluster_id;",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -2106,7 +2106,7 @@
               }
             ]
           },
-          "unit": "s"
+          "unit": "d"
         },
         "overrides": []
       },
@@ -2311,7 +2311,7 @@
           "formatType": "Table",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select dnode_ep, last(status) as status from $database.d_info partition by dnode_ep, cluster_id;",
+          "sql": "select mnode_ep, last(role) as role from $database.m_info partition by mnode_ep, cluster_id",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -2684,320 +2684,313 @@
       "id": 92,
       "panels": [
         {
+          "datasource": "${DS_TDENGINE}",
+          "description": "超级表的个数",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 3,
+            "w": 3,
+            "x": 0,
+            "y": 39
+          },
+          "id": 96,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": true
+            },
+            "text": {},
+            "textMode": "auto"
+          },
+          "pluginVersion": "7.5.10",
+          "repeatDirection": "h",
+          "targets": [
+            {
+              "alias": "dnodes",
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "datasource":"${DS_TDENGINE}",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select last(stbs_total) from $database.cluster_info",
+              "target": "select metric",
+              "timeshift": {},
+              "type": "timeserie"
+            }
+          ],
+          "title": "STables",
+          "transformations": [],
+          "type": "stat"
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_TDENGINE}",
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 6,
+            "w": 9,
+            "x": 3,
+            "y": 39
+          },
+          "hiddenSeries": false,
+          "id": 94,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "7.5.10",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "alias": "",
+              "colName": "vgroup_id",
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
+              "formatType": "Time series",
+              "groupDataByColName": "",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select _wstart as ts, last(tables_num) as tables_num from $database.vgroups_info where ts > $from and ts <= $to interval($interval) fill(null)"
+            }
+          ],
+          "thresholds": [],
+          "timeRegions": [],
+          "title": "Tables",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_TDENGINE}",
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 6,
+            "w": 12,
+            "x": 12,
+            "y": 39
+          },
+          "hiddenSeries": false,
+          "id": 95,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "7.5.10",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "alias": "",
+              "colName": "vgroup_id",
+              "colNameFormatStr": "vgoup{{groupValue}}",
+              "colNameToGroup": "vgroup_id",
+              "datasource": {
+                "type": "tdengine-datasource",
+                "uid": "${DS_TDENGINE}"
+              },
+              "formatType": "Time series",
+              "groupDataByColName": "",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select _wstart as ts, max(tables_num) as tables_num from $database.vgroups_info where ts > $from and ts <= $to partition by vgroup_id interval($interval) fill(null)"
+            }
+          ],
+          "thresholds": [],
+          "timeRegions": [],
+          "title": "Tables Number Foreach VGroups",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false
+          }
+        },
+        {
           "datasource": {
             "type": "tdengine-datasource",
-            "uid": "PCDB1A4F820EAA3DF"
+            "uid": "${DS_TDENGINE}"
           },
-          "refId": "A"
+          "description": "所有普通表的个数（包括超级表的子表）",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 3,
+            "w": 3,
+            "x": 0,
+            "y": 42
+          },
+          "id": 98,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": true
+            },
+            "text": {},
+            "textMode": "auto"
+          },
+          "pluginVersion": "7.5.10",
+          "repeatDirection": "h",
+          "targets": [
+            {
+              "alias": "dnodes",
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "datasource": {
+                "type": "tdengine-datasource",
+                "uid": "${DS_TDENGINE}"
+              },
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select last(tbs_total) as tbs_total from $database.cluster_info where first_ep = '$fqdn';",
+              "target": "select metric",
+              "timeshift": {},
+              "type": "timeserie"
+            }
+          ],
+          "title": "Total Tables",
+          "transformations": [],
+          "type": "stat"
         }
       ],
       "title": "Tables Summary from [ $database ]",
       "type": "row"
-    },
-    {
-      "datasource": "${DS_TDENGINE}",
-      "description": "超级表的个数",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 3,
-        "x": 0,
-        "y": 39
-      },
-      "id": 96,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": true
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "7.5.10",
-      "repeatDirection": "h",
-      "targets": [
-        {
-          "alias": "dnodes",
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
-          "datasource":"${DS_TDENGINE}",
-          "formatType": "Time series",
-          "queryType": "SQL",
-          "refId": "A",
-          "sql": "select last(stbs_total) from $database.cluster_info",
-          "target": "select metric",
-          "timeshift": {},
-          "type": "timeserie"
-        }
-      ],
-      "title": "STables",
-      "transformations": [],
-      "type": "stat"
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${DS_TDENGINE}",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 6,
-        "w": 9,
-        "x": 3,
-        "y": 39
-      },
-      "hiddenSeries": false,
-      "id": 94,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "7.5.10",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "alias": "",
-          "colName": "vgroup_id",
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
-          "datasource": "${DS_TDENGINE}",
-          "formatType": "Time series",
-          "groupDataByColName": "",
-          "queryType": "SQL",
-          "refId": "A",
-          "sql": "select _wstart as ts, last(tables_num) as tables_num from $database.vgroups_info where ts > $from and ts <= $to interval($interval) fill(null)"
-        }
-      ],
-      "thresholds": [],
-      "timeRegions": [],
-      "title": "Tables",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "logBase": 1,
-          "show": true
-        },
-        {
-          "format": "short",
-          "logBase": 1,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${DS_TDENGINE}",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 6,
-        "w": 12,
-        "x": 12,
-        "y": 39
-      },
-      "hiddenSeries": false,
-      "id": 95,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "7.5.10",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "alias": "",
-          "colName": "vgroup_id",
-          "colNameFormatStr": "vgoup{{groupValue}}",
-          "colNameToGroup": "vgroup_id",
-          "datasource": {
-            "type": "tdengine-datasource",
-            "uid": "${DS_TDENGINE}"
-          },
-          "formatType": "Time series",
-          "groupDataByColName": "",
-          "queryType": "SQL",
-          "refId": "A",
-          "sql": "select _wstart as ts, max(tables_num) as tables_num from $database.vgroups_info where ts > $from and ts <= $to partition by vgroup_id interval($interval) fill(null)"
-        }
-      ],
-      "thresholds": [],
-      "timeRegions": [],
-      "title": "Tables Number Foreach VGroups",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "logBase": 1,
-          "show": true
-        },
-        {
-          "format": "short",
-          "logBase": 1,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false
-      }
-    },
-    {
-      "datasource": {
-        "type": "tdengine-datasource",
-        "uid": "${DS_TDENGINE}"
-      },
-      "description": "所有普通表的个数（包括超级表的子表）",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 3,
-        "x": 0,
-        "y": 42
-      },
-      "id": 98,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": true
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "7.5.10",
-      "repeatDirection": "h",
-      "targets": [
-        {
-          "alias": "dnodes",
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
-          "datasource": {
-            "type": "tdengine-datasource",
-            "uid": "${DS_TDENGINE}"
-          },
-          "formatType": "Time series",
-          "queryType": "SQL",
-          "refId": "A",
-          "sql": "select last(tbs_total) as tbs_total from $database.cluster_info where first_ep = '$fqdn';",
-          "target": "select metric",
-          "timeshift": {},
-          "type": "timeserie"
-        }
-      ],
-      "title": "Total Tables",
-      "transformations": [],
-      "type": "stat"
     },
     {
       "collapsed": true,
@@ -3029,7 +3022,7 @@
                   }
                 ]
               },
-              "unit": "s"
+              "unit": "d"
             },
             "overrides": []
           },
@@ -4692,7 +4685,7 @@
           "datasource": "${DS_TDENGINE}"
         },
         {
-          "id": 2,
+          "id": 110,
           "gridPos": {
             "h": 5,
             "w": 3,
