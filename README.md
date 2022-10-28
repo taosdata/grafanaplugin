@@ -2,7 +2,7 @@
 
 - [Installation](#installation)
   - [One-line installer](#one-line-installer)
-  - [Install from Configuration](#install-from-configuration)
+  - [Install with GUI](#install-with-gui)
   - [Install Manually](#install-manually)
   - [Installation on macOS](#installation-on-macos)
 - [Usage](#usage)
@@ -40,9 +40,9 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/taosdata/grafanaplugin/m
 
 Type `install.sh --help` for the full usage of the script.
 
-### Install from Configuration
+### Install with GUI
 
-The TDengine data source plugin is already published as a signed Grafana plugin. You can easily install it from Grafana configuration interface. In any platform you already installed Grafana, you can open the URL http://localhost:3000 then click plugin menu from left panel.
+The TDengine data source plugin is already published as a signed Grafana plugin. You can easily install it from Grafana Configuration GUI. In any platform you already installed Grafana, you can open the URL http://localhost:3000 then click plugin menu from left panel.
 
 ![click plugin menu](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/click-plugin-menu-from-config.png)
 
