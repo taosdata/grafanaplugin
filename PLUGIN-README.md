@@ -62,9 +62,9 @@ Now TDengine data source plugin provides basic alert feature support by backend 
 
 1. The sql statement only supports two variables: `$from` and `$to`.
 2. When using grafana's alert function, you must use `SQL` as the `Type` option. That means, arithmetic expression will not work as you expected for alert.
-3. In addition, only `ALIAS BY` and `INPUT SQL` are valid. So alert does not work if you requires the time-shift feature.
+3. In addition, only `ALIAS BY` and `INPUT SQL` are valid. So alert does not work if you require the time-shift feature.
 
-We've published a dashboard ([15155](https://grafana.com/grafana/dashboards/15155)) for you to under stand how alert working.
+We've published a dashboard ([15155](https://grafana.com/grafana/dashboards/15155)) for you to understand how alert working.
 
 Here is the details:
 
