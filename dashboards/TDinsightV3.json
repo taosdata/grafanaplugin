@@ -134,7 +134,7 @@
         "content": "<h1><center>TDengine Cluster Dashboard (First EP: ${firstEp}, Version: ${version})</center></h1>",
         "mode": "markdown"
       },
-      "pluginVersion": "9.2.2",
+      "pluginVersion": "7.5.0",
       "repeatDirection": "h",
       "targets": [
         {
@@ -212,7 +212,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.2.2",
+      "pluginVersion": "7.5.0",
       "targets": [
         {
           "colNameFormatStr": "",
@@ -272,7 +272,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.2.2",
+      "pluginVersion": "7.5.0",
       "targets": [
         {
           "colNameFormatStr": "",
@@ -333,7 +333,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.2.2",
+      "pluginVersion": "7.5.0",
       "targets": [
         {
           "colNameFormatStr": "",
@@ -406,7 +406,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.2.2",
+      "pluginVersion": "7.5.0",
       "targets": [
         {
           "colNameFormatStr": "",
@@ -481,7 +481,7 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "9.2.2",
+      "pluginVersion": "7.5.0",
       "targets": [
         {
           "colNameFormatStr": "",
@@ -546,7 +546,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.2.2",
+      "pluginVersion": "7.5.0",
       "repeatDirection": "h",
       "targets": [
         {
@@ -610,7 +610,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.2.2",
+      "pluginVersion": "7.5.0",
       "repeatDirection": "h",
       "targets": [
         {
@@ -674,7 +674,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.2.2",
+      "pluginVersion": "7.5.0",
       "targets": [
         {
           "colNameFormatStr": "",
@@ -734,7 +734,7 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "9.2.2",
+      "pluginVersion": "7.5.0",
       "targets": [
         {
           "alias": "",
@@ -796,7 +796,7 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "9.2.2",
+      "pluginVersion": "7.5.0",
       "targets": [
         {
           "alias": "",
@@ -858,7 +858,7 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "9.2.2",
+      "pluginVersion": "7.5.0",
       "targets": [
         {
           "alias": "",
@@ -920,7 +920,7 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "9.2.2",
+      "pluginVersion": "7.5.0",
       "targets": [
         {
           "alias": "",
@@ -1011,7 +1011,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "9.2.2",
+      "pluginVersion": "7.5.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1145,7 +1145,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "9.2.2",
+      "pluginVersion": "7.5.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1280,7 +1280,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "9.2.2",
+      "pluginVersion": "7.5.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1415,7 +1415,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "9.2.2",
+      "pluginVersion": "7.5.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1574,7 +1574,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "9.2.2",
+      "pluginVersion": "7.5.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1725,7 +1725,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "9.2.2",
+      "pluginVersion": "7.5.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1872,7 +1872,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "9.2.2",
+      "pluginVersion": "7.5.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1999,7 +1999,7 @@
               }
             ]
           },
-          "pluginVersion": "9.2.2",
+          "pluginVersion": "7.5.0",
           "targets": [
             {
               "colNameFormatStr": "",
@@ -2071,7 +2071,7 @@
             "text": {},
             "textMode": "value_and_name"
           },
-          "pluginVersion": "9.2.2",
+          "pluginVersion": "7.5.0",
           "targets": [
             {
               "alias": "",
@@ -2127,7 +2127,7 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "9.2.2",
+          "pluginVersion": "7.5.0",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -2246,7 +2246,7 @@
             "showHeader": true,
             "sortBy": []
           },
-          "pluginVersion": "9.2.2",
+          "pluginVersion": "7.5.0",
           "targets": [
             {
               "colNameFormatStr": "",
@@ -2301,7 +2301,7 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "9.2.2",
+          "pluginVersion": "7.5.0",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -2659,7 +2659,7 @@
             "text": {},
             "textMode": "auto"
           },
-          "pluginVersion": "9.2.2",
+          "pluginVersion": "7.5.0",
           "repeatDirection": "h",
           "targets": [
             {
@@ -2712,7 +2712,7 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "9.2.2",
+          "pluginVersion": "7.5.0",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -2796,7 +2796,7 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "9.2.2",
+          "pluginVersion": "7.5.0",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -2916,7 +2916,7 @@
             "text": {},
             "textMode": "auto"
           },
-          "pluginVersion": "9.2.2",
+          "pluginVersion": "7.5.0",
           "targets": [
             {
               "alias": "disk_used",
@@ -3002,7 +3002,7 @@
             "text": {},
             "textMode": "auto"
           },
-          "pluginVersion": "9.2.2",
+          "pluginVersion": "7.5.0",
           "targets": [
             {
               "alias": "",
@@ -3065,7 +3065,7 @@
             "text": {},
             "textMode": "auto"
           },
-          "pluginVersion": "9.2.2",
+          "pluginVersion": "7.5.0",
           "targets": [
             {
               "alias": "",
@@ -3128,7 +3128,7 @@
             "text": {},
             "textMode": "auto"
           },
-          "pluginVersion": "9.2.2",
+          "pluginVersion": "7.5.0",
           "targets": [
             {
               "alias": "",
@@ -3191,7 +3191,7 @@
             "text": {},
             "textMode": "auto"
           },
-          "pluginVersion": "9.2.2",
+          "pluginVersion": "7.5.0",
           "targets": [
             {
               "alias": "",
@@ -3286,7 +3286,7 @@
             "showThresholdMarkers": true,
             "text": {}
           },
-          "pluginVersion": "9.2.2",
+          "pluginVersion": "7.5.0",
           "targets": [
             {
               "alias": "mem_taosd",
@@ -3346,7 +3346,7 @@
             "showThresholdMarkers": true,
             "text": {}
           },
-          "pluginVersion": "9.2.2",
+          "pluginVersion": "7.5.0",
           "targets": [
             {
               "alias": "memory",
@@ -3419,7 +3419,7 @@
             "showThresholdMarkers": true,
             "text": {}
           },
-          "pluginVersion": "9.2.2",
+          "pluginVersion": "7.5.0",
           "targets": [
             {
               "alias": "disk_used",
@@ -3482,7 +3482,7 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "9.2.2",
+          "pluginVersion": "7.5.0",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -3578,7 +3578,7 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "9.2.2",
+          "pluginVersion": "7.5.0",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -3669,7 +3669,7 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "9.2.2",
+          "pluginVersion": "7.5.0",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -3835,7 +3835,7 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "9.2.2",
+          "pluginVersion": "7.5.0",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -4168,7 +4168,7 @@
             "text": {},
             "textMode": "auto"
           },
-          "pluginVersion": "9.2.2",
+          "pluginVersion": "7.5.0",
           "repeatDirection": "h",
           "targets": [
             {
@@ -4749,11 +4749,7 @@
         "useTags": false
       },
       {
-        "current": {
-          "selected": false,
-          "text": "3.0.1.5",
-          "value": "3.0.1.5"
-        },
+        "current": {},
         "datasource": "${DS_TDENGINE}",
         "definition": "select last(version) from $database.cluster_info",
         "hide": 2,
@@ -4772,11 +4768,7 @@
         "useTags": false
       },
       {
-        "current": {
-          "selected": false,
-          "text": "934293411e15:6030",
-          "value": "934293411e15:6030"
-        },
+        "current": {},
         "datasource": "${DS_TDENGINE}",
         "definition": "select last(first_ep) from $database.cluster_info",
         "hide": 2,
