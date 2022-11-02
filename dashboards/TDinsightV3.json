@@ -69,22 +69,32 @@
     "list": [
       {
         "builtIn": 1,
-        "datasource": "-- Grafana --",
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
         "enable": true,
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
         "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
         "type": "dashboard"
       }
     ]
   },
   "description": "Monitor TDengine with alerts",
   "editable": true,
+  "fiscalYearStartMonth": 0,
   "gnetId": 15167,
   "graphTooltip": 0,
-  "id": null,
-  "iteration": 1637590763527,
+  "id": 6,
   "links": [],
+  "liveNow": false,
   "panels": [
     {
       "collapsed": false,
@@ -97,15 +107,17 @@
       },
       "id": 57,
       "panels": [],
+      "targets": [
+        {
+          "datasource": "${DS_TDENGINE}",
+          "refId": "A"
+        }
+      ],
       "title": "Cluster Status",
       "type": "row"
     },
     {
       "datasource": "${DS_TDENGINE}",
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
       "gridPos": {
         "h": 3,
         "w": 24,
@@ -114,27 +126,29 @@
       },
       "id": 32,
       "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
         "content": "<h1><center>TDengine Cluster Dashboard (First EP: ${firstEp}, Version: ${version})</center></h1>",
         "mode": "markdown"
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "7.5.0",
       "repeatDirection": "h",
       "targets": [
         {
           "alias": "mnodes",
+          "datasource": "${DS_TDENGINE}",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
           "sql": "select mnode_ep,mnode_id,last(status) as status from $database.m_info group by mnode_ep, cluster_id",
           "target": "select metric",
-          "timeshift": {
-            "period": null
-          },
+          "timeshift": {},
           "type": "timeserie"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "-- OVERVIEW --",
       "transformations": [
         {
@@ -198,11 +212,12 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "7.5.0",
       "targets": [
         {
           "colNameFormatStr": "",
           "colNameToGroup": "",
+          "datasource": "${DS_TDENGINE}",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -257,11 +272,12 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "7.5.0",
       "targets": [
         {
           "colNameFormatStr": "",
           "colNameToGroup": "",
+          "datasource": "${DS_TDENGINE}",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -317,11 +333,12 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "7.5.0",
       "targets": [
         {
           "colNameFormatStr": "",
           "colNameToGroup": "",
+          "datasource": "${DS_TDENGINE}",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -389,11 +406,12 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "7.5.0",
       "targets": [
         {
           "colNameFormatStr": "",
           "colNameToGroup": "",
+          "datasource": "${DS_TDENGINE}",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -450,6 +468,8 @@
       "id": 100,
       "options": {
         "displayMode": "gradient",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
@@ -461,11 +481,12 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "7.5.0",
       "targets": [
         {
           "colNameFormatStr": "",
           "colNameToGroup": "",
+          "datasource": "${DS_TDENGINE}",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -525,29 +546,25 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "7.5.0",
       "repeatDirection": "h",
       "targets": [
         {
           "alias": "dnodes",
           "colNameFormatStr": "",
           "colNameToGroup": "",
+          "datasource": "${DS_TDENGINE}",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
           "sql": "select last(dbs_total) from $database.cluster_info;",
           "target": "select metric",
-          "timeshift": {
-            "period": null
-          },
+          "timeshift": {},
           "type": "timeserie"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "Databases",
-      "transformations": [
-      ],
+      "transformations": [],
       "type": "stat"
     },
     {
@@ -593,29 +610,25 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "7.5.0",
       "repeatDirection": "h",
       "targets": [
         {
           "alias": "dnodes",
           "colNameFormatStr": "",
           "colNameToGroup": "",
+          "datasource": "${DS_TDENGINE}",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
           "sql": "select last(tbs_total) from $database.cluster_info;",
           "target": "select metric",
-          "timeshift": {
-            "period": null
-          },
+          "timeshift": {},
           "type": "timeserie"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "Tables",
-      "transformations": [
-      ],
+      "transformations": [],
       "type": "stat"
     },
     {
@@ -661,11 +674,12 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "7.5.0",
       "targets": [
         {
           "colNameFormatStr": "",
           "colNameToGroup": "",
+          "datasource": "${DS_TDENGINE}",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -707,6 +721,8 @@
       "id": 75,
       "options": {
         "displayMode": "basic",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
@@ -718,12 +734,13 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "7.5.0",
       "targets": [
         {
           "alias": "",
           "colNameFormatStr": "",
           "colNameToGroup": "",
+          "datasource": "${DS_TDENGINE}",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -732,8 +749,6 @@
           "type": "timeserie"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "DNodes",
       "transformations": [],
       "type": "bargauge"
@@ -768,6 +783,8 @@
       "id": 101,
       "options": {
         "displayMode": "basic",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
@@ -779,12 +796,13 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "7.5.0",
       "targets": [
         {
           "alias": "",
           "colNameFormatStr": "",
           "colNameToGroup": "",
+          "datasource": "${DS_TDENGINE}",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -793,8 +811,6 @@
           "type": "timeserie"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "MNodes",
       "transformations": [],
       "type": "bargauge"
@@ -829,6 +845,8 @@
       "id": 102,
       "options": {
         "displayMode": "basic",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
@@ -840,12 +858,13 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "7.5.0",
       "targets": [
         {
           "alias": "",
           "colNameFormatStr": "",
           "colNameToGroup": "",
+          "datasource": "${DS_TDENGINE}",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -854,8 +873,6 @@
           "type": "timeserie"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "VGroups",
       "transformations": [],
       "type": "bargauge"
@@ -890,6 +907,8 @@
       "id": 103,
       "options": {
         "displayMode": "basic",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
@@ -901,12 +920,13 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "7.5.0",
       "targets": [
         {
           "alias": "",
           "colNameFormatStr": "",
           "colNameToGroup": "",
+          "datasource": "${DS_TDENGINE}",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -915,8 +935,6 @@
           "type": "timeserie"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "VNodes",
       "transformations": [],
       "type": "bargauge"
@@ -967,10 +985,6 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "${DS_TDENGINE}",
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -997,7 +1011,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "7.5.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1009,6 +1023,7 @@
         {
           "colNameFormatStr": "",
           "colNameToGroup": "",
+          "datasource": "${DS_TDENGINE}",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -1027,9 +1042,7 @@
           "visible": true
         }
       ],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "DNodes Alive Percent",
       "tooltip": {
         "shared": true,
@@ -1038,16 +1051,13 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
       "yaxes": [
         {
           "format": "percentunit",
-          "label": null,
           "logBase": 1,
           "max": "1",
           "min": "0",
@@ -1055,16 +1065,12 @@
         },
         {
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     },
     {
@@ -1113,10 +1119,6 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "${DS_TDENGINE}",
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -1143,7 +1145,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "7.5.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1156,6 +1158,7 @@
           "alias": "",
           "colNameFormatStr": "",
           "colNameToGroup": "",
+          "datasource": "${DS_TDENGINE}",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -1174,9 +1177,7 @@
           "visible": true
         }
       ],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "MNodes Alive Percent",
       "tooltip": {
         "shared": true,
@@ -1185,16 +1186,13 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
       "yaxes": [
         {
           "format": "percentunit",
-          "label": null,
           "logBase": 1,
           "max": "1",
           "min": "0",
@@ -1202,16 +1200,12 @@
         },
         {
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     },
     {
@@ -1260,10 +1254,6 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "${DS_TDENGINE}",
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -1290,7 +1280,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "7.5.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1303,6 +1293,7 @@
           "alias": "",
           "colNameFormatStr": "",
           "colNameToGroup": "",
+          "datasource": "${DS_TDENGINE}",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -1321,9 +1312,7 @@
           "visible": true
         }
       ],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "VGroups Alive Percent",
       "tooltip": {
         "shared": true,
@@ -1332,16 +1321,13 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
       "yaxes": [
         {
           "format": "percentunit",
-          "label": null,
           "logBase": 1,
           "max": "1",
           "min": "0",
@@ -1349,16 +1335,12 @@
         },
         {
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     },
     {
@@ -1407,10 +1389,6 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "${DS_TDENGINE}",
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -1437,7 +1415,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "7.5.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1450,6 +1428,7 @@
           "alias": "",
           "colNameFormatStr": "",
           "colNameToGroup": "",
+          "datasource": "${DS_TDENGINE}",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -1468,9 +1447,7 @@
           "visible": true
         }
       ],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "VNodes Alive Percent",
       "tooltip": {
         "shared": true,
@@ -1479,16 +1456,13 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
       "yaxes": [
         {
           "format": "percentunit",
-          "label": null,
           "logBase": 1,
           "max": "1",
           "min": "0",
@@ -1496,16 +1470,12 @@
         },
         {
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     },
     {
@@ -1578,10 +1548,6 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "${DS_TDENGINE}",
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -1608,7 +1574,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "7.5.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1625,6 +1591,7 @@
         {
           "colNameFormatStr": "",
           "colNameToGroup": "",
+          "datasource": "${DS_TDENGINE}",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -1635,6 +1602,7 @@
         {
           "colNameFormatStr": "",
           "colNameToGroup": "",
+          "datasource": "${DS_TDENGINE}",
           "formatType": "Time series",
           "hide": false,
           "queryType": "SQL",
@@ -1654,9 +1622,7 @@
           "visible": true
         }
       ],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "Measuring Points Used",
       "tooltip": {
         "shared": true,
@@ -1665,25 +1631,18 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
       "yaxes": [
         {
-          "decimals": null,
           "format": "none",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         },
         {
           "format": "percentunit",
-          "label": null,
           "logBase": 1,
           "max": "1",
           "min": "0",
@@ -1691,8 +1650,7 @@
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     },
     {
@@ -1741,10 +1699,6 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "${DS_TDENGINE}",
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -1771,7 +1725,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "7.5.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1788,6 +1742,7 @@
         {
           "colNameFormatStr": "",
           "colNameToGroup": "",
+          "datasource": "${DS_TDENGINE}",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -1806,9 +1761,7 @@
           "visible": true
         }
       ],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "Grants Expire Time",
       "tooltip": {
         "shared": true,
@@ -1817,25 +1770,19 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
       "yaxes": [
         {
-          "decimals": null,
           "format": "s",
-          "label": null,
           "logBase": 1,
-          "max": null,
           "min": "0",
           "show": true
         },
         {
           "format": "percentunit",
-          "label": null,
           "logBase": 1,
           "max": "1",
           "min": "0",
@@ -1843,8 +1790,7 @@
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     },
     {
@@ -1926,7 +1872,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "7.5.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1943,6 +1889,7 @@
         {
           "colNameFormatStr": "",
           "colNameToGroup": "",
+          "datasource": "${DS_TDENGINE}",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -1961,9 +1908,7 @@
           "visible": true
         }
       ],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "Error Rate",
       "tooltip": {
         "shared": true,
@@ -1972,25 +1917,19 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
       "yaxes": [
         {
-          "decimals": null,
           "format": "cps",
-          "label": null,
           "logBase": 1,
-          "max": null,
           "min": "0",
           "show": true
         },
         {
           "format": "percentunit",
-          "label": null,
           "logBase": 1,
           "max": "1",
           "min": "0",
@@ -1998,424 +1937,7 @@
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "collapsed": false,
-      "datasource": "${DS_TDENGINE}",
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 24
-      },
-      "id": 24,
-      "panels": [],
-      "repeat": null,
-      "title": "DNodes Overview",
-      "type": "row"
-    },
-    {
-      "datasource": "${DS_TDENGINE}",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {
-            "align": "center",
-            "displayMode": "auto",
-            "inspect": false,
-            "filterable": false
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "color": {
-            "mode": "thresholds"
-          }
-        }
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 6,
-        "x": 0,
-        "y": 25
-      },
-      "id": 36,
-      "options": {
-        "showHeader": true,
-        "sortBy": [
-          {
-            "desc": false,
-            "displayName": "cores"
-          }
-        ]
-      },
-      "pluginVersion": "7.5.10",
-      "targets": [
-        {
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
-          "formatType": "Table",
-          "queryType": "SQL",
-          "refId": "A",
-          "sql": "select dnode_ep, last(status) as status from $database.d_info partition by dnode_ep, cluster_id;",
-          "target": "select metric",
-          "type": "timeserie"
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "DNodes Status",
-      "transformations": [
-        {
-          "id": "sortBy",
-          "options": {
-            "fields": {},
-            "sort": [
-              {
-                "field": "id"
-              }
-            ]
-          }
-        }
-      ],
-      "type": "table"
-    },
-    {
-      "datasource": "${DS_TDENGINE}",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "d"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 4,
-        "x": 6,
-        "y": 25
-      },
-      "id": 90,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "value_and_name"
-      },
-      "pluginVersion": "7.5.10",
-      "repeat": null,
-      "targets": [
-        {
-          "alias": "",
-          "colNameFormatStr": "{{groupValue}}",
-          "colNameToGroup": "dnode_ep",
-          "formatType": "Time series",
-          "queryType": "SQL",
-          "refId": "A",
-          "sql": "select last(uptime) from $database.dnodes_info where ts >= $from and ts <= $to group by dnode_ep",
-          "target": "select metric",
-          "type": "timeserie"
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "DNodes Lifetime",
-      "type": "stat"
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${DS_TDENGINE}",
-      "fieldConfig": {
-        "defaults": {
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 6,
-        "w": 8,
-        "x": 10,
-        "y": 25
-      },
-      "hiddenSeries": false,
-      "id": 88,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "7.5.10",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
-          "formatType": "Time series",
-          "queryType": "SQL",
-          "refId": "A",
-          "sql": "select _wstart as ts, avg(dnodes_total) as total, avg(dnodes_alive) as alive from $database.cluster_info where ts >= $from and ts <= $to interval($interval) fill(null)",
-          "target": "select metric",
-          "type": "timeserie"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "DNodes Number",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "collapsed": false,
-      "datasource": "${DS_TDENGINE}",
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 31
-      },
-      "id": 22,
-      "panels": [],
-      "title": "MNodes Overview",
-      "type": "row"
-    },
-    {
-      "datasource": "${DS_TDENGINE}",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {
-            "align": "center",
-            "filterable": false
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        }
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 6,
-        "x": 0,
-        "y": 32
-      },
-      "id": 38,
-      "options": {
-        "showHeader": true,
-        "sortBy": []
-      },
-      "pluginVersion": "7.5.10",
-      "targets": [
-        {
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
-          "formatType": "Table",
-          "queryType": "SQL",
-          "refId": "A",
-          "sql": "select mnode_ep, last(role) as role from $database.m_info partition by mnode_ep, cluster_id",
-          "target": "select metric",
-          "type": "timeserie"
-        }
-      ],
-      "title": "MNodes Status",
-      "type": "table"
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${DS_TDENGINE}",
-      "fieldConfig": {
-        "defaults": {
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 5,
-        "w": 12,
-        "x": 6,
-        "y": 32
-      },
-      "hiddenSeries": false,
-      "id": 89,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "7.5.10",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
-          "formatType": "Time series",
-          "queryType": "SQL",
-          "refId": "A",
-          "sql": "select _wstart as ts, avg(mnodes_total) as total, avg(mnodes_alive) as alive from $database.cluster_info where ts >= $from and ts <= $to interval($interval) fill(null)",
-          "target": "select metric",
-          "type": "timeserie"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "MNodes Number",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     },
     {
@@ -2425,7 +1947,429 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 37
+        "y": 24
+      },
+      "id": 24,
+      "panels": [
+        {
+          "datasource": "${DS_TDENGINE}",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": "center",
+                "displayMode": "auto",
+                "filterable": false,
+                "inspect": false
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 6,
+            "x": 0,
+            "y": 25
+          },
+          "id": 36,
+          "options": {
+            "footer": {
+              "fields": "",
+              "reducer": [
+                "sum"
+              ],
+              "show": false
+            },
+            "showHeader": true,
+            "sortBy": [
+              {
+                "desc": false,
+                "displayName": "cores"
+              }
+            ]
+          },
+          "pluginVersion": "7.5.0",
+          "targets": [
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
+              "formatType": "Table",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select dnode_ep, last(status) as status from $database.d_info partition by dnode_ep, cluster_id;",
+              "target": "select metric",
+              "type": "timeserie"
+            }
+          ],
+          "title": "DNodes Status",
+          "transformations": [
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "field": "id"
+                  }
+                ]
+              }
+            }
+          ],
+          "type": "table"
+        },
+        {
+          "datasource": "${DS_TDENGINE}",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 4,
+            "x": 6,
+            "y": 25
+          },
+          "id": 90,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "orientation": "horizontal",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "text": {},
+            "textMode": "value_and_name"
+          },
+          "pluginVersion": "7.5.0",
+          "targets": [
+            {
+              "alias": "",
+              "colNameFormatStr": "{{groupValue}}",
+              "colNameToGroup": "dnode_ep",
+              "datasource": "${DS_TDENGINE}",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select last(uptime) from $database.dnodes_info where ts >= $from and ts <= $to group by dnode_ep",
+              "target": "select metric",
+              "type": "timeserie"
+            }
+          ],
+          "title": "DNodes Lifetime",
+          "type": "stat"
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_TDENGINE}",
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 6,
+            "w": 8,
+            "x": 10,
+            "y": 25
+          },
+          "hiddenSeries": false,
+          "id": 88,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "7.5.0",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select _wstart as ts, avg(dnodes_total) as total, avg(dnodes_alive) as alive from $database.cluster_info where ts >= $from and ts <= $to interval($interval) fill(null)",
+              "target": "select metric",
+              "type": "timeserie"
+            }
+          ],
+          "thresholds": [],
+          "timeRegions": [],
+          "title": "DNodes Number",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false
+          }
+        }
+      ],
+      "targets": [
+        {
+          "datasource": "${DS_TDENGINE}",
+          "refId": "A"
+        }
+      ],
+      "title": "DNodes Overview",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "datasource": "${DS_TDENGINE}",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 25
+      },
+      "id": 22,
+      "panels": [
+        {
+          "datasource": "${DS_TDENGINE}",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": "center",
+                "displayMode": "auto",
+                "filterable": false,
+                "inspect": false
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 5,
+            "w": 6,
+            "x": 0,
+            "y": 32
+          },
+          "id": 38,
+          "options": {
+            "footer": {
+              "fields": "",
+              "reducer": [
+                "sum"
+              ],
+              "show": false
+            },
+            "showHeader": true,
+            "sortBy": []
+          },
+          "pluginVersion": "7.5.0",
+          "targets": [
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
+              "formatType": "Table",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select mnode_ep, last(role) as role from $database.m_info partition by mnode_ep, cluster_id",
+              "target": "select metric",
+              "type": "timeserie"
+            }
+          ],
+          "title": "MNodes Status",
+          "type": "table"
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_TDENGINE}",
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 5,
+            "w": 12,
+            "x": 6,
+            "y": 32
+          },
+          "hiddenSeries": false,
+          "id": 89,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "7.5.0",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select _wstart as ts, avg(mnodes_total) as total, avg(mnodes_alive) as alive from $database.cluster_info where ts >= $from and ts <= $to interval($interval) fill(null)",
+              "target": "select metric",
+              "type": "timeserie"
+            }
+          ],
+          "thresholds": [],
+          "timeRegions": [],
+          "title": "MNodes Number",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false
+          }
+        }
+      ],
+      "targets": [
+        {
+          "datasource": "${DS_TDENGINE}",
+          "refId": "A"
+        }
+      ],
+      "title": "MNodes Overview",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "datasource": "${DS_TDENGINE}",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 26
       },
       "id": 108,
       "panels": [
@@ -2482,6 +2426,7 @@
             {
               "colNameFormatStr": "",
               "colNameToGroup": "dnode_ep",
+              "datasource": "${DS_TDENGINE}",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -2490,6 +2435,7 @@
             {
               "colNameFormatStr": "",
               "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -2498,9 +2444,7 @@
             }
           ],
           "thresholds": [],
-          "timeFrom": null,
           "timeRegions": [],
-          "timeShift": null,
           "title": "Requests Rate (Inserts per Second)",
           "tooltip": {
             "shared": true,
@@ -2509,33 +2453,24 @@
           },
           "type": "graph",
           "xaxis": {
-            "buckets": null,
             "mode": "time",
-            "name": null,
             "show": true,
             "values": []
           },
           "yaxes": [
             {
               "format": "cps",
-              "label": null,
               "logBase": 1,
-              "max": null,
-              "min": null,
               "show": true
             },
             {
               "format": "short",
-              "label": null,
               "logBase": 1,
-              "max": null,
-              "min": null,
               "show": true
             }
           ],
           "yaxis": {
-            "align": false,
-            "alignLevel": null
+            "align": false
           }
         },
         {
@@ -2594,6 +2529,7 @@
             {
               "colNameFormatStr": "",
               "colNameToGroup": "dnode_ep",
+              "datasource": "${DS_TDENGINE}",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -2602,6 +2538,7 @@
             {
               "colNameFormatStr": "",
               "colNameToGroup": "dnode_ep",
+              "datasource": "${DS_TDENGINE}",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -2611,6 +2548,7 @@
             {
               "colNameFormatStr": "",
               "colNameToGroup": "dnode_ep",
+              "datasource": "${DS_TDENGINE}",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -2620,6 +2558,7 @@
             {
               "colNameFormatStr": "",
               "colNameToGroup": "dnode_ep",
+              "datasource": "${DS_TDENGINE}",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -2628,9 +2567,7 @@
             }
           ],
           "thresholds": [],
-          "timeFrom": null,
           "timeRegions": [],
-          "timeShift": null,
           "title": "Requests (Selects)",
           "tooltip": {
             "shared": true,
@@ -2639,34 +2576,31 @@
           },
           "type": "graph",
           "xaxis": {
-            "buckets": null,
             "mode": "time",
-            "name": null,
             "show": true,
             "values": []
           },
           "yaxes": [
             {
               "format": "short",
-              "label": null,
               "logBase": 1,
-              "max": null,
-              "min": null,
               "show": true
             },
             {
               "format": "cps",
-              "label": null,
               "logBase": 1,
-              "max": null,
-              "min": null,
               "show": true
             }
           ],
           "yaxis": {
-            "align": false,
-            "alignLevel": null
+            "align": false
           }
+        }
+      ],
+      "targets": [
+        {
+          "datasource": "${DS_TDENGINE}",
+          "refId": "A"
         }
       ],
       "title": "Requests",
@@ -2679,7 +2613,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 38
+        "y": 27
       },
       "id": 92,
       "panels": [
@@ -2696,8 +2630,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   }
                 ]
               }
@@ -2708,7 +2641,7 @@
             "h": 3,
             "w": 3,
             "x": 0,
-            "y": 39
+            "y": 34
           },
           "id": 96,
           "options": {
@@ -2726,14 +2659,14 @@
             "text": {},
             "textMode": "auto"
           },
-          "pluginVersion": "7.5.10",
+          "pluginVersion": "7.5.0",
           "repeatDirection": "h",
           "targets": [
             {
               "alias": "dnodes",
               "colNameFormatStr": "",
               "colNameToGroup": "",
-              "datasource":"${DS_TDENGINE}",
+              "datasource": "${DS_TDENGINE}",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -2759,7 +2692,7 @@
             "h": 6,
             "w": 9,
             "x": 3,
-            "y": 39
+            "y": 34
           },
           "hiddenSeries": false,
           "id": 94,
@@ -2779,7 +2712,7 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "7.5.10",
+          "pluginVersion": "7.5.0",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -2843,7 +2776,7 @@
             "h": 6,
             "w": 12,
             "x": 12,
-            "y": 39
+            "y": 34
           },
           "hiddenSeries": false,
           "id": 95,
@@ -2863,7 +2796,7 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "7.5.10",
+          "pluginVersion": "7.5.0",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -2917,76 +2850,12 @@
           "yaxis": {
             "align": false
           }
-        },
+        }
+      ],
+      "targets": [
         {
-          "datasource": {
-            "type": "tdengine-datasource",
-            "uid": "${DS_TDENGINE}"
-          },
-          "description": "所有普通表的个数（包括超级表的子表）",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "thresholds"
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  }
-                ]
-              }
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 3,
-            "w": 3,
-            "x": 0,
-            "y": 42
-          },
-          "id": 98,
-          "options": {
-            "colorMode": "value",
-            "graphMode": "area",
-            "justifyMode": "auto",
-            "orientation": "auto",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": true
-            },
-            "text": {},
-            "textMode": "auto"
-          },
-          "pluginVersion": "7.5.10",
-          "repeatDirection": "h",
-          "targets": [
-            {
-              "alias": "dnodes",
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
-              "datasource": {
-                "type": "tdengine-datasource",
-                "uid": "${DS_TDENGINE}"
-              },
-              "formatType": "Time series",
-              "queryType": "SQL",
-              "refId": "A",
-              "sql": "select last(tbs_total) as tbs_total from $database.cluster_info where first_ep = '$fqdn';",
-              "target": "select metric",
-              "timeshift": {},
-              "type": "timeserie"
-            }
-          ],
-          "title": "Total Tables",
-          "transformations": [],
-          "type": "stat"
+          "datasource": "${DS_TDENGINE}",
+          "refId": "A"
         }
       ],
       "title": "Tables Summary from [ $database ]",
@@ -2999,7 +2868,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 41
+        "y": 28
       },
       "id": 20,
       "panels": [
@@ -3017,12 +2886,11 @@
                 "mode": "percentage",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   }
                 ]
               },
-              "unit": "d"
+              "unit": "s"
             },
             "overrides": []
           },
@@ -3030,7 +2898,7 @@
             "h": 6,
             "w": 4,
             "x": 0,
-            "y": 42
+            "y": 35
           },
           "id": 120,
           "options": {
@@ -3048,32 +2916,22 @@
             "text": {},
             "textMode": "auto"
           },
-          "pluginVersion": "7.5.10",
-          "scopedVars": {
-            "fqdn": {
-              "selected": false,
-              "text": "huolinhe-TM1701:6030",
-              "value": "huolinhe-TM1701:6030"
-            }
-          },
+          "pluginVersion": "7.5.0",
           "targets": [
             {
               "alias": "disk_used",
               "colNameFormatStr": "",
               "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
               "sql": "select last(uptime) as uptime from $database.dnodes_info where dnode_ep = '$fqdn'",
               "target": "select metric",
-              "timeshift": {
-                "period": null
-              },
+              "timeshift": {},
               "type": "timeserie"
             }
           ],
-          "timeFrom": null,
-          "timeShift": null,
           "title": "Uptime",
           "transformations": [
             {
@@ -3099,28 +2957,22 @@
               },
               "mappings": [
                 {
-                  "from": "",
-                  "id": 1,
-                  "text": "Yes",
-                  "to": "",
-                  "type": 1,
-                  "value": "1"
-                },
-                {
-                  "from": "",
-                  "id": 2,
-                  "text": "No",
-                  "to": "",
-                  "type": 1,
-                  "value": "0"
+                  "options": {
+                    "0": {
+                      "text": "No"
+                    },
+                    "1": {
+                      "text": "Yes"
+                    }
+                  },
+                  "type": "value"
                 }
               ],
               "thresholds": {
                 "mode": "percentage",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   }
                 ]
               },
@@ -3132,7 +2984,7 @@
             "h": 6,
             "w": 2,
             "x": 4,
-            "y": 42
+            "y": 35
           },
           "id": 121,
           "options": {
@@ -3150,32 +3002,22 @@
             "text": {},
             "textMode": "auto"
           },
-          "pluginVersion": "7.5.10",
-          "scopedVars": {
-            "fqdn": {
-              "selected": false,
-              "text": "huolinhe-TM1701:6030",
-              "value": "huolinhe-TM1701:6030"
-            }
-          },
+          "pluginVersion": "7.5.0",
           "targets": [
             {
               "alias": "",
               "colNameFormatStr": "",
               "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
               "sql": "select last(has_mnode) as has_mnode from $database.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to",
               "target": "select metric",
-              "timeshift": {
-                "period": null
-              },
+              "timeshift": {},
               "type": "timeserie"
             }
           ],
-          "timeFrom": null,
-          "timeShift": null,
           "title": "Has MNode?",
           "type": "stat"
         },
@@ -3193,8 +3035,7 @@
                 "mode": "percentage",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   }
                 ]
               },
@@ -3206,7 +3047,7 @@
             "h": 6,
             "w": 2,
             "x": 6,
-            "y": 42
+            "y": 35
           },
           "id": 122,
           "options": {
@@ -3224,32 +3065,22 @@
             "text": {},
             "textMode": "auto"
           },
-          "pluginVersion": "7.5.10",
-          "scopedVars": {
-            "fqdn": {
-              "selected": false,
-              "text": "huolinhe-TM1701:6030",
-              "value": "huolinhe-TM1701:6030"
-            }
-          },
+          "pluginVersion": "7.5.0",
           "targets": [
             {
               "alias": "",
               "colNameFormatStr": "",
               "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
               "sql": "select last(cpu_cores) as cpu_cores from $database.dnodes_info where dnode_ep = '$fqdn' interval ($interval)",
               "target": "select metric",
-              "timeshift": {
-                "period": null
-              },
+              "timeshift": {},
               "type": "timeserie"
             }
           ],
-          "timeFrom": null,
-          "timeShift": null,
           "title": "CPU Cores",
           "transformations": [],
           "type": "stat"
@@ -3267,8 +3098,7 @@
                 "mode": "percentage",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   }
                 ]
               },
@@ -3280,7 +3110,7 @@
             "h": 6,
             "w": 2,
             "x": 8,
-            "y": 42
+            "y": 35
           },
           "id": 123,
           "options": {
@@ -3298,32 +3128,22 @@
             "text": {},
             "textMode": "auto"
           },
-          "pluginVersion": "7.5.10",
-          "scopedVars": {
-            "fqdn": {
-              "selected": false,
-              "text": "huolinhe-TM1701:6030",
-              "value": "huolinhe-TM1701:6030"
-            }
-          },
+          "pluginVersion": "7.5.0",
           "targets": [
             {
               "alias": "",
               "colNameFormatStr": "",
               "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
               "sql": "select last(vnodes_num) as vnodes_num from $database.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)",
               "target": "select metric",
-              "timeshift": {
-                "period": null
-              },
+              "timeshift": {},
               "type": "timeserie"
             }
           ],
-          "timeFrom": null,
-          "timeShift": null,
           "title": "VNodes Number",
           "transformations": [],
           "type": "stat"
@@ -3341,8 +3161,7 @@
                 "mode": "percentage",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   }
                 ]
               },
@@ -3354,7 +3173,7 @@
             "h": 6,
             "w": 2,
             "x": 10,
-            "y": 42
+            "y": 35
           },
           "id": 124,
           "options": {
@@ -3372,32 +3191,22 @@
             "text": {},
             "textMode": "auto"
           },
-          "pluginVersion": "7.5.10",
-          "scopedVars": {
-            "fqdn": {
-              "selected": false,
-              "text": "huolinhe-TM1701:6030",
-              "value": "huolinhe-TM1701:6030"
-            }
-          },
+          "pluginVersion": "7.5.0",
           "targets": [
             {
               "alias": "",
               "colNameFormatStr": "",
               "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
               "sql": "select last(masters) as masters from $database.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)",
               "target": "select metric",
-              "timeshift": {
-                "period": null
-              },
+              "timeshift": {},
               "type": "timeserie"
             }
           ],
-          "timeFrom": null,
-          "timeShift": null,
           "title": "VNodes Masters",
           "transformations": [],
           "type": "stat"
@@ -3411,13 +3220,13 @@
                 "mode": "continuous-GrYlRd"
               },
               "mappings": [],
+              "max": 100,
               "min": 0,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "#EAB839",
@@ -3444,8 +3253,7 @@
                       "mode": "absolute",
                       "steps": [
                         {
-                          "color": "green",
-                          "value": null
+                          "color": "green"
                         },
                         {
                           "color": "red",
@@ -3462,7 +3270,7 @@
             "h": 6,
             "w": 4,
             "x": 12,
-            "y": 42
+            "y": 35
           },
           "id": 45,
           "options": {
@@ -3478,19 +3286,13 @@
             "showThresholdMarkers": true,
             "text": {}
           },
-          "pluginVersion": "7.5.10",
-          "scopedVars": {
-            "fqdn": {
-              "selected": false,
-              "text": "huolinhe-TM1701:6030",
-              "value": "huolinhe-TM1701:6030"
-            }
-          },
+          "pluginVersion": "7.5.0",
           "targets": [
             {
               "alias": "mem_taosd",
               "colNameFormatStr": "",
               "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
               "formatType": "Table",
               "queryType": "SQL",
               "refId": "A",
@@ -3499,8 +3301,6 @@
               "type": "timeserie"
             }
           ],
-          "timeFrom": null,
-          "timeShift": null,
           "title": "Current CPU Usage of taosd",
           "type": "gauge"
         },
@@ -3518,8 +3318,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   }
                 ]
               },
@@ -3531,7 +3330,7 @@
             "h": 6,
             "w": 4,
             "x": 16,
-            "y": 42
+            "y": 35
           },
           "id": 66,
           "options": {
@@ -3547,19 +3346,13 @@
             "showThresholdMarkers": true,
             "text": {}
           },
-          "pluginVersion": "7.5.10",
-          "scopedVars": {
-            "fqdn": {
-              "selected": false,
-              "text": "huolinhe-TM1701:6030",
-              "value": "huolinhe-TM1701:6030"
-            }
-          },
+          "pluginVersion": "7.5.0",
           "targets": [
             {
               "alias": "memory",
               "colNameFormatStr": "",
               "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -3568,8 +3361,6 @@
               "type": "timeserie"
             }
           ],
-          "timeFrom": null,
-          "timeShift": null,
           "title": "Current Memory Usage of taosd",
           "type": "gauge"
         },
@@ -3588,8 +3379,7 @@
                 "mode": "percentage",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "#EAB839",
@@ -3613,7 +3403,7 @@
             "h": 6,
             "w": 4,
             "x": 20,
-            "y": 42
+            "y": 35
           },
           "id": 51,
           "options": {
@@ -3629,32 +3419,22 @@
             "showThresholdMarkers": true,
             "text": {}
           },
-          "pluginVersion": "7.5.10",
-          "scopedVars": {
-            "fqdn": {
-              "selected": false,
-              "text": "huolinhe-TM1701:6030",
-              "value": "huolinhe-TM1701:6030"
-            }
-          },
+          "pluginVersion": "7.5.0",
           "targets": [
             {
               "alias": "disk_used",
               "colNameFormatStr": "",
               "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
               "sql": "select last(disk_used) as used, last(disk_total) as total, last(disk_used) / last(disk_total) as percent from $database.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to",
               "target": "select metric",
-              "timeshift": {
-                "period": null
-              },
+              "timeshift": {},
               "type": "timeserie"
             }
           ],
-          "timeFrom": null,
-          "timeShift": null,
           "title": "Disk Used",
           "transformations": [],
           "type": "gauge"
@@ -3662,7 +3442,6 @@
         {
           "aliasColors": {},
           "bars": false,
-          "cacheTimeout": null,
           "dashLength": 10,
           "dashes": false,
           "datasource": "${DS_TDENGINE}",
@@ -3679,7 +3458,7 @@
             "h": 11,
             "w": 12,
             "x": 0,
-            "y": 48
+            "y": 41
           },
           "hiddenSeries": false,
           "hideTimeOverride": true,
@@ -3703,17 +3482,10 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "7.5.10",
+          "pluginVersion": "7.5.0",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
-          "scopedVars": {
-            "fqdn": {
-              "selected": false,
-              "text": "huolinhe-TM1701:6030",
-              "value": "huolinhe-TM1701:6030"
-            }
-          },
           "seriesOverrides": [],
           "spaceLength": 10,
           "stack": false,
@@ -3723,6 +3495,7 @@
               "alias": "",
               "colNameFormatStr": "",
               "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -3733,9 +3506,7 @@
             }
           ],
           "thresholds": [],
-          "timeFrom": null,
           "timeRegions": [],
-          "timeShift": null,
           "title": "CPU Usage",
           "tooltip": {
             "shared": true,
@@ -3744,40 +3515,30 @@
           },
           "type": "graph",
           "xaxis": {
-            "buckets": null,
             "mode": "time",
-            "name": null,
             "show": true,
             "values": []
           },
           "yaxes": [
             {
-              "decimals": null,
               "format": "percent",
               "label": "使用占比",
               "logBase": 1,
-              "max": null,
-              "min": null,
               "show": true
             },
             {
               "format": "short",
-              "label": null,
               "logBase": 1,
-              "max": null,
-              "min": null,
               "show": false
             }
           ],
           "yaxis": {
-            "align": false,
-            "alignLevel": null
+            "align": false
           }
         },
         {
           "aliasColors": {},
           "bars": false,
-          "cacheTimeout": null,
           "dashLength": 10,
           "dashes": false,
           "datasource": "${DS_TDENGINE}",
@@ -3794,7 +3555,7 @@
             "h": 11,
             "w": 12,
             "x": 12,
-            "y": 48
+            "y": 41
           },
           "hiddenSeries": false,
           "hideTimeOverride": true,
@@ -3817,17 +3578,10 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "7.5.10",
+          "pluginVersion": "7.5.0",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
-          "scopedVars": {
-            "fqdn": {
-              "selected": false,
-              "text": "huolinhe-TM1701:6030",
-              "value": "huolinhe-TM1701:6030"
-            }
-          },
           "seriesOverrides": [],
           "spaceLength": 10,
           "stack": false,
@@ -3837,6 +3591,7 @@
               "alias": "",
               "colNameFormatStr": "",
               "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -3847,9 +3602,7 @@
             }
           ],
           "thresholds": [],
-          "timeFrom": null,
           "timeRegions": [],
-          "timeShift": null,
           "title": "RAM Usage",
           "tooltip": {
             "shared": true,
@@ -3858,34 +3611,25 @@
           },
           "type": "graph",
           "xaxis": {
-            "buckets": null,
             "mode": "time",
-            "name": null,
             "show": true,
             "values": []
           },
           "yaxes": [
             {
-              "decimals": null,
               "format": "deckbytes",
               "label": "使用占比",
               "logBase": 1,
-              "max": null,
-              "min": null,
               "show": true
             },
             {
               "format": "short",
-              "label": null,
               "logBase": 1,
-              "max": null,
-              "min": null,
               "show": false
             }
           ],
           "yaxis": {
-            "align": false,
-            "alignLevel": null
+            "align": false
           }
         },
         {
@@ -3894,17 +3638,13 @@
           "dashLength": 10,
           "dashes": false,
           "datasource": "${DS_TDENGINE}",
-          "fieldConfig": {
-            "defaults": {},
-            "overrides": []
-          },
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 59
+            "y": 52
           },
           "hiddenSeries": false,
           "id": 117,
@@ -3929,17 +3669,10 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "7.5.10",
+          "pluginVersion": "7.5.0",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
-          "scopedVars": {
-            "fqdn": {
-              "selected": false,
-              "text": "huolinhe-TM1701:6030",
-              "value": "huolinhe-TM1701:6030"
-            }
-          },
           "seriesOverrides": [
             {
               "alias": "/percent/",
@@ -3954,97 +3687,89 @@
               "alias": "",
               "colNameFormatStr": "",
               "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
               "refId": "A",
               "sql": "select _wstart as ts, avg(used) as level0_used, avg(total) as level0_total from $database.data_dir where level = 0 and dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)",
               "target": "select metric",
-              "timeshift": {
-                "period": null
-              },
+              "timeshift": {},
               "type": "timeserie"
             },
             {
               "alias": "",
               "colNameFormatStr": "",
               "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
               "refId": "B",
               "sql": "select _wstart as ts, avg(used) as level1_used, avg(total) as level1_total from $database.data_dir where level = 1 and dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)",
               "target": "select metric",
-              "timeshift": {
-                "period": null
-              },
+              "timeshift": {},
               "type": "timeserie"
             },
             {
               "alias": "",
               "colNameFormatStr": "",
               "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
               "refId": "C",
               "sql": "select _wstart as ts, avg(used) as level2_used, avg(total) as level2_total from $database.data_dir where level = 2 and dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)",
               "target": "select metric",
-              "timeshift": {
-                "period": null
-              },
+              "timeshift": {},
               "type": "timeserie"
             },
             {
               "alias": "",
               "colNameFormatStr": "",
               "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
               "refId": "D",
               "sql": "select avg(used)/avg(total) as level0_percent from $database.data_dir where level = 0 and dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)",
               "target": "select metric",
-              "timeshift": {
-                "period": null
-              },
+              "timeshift": {},
               "type": "timeserie"
             },
             {
               "alias": "",
               "colNameFormatStr": "",
               "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
               "refId": "D",
               "sql": "select avg(used)/avg(total) as level1_percent from $database.data_dir where level = 1 and dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)",
               "target": "select metric",
-              "timeshift": {
-                "period": null
-              },
+              "timeshift": {},
               "type": "timeserie"
             },
             {
               "alias": "",
               "colNameFormatStr": "",
               "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
               "refId": "D",
               "sql": "select avg(used)/avg(total) as level2_percent from $database.data_dir where level = 2 and dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)",
               "target": "select metric",
-              "timeshift": {
-                "period": null
-              },
+              "timeshift": {},
               "type": "timeserie"
             }
           ],
           "thresholds": [],
-          "timeFrom": null,
           "timeRegions": [],
-          "timeShift": null,
           "title": "Disk Used",
           "tooltip": {
             "shared": false,
@@ -4054,33 +3779,25 @@
           "transformations": [],
           "type": "graph",
           "xaxis": {
-            "buckets": null,
             "mode": "time",
-            "name": null,
             "show": true,
             "values": []
           },
           "yaxes": [
             {
               "format": "bytes",
-              "label": null,
               "logBase": 1,
-              "max": null,
-              "min": null,
               "show": true
             },
             {
               "format": "percentunit",
               "label": "Disk Used",
               "logBase": 1,
-              "max": null,
-              "min": null,
               "show": true
             }
           ],
           "yaxis": {
-            "align": false,
-            "alignLevel": null
+            "align": false
           }
         },
         {
@@ -4089,17 +3806,13 @@
           "dashLength": 10,
           "dashes": false,
           "datasource": "${DS_TDENGINE}",
-          "fieldConfig": {
-            "defaults": {},
-            "overrides": []
-          },
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 59
+            "y": 52
           },
           "hiddenSeries": false,
           "id": 64,
@@ -4122,17 +3835,10 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "7.5.10",
+          "pluginVersion": "7.5.0",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
-          "scopedVars": {
-            "fqdn": {
-              "selected": false,
-              "text": "huolinhe-TM1701:6030",
-              "value": "huolinhe-TM1701:6030"
-            }
-          },
           "seriesOverrides": [],
           "spaceLength": 10,
           "stack": false,
@@ -4142,52 +3848,47 @@
               "alias": "level0",
               "colNameFormatStr": "",
               "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
               "refId": "A",
               "sql": "select ts, derivative(value1, 1m, 0) as level0 from (select _wstart as ts, avg(used) as value1 from $database.data_dir where dnode_ep = '$fqdn' and ts >= $from and ts <= $to and level = 0 interval($interval) fill(null))",
               "target": "select metric",
-              "timeshift": {
-                "period": null
-              },
+              "timeshift": {},
               "type": "timeserie"
             },
             {
               "alias": "level1",
               "colNameFormatStr": "",
               "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
               "refId": "B",
               "sql": "select ts, derivative(value1, 1m, 0) as level1 from (select _wstart as ts, avg(used) as value1 from $database.data_dir where dnode_ep = '$fqdn' and ts >= $from and ts <= $to and level = 1 interval($interval) fill(null))",
               "target": "select metric",
-              "timeshift": {
-                "period": null
-              },
+              "timeshift": {},
               "type": "timeserie"
             },
             {
               "alias": "level2",
               "colNameFormatStr": "",
               "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
               "refId": "C",
               "sql": "select ts, derivative(value1, 1m, 0) as level2 from (select _wstart as ts, avg(used) as value1 from $database.data_dir where dnode_ep = '$fqdn' and ts >= $from and ts <= $to and level =2 interval($interval) fill(null))",
               "target": "select metric",
-              "timeshift": {
-                "period": null
-              },
+              "timeshift": {},
               "type": "timeserie"
             }
           ],
           "thresholds": [],
-          "timeFrom": null,
           "timeRegions": [],
-          "timeShift": null,
           "title": "Disk Used Increasing Rate per Minute",
           "tooltip": {
             "shared": false,
@@ -4196,39 +3897,30 @@
           },
           "type": "graph",
           "xaxis": {
-            "buckets": null,
             "mode": "time",
-            "name": null,
             "show": true,
             "values": []
           },
           "yaxes": [
             {
               "format": "binBps",
-              "label": null,
               "logBase": 1,
-              "max": null,
-              "min": null,
               "show": true
             },
             {
               "format": "percentunit",
               "label": "Disk Used",
               "logBase": 1,
-              "max": null,
-              "min": null,
               "show": true
             }
           ],
           "yaxis": {
-            "align": false,
-            "alignLevel": null
+            "align": false
           }
         },
         {
           "aliasColors": {},
           "bars": false,
-          "cacheTimeout": null,
           "dashLength": 10,
           "dashes": false,
           "datasource": "${DS_TDENGINE}",
@@ -4245,7 +3937,7 @@
             "h": 12,
             "w": 12,
             "x": 0,
-            "y": 69
+            "y": 62
           },
           "hiddenSeries": false,
           "hideTimeOverride": true,
@@ -4273,13 +3965,6 @@
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
-          "scopedVars": {
-            "fqdn": {
-              "selected": false,
-              "text": "huolinhe-TM1701:6030",
-              "value": "huolinhe-TM1701:6030"
-            }
-          },
           "seriesOverrides": [
             {
               "alias": "/last/",
@@ -4296,6 +3981,7 @@
               "alias": "",
               "colNameFormatStr": "",
               "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -4306,9 +3992,7 @@
             }
           ],
           "thresholds": [],
-          "timeFrom": null,
           "timeRegions": [],
-          "timeShift": null,
           "title": "Disk IO",
           "tooltip": {
             "shared": true,
@@ -4317,40 +4001,30 @@
           },
           "type": "graph",
           "xaxis": {
-            "buckets": null,
             "mode": "time",
-            "name": null,
             "show": true,
             "values": []
           },
           "yaxes": [
             {
-              "decimals": null,
               "format": "binBps",
               "label": "IO Rate",
               "logBase": 1,
-              "max": null,
-              "min": null,
               "show": true
             },
             {
               "format": "short",
-              "label": null,
               "logBase": 1,
-              "max": null,
-              "min": null,
               "show": false
             }
           ],
           "yaxis": {
-            "align": false,
-            "alignLevel": null
+            "align": false
           }
         },
         {
           "aliasColors": {},
           "bars": false,
-          "cacheTimeout": null,
           "dashLength": 10,
           "dashes": false,
           "datasource": "${DS_TDENGINE}",
@@ -4367,7 +4041,7 @@
             "h": 12,
             "w": 12,
             "x": 12,
-            "y": 69
+            "y": 62
           },
           "hiddenSeries": false,
           "hideTimeOverride": true,
@@ -4394,13 +4068,6 @@
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
-          "scopedVars": {
-            "fqdn": {
-              "selected": false,
-              "text": "huolinhe-TM1701:6030",
-              "value": "huolinhe-TM1701:6030"
-            }
-          },
           "seriesOverrides": [
             {
               "alias": "/in/",
@@ -4415,6 +4082,7 @@
               "alias": "",
               "colNameFormatStr": "",
               "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -4425,9 +4093,7 @@
             }
           ],
           "thresholds": [],
-          "timeFrom": null,
           "timeRegions": [],
-          "timeShift": null,
           "title": "Net",
           "tooltip": {
             "shared": true,
@@ -4436,38 +4102,104 @@
           },
           "type": "graph",
           "xaxis": {
-            "buckets": null,
             "mode": "time",
-            "name": null,
             "show": true,
             "values": []
           },
           "yaxes": [
             {
-              "decimals": null,
               "format": "binBps",
               "label": "IO Rate",
               "logBase": 1,
-              "max": null,
-              "min": null,
               "show": true
             },
             {
               "format": "short",
-              "label": null,
               "logBase": 1,
-              "max": null,
-              "min": null,
               "show": false
             }
           ],
           "yaxis": {
-            "align": false,
-            "alignLevel": null
+            "align": false
           }
+        },
+        {
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "TDengine"
+          },
+          "description": "所有普通表的个数（包括超级表的子表）",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 3,
+            "w": 3,
+            "x": 0,
+            "y": 74
+          },
+          "id": 98,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": true
+            },
+            "text": {},
+            "textMode": "auto"
+          },
+          "pluginVersion": "7.5.0",
+          "repeatDirection": "h",
+          "targets": [
+            {
+              "alias": "dnodes",
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "datasource": {
+                "type": "tdengine-datasource",
+                "uid": "TDengine"
+              },
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select last(tbs_total) as tbs_total from $database.cluster_info where first_ep = '$fqdn';",
+              "target": "select metric",
+              "timeshift": {},
+              "type": "timeserie"
+            }
+          ],
+          "title": "Total Tables",
+          "transformations": [],
+          "type": "stat"
         }
       ],
       "repeat": "fqdn",
+      "targets": [
+        {
+          "datasource": "${DS_TDENGINE}",
+          "refId": "A"
+        }
+      ],
       "title": "DNode Usage [ $fqdn ]",
       "type": "row"
     },
@@ -4478,7 +4210,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 42
+        "y": 29
       },
       "id": 63,
       "panels": [
@@ -4539,6 +4271,7 @@
               "alias": "logins",
               "colNameFormatStr": "",
               "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -4548,9 +4281,7 @@
             }
           ],
           "thresholds": [],
-          "timeFrom": null,
           "timeRegions": [],
-          "timeShift": null,
           "title": "Login Counts per Minute",
           "tooltip": {
             "shared": true,
@@ -4559,115 +4290,111 @@
           },
           "type": "graph",
           "xaxis": {
-            "buckets": null,
             "mode": "time",
-            "name": null,
             "show": true,
             "values": []
           },
           "yaxes": [
             {
               "format": "cpm",
-              "label": null,
               "logBase": 1,
-              "max": null,
-              "min": null,
               "show": true
             },
             {
               "format": "short",
-              "label": null,
               "logBase": 1,
-              "max": null,
-              "min": null,
               "show": true
             }
           ],
           "yaxis": {
-            "align": false,
-            "alignLevel": null
+            "align": false
           }
+        }
+      ],
+      "targets": [
+        {
+          "datasource": "${DS_TDENGINE}",
+          "refId": "A"
         }
       ],
       "title": "Login History",
       "type": "row"
     },
     {
-      "id": 64,
       "collapsed": true,
       "datasource": "${DS_TDENGINE}",
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 43
+        "y": 30
       },
+      "id": 64,
       "panels": [
         {
-          "id": 1,
+          "datasource": "${DS_TDENGINE}",
+          "description": "http请求统计",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
           "gridPos": {
             "h": 5,
             "w": 8,
             "x": 0,
             "y": 0
           },
-          "type": "timeseries",
-          "title": "http_request_inflight",
-          "description": "http请求统计",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {
-                "drawStyle": "line",
-                "lineInterpolation": "linear",
-                "barAlignment": 0,
-                "lineWidth": 1,
-                "fillOpacity": 0,
-                "gradientMode": "none",
-                "spanNulls": false,
-                "showPoints": "auto",
-                "pointSize": 5,
-                "stacking": {
-                  "mode": "none",
-                  "group": "A"
-                },
-                "axisPlacement": "auto",
-                "axisLabel": "",
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "hideFrom": {
-                  "tooltip": false,
-                  "viz": false,
-                  "legend": false
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "color": {
-                "mode": "palette-classic"
-              },
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  }
-                ]
-              },
-              "mappings": []
-            },
-            "overrides": []
-          },
+          "id": 1,
           "options": {
-            "tooltip": {
-              "mode": "single"
-            },
             "legend": {
+              "calcs": [],
               "displayMode": "list",
               "placement": "bottom",
-              "calcs": []
+              "showLegend": true
+            },
+            "tooltip": {
+              "mode": "single"
             }
           },
           "targets": [
@@ -4682,45 +4409,45 @@
               "sql": "select _wstart as ts, avg(gauge) as request_in_flight from $database.taosadapter_restful_http_request_in_flight where _ts >= $from and _ts <= $to interval($interval)"
             }
           ],
-          "datasource": "${DS_TDENGINE}"
+          "title": "http_request_inflight",
+          "type": "timeseries"
         },
         {
-          "id": 110,
-          "gridPos": {
-            "h": 5,
-            "w": 3,
-            "x": 8,
-            "y": 0
-          },
-          "type": "stat",
-          "title": "http_request_total",
+          "datasource": "${DS_TDENGINE}",
           "description": "http请求总数统计",
           "fieldConfig": {
             "defaults": {
               "color": {
                 "mode": "palette-classic"
               },
+              "mappings": [],
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   }
                 ]
-              },
-              "mappings": []
+              }
             },
             "overrides": []
           },
+          "gridPos": {
+            "h": 5,
+            "w": 3,
+            "x": 8,
+            "y": 0
+          },
+          "id": 2,
           "options": {
-            "tooltip": {
-              "mode": "single"
-            },
             "legend": {
+              "calcs": [],
               "displayMode": "list",
               "placement": "bottom",
-              "calcs": []
+              "showLegend": true
+            },
+            "tooltip": {
+              "mode": "single"
             }
           },
           "targets": [
@@ -4734,45 +4461,45 @@
               "sql": "select last_row(gauge) as request_total from $database.taosadapter_restful_http_request_total"
             }
           ],
-          "datasource": "${DS_TDENGINE}"
+          "title": "http_request_total",
+          "type": "stat"
         },
         {
-          "id": 4,
-          "gridPos": {
-            "h": 5,
-            "w": 3,
-            "x": 11,
-            "y": 0
-          },
-          "type": "stat",
-          "title": "http_request_fail",
+          "datasource": "${DS_TDENGINE}",
           "description": "http请求失败统计",
           "fieldConfig": {
             "defaults": {
               "color": {
                 "mode": "palette-classic"
               },
+              "mappings": [],
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   }
                 ]
-              },
-              "mappings": []
+              }
             },
             "overrides": []
           },
+          "gridPos": {
+            "h": 5,
+            "w": 3,
+            "x": 11,
+            "y": 0
+          },
+          "id": 4,
           "options": {
-            "tooltip": {
-              "mode": "single"
-            },
             "legend": {
+              "calcs": [],
               "displayMode": "list",
               "placement": "bottom",
-              "calcs": []
+              "showLegend": true
+            },
+            "tooltip": {
+              "mode": "single"
             }
           },
           "targets": [
@@ -4787,29 +4514,25 @@
               "sql": "select last_row(gauge) as request_fail from $database.taosadapter_restful_http_request_fail"
             }
           ],
-          "datasource": "${DS_TDENGINE}"
+          "title": "http_request_fail",
+          "type": "stat"
         },
         {
-          "id": 3,
-          "gridPos": {
-            "h": 5,
-            "w": 4,
-            "x": 17,
-            "y": 48
-          },
-          "type": "gauge",
-          "title": "Memory Used",
-          "transformations": [],
           "datasource": "${DS_TDENGINE}",
-          "pluginVersion": "7.5.10",
+          "description": "",
           "fieldConfig": {
             "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "max": 100,
+              "min": 0,
               "thresholds": {
                 "mode": "percentage",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -4821,34 +4544,37 @@
                   }
                 ]
               },
-              "mappings": [],
-              "color": {
-                "mode": "thresholds"
-              },
-              "max": 100,
-              "min": 0,
               "unit": "percent"
             },
             "overrides": []
           },
+          "gridPos": {
+            "h": 5,
+            "w": 4,
+            "x": 17,
+            "y": 48
+          },
+          "id": 3,
           "options": {
+            "orientation": "auto",
             "reduceOptions": {
-              "values": false,
               "calcs": [
                 "last"
               ],
-              "fields": "/^mem_percent$/"
+              "fields": "/^mem_percent$/",
+              "values": false
             },
-            "orientation": "auto",
             "showThresholdLabels": true,
             "showThresholdMarkers": true,
             "text": {}
           },
+          "pluginVersion": "7.5.10",
           "targets": [
             {
               "alias": "disk_used",
               "colNameFormatStr": "",
               "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -4858,29 +4584,26 @@
               "type": "timeserie"
             }
           ],
-          "description": ""
+          "title": "Memory Used",
+          "transformations": [],
+          "type": "gauge"
         },
         {
-          "id": 6,
-          "gridPos": {
-            "h": 5,
-            "w": 3,
-            "x": 14,
-            "y": 48
-          },
-          "type": "gauge",
-          "title": "CPU Used",
-          "transformations": [],
-          "pluginVersion": "7.5.10",
+          "datasource": "${DS_TDENGINE}",
           "description": "CPU 使用率",
           "fieldConfig": {
             "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "max": 100,
+              "min": 0,
               "thresholds": {
                 "mode": "percentage",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "#EAB839",
@@ -4892,45 +4615,55 @@
                   }
                 ]
               },
-              "mappings": [],
-              "color": {
-                "mode": "thresholds"
-              },
-              "max": 100,
-              "min": 0,
               "unit": "percent"
             },
             "overrides": []
           },
+          "gridPos": {
+            "h": 5,
+            "w": 3,
+            "x": 14,
+            "y": 48
+          },
+          "id": 6,
           "options": {
+            "orientation": "auto",
             "reduceOptions": {
-              "values": false,
               "calcs": [
                 "last"
               ],
-              "fields": "/^cpu_percent$/"
+              "fields": "/^cpu_percent$/",
+              "values": false
             },
-            "orientation": "auto",
             "showThresholdLabels": true,
             "showThresholdMarkers": true,
             "text": {}
           },
+          "pluginVersion": "7.5.10",
           "targets": [
             {
               "alias": "disk_used",
               "colNameFormatStr": "",
               "colNameToGroup": "",
+              "datasource": "${DS_TDENGINE}",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
               "sql": "select last(gauge) as cpu_percent from $database.taosadapter_system_cpu_percent where _ts >= $from and _ts <= $to",
               "target": "select metric",
               "timeshift": {},
-              "type": "timeserie",
-              "datasource": "${DS_TDENGINE}"
+              "type": "timeserie"
             }
           ],
-          "datasource": "${DS_TDENGINE}"
+          "title": "CPU Used",
+          "transformations": [],
+          "type": "gauge"
+        }
+      ],
+      "targets": [
+        {
+          "datasource": "${DS_TDENGINE}",
+          "refId": "A"
         }
       ],
       "title": "TaosAdapter",
@@ -4938,14 +4671,17 @@
     }
   ],
   "refresh": "30s",
-  "schemaVersion": 27,
+  "schemaVersion": 37,
   "style": "dark",
   "tags": [],
   "templating": {
     "list": [
       {
-        "allValue": null,
-        "current": {},
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
         "datasource": "${DS_TDENGINE}",
         "definition": "select name from information_schema.ins_databases where `vgroups` is not null",
         "hide": 0,
@@ -4956,6 +4692,7 @@
         "options": [],
         "query": "select name from information_schema.ins_databases where `vgroups` is not null",
         "refresh": 1,
+        "regex": "",
         "skipUrlSync": false,
         "sort": 1,
         "tagValuesQuery": "",
@@ -4964,8 +4701,11 @@
         "useTags": false
       },
       {
-        "allValue": null,
-        "current": {},
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
         "datasource": "${DS_TDENGINE}",
         "definition": "select name from information_schema.ins_databases where `vgroups` is not null",
         "hide": 0,
@@ -4985,14 +4725,16 @@
         "useTags": false
       },
       {
-        "current": {},
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
         "datasource": "${DS_TDENGINE}",
         "definition": "select first_ep from $database.cluster_info group by cluster_id, first_ep;",
         "description": "TDengine Nodes FQDN (Hostname)",
-        "error": null,
         "hide": 0,
         "includeAll": true,
-        "label": null,
         "multi": true,
         "name": "fqdn",
         "options": [],
@@ -5002,21 +4744,16 @@
         "skipUrlSync": false,
         "sort": 0,
         "tagValuesQuery": "",
-        "tags": [],
         "tagsQuery": "",
         "type": "query",
         "useTags": false
       },
       {
-        "allValue": null,
         "current": {},
         "datasource": "${DS_TDENGINE}",
         "definition": "select last(version) from $database.cluster_info",
-        "description": null,
-        "error": null,
         "hide": 2,
         "includeAll": false,
-        "label": null,
         "multi": false,
         "name": "version",
         "options": [],
@@ -5026,21 +4763,16 @@
         "skipUrlSync": false,
         "sort": 0,
         "tagValuesQuery": "",
-        "tags": [],
         "tagsQuery": "",
         "type": "query",
         "useTags": false
       },
       {
-        "allValue": null,
         "current": {},
         "datasource": "${DS_TDENGINE}",
         "definition": "select last(first_ep) from $database.cluster_info",
-        "description": null,
-        "error": null,
         "hide": 2,
         "includeAll": false,
-        "label": null,
         "multi": false,
         "name": "firstEp",
         "options": [],
@@ -5050,7 +4782,6 @@
         "skipUrlSync": false,
         "sort": 0,
         "tagValuesQuery": "",
-        "tags": [],
         "tagsQuery": "",
         "type": "query",
         "useTags": false
@@ -5064,8 +4795,6 @@
           "text": "auto",
           "value": "$__auto_interval_interval"
         },
-        "description": null,
-        "error": null,
         "hide": 0,
         "label": "Interval",
         "name": "interval",
@@ -5175,5 +4904,6 @@
   "timezone": "",
   "title": "TDinsight for 3.x",
   "uid": "tdinsight-3x",
-  "version": 31
+  "version": 31,
+  "weekStart": ""
 }
