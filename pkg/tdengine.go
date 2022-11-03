@@ -4,10 +4,12 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/araddon/dateparse"
@@ -36,6 +38,23 @@ const (
 	CTypeUnsignedBigInt   = 14
 )
 
+const (
+	CTypeBoolStr             = "BOOL"
+	CTypeTinyIntStr          = "TINYINT"
+	CTypeSmallIntStr         = "SMALLINT"
+	CTypeIntStr              = "INT"
+	CTypeBigIntStr           = "BIGINT"
+	CTypeFloatStr            = "FLOAT"
+	CTypeDoubleStr           = "DOUBLE"
+	CTypeBinaryStr           = "BINARY"
+	CTypeTimestampStr        = "TIMESTAMP"
+	CTypeNCharStr            = "NCHAR"
+	CTypeUnsignedTinyIntStr  = "TINYINT UNSIGNED"
+	CTypeUnsignedSmallIntStr = "SMALLINT UNSIGNED"
+	CTypeUnsignedIntStr      = "INT UNSIGNED"
+	CTypeUnsignedBigIntStr   = "BIGINT UNSIGNED"
+)
+
 // Check if the target type of `typeNum` is boolean or not.
 func isBoolType(typeNum int) bool {
 	return typeNum == CTypeBool
@@ -45,6 +64,26 @@ func isBoolType(typeNum int) bool {
 func isIntegerTypes(typeNum int) bool {
 	return (typeNum >= CTypeTinyInt && typeNum <= CTypeBigInt) ||
 		(typeNum >= CTypeUnsignedTinyInt && typeNum <= CTypeUnsignedBigInt)
+}
+
+func isIntegerTypesForInterface(tp interface{}) bool {
+	switch tp := tp.(type) {
+	case string:
+		return tp == CTypeIntStr || tp == CTypeUnsignedIntStr || tp == CTypeBigIntStr || tp == CTypeUnsignedBigIntStr ||
+			tp == CTypeSmallIntStr || tp == CTypeUnsignedSmallIntStr || tp == CTypeTinyIntStr ||
+			tp == CTypeUnsignedTinyIntStr
+	case int:
+		return isIntegerTypes(tp)
+	case int32:
+		return isIntegerTypes(int(tp))
+	case int64:
+		return isIntegerTypes(int(tp))
+	case float32:
+		return isIntegerTypes(int(tp))
+	case float64:
+		return isIntegerTypes(int(tp))
+	}
+	return false
 }
 
 func isFloatTypes(typeNum int) bool {
@@ -103,14 +142,14 @@ func (rd *RocksetDatasource) QueryData(ctx context.Context, req *backend.QueryDa
 	response := backend.NewQueryDataResponse()
 	for i := 0; i < len(req.Queries); i++ {
 		if sql, alias, err := generateSql(req.Queries[i]); err != nil {
-			pluginLogger.Debug("generateSql error: %w", err)
+			pluginLogger.Error("generateSql error: %w", err)
 			return nil, fmt.Errorf("generateSql error: %w", err)
 		} else {
 			if res, err := query(req.PluginContext.DataSourceInstanceSettings.URL, dat.BasicAuth, dat.Token, []byte(sql)); err != nil {
-				pluginLogger.Debug("query data: %w", err)
+				pluginLogger.Error("query data: %w", err)
 				return nil, fmt.Errorf("query data: %w", err)
 			} else if resp, err := makeResponse(res, alias); err != nil {
-				pluginLogger.Debug("make reponse: %w", err)
+				pluginLogger.Error("make reponse: %w", err)
 				return nil, fmt.Errorf("make reponse: %w", err)
 			} else {
 				response.Responses[req.Queries[i].RefID] = resp
@@ -124,7 +163,7 @@ func generateSql(query backend.DataQuery) (sql, alias string, err error) {
 	var queryDataJson map[string]interface{}
 	// pluginLogger.Debug(fmt.Sprintf("req.Queries.JSON:%+v", string(query.JSON)))
 	if err = json.Unmarshal(query.JSON, &queryDataJson); err != nil {
-		pluginLogger.Debug("get query error: %w", err)
+		pluginLogger.Error("get query error: %w", err)
 		return "", "", fmt.Errorf("get query error: %w", err)
 	}
 	queryType, ok := queryDataJson["queryType"].(string)
@@ -154,27 +193,70 @@ func generateSql(query backend.DataQuery) (sql, alias string, err error) {
 	return sql, alias, nil
 }
 
-func getTypeArray(typeNum int) interface{} {
+func getTypeArray(tp interface{}) interface{} {
+	switch tp := tp.(type) {
+	case string:
+		return getTypeArrayForStr(tp)
+	case int:
+		return getTypeArrayForInt(tp)
+	case int32:
+		return getTypeArrayForInt(int(tp))
+	case int64:
+		return getTypeArrayForInt(int(tp))
+	case float32:
+		return getTypeArrayForInt(int(tp))
+	case float64:
+		return getTypeArrayForInt(int(tp))
+	}
+	// binary/nchar, and maybe json
+	return []string{}
+}
+
+func getTypeArrayForInt(typeNum int) interface{} {
 	if isBoolType(typeNum) {
 		// BOOL
 		return []bool{}
-	} else if isIntegerTypes(typeNum) {
+	}
+	if isIntegerTypes(typeNum) {
 		// 2/3/4/5,11/12/13/14, INTs
 		return []int64{}
-	} else if isFloatTypes(typeNum) {
+	}
+	if isFloatTypes(typeNum) {
 		// float/double
 		return []float64{}
-	} else if isTimestampType(typeNum) {
+	}
+	if isTimestampType(typeNum) {
 		// timestamp
 		return []time.Time{}
-	} else {
-		// binary/nchar, and maybe json
-		return []string{}
 	}
+	// binary/nchar, and maybe json
+	return []string{}
+}
+
+func getTypeArrayForStr(tp string) interface{} {
+	if tp == CTypeBoolStr {
+		return []bool{}
+	}
+	if tp == CTypeIntStr || tp == CTypeUnsignedIntStr || tp == CTypeBigIntStr || tp == CTypeUnsignedBigIntStr ||
+		tp == CTypeSmallIntStr || tp == CTypeUnsignedSmallIntStr || tp == CTypeTinyIntStr ||
+		tp == CTypeUnsignedTinyIntStr {
+		return []int64{}
+	}
+	if tp == CTypeFloatStr || tp == CTypeDoubleStr {
+		// float/double
+		return []float64{}
+	}
+	if tp == CTypeTimestampStr {
+		// timestamp
+		return []time.Time{}
+	}
+	// binary/nchar, and maybe json
+	return []string{}
 }
 
 type restResult struct {
 	Status     string          `json:"status"`
+	Code       int             `json:"code"`
 	Head       []string        `json:"head"`
 	ColumnMeta [][]interface{} `json:"column_meta"`
 	Data       [][]interface{} `json:"data"`
@@ -182,16 +264,12 @@ type restResult struct {
 }
 
 func makeResponse(body []byte, alias string) (response backend.DataResponse, err error) {
-
-	// var res map[string]interface{}
 	var res restResult
 
-	// pluginLogger.Debug(fmt.Sprint("body: ", string(body)))
 	if err = json.Unmarshal(body, &res); err != nil {
 		pluginLogger.Error(fmt.Sprint("parse json error: ", err))
 		return response, fmt.Errorf("get res error: %w", err)
 	}
-	// pluginLogger.Info(fmt.Sprint("parsed: ", res))
 	frame := data.NewFrame("response")
 
 	aliasList := strings.Split(alias, ",")
@@ -201,9 +279,8 @@ func makeResponse(body []byte, alias string) (response backend.DataResponse, err
 			name = strings.ReplaceAll(aliasList[i-1], "[[col]]", name)
 		}
 		frame.Fields = append(frame.Fields,
-			data.NewField(name, nil, getTypeArray(int(res.ColumnMeta[i][1].(float64)))),
+			data.NewField(name, nil, getTypeArray(res.ColumnMeta[i][1])),
 		)
-		// pluginLogger.Debug(fmt.Sprint("frame: ", frame, ", after field: ", name, ", typeNum: ", int(res.ColumnMeta[i][1].(float64))))
 	}
 
 	timeLayout := ""
@@ -211,14 +288,12 @@ func makeResponse(body []byte, alias string) (response backend.DataResponse, err
 		return response, nil
 	}
 	tsLayout := res.Data[0][0].(string)
-	// pluginLogger.Debug(fmt.Sprint("tsLayout: ", tsLayout))
-
 	timeLayout, err = dateparse.ParseFormat(tsLayout)
 
 	if err != nil {
 		return response, fmt.Errorf("ts parse layout error %s", tsLayout)
 	}
-	// pluginLogger.Debug(fmt.Sprint("frame: ", frame))
+
 	for i := 0; i < len(res.Data); i++ {
 		if res.Data[i][0], err = time.Parse(timeLayout, res.Data[i][0].(string)); err != nil {
 			pluginLogger.Error(fmt.Sprint("parse error:", err))
@@ -230,35 +305,28 @@ func makeResponse(body []byte, alias string) (response backend.DataResponse, err
 				hasNil = true
 				break
 			}
-			typeNum := int(res.ColumnMeta[j][1].(float64))
-			// pluginLogger.Debug(fmt.Sprintf("column: %d, type: %d", j, typeNum))
-			if isIntegerTypes(typeNum) {
+			if isIntegerTypesForInterface(res.ColumnMeta[j][1]) {
 				res.Data[i][j] = int64(res.Data[i][j].(float64))
-
 			}
 		}
 		if hasNil {
 			continue
 		}
-		// pluginLogger.Debug(fmt.Sprint("before appended row ", i))
 		frame.AppendRow(res.Data[i]...)
-		// pluginLogger.Debug(fmt.Sprint("appended row ", i))
 	}
 	response.Frames = append(response.Frames, frame)
-	// json, _ := response.MarshalJSON()
-	// pluginLogger.Debug(fmt.Sprint("response is", string(json)))
 	return response, nil
 }
 func query(url, basicAuth, token string, reqBody []byte) ([]byte, error) {
 	var reqBodyBuffer io.Reader = bytes.NewBuffer(reqBody)
 
-	sqlUtcUrl := url + "/rest/sqlutc"
+	sqlUrl, err := defaultDbVersion.sqlUrl(url, basicAuth, token)
 	if token != "" {
-		sqlUtcUrl = sqlUtcUrl + "?token=" + token
+		sqlUrl = sqlUrl + "?token=" + token
 	}
-	req, err := http.NewRequest("POST", sqlUtcUrl, reqBodyBuffer)
+	req, err := http.NewRequest("POST", sqlUrl, reqBodyBuffer)
 	if err != nil {
-		pluginLogger.Error(fmt.Sprint("query "+url+"/rest/sqlutc error: ", err))
+		pluginLogger.Error(fmt.Sprintf("query %s error: %v", sqlUrl, err))
 		return []byte{}, err
 	}
 
@@ -267,12 +335,15 @@ func query(url, basicAuth, token string, reqBody []byte) ([]byte, error) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		pluginLogger.Error(fmt.Sprint("query "+url+"/rest/sqlutc error: ", err))
+		pluginLogger.Error(fmt.Sprintf("query %s error: %v", sqlUrl, err))
 		return []byte{}, err
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		if resp.StatusCode == 404 {
+			defaultDbVersion.cleanVersion(url)
+		}
 		pluginLogger.Error("when writing to [] received status code: %d", resp.StatusCode)
 		return []byte{}, fmt.Errorf("when writing to [] received status code: %d", resp.StatusCode)
 	}
@@ -282,7 +353,7 @@ func query(url, basicAuth, token string, reqBody []byte) ([]byte, error) {
 		pluginLogger.Error("when writing to [] received error: %v", err)
 		return []byte{}, fmt.Errorf("when writing to [] received error: %v", err)
 	}
-	defer resp.Body.Close()
+
 	return body, nil
 }
 
@@ -326,10 +397,6 @@ func healthError(msg string, args ...string) *backend.CheckHealthResult {
 	}
 }
 
-// CheckHealth handles health checks sent from Grafana to the plugin.
-// The main use case for these health checks is the test button on the
-// datasource configuration page which allows users to verify that
-// a datasource is working as expected.
 func (rd *RocksetDatasource) CallResource(ctx context.Context, req *backend.CallResourceRequest, sender backend.CallResourceResponseSender) error {
 	// pluginLogger.Debug("CallResource")
 	if req.Path == "setSmsConfig" {
@@ -363,4 +430,92 @@ func newDataSourceInstance(setting backend.DataSourceInstanceSettings) (instance
 func (s *instanceSettings) Dispose() {
 	// Called before creating a new instance to allow plugin authors to cleanup.
 	pluginLogger.Debug("dispose")
+}
+
+const sqlEndPoint = "/rest/sql"
+const utcSqlEndPoint = "/rest/sqlutc"
+
+var httpStatusErr = errors.New("http status error")
+
+var defaultDbVersion = dbVersion{}
+
+type dbVersion struct {
+	cache sync.Map
+}
+
+type serverVer struct {
+	Data [][]string
+}
+
+func (v *dbVersion) cleanVersion(url string) {
+	v.cache.Delete(url)
+}
+
+func (v *dbVersion) sqlUrl(url, basicAuth, token string) (sqlUrl string, err error) {
+	version, err := v.getVersion(url, basicAuth, token)
+	if err != nil {
+		return "", fmt.Errorf("get sql url error. %v", err)
+	}
+	if is30(version) {
+		sqlUrl = url + sqlEndPoint
+	} else {
+		sqlUrl = url + utcSqlEndPoint
+	}
+
+	return
+}
+
+func is30(version string) bool {
+	return strings.HasPrefix(version, "3")
+}
+
+func (v *dbVersion) getVersion(url, basicAuth, token string) (version string, err error) {
+	if cached, ok := v.cache.Load(url); ok {
+		return cached.(string), nil
+	}
+
+	defer func() {
+		if len(version) > 0 && err == nil {
+			v.cache.Store(url, version)
+		}
+	}()
+
+	reqUrl := url + sqlEndPoint
+	if len(token) > 0 {
+		reqUrl = reqUrl + "?token=" + token
+	}
+	req, err := http.NewRequest(http.MethodPost, reqUrl, strings.NewReader("select server_version()"))
+	if err != nil {
+		pluginLogger.Error("create request for url error ", url, err)
+		return "", err
+	}
+	req.Header.Set("Authorization", "Basic "+basicAuth) // cm9vdDp0YW9zZGF0YQ==
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		pluginLogger.Error("request for server version error ", err)
+		return "", err
+	}
+	defer func() { _ = resp.Body.Close() }()
+	if resp.StatusCode != 200 {
+		pluginLogger.Error("read response data for server version error ", err)
+		return "", fmt.Errorf("%v. http status code %d", httpStatusErr, resp.StatusCode)
+	}
+
+	respData, err := io.ReadAll(resp.Body)
+	if err != nil {
+		pluginLogger.Error("read response data for server version error ", err)
+		return "", err
+	}
+
+	var ver serverVer
+	if err = json.Unmarshal(respData, &ver); err != nil {
+		pluginLogger.Error("unmarshall server version data ", err)
+		return "", err
+	}
+	if len(ver.Data) != 1 || len(ver.Data[0]) != 1 {
+		pluginLogger.Error("get server version data error, resp data is ", string(respData))
+		return "", err
+	}
+
+	return ver.Data[0][0], nil
 }
