@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.2.7] - 2022-11-03
+
+### Bug Fixes
+
+- Fix TDinsight.sh --offline error (#152)
+- Change time unit and placement of charts (#153)
+- Telegraf conf refine (#154)
+- Fix page fault for TDinsight v3 in grafana (#161)
+
+### Documentation
+
+- Add install plugin from config section (#157)
+- Readme add bullet link (#158)
+- Wording align with official doc (#159)
+
+### Enhancements
+
+- Grafana plugin support TDengine 3.0 (#162)
+
 ## [3.2.6] - 2022-08-12
 
 ### Bug Fixes
