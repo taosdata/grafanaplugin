@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [3.2.7] - 2022-11-03
+## [3.2.7] - 2022-11-04
 
 ### Bug Fixes
 
@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - Add install plugin from config section (#157)
 - Readme add bullet link (#158)
 - Wording align with official doc (#159)
+- Fix a few typos and wording
 
 ### Enhancements
 
