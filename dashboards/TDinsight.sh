@@ -82,20 +82,20 @@ Usage:
    $0 -h|--help
    $0 -n <ds-name> -a <api-url> -u <user> -p <password>
 
-Install and configure TDinsight dashboard in Grafana on ubuntu 18.04/20.04 system.
+Install and configure TDinsight dashboard in Grafana on Ubuntu 18.04/20.04 system.
 
 -h, --help                                  Display help
 
 -V, --verbose                               Run script in verbose mode. Will print out each step of execution.
 -R, --remove                                Remove TDinsight dashboard, TDengine data source and the plugin.
--F, --offline                               Use file in local path (the directory this script located in or just cwd).
+-F, --offline                               Use file in local path (the directory this script located in or just current work directory).
     --download-only                         Download plugin and dashboard json file into current directory.
 
 -v, --plugin-version <version>              TDengine datasource plugin version, [default: $TDENGINE_PLUGIN_VERSION]
 
 -P, --grafana-provisioning-dir <dir>        Grafana provisioning directory, [default: $GF_PROVISIONING_DIR]
 -G, --grafana-plugins-dir <dir>             Grafana plugins directory, [default: $GF_PLUGINS_DIR]
--O, --grafana-org-id <number>               Grafana orgnization id. [default: $GF_ORG_ID]
+-O, --grafana-org-id <number>               Grafana organization id. [default: $GF_ORG_ID]
 
 -n, --tdengine-ds-name <string>             TDengine datasource name, no space. [default: $TDENGINE_DS_NAME]
 -a, --tdengine-api <url>                    TDengine REST API endpoint. [default: $TDENGINE_API]
@@ -103,14 +103,14 @@ Install and configure TDinsight dashboard in Grafana on ubuntu 18.04/20.04 syste
 -p, --tdengine-password <string>            TDengine password. [default: $TDENGINE_PASSWORD]
     --tdengine-cloud-token <string>         TDengine cloud token. [env: \$TDENGINE_CLOUD_TOKEN]
 
--i, --tdinsight-uid <string>                Replace with a non-space ascii code as the dashboard id. [default: $TDINSIGHT_DASHBOARD_UID]
+-i, --tdinsight-uid <string>                Replace with a non-space ASCII code as the dashboard id. [default: $TDINSIGHT_DASHBOARD_UID]
 -t, --tdinsight-title <string>              Dashboard title. [default: $TDINSIGHT_DASHBOARD_TITLE]
 -e, --tdinsight-editable                    If the provisioning dashboard could be editable. [default: false]
 
 -E, --external-notifier <string>            Apply external notifier uid to TDinsight dashboard.
 
 Aliyun SMS as Notifier:
--s, --sms-enabled                           To enable tdengine-datasource plugin builtin aliyun sms webhook.
+-s, --sms-enabled                           To enable tdengine-datasource plugin builtin Aliyun sms webhook.
 -N, --sms-notifier-name <string>            Provisioning notifier name.[default: $SMS_NOTIFIER_NAME]
 -U, --sms-notifier-uid <string>             Provisioning notifier uid, use lowercase notifier name by default.
 -D, --sms-notifier-is-default               Set notifier as default.
@@ -346,7 +346,7 @@ datasources:
   # <string, required> datasource type. Required
   type: tdengine-datasource
   # <string, required> access mode. direct or proxy. Required
-  # <int> org id. will defauto orgId 1 if not specified
+  # <int> org id. will be set to 1 if not specified
   orgId: $GF_ORG_ID
   # <string> url
   url: $TDENGINE_API
@@ -412,7 +412,7 @@ remove_notifier() {
 download_dashboard() {
   #get_dashboard_by_id $TDINSIGHT_DASHBOARD_ID TDinsight-$TDINSIGHT_DASHBOARD_ID.json
   #wget -c https://github.com/taosdata/grafanaplugin/releases/download/v$TDENGINE_PLUGIN_VERSION/TDinsight.json -O TDinsight-$TDINSIGHT_DASHBOARD_ID.json
-  echo "**deprecated: 3.2.6 will not download dashboard from grafana, use builtin dashboards via grafana datasource settings.**" >&2
+  echo "**deprecated: 3.2.6 and above will not download dashboard from grafana, use builtin dashboards via grafana datasource settings.**" >&2
   true
 }
 
