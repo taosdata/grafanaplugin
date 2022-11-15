@@ -72,6 +72,6 @@
   },
 
   "dependencies": {
-    "grafanaDependency": ">=7.5.10"
+    "grafanaDependency": ">=7.3.0"
   }
 }
