@@ -8,5 +8,5 @@ require (
 	github.com/alibabacloud-go/tea v1.1.17
 	github.com/araddon/dateparse v0.0.0-20210429162001-6b43995a97de
 	github.com/grafana/grafana-plugin-sdk-go v0.117.0
-	github.com/hashicorp/go-hclog v0.14.1
+	github.com/stretchr/testify v1.7.0
 )
