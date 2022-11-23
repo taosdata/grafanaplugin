@@ -270,7 +270,7 @@ func makeResponse(body []byte, alias string) (response backend.DataResponse, err
 		pluginLogger.Error(fmt.Sprint("parse json error: ", err))
 		return response, fmt.Errorf("get res error: %w", err)
 	}
-	frame := data.NewFrame("response")
+	frame := data.NewFrame("") // do not set name for frame. this name will override the data column name
 
 	aliasList := strings.Split(alias, ",")
 	for i := 0; i < len(res.ColumnMeta); i++ {
