@@ -1,10 +1,10 @@
 version: "3.7"
 
 services:
-  tdengine:
-    image: tdengine/tdengine:2.4.0.16
-    environment:
-      TAOS_FQDN: localhsot
+#  tdengine:
+#    image: tdengine/tdengine:3.0.1.8
+#    environment:
+#      TAOS_FQDN: localhsot
   grafana:
     image: grafana/grafana:7.5.10
     volumes:
@@ -25,7 +25,7 @@ services:
       SMS_PHONE_NUMBERS: $SMS_PHONE_NUMBERS
       SMS_LISTEN_ADDR: ${SMS_LISTEN_ADDR}
     ports:
-      - 3000:3000
+      - "3000:3000"
   alertmanager:
     image: prom/alertmanager:v0.21.0
     volumes:
@@ -34,12 +34,12 @@ services:
       - '--config.file=/etc/alertmanager/config.yml'
       - '--storage.path=/alertmanager'
     ports:
-      - 9093:9093
-  webhook:
-    build: ./webhook/
-    hostname: webhook
-    ports:
-      - 9010:9010
+      - "9093:9093"
+#  webhook:
+#    build: ./webhook/
+#    hostname: webhook
+#    ports:
+#      - "9010:9010"
 
 volumes:
   grafana-data:

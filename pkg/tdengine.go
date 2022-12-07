@@ -132,11 +132,11 @@ func transcode(in, out interface{}) {
 func (rd *RocksetDatasource) QueryData(ctx context.Context, req *backend.QueryDataRequest) (*backend.QueryDataResponse, error) {
 	var dat JsonData
 
-	// pluginLogger.Debug(fmt.Sprintf("%#v", string(req.Queries[0].JSON)))
+	pluginLogger.Debug(fmt.Sprintf("%#v", string(req.Queries[0].JSON)))
 	decryptedJSONData := req.PluginContext.DataSourceInstanceSettings.DecryptedSecureJSONData
 	transcode(decryptedJSONData, &dat)
 
-	// pluginLogger.Debug(fmt.Sprintf("DataSource: %v", req.PluginContext.DataSourceInstanceSettings))
+	pluginLogger.Debug(fmt.Sprintf("DataSource: %v", req.PluginContext.DataSourceInstanceSettings))
 	AssertSmsWorker(ctx, req.PluginContext.DataSourceInstanceSettings.ID, dat)
 
 	response := backend.NewQueryDataResponse()
@@ -317,6 +317,7 @@ func makeResponse(body []byte, alias string) (response backend.DataResponse, err
 	response.Frames = append(response.Frames, frame)
 	return response, nil
 }
+
 func query(url, basicAuth, token string, reqBody []byte) ([]byte, error) {
 	var reqBodyBuffer io.Reader = bytes.NewBuffer(reqBody)
 
@@ -362,27 +363,27 @@ func query(url, basicAuth, token string, reqBody []byte) ([]byte, error) {
 // datasource configuration page which allows users to verify that
 // a datasource is working as expected.
 func (rd *RocksetDatasource) CheckHealth(ctx context.Context, req *backend.CheckHealthRequest) (*backend.CheckHealthResult, error) {
-	pluginLogger.Debug("CheckHealth")
-	// pluginLogger.Debug(fmt.Sprintf("%#v", req.PluginContext))
-	// pluginLogger.Debug(fmt.Sprintf("%#v", req.PluginContext.User))
-	// pluginLogger.Debug(fmt.Sprintf("%#v", req.PluginContext.AppInstanceSettings))
-	var dat map[string]interface{}
-	if err := json.Unmarshal(req.PluginContext.DataSourceInstanceSettings.JSONData, &dat); err != nil {
-		pluginLogger.Error("get dataSourceInstanceSettings error: %s", err.Error())
-		return healthError("get dataSourceInstanceSettings error: %s", err.Error()), nil
-	}
-
-	basicAuth, _ := dat["basicAuth"].(string)
-
-	token, found := dat["token"].(string)
-	if !found {
-		token = ""
-	}
-
-	if _, err := query(req.PluginContext.DataSourceInstanceSettings.URL, basicAuth, token, []byte("show databases")); err != nil {
-		pluginLogger.Error("failed get connect to tdengine: %s", err.Error())
-		return healthError("failed get connect to tdengine: %s", err.Error()), nil
-	}
+	//pluginLogger.Debug("CheckHealth")
+	//// pluginLogger.Debug(fmt.Sprintf("%#v", req.PluginContext))
+	//// pluginLogger.Debug(fmt.Sprintf("%#v", req.PluginContext.User))
+	//// pluginLogger.Debug(fmt.Sprintf("%#v", req.PluginContext.AppInstanceSettings))
+	//var dat map[string]interface{}
+	//if err := json.Unmarshal(req.PluginContext.DataSourceInstanceSettings.JSONData, &dat); err != nil {
+	//	pluginLogger.Error("get dataSourceInstanceSettings error: %s", err.Error())
+	//	return healthError("get dataSourceInstanceSettings error: %s", err.Error()), nil
+	//}
+	//
+	//basicAuth, _ := dat["basicAuth"].(string)
+	//
+	//token, found := dat["token"].(string)
+	//if !found {
+	//	token = ""
+	//}
+	//
+	//if _, err := query(req.PluginContext.DataSourceInstanceSettings.URL, basicAuth, token, []byte("show databases")); err != nil {
+	//	pluginLogger.Error("failed get connect to tdengine: %s", err.Error())
+	//	return healthError("failed get connect to tdengine: %s", err.Error()), nil
+	//}
 
 	return &backend.CheckHealthResult{
 		Status:  backend.HealthStatusOk,
@@ -432,8 +433,7 @@ func (s *instanceSettings) Dispose() {
 	pluginLogger.Debug("dispose")
 }
 
-const sqlEndPoint = "/rest/sql"
-const utcSqlEndPoint = "/rest/sqlutc"
+const sqlEndPoint = "/v1/device/sql"
 
 var httpStatusErr = errors.New("http status error")
 
@@ -443,79 +443,11 @@ type dbVersion struct {
 	cache sync.Map
 }
 
-type serverVer struct {
-	Data [][]string
-}
-
 func (v *dbVersion) cleanVersion(url string) {
 	v.cache.Delete(url)
 }
 
 func (v *dbVersion) sqlUrl(url, basicAuth, token string) (sqlUrl string, err error) {
-	version, err := v.getVersion(url, basicAuth, token)
-	if err != nil {
-		return "", fmt.Errorf("get sql url error. %v", err)
-	}
-	if is30(version) {
-		sqlUrl = url + sqlEndPoint
-	} else {
-		sqlUrl = url + utcSqlEndPoint
-	}
-
+	sqlUrl = url + sqlEndPoint
 	return
-}
-
-func is30(version string) bool {
-	return strings.HasPrefix(version, "3")
-}
-
-func (v *dbVersion) getVersion(url, basicAuth, token string) (version string, err error) {
-	if cached, ok := v.cache.Load(url); ok {
-		return cached.(string), nil
-	}
-
-	defer func() {
-		if len(version) > 0 && err == nil {
-			v.cache.Store(url, version)
-		}
-	}()
-
-	reqUrl := url + sqlEndPoint
-	if len(token) > 0 {
-		reqUrl = reqUrl + "?token=" + token
-	}
-	req, err := http.NewRequest(http.MethodPost, reqUrl, strings.NewReader("select server_version()"))
-	if err != nil {
-		pluginLogger.Error("create request for url error ", url, err)
-		return "", err
-	}
-	req.Header.Set("Authorization", "Basic "+basicAuth) // cm9vdDp0YW9zZGF0YQ==
-	resp, err := http.DefaultClient.Do(req)
-	if err != nil {
-		pluginLogger.Error("request for server version error ", err)
-		return "", err
-	}
-	defer func() { _ = resp.Body.Close() }()
-	if resp.StatusCode != 200 {
-		pluginLogger.Error("read response data for server version error ", err)
-		return "", fmt.Errorf("%v. http status code %d", httpStatusErr, resp.StatusCode)
-	}
-
-	respData, err := io.ReadAll(resp.Body)
-	if err != nil {
-		pluginLogger.Error("read response data for server version error ", err)
-		return "", err
-	}
-
-	var ver serverVer
-	if err = json.Unmarshal(respData, &ver); err != nil {
-		pluginLogger.Error("unmarshall server version data ", err)
-		return "", err
-	}
-	if len(ver.Data) != 1 || len(ver.Data[0]) != 1 {
-		pluginLogger.Error("get server version data error, resp data is ", string(respData))
-		return "", err
-	}
-
-	return ver.Data[0][0], nil
 }

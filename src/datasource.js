@@ -65,32 +65,12 @@ export class GenericDatasource {
         resolve();
       });
     }
-    if (this.serverVersion === 0) {
-      return this.backendSrv.datasourceRequest({
-        url: this.url + "/sql",
-        data: "select server_version()",
-        method: 'POST',
-      }).then((res) => {
-        if (res.data.data[0][0].startsWith("3")) {
-          this.serverVersion = 3;
-          return this.querySql(params);
-        } else {
-          this.serverVersion = 2;
-          return this.querySqlUtc(params);
-        }
-      }).catch(err => {
-        return err;
-      });
-    } else if (this.serverVersion === 3) {
-      return this.querySql(params);
-    } else {
-      return this.querySqlUtc(params);
-    }
+    return this.querySql(params);
   }
 
   querySql(params) {
     return this.backendSrv.datasourceRequest({
-      url: this.url + "/sql",
+      url: this.url + "/v1/device/sql",
       data: params,
       method: 'POST',
     }).then((result) => {
@@ -101,13 +81,7 @@ export class GenericDatasource {
     });
   }
 
-  querySqlUtc(params) {
-    return this.backendSrv.datasourceRequest({
-      url: this.url + "/sqlutc",
-      data: params,
-      method: 'POST',
-    });
-  }
+
 
   convertResult(src) {
     var dist = {}
@@ -150,7 +124,7 @@ export class GenericDatasource {
   }
 
   generateSql(sql, options) {
-    // console.log('sql',sql);
+    console.log('sql',sql);
     if (!sql || sql.length === 0) {
       return sql;
     }
@@ -355,8 +329,8 @@ export class GenericDatasource {
   }
 
   postQuery(query, response, options) {
-    // console.log('query',query);
-    // console.log('response',response);
+    console.log('query',query);
+    console.log('response1111',response);
     if (!response || !response.data || !response.data.data) {
       return [];
     }

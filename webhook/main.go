@@ -17,7 +17,7 @@ func main() {
 	handler.HandleFunc("/sms", grafana_webhook.HandleWebhook(func(w http.ResponseWriter, b *grafana_webhook.Body) {
 
 		fmt.Printf("Grafana status: %s\n%s\n", b.Title, b.Message)
-		// sendMessage(msg)
+		//sendMessage(msg)
 
 	}, 0))
 
