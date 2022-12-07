@@ -2,9 +2,9 @@
 apiVersion: 1
 
 notifiers:
-  - name: tdinsight-builtin-sms
+  - name: iot-platform-builtin-sms
     type: webhook
-    uid: tdinsight-builtin-sms
+    uid: iot-platform-builtin-sms
     is_default: true
     settings:
       url: http://${SMS_LISTEN_ADDR}/sms
