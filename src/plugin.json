@@ -1,13 +1,13 @@
 {
-  "name": "TDengine",
-  "id": "tdengine-datasource",
+  "name": "Iot Platform",
+  "id": "iot-platform-datasource",
   "type": "datasource",
 
   "metrics": true,
   "annotations": false,
   "alerting": true,
   "backend": true,
-  "executable": "tdengine-datasource",
+  "executable": "iot-platform-datasource",
 
   "routes": [
     {
@@ -39,29 +39,17 @@
       ]
     }
   ],
-  "includes": [
-    {
-      "type": "dashboard",
-      "name": "TDinsight",
-      "path": "dashboards/TDinsight.json"
-    },
-    {
-      "type": "dashboard",
-      "name": "TDinsightV3",
-      "path": "dashboards/TDinsightV3.json"
-    }
-  ],
   "info": {
     "screenshots": [{ "name": "config", "path": "img/howto-add-datasource.png" }],
-    "keywords": ["taosdata", "TDengine"],
-    "description": "Grafana datasource plugin for TDengine",
+    "keywords": ["iot", "IoT", "IoT Platform"],
+    "description": "Grafana datasource plugin for IoT Platform",
     "author": {
-      "name": "TAOS Data Inc.",
-      "url": "https://tdengine.com"
+      "name": "Unbounded Tech Inc.",
+      "url": "https://digiinfr.com/"
     },
     "logos": {
-      "small": "img/taosdata_logo.png",
-      "large": "img/taosdata_logo.png"
+      "small": "img/unbounded_company_logo.png",
+      "large": "img/unbounded_company_logo.png"
     },
     "links": [
       { "name": "GitHub", "url": "https://github.com/taosdata/grafanaplugin" },

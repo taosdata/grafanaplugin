@@ -5,9 +5,9 @@ apiVersion: 1
 # whats available in the database
 datasources:
   # <string, required> name of the datasource. Required
-- name: TDengine
+- name: IoT Platform
   # <string, required> datasource type. Required
-  type: tdengine-datasource
+  type: iot-platform-datasource
   # <string, required> access mode. direct or proxy. Required
   # <int> org id. will be set to 1 if not specified
   orgId: 1
