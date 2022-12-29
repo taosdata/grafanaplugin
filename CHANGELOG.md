@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.2.8] - 2022-12-29
+
+### Bug Fixes
+
+- Delete frame name, otherwise this name will override data column name
+- Tdinsight dashboard show error
+
 ## [3.2.7] - 2022-11-15
 
 ### Bug Fixes
