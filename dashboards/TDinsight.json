@@ -767,7 +767,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select dnodes_total as total,dnodes_alive as alive from log.cluster_info where ts >= $from and ts <= $to",
+          "sql": "select dnodes_total as total,dnodes_alive from log.cluster_info where ts >= $from and ts <= $to",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -828,7 +828,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select mnodes_total as total,mnodes_alive as alive from log.cluster_info where ts >= $from and ts <= $to",
+          "sql": "select mnodes_total as total,mnodes_alive from log.cluster_info where ts >= $from and ts <= $to",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -889,7 +889,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select vgroups_total as total, vgroups_alive as alive from log.cluster_info where ts >= $from and ts <= $to",
+          "sql": "select vgroups_total as total, vgroups_alive from log.cluster_info where ts >= $from and ts <= $to",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -950,7 +950,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select vnodes_total as total, vnodes_alive as alive from log.cluster_info where ts >= $from and ts <= $to",
+          "sql": "select vnodes_total as total, vnodes_alive from log.cluster_info where ts >= $from and ts <= $to",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -2434,7 +2434,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select avg(dnodes_total) as total, avg(dnodes_alive) as alive from log.cluster_info where ts >= $from and ts <= $to interval($interval) fill(null)",
+          "sql": "select avg(dnodes_total) as total, avg(dnodes_alive) as dnodes_alive from log.cluster_info where ts >= $from and ts <= $to interval($interval) fill(null)",
           "target": "select metric",
           "type": "timeserie"
         }
@@ -2767,7 +2767,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select avg(mnodes_total) as total, avg(mnodes_alive) as alive from log.cluster_info where ts >= $from and ts <= $to interval($interval) fill(null)",
+          "sql": "select avg(mnodes_total) as total, avg(mnodes_alive) as mnodes_alive from log.cluster_info where ts >= $from and ts <= $to interval($interval) fill(null)",
           "target": "select metric",
           "type": "timeserie"
         }
