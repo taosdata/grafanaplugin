@@ -192,10 +192,10 @@ export class GenericDatasource {
     }
     sql = sql.replace(/\$interval/g, intervalMs);
 
-    const allVaribles = this.templateSrv.getVariables ? this.templateSrv.getVariables() : this.templateSrv.variables || [];
-    for (let i = 0; i < allVaribles.length; i++) {
-      if (allVaribles[i].current && allVaribles[i].current.value) {
-        sql = sql.replace("$" + allVaribles[i].name, allVaribles[i].current.value);
+    const allVariables = this.templateSrv.getVariables ? this.templateSrv.getVariables() : this.templateSrv.variables || [];
+    for (let i = 0; i < allVariables.length; i++) {
+      if (allVariables[i].current && allVariables[i].current.value) {
+        sql = sql.replace("$" + allVariables[i].name, allVariables[i].current.value);
       }
     }
 

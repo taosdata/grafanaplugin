@@ -1636,7 +1636,7 @@
     },
     {
       "datasource": "TDengine",
-      "description": "taosd  max  memery  last 10 minutes",
+      "description": "taosd  max  memory  last 10 minutes",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2003,7 +2003,7 @@
     },
     {
       "datasource": "TDengine",
-      "description": "taosd  max  memery  last 10 minutes",
+      "description": "taosd  max  memory  last 10 minutes",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2065,12 +2065,12 @@
       ],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Max Memory  Usage of taosd in Last 5 minute",
+      "title": "Max Memory Usage of taosd in Last 5 minute",
       "type": "gauge"
     },
     {
       "datasource": "TDengine",
-      "description": "taosd  max  memery  last 10 minutes",
+      "description": "taosd max memory last 10 minutes",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3120,7 +3120,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Requets Count per Minutes $fqdn",
+      "title": "Requests Count per Minutes $fqdn",
       "tooltip": {
         "shared": true,
         "sort": 0,
