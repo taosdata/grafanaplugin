@@ -20,7 +20,7 @@ datasources:
   url: $TDENGINE_API
   # <bool> mark as default datasource. Max one per org
   isDefault: true
-  # <map> to store sensitive informations
+  # <map> to store sensitive information
   secureJsonData:
     # <string> a redundant url configuration. Required.
     url: $TDENGINE_API

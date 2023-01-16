@@ -126,7 +126,7 @@ func transcode(in, out interface{}) {
 }
 
 // QueryData handles multiple queries and returns multiple responses.
-// req contains the queries []DataQuery (where each query contains RefID as a unique identifer).
+// req contains the queries []DataQuery (where each query contains RefID as a unique identifier).
 // The QueryDataResponse contains a map of RefID to the response for each query, and each response
 // contains Frames ([]*Frame).
 func (rd *RocksetDatasource) QueryData(ctx context.Context, req *backend.QueryDataRequest) (*backend.QueryDataResponse, error) {
@@ -149,8 +149,8 @@ func (rd *RocksetDatasource) QueryData(ctx context.Context, req *backend.QueryDa
 				pluginLogger.Error("query data: %w", err)
 				return nil, fmt.Errorf("query data: %w", err)
 			} else if resp, err := makeResponse(res, alias); err != nil {
-				pluginLogger.Error("make reponse: %w", err)
-				return nil, fmt.Errorf("make reponse: %w", err)
+				pluginLogger.Error("make response: %w", err)
+				return nil, fmt.Errorf("make response: %w", err)
 			} else {
 				response.Responses[req.Queries[i].RefID] = resp
 			}

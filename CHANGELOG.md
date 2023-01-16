@@ -167,7 +167,7 @@ All notable changes to this project will be documented in this file.
 
 ### [TD-14180]<fix>
 
-- Fix cpu and memery percent in taosAdapter (#108)
+- Fix cpu and memory percent in taosAdapter (#108)
 
 ### [TDREL-24]<docs>
 
