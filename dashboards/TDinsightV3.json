@@ -2363,12 +2363,12 @@
           "steppedLine": false,
           "targets": [
             {
-              "colNameFormatStr": "",
+              "colNameFormatStr": "vgroup_{{vgroup_id}}",
               "colNameToGroup": "vgroup_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, max(tables_num) as tables_num from $database.vgroups_info where ts > $from and ts <= $to partition by vgroup_id interval($interval) fill(null)"
+              "sql": "select _wstart as ts, vgroup_id, max(tables_num) as tables_num from $database.vgroups_info where ts > $from and ts <= $to partition by vgroup_id interval($interval) fill(null)"
             }
           ],
           "thresholds": [],
@@ -4197,5 +4197,5 @@
   "timepicker": {},
   "timezone": "",
   "title": "TDinsight for 3.x",
-  "version": 34
+  "version": 35
 }
