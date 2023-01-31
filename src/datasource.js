@@ -1,11 +1,10 @@
 import _ from "lodash";
 
-var moment = require('./js/moment-timezone-with-data');
+const moment = require('./js/moment-timezone-with-data');
 
 export class GenericDatasource {
 
   constructor(instanceSettings, $q, backendSrv, templateSrv) {
-    // console.log("instanceSettings",instanceSettings);
     this.pluginId = instanceSettings.type;
     this.url = instanceSettings.url;
     this.name = instanceSettings.name;
@@ -19,7 +18,6 @@ export class GenericDatasource {
   }
 
   query(options) {
-    // console.log('options',options);
     if (options.timezone) {
       this.timezone = options.timezone === "browser" ? Intl.DateTimeFormat().resolvedOptions().timeZone : options.timezone;
     }
@@ -31,31 +29,16 @@ export class GenericDatasource {
       let sql = this.generateSql(target.sql, options);
       this.generateSqlList[target.refId] = sql;
       return this.request(sql).then(res => this.postQuery(target, res, options));
-    }))
-      .then(data => {
-        let result = this.arithmeticQueries(data, options).flat();
-        // console.log('result',result);
-        return {data: result};
-      }, (err) => {
-        console.log(err);
-        if (err.data && err.data.desc) {
-          throw new Error(err.data.desc);
-        } else {
-          throw new Error(err);
-        }
-      });
-  }
-
-  testDatasource() {
-    return this.request('show databases').then(response => {
-      if (!!response && response.status === 200 && !_.get(response, 'data.code')) {
-        return {status: "success", message: "TDengine Data source is working", title: "Success"};
+    })).then(data => {
+      let result = this.arithmeticQueries(data, options).flat();
+      return {data: result};
+    }, (err) => {
+      console.log(err);
+      if (err.data && err.data.desc) {
+        throw new Error(err.data.desc);
+      } else {
+        throw new Error(err);
       }
-      return {
-        status: "error",
-        message: "TDengine Data source is not working, reason: " + response.data.message,
-        title: "Failed"
-      };
     });
   }
 
@@ -110,7 +93,7 @@ export class GenericDatasource {
   }
 
   convertResult(src) {
-    var dist = {}
+    let dist = {}
     if (src.code === 0) {
       dist.status = "succ";
       dist.column_meta = src.column_meta;
@@ -150,14 +133,13 @@ export class GenericDatasource {
   }
 
   generateSql(sql, options) {
-    // console.log('sql',sql);
     if (!sql || sql.length === 0) {
       return sql;
     }
 
-    var queryStart = "now-1h";
-    var queryEnd = "now";
-    var intervalMs = "20000";
+    let queryStart = "now-1h";
+    let queryEnd = "now";
+    let intervalMs = "20000";
     if (!!options) {
       if (!!options.range && !!options.range.from) {
         queryStart = options.range.from.toISOString();
@@ -202,10 +184,27 @@ export class GenericDatasource {
     return sql;
   }
 
-  long2wide(recv, by) {
+  formatColumn(colFormat, labelName) {
+    while (true) {
+      let fields = colFormat.match(/\{\{(\w+)\}\}/)
+      if (fields === null) {
+        break
+      }
+
+      let placeholder = fields[0]
+      let variable = fields[1]
+      let value = labelName[variable]
+      if (!value) {
+        value = placeholder
+      }
+      colFormat = colFormat.replaceAll(placeholder, value)
+    }
+    return colFormat;
+  }
+
+  long2wide(recv, by, colFormat) {
     let data = recv.data;
     let header = recv.column_meta;
-    let rows = recv.rows;
     if (_.size(by) === 0) {
       return recv;
     }
@@ -218,7 +217,6 @@ export class GenericDatasource {
     }
 
     let [colKick, colLock] = _(header).slice(1).partition(h => _.includes(by, h[0])).value();
-
     let newHeader = [header[0]];
 
     let fields = _.map(colLock, (h, i) => {
@@ -255,9 +253,11 @@ export class GenericDatasource {
       _.forEach(field.labels, label => {
         let newField = _.cloneDeep(field.field);
         let labelName = _(label).keys().filter(k => k !== '__values__').map(key => [key, label[key]]).fromPairs().value();
-        console.log("label:", label, labelName);
-
-        newField[0] = field.name + " " + JSON.stringify(labelName);
+        if (colFormat) {
+          newField[0] = this.formatColumn(colFormat, labelName);
+        } else {
+          newField[0] = field.name + " " + JSON.stringify(labelName);
+        }
         newHeader.push(newField);
       })
     })
@@ -274,7 +274,6 @@ export class GenericDatasource {
     })
 
     return {data: newData, column_meta: newHeader, rows: _.size(ts)};
-    ;
   }
 
   groupDataByColName(dataRecv, query, options) {
@@ -283,7 +282,6 @@ export class GenericDatasource {
       if (!!query.colNameToGroup) {
         groupBy = _.trim(query.colNameToGroup);
       } else {
-
         let m = query.sql.match(/group +by +([^()\s,]+(,\s*\S+)*)\s*[^(,)]*$/);
         if (m) {
           groupBy = m[1];
@@ -293,7 +291,7 @@ export class GenericDatasource {
 
         let by = _(groupBy).split(",").map(s => _.trim(s)).value();
         if (_.size(by) > 0) {
-          return [this.long2wide(dataRecv, by)];
+          return [this.long2wide(dataRecv, by, query.colNameFormatStr)];
         } else {
           return [dataRecv];
         }
@@ -304,7 +302,7 @@ export class GenericDatasource {
 
       let by = _(groupBy).split(",").map(s => _.trim(s)).value();
       if (_.size(by) > 0) {
-        return [this.long2wide(dataRecv, by)];
+        return [this.long2wide(dataRecv, by, query.colNameFormatStr)];
       } else {
         return [dataRecv];
       }
@@ -317,10 +315,8 @@ export class GenericDatasource {
     for (let index = 0; index < dataRecv.column_meta.length; index++) {
       if (dataRecv.column_meta[index][0] === query.colNameToGroup) {
         let groupData = {};
-        let headers = dataRecv.column_meta;
         const data = dataRecv.data;
         const rows = dataRecv.rows;
-        const cols = headers.length;
         for (let rowsIndex = 0; rowsIndex < rows; rowsIndex++) {
           let groupColValue = data[rowsIndex][index];
           if (!groupData[groupColValue]) {
@@ -329,7 +325,7 @@ export class GenericDatasource {
               if (k !== index) {
                 let header = [...dataRecv.column_meta[k]];
                 if (!(k === 0 && header[1] === 9)) {
-                  header[0] = this.getRowAlias(query.colNameFormatStr || "{{colName}}_{{groupValue}}", {
+                  header[0] = this.getRowAlias(query.colNameFormatStr || "prefix_{{group_field}}", {
                     colName: header[0],
                     groupValue: groupColValue
                   }, options);
@@ -337,7 +333,6 @@ export class GenericDatasource {
                 groupData[groupColValue].column_meta.push(header);
               }
             }
-            groupData[groupColValue].column_meta;
           }
           data[rowsIndex].splice(index, 1);
           groupData[groupColValue].data.push(data[rowsIndex]);
@@ -355,8 +350,6 @@ export class GenericDatasource {
   }
 
   postQuery(query, response, options) {
-    // console.log('query',query);
-    // console.log('response',response);
     if (!response || !response.data || !response.data.data) {
       return [];
     }
@@ -403,7 +396,6 @@ export class GenericDatasource {
         }
       }
     }
-    // console.log('result',result);
     return result;
   }
 
@@ -411,7 +403,6 @@ export class GenericDatasource {
     const arithmeticQueries = options.targets.filter((target) => target.queryType === "Arithmetic" && target.expression && !(target.hide === true));
     if (arithmeticQueries.length === 0) return data;
     let targetRefIds = data.flatMap((item) => item.flatMap((field, index) => (index === 0 ? [field.refId, field.refId + '__' + index] : [field.refId + '__' + index])));
-    // console.log('targetRefIds',targetRefIds);
     let targetResults = {};
     data.forEach((item) => {
       item.forEach((field, index) => {
@@ -442,9 +433,6 @@ export class GenericDatasource {
               throw error
             }
           }
-          // else{
-          //   console.log('args not full',targetRefIds,args);
-          // }
           if (!Array.isArray(result)) {
             result = [result];
           }
@@ -462,33 +450,8 @@ export class GenericDatasource {
       });
       return data.concat(dataArithmetic);
     } catch (err) {
-      // console.log(err);
       throw new Error(err);
     }
-  }
-
-  encode(input) {
-    var _keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-    var output = "";
-    var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
-    var i = 0;
-    while (i < input.length) {
-      chr1 = input.charCodeAt(i++);
-      chr2 = input.charCodeAt(i++);
-      chr3 = input.charCodeAt(i++);
-      enc1 = chr1 >> 2;
-      enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
-      enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
-      enc4 = chr3 & 63;
-      if (isNaN(chr2)) {
-        enc3 = enc4 = 64;
-      } else if (isNaN(chr3)) {
-        enc4 = 64;
-      }
-      output = output + _keyStr.charAt(enc1) + _keyStr.charAt(enc2) + _keyStr.charAt(enc3) + _keyStr.charAt(enc4);
-    }
-
-    return output;
   }
 
   generateTimeshift(options, target) {
@@ -504,13 +467,10 @@ export class GenericDatasource {
   }
 
   metricFindQuery(query, options) {
-    // console.log('query',query);
-    // console.log('options',options);
     return this.request(this.generateSql(query, options)).then(res => {
       if (!res || !res.data || !res.data.data) {
         return [];
       } else {
-        // console.log('res',res);
         let values = [];
         for (let i = 0; i < res.data.data.length; i++) {
           values.push({text: '' + res.data.data[i]});
