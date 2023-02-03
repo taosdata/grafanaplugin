@@ -3768,7 +3768,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last_row(gauge) as request_total from $database.taosadapter_restful_http_request_total"
+              "sql": "select sum(gauge) from (select last(gauge) as gauge from taosadapter_restful_http_request_total group by client_ip, endpoint, request_method, request_uri, status_code)"
             }
           ],
           "title": "http_request_total",
