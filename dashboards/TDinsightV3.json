@@ -3697,7 +3697,7 @@
               "sql": "select sum(gauge) from (select last(gauge) as gauge from $database.taosadapter_restful_http_request_total group by client_ip, endpoint, request_method, request_uri, status_code)"
             }
           ],
-          "title": "http_request_total",
+          "title": "Http Request Total",
           "type": "stat"
         },
         {
@@ -3753,7 +3753,7 @@
               "sql": "select sum(gauge) from (select last(gauge) as gauge from $database.taosadapter_restful_http_request_fail group by client_ip, endpoint, request_method, request_uri, status_code)"
             }
           ],
-          "title": "http_request_fail",
+          "title": "Http Request Fail",
           "type": "stat"
         },
         {
@@ -3957,7 +3957,7 @@
               "sql": "select _wstart as ts, avg(gauge) as request_in_flight, endpoint from $database.taosadapter_restful_http_request_in_flight where _ts >= $from and _ts <= $to partition by endpoint interval($interval)"
             }
           ],
-          "title": "http_request_inflight",
+          "title": "Http Request Inflight",
           "type": "timeseries"
         },
         {
@@ -4022,7 +4022,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "http_status_code",
+          "title": "Http Status Code",
           "tooltip": {
             "shared": true,
             "sort": 0,
