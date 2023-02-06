@@ -26,7 +26,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "7.5.10"
+      "version": "7.5.0"
     },
     {
       "type": "panel",
@@ -83,7 +83,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1673832850688,
+  "iteration": 1675653322606,
   "links": [],
   "panels": [
     {
@@ -359,7 +359,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "7.5.0",
       "targets": [
         {
           "colNameFormatStr": "",
@@ -1952,7 +1952,7 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "7.5.10",
+          "pluginVersion": "7.5.0",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -2059,7 +2059,7 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "7.5.10",
+          "pluginVersion": "7.5.0",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -3348,7 +3348,7 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "7.5.10",
+          "pluginVersion": "7.5.0",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -3445,7 +3445,7 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "7.5.10",
+          "pluginVersion": "7.5.0",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -3564,7 +3564,7 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "7.5.10",
+          "pluginVersion": "7.5.0",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -3651,80 +3651,6 @@
               "color": {
                 "mode": "palette-classic"
               },
-              "custom": {
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "drawStyle": "line",
-                "fillOpacity": 0,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "graph": false,
-                  "legend": false,
-                  "tooltip": false
-                },
-                "lineInterpolation": "linear",
-                "lineWidth": 1,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "auto",
-                "spanNulls": false
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  }
-                ]
-              },
-              "unit": "short"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 6,
-            "w": 12,
-            "x": 0,
-            "y": 8
-          },
-          "id": 82,
-          "options": {
-            "graph": {},
-            "legend": {
-              "calcs": [],
-              "displayMode": "list",
-              "placement": "bottom"
-            },
-            "tooltipOptions": {
-              "mode": "single"
-            }
-          },
-          "pluginVersion": "7.5.10",
-          "targets": [
-            {
-              "colNameFormatStr": "request_in_flight_{{endpoint}}",
-              "colNameToGroup": "endpoint",
-              "formatType": "Time series",
-              "queryType": "SQL",
-              "refId": "A",
-              "sql": "select _wstart as ts, avg(gauge) as request_in_flight, endpoint from $database.taosadapter_restful_http_request_in_flight where _ts >= $from and _ts <= $to partition by endpoint interval($interval)"
-            }
-          ],
-          "title": "http_request_inflight",
-          "type": "timeseries"
-        },
-        {
-          "datasource": "${DS_TDENGINE}",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
               "mappings": [],
               "thresholds": {
                 "mode": "absolute",
@@ -3740,8 +3666,8 @@
           },
           "gridPos": {
             "h": 6,
-            "w": 3,
-            "x": 12,
+            "w": 6,
+            "x": 0,
             "y": 8
           },
           "id": 84,
@@ -3771,7 +3697,7 @@
               "sql": "select sum(gauge) from (select last(gauge) as gauge from $database.taosadapter_restful_http_request_total group by client_ip, endpoint, request_method, request_uri, status_code)"
             }
           ],
-          "title": "http_request_total",
+          "title": "Http Request Total",
           "type": "stat"
         },
         {
@@ -3796,8 +3722,8 @@
           },
           "gridPos": {
             "h": 6,
-            "w": 3,
-            "x": 15,
+            "w": 6,
+            "x": 6,
             "y": 8
           },
           "id": 86,
@@ -3827,7 +3753,7 @@
               "sql": "select sum(gauge) from (select last(gauge) as gauge from $database.taosadapter_restful_http_request_fail group by client_ip, endpoint, request_method, request_uri, status_code)"
             }
           ],
-          "title": "http_request_fail",
+          "title": "Http Request Fail",
           "type": "stat"
         },
         {
@@ -3863,8 +3789,8 @@
           },
           "gridPos": {
             "h": 6,
-            "w": 3,
-            "x": 18,
+            "w": 6,
+            "x": 12,
             "y": 8
           },
           "id": 88,
@@ -3880,7 +3806,7 @@
             "showThresholdMarkers": true,
             "text": {}
           },
-          "pluginVersion": "7.5.10",
+          "pluginVersion": "7.5.0",
           "targets": [
             {
               "alias": "cpu_used",
@@ -3928,8 +3854,8 @@
           },
           "gridPos": {
             "h": 6,
-            "w": 3,
-            "x": 21,
+            "w": 6,
+            "x": 18,
             "y": 8
           },
           "id": 90,
@@ -3945,7 +3871,7 @@
             "showThresholdMarkers": true,
             "text": {}
           },
-          "pluginVersion": "7.5.10",
+          "pluginVersion": "7.5.0",
           "targets": [
             {
               "alias": "memory_used",
@@ -3959,6 +3885,179 @@
           ],
           "title": "Memory Used",
           "type": "gauge"
+        },
+        {
+          "datasource": "${DS_TDENGINE}",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "graph": false,
+                  "legend": false,
+                  "tooltip": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 12,
+            "x": 0,
+            "y": 14
+          },
+          "id": 82,
+          "options": {
+            "graph": {},
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltipOptions": {
+              "mode": "single"
+            }
+          },
+          "pluginVersion": "7.5.0",
+          "targets": [
+            {
+              "colNameFormatStr": "request_in_flight_{{endpoint}}",
+              "colNameToGroup": "endpoint",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select _wstart as ts, avg(gauge) as request_in_flight, endpoint from $database.taosadapter_restful_http_request_in_flight where _ts >= $from and _ts <= $to partition by endpoint interval($interval)"
+            }
+          ],
+          "title": "Http Request Inflight",
+          "type": "timeseries"
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": null,
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 6,
+            "w": 12,
+            "x": 12,
+            "y": 14
+          },
+          "hiddenSeries": false,
+          "id": 118,
+          "legend": {
+            "alignAsTable": true,
+            "avg": false,
+            "current": true,
+            "max": true,
+            "min": true,
+            "rightSide": true,
+            "show": true,
+            "total": true,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "7.5.0",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "colNameFormatStr": "{{status_code}}",
+              "colNameToGroup": "status_code",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select _wstart as ts, status_code, count(*) from $database.taosadapter_restful_http_request_total where _ts >= $from and _ts <= $to partition by status_code interval($interval) fill(null)"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Http Status Code",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
         }
       ],
       "title": "TaosAdapter",
@@ -3966,7 +4065,7 @@
     }
   ],
   "refresh": "30s",
-  "schemaVersion": 37,
+  "schemaVersion": 27,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -4197,5 +4296,5 @@
   "timepicker": {},
   "timezone": "",
   "title": "TDinsight for 3.x",
-  "version": 35
+  "version": 36
 }
