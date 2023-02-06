@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -96,7 +97,7 @@ func isTimestampType(typeNum int) bool {
 
 // newDatasource returns datasource.ServeOpts.
 func newDatasource() datasource.ServeOpts {
-	// creates a instance manager for your plugin. The function passed
+	// creates an instance manager for your plugin. The function passed
 	// into `NewInstanceManger` is called when the instance is created
 	// for the first time or when a datasource configuration changed.
 	im := datasource.NewInstanceManager(newDataSourceInstance)
@@ -141,56 +142,77 @@ func (rd *RocksetDatasource) QueryData(ctx context.Context, req *backend.QueryDa
 
 	response := backend.NewQueryDataResponse()
 	for i := 0; i < len(req.Queries); i++ {
-		if sql, alias, err := generateSql(req.Queries[i]); err != nil {
+		queryDataJson, err := getQueryJson(req.Queries[i])
+		if err != nil {
 			pluginLogger.Error("generateSql error: %w", err)
-			return nil, fmt.Errorf("generateSql error: %w", err)
-		} else {
-			if res, err := query(req.PluginContext.DataSourceInstanceSettings.URL, dat.BasicAuth, dat.Token, []byte(sql)); err != nil {
-				pluginLogger.Error("query data: %w", err)
-				return nil, fmt.Errorf("query data: %w", err)
-			} else if resp, err := makeResponse(res, alias); err != nil {
-				pluginLogger.Error("make response: %w", err)
-				return nil, fmt.Errorf("make response: %w", err)
-			} else {
-				response.Responses[req.Queries[i].RefID] = resp
-			}
+			return nil, fmt.Errorf("generateSql error: %v", err)
 		}
+		res, err := query(req.PluginContext.DataSourceInstanceSettings.URL, dat.BasicAuth, dat.Token, []byte(queryDataJson.Sql))
+		if err != nil {
+			pluginLogger.Error("query data: %w", err)
+			return nil, fmt.Errorf("query data: %w", err)
+		}
+		formatedRes, err := formatData(res, queryDataJson.Sql, queryDataJson.ColNameFormatStr, queryDataJson.ColNameToGroup)
+		if err != nil {
+			pluginLogger.Error("format group data error: %w", err)
+			return nil, fmt.Errorf("format group data error: %w", err)
+		}
+		resp, err := makeResponse(formatedRes, queryDataJson.Alias)
+		if err != nil {
+			pluginLogger.Error("make response: %w", err)
+			return nil, fmt.Errorf("make response: %w", err)
+		}
+		response.Responses[req.Queries[i].RefID] = resp
 	}
 	return response, nil
 }
 
-func generateSql(query backend.DataQuery) (sql, alias string, err error) {
-	var queryDataJson map[string]interface{}
-	// pluginLogger.Debug(fmt.Sprintf("req.Queries.JSON:%+v", string(query.JSON)))
-	if err = json.Unmarshal(query.JSON, &queryDataJson); err != nil {
+type queryJson struct {
+	Alias            string `json:"alias,omitempty"`
+	ColNameFormatStr string `json:"colNameFormatStr,omitempty"`
+	ColNameToGroup   string `json:"colNameToGroup,omitempty"`
+	FormatType       string `json:"formatType,omitempty"`
+	Hide             bool   `json:"hide,omitempty"`
+	IntervalMs       int64  `json:"intervalMs,omitempty"`
+	MaxDataPoints    int64  `json:"maxDataPoints,omitempty"`
+	QueryType        string `json:"queryType,omitempty"`
+	RefID            string `json:"refId,omitempty"`
+	Sql              string `json:"sql,omitempty"`
+}
+
+func getQueryJson(query backend.DataQuery) (*queryJson, error) {
+	var queryDataJson queryJson
+	pluginLogger.Debug(fmt.Sprintf("req.Queries.JSON:%+v", string(query.JSON)))
+	if err := json.Unmarshal(query.JSON, &queryDataJson); err != nil {
 		pluginLogger.Error("get query error: %w", err)
-		return "", "", fmt.Errorf("get query error: %w", err)
+		return nil, fmt.Errorf("get query error: %w", err)
 	}
-	queryType, ok := queryDataJson["queryType"].(string)
-	if ok && queryType != "SQL" {
+	if queryDataJson.QueryType != "SQL" {
 		pluginLogger.Debug("queryType error, only support SQL queryType")
-		return "", "", fmt.Errorf("queryType error, only support SQL queryType")
-	}
-	sql, ok = queryDataJson["sql"].(string)
-	if !ok {
-		pluginLogger.Debug("generateSql can not get SQL")
-		return "", "", fmt.Errorf("generateSql can not get SQL")
-	}
-	if timeZone, err := time.LoadLocation(""); err != nil {
-		pluginLogger.Debug("get time location zone: %w", err)
-		return "", "", fmt.Errorf("get time location zone: %w", err)
-	} else {
-		// pluginLogger.Debug("use timeZone: %v", timeZone)
-		// sql = strings.ReplaceAll(sql, "$interval", fmt.Sprint(query.Interval.Seconds())+"s")  // Do not support $interval,because it always be 0.
-		sql = strings.ReplaceAll(sql, "$from", "'"+fmt.Sprint(query.TimeRange.From.In(timeZone).Format(time.RFC3339Nano))+"'")
-		sql = strings.ReplaceAll(sql, "$begin", "'"+fmt.Sprint(query.TimeRange.From.In(timeZone).Format(time.RFC3339Nano))+"'")
-		sql = strings.ReplaceAll(sql, "$to", "'"+fmt.Sprint(query.TimeRange.To.In(timeZone).Format(time.RFC3339Nano))+"'")
-		sql = strings.ReplaceAll(sql, "$end", "'"+fmt.Sprint(query.TimeRange.To.In(timeZone).Format(time.RFC3339Nano))+"'")
+		return nil, fmt.Errorf("queryType error, only support SQL queryType")
 	}
 
-	// pluginLogger.Debug(sql)
-	alias, _ = queryDataJson["alias"].(string)
-	return sql, alias, nil
+	sql := queryDataJson.Sql
+	if len(sql) == 0 {
+		pluginLogger.Debug("generateSql can not get SQL")
+		return nil, fmt.Errorf("generateSql can not get SQL")
+	}
+	timeZone, err := time.LoadLocation("")
+	if err != nil {
+		pluginLogger.Debug("get time location zone: %w", err)
+		return nil, fmt.Errorf("get time location zone: %w", err)
+	}
+	if query.Interval > 0 {
+		sql = strings.ReplaceAll(sql, "$interval", fmt.Sprint(query.Interval.Seconds())+"s")
+	}
+	sql = strings.ReplaceAll(sql, "$from", "'"+fmt.Sprint(query.TimeRange.From.In(timeZone).Format(time.RFC3339Nano))+"'")
+	sql = strings.ReplaceAll(sql, "$begin", "'"+fmt.Sprint(query.TimeRange.From.In(timeZone).Format(time.RFC3339Nano))+"'")
+	sql = strings.ReplaceAll(sql, "$to", "'"+fmt.Sprint(query.TimeRange.To.In(timeZone).Format(time.RFC3339Nano))+"'")
+	sql = strings.ReplaceAll(sql, "$end", "'"+fmt.Sprint(query.TimeRange.To.In(timeZone).Format(time.RFC3339Nano))+"'")
+	pluginLogger.Debug(sql)
+
+	queryDataJson.Sql = sql
+	return &queryDataJson, nil
 }
 
 func getTypeArray(tp interface{}) interface{} {
@@ -263,18 +285,12 @@ type restResult struct {
 	Rows       int             `json:"rows"`
 }
 
-func makeResponse(body []byte, alias string) (response backend.DataResponse, err error) {
-	var res restResult
-
-	if err = json.Unmarshal(body, &res); err != nil {
-		pluginLogger.Error(fmt.Sprint("parse json error: ", err))
-		return response, fmt.Errorf("get res error: %w", err)
-	}
+func makeResponse(res *restResult, alias string) (response backend.DataResponse, err error) {
 	frame := data.NewFrame("") // do not set name for frame. this name will override the data column name
 
 	aliasList := strings.Split(alias, ",")
 	for i := 0; i < len(res.ColumnMeta); i++ {
-		name := res.ColumnMeta[i][0].(string)
+		name := toString(res.ColumnMeta[i][0])
 		if i > 0 && len(aliasList) >= i && len(aliasList[i-1]) > 0 {
 			name = strings.ReplaceAll(aliasList[i-1], "[[col]]", name)
 		}
@@ -287,7 +303,7 @@ func makeResponse(body []byte, alias string) (response backend.DataResponse, err
 	if len(res.Data) == 0 || len(res.Data[0]) == 0 {
 		return response, nil
 	}
-	tsLayout := res.Data[0][0].(string)
+	tsLayout := toString(res.Data[0][0])
 	timeLayout, err = dateparse.ParseFormat(tsLayout)
 
 	if err != nil {
@@ -295,7 +311,7 @@ func makeResponse(body []byte, alias string) (response backend.DataResponse, err
 	}
 
 	for i := 0; i < len(res.Data); i++ {
-		if res.Data[i][0], err = time.Parse(timeLayout, res.Data[i][0].(string)); err != nil {
+		if res.Data[i][0], err = time.Parse(timeLayout, toString(res.Data[i][0])); err != nil {
 			pluginLogger.Error(fmt.Sprint("parse error:", err))
 			return response, fmt.Errorf("ts parse error: %w", err)
 		}
@@ -317,6 +333,123 @@ func makeResponse(body []byte, alias string) (response backend.DataResponse, err
 	response.Frames = append(response.Frames, frame)
 	return response, nil
 }
+
+var configError = errors.New("query config error")
+
+func formatData(body []byte, sql, formatStr, groupFields string) (*restResult, error) {
+	var res restResult
+	if err := json.Unmarshal(body, &res); err != nil {
+		pluginLogger.Error(fmt.Sprint("parse json error: ", err))
+		return nil, fmt.Errorf("get res error: %w", err)
+	}
+
+	upperSql := strings.ToUpper(sql)
+	if strings.Contains(upperSql, " PARTITION BY ") || strings.Contains(upperSql, " GROUP BY ") {
+		return formatGroupData(&res, formatStr, groupFields)
+	}
+
+	return &res, nil
+}
+
+func formatGroupData(res *restResult, formatStr, groupFields string) (*restResult, error) {
+	if len(groupFields) == 0 {
+		pluginLogger.Error("config error, group fields is nil")
+		return nil, fmt.Errorf("%v, %s", configError, "group_by_column config is null")
+	}
+	groups := strings.Split(groupFields, ",")
+	for i, group := range groups {
+		groups[i] = strings.TrimSpace(group)
+	}
+
+	var timestamps []string
+	var tsIndex int
+	var valueField, valueType string
+	var valueLength int64
+
+	valueIndex := -1
+	tsData := make(map[interface{}]map[string]interface{}, len(res.Data)) // {ts: {group: value}}
+	fieldIndex := make(map[string]int, len(res.ColumnMeta))
+	groupedNames := make(map[string]struct{}, len(res.Data))
+
+	var gotValueField bool
+	for i, colMeta := range res.ColumnMeta {
+		colName := toString(colMeta[0])
+		colType := toString(colMeta[1])
+		fieldIndex[colName] = i
+		if colType == "TIMESTAMP" {
+			tsIndex = i
+			continue
+		}
+
+		if gotValueField {
+			continue
+		}
+		if !inStrSlice(colName, groups) {
+			valueIndex = i
+			valueField = colName
+			valueType = colType
+			valueLength, _ = toInt(colMeta[2])
+			gotValueField = true
+		}
+	}
+
+	if valueIndex == -1 {
+		pluginLogger.Error("config error, unknown value field")
+		return nil, fmt.Errorf("%v, %s", configError, "unknown value field")
+	}
+
+	for _, d := range res.Data {
+		if _, ok := tsData[d[tsIndex]]; !ok {
+			tsData[d[tsIndex]] = make(map[string]interface{})
+			timestamps = append(timestamps, toString(d[tsIndex]))
+		}
+		groupedName := groupedColumnName(d, valueField, formatStr, groups, fieldIndex)
+		groupedNames[groupedName] = struct{}{}
+		value, _ := toFloat(d[valueIndex])
+		tsData[d[tsIndex]][groupedName] = value
+	}
+
+	groupMeta := make([][]interface{}, 0, len(groupedNames)+1)
+	groupMeta = append(groupMeta, res.ColumnMeta[tsIndex])
+	for col := range groupedNames {
+		groupMeta = append(groupMeta, []interface{}{col, valueType, valueLength})
+	}
+
+	groupData := make([][]interface{}, 0, len(timestamps))
+	for _, ts := range timestamps {
+		d := tsData[ts]
+		row := make([]interface{}, len(groupMeta))
+		row[0] = ts
+		for i, m := range groupMeta[1:] {
+			row[i+1] = d[toString(m[0])]
+		}
+		groupData = append(groupData, row)
+	}
+
+	res.Data = groupData
+	res.ColumnMeta = groupMeta
+	res.Rows = len(groupData)
+	return res, nil
+}
+
+func groupedColumnName(data []interface{}, valueField string, formatStr string, groupFields []string, fieldIndex map[string]int) string {
+	if len(formatStr) == 0 {
+		m := make(map[string]interface{}, len(groupFields))
+		for _, field := range groupFields {
+			m[field] = data[fieldIndex[field]]
+		}
+		j, _ := json.Marshal(m)
+		return fmt.Sprintf("%s %s", valueField, string(j))
+	}
+
+	for _, field := range groupFields {
+		value := data[fieldIndex[field]]
+		formatStr = strings.ReplaceAll(formatStr, fmt.Sprintf("{{%s}}", field), toString(value))
+	}
+
+	return formatStr
+}
+
 func query(url, basicAuth, token string, reqBody []byte) ([]byte, error) {
 	var reqBodyBuffer io.Reader = bytes.NewBuffer(reqBody)
 
@@ -353,7 +486,6 @@ func query(url, basicAuth, token string, reqBody []byte) ([]byte, error) {
 		pluginLogger.Error("when writing to [] received error: %v", err)
 		return []byte{}, fmt.Errorf("when writing to [] received error: %v", err)
 	}
-
 	return body, nil
 }
 
@@ -363,21 +495,14 @@ func query(url, basicAuth, token string, reqBody []byte) ([]byte, error) {
 // a datasource is working as expected.
 func (rd *RocksetDatasource) CheckHealth(ctx context.Context, req *backend.CheckHealthRequest) (*backend.CheckHealthResult, error) {
 	pluginLogger.Debug("CheckHealth")
-	// pluginLogger.Debug(fmt.Sprintf("%#v", req.PluginContext))
-	// pluginLogger.Debug(fmt.Sprintf("%#v", req.PluginContext.User))
-	// pluginLogger.Debug(fmt.Sprintf("%#v", req.PluginContext.AppInstanceSettings))
 	var dat map[string]interface{}
 	if err := json.Unmarshal(req.PluginContext.DataSourceInstanceSettings.JSONData, &dat); err != nil {
 		pluginLogger.Error("get dataSourceInstanceSettings error: %s", err.Error())
 		return healthError("get dataSourceInstanceSettings error: %s", err.Error()), nil
 	}
 
-	basicAuth, _ := dat["basicAuth"].(string)
-
-	token, found := dat["token"].(string)
-	if !found {
-		token = ""
-	}
+	basicAuth := toString(dat["basicAuth"])
+	token := toString(dat["token"])
 
 	if _, err := query(req.PluginContext.DataSourceInstanceSettings.URL, basicAuth, token, []byte("show databases")); err != nil {
 		pluginLogger.Error("failed get connect to tdengine: %s", err.Error())
@@ -471,7 +596,7 @@ func is30(version string) bool {
 
 func (v *dbVersion) getVersion(url, basicAuth, token string) (version string, err error) {
 	if cached, ok := v.cache.Load(url); ok {
-		return cached.(string), nil
+		return toString(cached), nil
 	}
 
 	defer func() {
@@ -518,4 +643,76 @@ func (v *dbVersion) getVersion(url, basicAuth, token string) (version string, er
 	}
 
 	return ver.Data[0][0], nil
+}
+
+func inStrSlice(field string, slice []string) bool {
+	for _, s := range slice {
+		if field == s {
+			return true
+		}
+	}
+
+	return false
+}
+
+func toString(a interface{}) string {
+	if a == nil {
+		return ""
+	}
+	switch a := a.(type) {
+	case string:
+		return a
+	case int:
+		return strconv.Itoa(a)
+	case int32:
+		return strconv.FormatInt(int64(a), 10)
+	case int64:
+		return strconv.FormatInt(a, 10)
+	case float32:
+		return strconv.FormatFloat(float64(a), 'f', -1, 64)
+	case float64:
+		return strconv.FormatFloat(a, 'f', -1, 64)
+	case json.Number:
+		return a.String()
+	case []byte:
+		return string(a)
+	default:
+		return fmt.Sprintf("%v", a)
+	}
+}
+
+func toInt(i interface{}) (int64, error) {
+	switch i := i.(type) {
+	case int:
+		return int64(i), nil
+	case int32:
+		return int64(i), nil
+	case int64:
+		return i, nil
+	case float32:
+		return int64(i), nil
+	case float64:
+		return int64(i), nil
+	case string:
+		return strconv.ParseInt(i, 10, 64)
+	default:
+		return 0, fmt.Errorf("unknown type %t", i)
+	}
+}
+
+func toFloat(f interface{}) (float64, error) {
+	switch f := f.(type) {
+	case int:
+		return float64(f), nil
+	case int32:
+		return float64(f), nil
+	case int64:
+		return float64(f), nil
+	case float32:
+		return float64(f), nil
+	case float64:
+		return f, nil
+	default:
+		return 0, fmt.Errorf("unknown type %t", f)
+	}
 }

@@ -3707,12 +3707,12 @@
           "pluginVersion": "7.5.10",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
+              "colNameFormatStr": "request_in_flight_{{endpoint}}",
+              "colNameToGroup": "endpoint",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, avg(gauge) as request_in_flight from $database.taosadapter_restful_http_request_in_flight where _ts >= $from and _ts <= $to interval($interval)"
+              "sql": "select _wstart as ts, avg(gauge) as request_in_flight, endpoint from $database.taosadapter_restful_http_request_in_flight where _ts >= $from and _ts <= $to partition by endpoint interval($interval)"
             }
           ],
           "title": "http_request_inflight",
@@ -3768,7 +3768,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last_row(gauge) as request_total from $database.taosadapter_restful_http_request_total"
+              "sql": "select sum(gauge) from (select last(gauge) as gauge from $database.taosadapter_restful_http_request_total group by client_ip, endpoint, request_method, request_uri, status_code)"
             }
           ],
           "title": "http_request_total",
@@ -3824,7 +3824,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last_row(gauge) as request_fail from $database.taosadapter_restful_http_request_fail"
+              "sql": "select sum(gauge) from (select last(gauge) as gauge from $database.taosadapter_restful_http_request_fail group by client_ip, endpoint, request_method, request_uri, status_code)"
             }
           ],
           "title": "http_request_fail",
@@ -3936,9 +3936,9 @@
           "options": {
             "reduceOptions": {
               "calcs": [
-                "last"
+                "lastNotNull"
               ],
-              "fields": "/^mem_percent$/",
+              "fields": "",
               "values": false
             },
             "showThresholdLabels": true,

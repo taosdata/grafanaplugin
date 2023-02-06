@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"testing"
 	"time"
 
@@ -42,4 +43,148 @@ func TestParseLayout(t *testing.T) {
 			assert.Equal(t, th.out, l, "for in=%v", th.in)
 		}
 	}
+}
+
+func TestFormatData(t *testing.T) {
+	d := `
+{
+    "code": 0,
+    "column_meta": [
+        ["voltage", "INT", 4],
+        ["ts", "TIMESTAMP", 8],
+        ["location", "VARCHAR", 64],
+        ["groupid", "INT", 4]
+    ],
+    "data": [
+        [100, "2023-02-02T08:00:00.000Z", "California.SanJose", 1],
+        [108, "2023-02-02T08:00:01.000Z", "California.SanJose", 1],
+        [108, "2023-02-02T08:00:02.000Z", "California.SanJose", 1],
+        [105, "2023-02-02T08:00:03.000Z", "California.SanJose", 1],
+        [null, "2023-02-02T08:00:04.000Z", "California.SanJose", 1],
+        [109, "2023-02-02T08:00:05.000Z", "California.SanJose", 1],
+        [105, "2023-02-02T08:00:06.000Z", "California.SanJose", 1],
+        [101, "2023-02-02T08:00:07.000Z", "California.SanJose", 1],
+        [null, "2023-02-02T08:00:08.000Z", "California.SanJose", 1],
+        [108, "2023-02-02T08:00:09.000Z", "California.SanJose", 1],
+        [107, "2023-02-02T08:00:10.000Z", "California.SanJose", 1],
+        [105, "2023-02-02T08:00:00.000Z", "California.SanDiego", 1],
+        [106, "2023-02-02T08:00:01.000Z", "California.SanDiego", 1],
+        [100, "2023-02-02T08:00:02.000Z", "California.SanDiego", 1],
+        [107, "2023-02-02T08:00:03.000Z", "California.SanDiego", 1],
+        [109, "2023-02-02T08:00:04.000Z", "California.SanDiego", 1],
+        [null, "2023-02-02T08:00:05.000Z", "California.SanDiego", 1],
+        [102, "2023-02-02T08:00:06.000Z", "California.SanDiego", 1],
+        [null, "2023-02-02T08:00:07.000Z", "California.SanDiego", 1],
+        [109, "2023-02-02T08:00:08.000Z", "California.SanDiego", 1],
+        [105, "2023-02-02T08:00:09.000Z", "California.SanDiego", 1],
+        [101, "2023-02-02T08:00:10.000Z", "California.SanDiego", 1],
+        [null, "2023-02-02T08:00:00.000Z", "California.Cupertino", 1],
+        [null, "2023-02-02T08:00:01.000Z", "California.Cupertino", 1],
+        [null, "2023-02-02T08:00:02.000Z", "California.Cupertino", 1],
+        [null, "2023-02-02T08:00:03.000Z", "California.Cupertino", 1],
+        [null, "2023-02-02T08:00:04.000Z", "California.Cupertino", 1],
+        [null, "2023-02-02T08:00:05.000Z", "California.Cupertino", 1],
+        [106, "2023-02-02T08:00:06.000Z", "California.Cupertino", 1],
+        [105, "2023-02-02T08:00:07.000Z", "California.Cupertino", 1],
+        [109, "2023-02-02T08:00:08.000Z", "California.Cupertino", 1],
+        [null, "2023-02-02T08:00:09.000Z", "California.Cupertino", 1],
+        [102, "2023-02-02T08:00:10.000Z", "California.Cupertino", 1],
+        [null, "2023-02-02T08:00:00.000Z", "California.PaloAlto", 1],
+        [107, "2023-02-02T08:00:01.000Z", "California.PaloAlto", 1],
+        [108, "2023-02-02T08:00:02.000Z", "California.PaloAlto", 1],
+        [100, "2023-02-02T08:00:03.000Z", "California.PaloAlto", 1],
+        [null, "2023-02-02T08:00:04.000Z", "California.PaloAlto", 1],
+        [null, "2023-02-02T08:00:05.000Z", "California.PaloAlto", 1],
+        [null, "2023-02-02T08:00:06.000Z", "California.PaloAlto", 1],
+        [108, "2023-02-02T08:00:07.000Z", "California.PaloAlto", 1],
+        [108, "2023-02-02T08:00:08.000Z", "California.PaloAlto", 1],
+        [108, "2023-02-02T08:00:09.000Z", "California.PaloAlto", 1],
+        [109, "2023-02-02T08:00:10.000Z", "California.PaloAlto", 1],
+        [109, "2023-02-02T08:00:00.000Z", "California.LosAngles", 1],
+        [null, "2023-02-02T08:00:01.000Z", "California.LosAngles", 1],
+        [108, "2023-02-02T08:00:02.000Z", "California.LosAngles", 1],
+        [109, "2023-02-02T08:00:03.000Z", "California.LosAngles", 1],
+        [null, "2023-02-02T08:00:04.000Z", "California.LosAngles", 1],
+        [105, "2023-02-02T08:00:05.000Z", "California.LosAngles", 1],
+        [109, "2023-02-02T08:00:06.000Z", "California.LosAngles", 1],
+        [106, "2023-02-02T08:00:07.000Z", "California.LosAngles", 1],
+        [105, "2023-02-02T08:00:08.000Z", "California.LosAngles", 1],
+        [109, "2023-02-02T08:00:09.000Z", "California.LosAngles", 1],
+        [105, "2023-02-02T08:00:10.000Z", "California.LosAngles", 1],
+        [102, "2023-02-02T08:00:00.000Z", "California.MountainView", 1],
+        [null, "2023-02-02T08:00:01.000Z", "California.MountainView", 1],
+        [null, "2023-02-02T08:00:02.000Z", "California.MountainView", 1],
+        [109, "2023-02-02T08:00:03.000Z", "California.MountainView", 1],
+        [null, "2023-02-02T08:00:04.000Z", "California.MountainView", 1],
+        [null, "2023-02-02T08:00:05.000Z", "California.MountainView", 1],
+        [null, "2023-02-02T08:00:06.000Z", "California.MountainView", 1],
+        [null, "2023-02-02T08:00:07.000Z", "California.MountainView", 1],
+        [109, "2023-02-02T08:00:08.000Z", "California.MountainView", 1],
+        [null, "2023-02-02T08:00:09.000Z", "California.MountainView", 1],
+        [null, "2023-02-02T08:00:10.000Z", "California.MountainView", 1],
+        [null, "2023-02-02T08:00:00.000Z", "California.Campbell", 1],
+        [105, "2023-02-02T08:00:01.000Z", "California.Campbell", 1],
+        [103, "2023-02-02T08:00:02.000Z", "California.Campbell", 1],
+        [null, "2023-02-02T08:00:03.000Z", "California.Campbell", 1],
+        [108, "2023-02-02T08:00:04.000Z", "California.Campbell", 1],
+        [null, "2023-02-02T08:00:05.000Z", "California.Campbell", 1],
+        [107, "2023-02-02T08:00:06.000Z", "California.Campbell", 1],
+        [104, "2023-02-02T08:00:07.000Z", "California.Campbell", 1],
+        [null, "2023-02-02T08:00:08.000Z", "California.Campbell", 1],
+        [104, "2023-02-02T08:00:09.000Z", "California.Campbell", 1],
+        [null, "2023-02-02T08:00:10.000Z", "California.Campbell", 1],
+        [108, "2023-02-02T08:00:00.000Z", "California.Sunnyvale", 1],
+        [null, "2023-02-02T08:00:01.000Z", "California.Sunnyvale", 1],
+        [100, "2023-02-02T08:00:02.000Z", "California.Sunnyvale", 1],
+        [106, "2023-02-02T08:00:03.000Z", "California.Sunnyvale", 1],
+        [103, "2023-02-02T08:00:04.000Z", "California.Sunnyvale", 1],
+        [106, "2023-02-02T08:00:05.000Z", "California.Sunnyvale", 1],
+        [106, "2023-02-02T08:00:06.000Z", "California.Sunnyvale", 1],
+        [108, "2023-02-02T08:00:07.000Z", "California.Sunnyvale", 1],
+        [null, "2023-02-02T08:00:08.000Z", "California.Sunnyvale", 1],
+        [null, "2023-02-02T08:00:09.000Z", "California.Sunnyvale", 1],
+        [104, "2023-02-02T08:00:10.000Z", "California.Sunnyvale", 1],
+        [null, "2023-02-02T08:00:00.000Z", "California.SanFrancisco", 1],
+        [null, "2023-02-02T08:00:01.000Z", "California.SanFrancisco", 1],
+        [105, "2023-02-02T08:00:02.000Z", "California.SanFrancisco", 1],
+        [109, "2023-02-02T08:00:03.000Z", "California.SanFrancisco", 1],
+        [102, "2023-02-02T08:00:04.000Z", "California.SanFrancisco", 1],
+        [107, "2023-02-02T08:00:05.000Z", "California.SanFrancisco", 1],
+        [100, "2023-02-02T08:00:06.000Z", "California.SanFrancisco", 1],
+        [108, "2023-02-02T08:00:07.000Z", "California.SanFrancisco", 1],
+        [108, "2023-02-02T08:00:08.000Z", "California.SanFrancisco", 1],
+        [103, "2023-02-02T08:00:09.000Z", "California.SanFrancisco", 1],
+        [null, "2023-02-02T08:00:10.000Z", "California.SanFrancisco", 1],
+        [101, "2023-02-02T08:00:00.000Z", "California.SantaClara", 1],
+        [109, "2023-02-02T08:00:01.000Z", "California.SantaClara", 1],
+        [null, "2023-02-02T08:00:02.000Z", "California.SantaClara", 1],
+        [null, "2023-02-02T08:00:03.000Z", "California.SantaClara", 1],
+        [null, "2023-02-02T08:00:04.000Z", "California.SantaClara", 1],
+        [102, "2023-02-02T08:00:05.000Z", "California.SantaClara", 1],
+        [null, "2023-02-02T08:00:06.000Z", "California.SantaClara", 1],
+        [null, "2023-02-02T08:00:07.000Z", "California.SantaClara", 1],
+        [null, "2023-02-02T08:00:08.000Z", "California.SantaClara", 1],
+        [null, "2023-02-02T08:00:09.000Z", "California.SantaClara", 1],
+        [104, "2023-02-02T08:00:10.000Z", "California.SantaClara", 1]
+    ],
+    "rows": 110
+}
+`
+	formatStr := "voltage_{{location}}_{{groupid}}"
+	groupFields := "location, groupid"
+	querySql := "select _wstart as ts, max(voltage) as voltage, location, groupid from power.meters " +
+		"where ts>='2023-02-02T08:00:00' and ts <= '2023-02-02T08:00:10' " +
+		"partition by location, groupid interval(1s) fill(null)"
+	groupData, err := formatData([]byte(d), querySql, formatStr, groupFields)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if groupData.Rows != 11 {
+		t.Fatal("fail")
+	}
+	if len(groupData.ColumnMeta) != len(groupData.Data[0]) {
+		t.Fatal("fail")
+	}
+	j, _ := json.Marshal(groupData)
+	t.Log(string(j))
 }
