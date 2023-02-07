@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.2.9] - 2023-02-06
+
+### Bug Fixes
+
+- Tdinsight v3.x support grafana 7.x (#170)
+- Fix http request dashboard
+
+### Enhancements
+
+- Support multi dimension alert
+- Add http_status_code dashboard (#173)
+
+### Features
+
+- Support set legend aliais by setting formatstr
+
 ## [3.2.8] - 2022-12-29
 
 ### Bug Fixes
@@ -167,7 +183,7 @@ All notable changes to this project will be documented in this file.
 
 ### [TD-14180]<fix>
 
-- Fix cpu and memory percent in taosAdapter (#108)
+- Fix cpu and memery percent in taosAdapter (#108)
 
 ### [TDREL-24]<docs>
 
