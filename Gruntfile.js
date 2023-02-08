@@ -29,6 +29,11 @@ module.exports = function (grunt) {
       pluginDef: {
         src: ['PLUGIN-README.md'],
         dest: 'dist/README.md'
+      },
+      license_to_dist: {
+        expand: true,
+        src: ['LICENSE'],
+        dest: 'dist/'
       }
     },
 
@@ -86,5 +91,5 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('default', ['clean', 'copy:src_to_dist', "copy:dashboards",
-    'copy:examples_to_dist', 'copy:pluginDef', 'babel', 'mochaTest']);
+    'copy:examples_to_dist', 'copy:pluginDef', 'copy:license_to_dist', 'babel', 'mochaTest']);
 };
