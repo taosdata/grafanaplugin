@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [3.2.9] - 2023-02-06
+## [3.2.9] - 2023-02-08
 
 ### Bug Fixes
 
@@ -17,6 +17,10 @@ All notable changes to this project will be documented in this file.
 ### Features
 
 - Support set legend aliais by setting formatstr
+
+### Build
+
+- Add license to dist
 
 ## [3.2.8] - 2022-12-29
 
