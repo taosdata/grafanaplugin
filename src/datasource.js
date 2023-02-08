@@ -185,19 +185,14 @@ export class GenericDatasource {
   }
 
   formatColumn(colFormat, labelName) {
-    while (true) {
-      let fields = colFormat.match(/\{\{(\w+)\}\}/)
-      if (fields === null) {
-        break
+    let placeholders = colFormat.match(/\{\{(\w+)\}\}/g)
+    for (let placeholder of placeholders) {
+      let field = placeholder.replaceAll('{{', '')
+      field = field.replaceAll('}}', '')
+      let value = labelName[field]
+      if (value) {
+        colFormat = colFormat.replaceAll(placeholder, value)
       }
-
-      let placeholder = fields[0]
-      let variable = fields[1]
-      let value = labelName[variable]
-      if (!value) {
-        value = placeholder
-      }
-      colFormat = colFormat.replaceAll(placeholder, value)
     }
     return colFormat;
   }
