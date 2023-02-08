@@ -175,7 +175,9 @@ func TestFormatData(t *testing.T) {
 	querySql := "select _wstart as ts, max(voltage) as voltage, location, groupid from power.meters " +
 		"where ts>='2023-02-02T08:00:00' and ts <= '2023-02-02T08:00:10' " +
 		"partition by location, groupid interval(1s) fill(null)"
-	groupData, err := formatData([]byte(d), querySql, formatStr, groupFields)
+	var res restResult
+	_ = json.Unmarshal([]byte(d), &res)
+	groupData, err := formatData(&res, querySql, formatStr, groupFields)
 	if err != nil {
 		t.Fatal(err)
 	}
