@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - Tdinsight v3.x support grafana 7.x (#170)
 - Fix http request dashboard
 - Fix block while format column name
+- Add error message when query data eror
 
 ### Enhancements
 
