@@ -147,7 +147,7 @@ func (rd *RocksetDatasource) QueryData(ctx context.Context, req *backend.QueryDa
 			pluginLogger.Error("generateSql error: %w", err)
 			return nil, fmt.Errorf("generateSql error: %v", err)
 		}
-		res, err := query(req.PluginContext.DataSourceInstanceSettings.URL, dat.BasicAuth, dat.Token, []byte(queryDataJson.Sql))
+		res, err := query(req.PluginContext.DataSourceInstanceSettings.URL, dat.BasicAuth, dat.Token, queryDataJson.Sql)
 		if err != nil {
 			pluginLogger.Error("query data: %w", err)
 			return nil, fmt.Errorf("query data: %w", err)
@@ -336,19 +336,13 @@ func makeResponse(res *restResult, alias string) (response backend.DataResponse,
 
 var configError = errors.New("query config error")
 
-func formatData(body []byte, sql, formatStr, groupFields string) (*restResult, error) {
-	var res restResult
-	if err := json.Unmarshal(body, &res); err != nil {
-		pluginLogger.Error(fmt.Sprint("parse json error: ", err))
-		return nil, fmt.Errorf("get res error: %w", err)
-	}
-
+func formatData(res *restResult, sql, formatStr, groupFields string) (*restResult, error) {
 	upperSql := strings.ToUpper(sql)
 	if strings.Contains(upperSql, " PARTITION BY ") || strings.Contains(upperSql, " GROUP BY ") {
-		return formatGroupData(&res, formatStr, groupFields)
+		return formatGroupData(res, formatStr, groupFields)
 	}
 
-	return &res, nil
+	return res, nil
 }
 
 func formatGroupData(res *restResult, formatStr, groupFields string) (*restResult, error) {
@@ -450,8 +444,8 @@ func groupedColumnName(data []interface{}, valueField string, formatStr string, 
 	return formatStr
 }
 
-func query(url, basicAuth, token string, reqBody []byte) ([]byte, error) {
-	var reqBodyBuffer io.Reader = bytes.NewBuffer(reqBody)
+func query(url, basicAuth, token string, sql string) (*restResult, error) {
+	reqBodyBuffer := strings.NewReader(sql)
 
 	sqlUrl, err := defaultDbVersion.sqlUrl(url, basicAuth, token)
 	if token != "" {
@@ -460,7 +454,7 @@ func query(url, basicAuth, token string, reqBody []byte) ([]byte, error) {
 	req, err := http.NewRequest("POST", sqlUrl, reqBodyBuffer)
 	if err != nil {
 		pluginLogger.Error(fmt.Sprintf("query %s error: %v", sqlUrl, err))
-		return []byte{}, err
+		return nil, err
 	}
 
 	req.Header.Set("Authorization", "Basic "+basicAuth) // cm9vdDp0YW9zZGF0YQ==
@@ -469,7 +463,7 @@ func query(url, basicAuth, token string, reqBody []byte) ([]byte, error) {
 	resp, err := client.Do(req)
 	if err != nil {
 		pluginLogger.Error(fmt.Sprintf("query %s error: %v", sqlUrl, err))
-		return []byte{}, err
+		return nil, err
 	}
 	defer resp.Body.Close()
 
@@ -478,15 +472,27 @@ func query(url, basicAuth, token string, reqBody []byte) ([]byte, error) {
 			defaultDbVersion.cleanVersion(url)
 		}
 		pluginLogger.Error("when writing to [] received status code: %d", resp.StatusCode)
-		return []byte{}, fmt.Errorf("when writing to [] received status code: %d", resp.StatusCode)
+		return nil, fmt.Errorf("when writing to [] received status code: %d", resp.StatusCode)
 	}
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		pluginLogger.Error("when writing to [] received error: %v", err)
-		return []byte{}, fmt.Errorf("when writing to [] received error: %v", err)
+		return nil, fmt.Errorf("when writing to [] received error: %v", err)
 	}
-	return body, nil
+
+	var result restResult
+	if err = json.Unmarshal(body, &result); err != nil {
+		return nil, err
+	}
+
+	if result.Code != 0 {
+		err = fmt.Errorf("query data by sql %s error, response code is %d ", sql, result.Code)
+		pluginLogger.Error("", err)
+		return nil, err
+	}
+
+	return &result, nil
 }
 
 // CheckHealth handles health checks sent from Grafana to the plugin.
@@ -504,7 +510,7 @@ func (rd *RocksetDatasource) CheckHealth(ctx context.Context, req *backend.Check
 	basicAuth := toString(dat["basicAuth"])
 	token := toString(dat["token"])
 
-	if _, err := query(req.PluginContext.DataSourceInstanceSettings.URL, basicAuth, token, []byte("show databases")); err != nil {
+	if _, err := query(req.PluginContext.DataSourceInstanceSettings.URL, basicAuth, token, "show databases"); err != nil {
 		pluginLogger.Error("failed get connect to tdengine: %s", err.Error())
 		return healthError("failed get connect to tdengine: %s", err.Error()), nil
 	}
