@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   tdengine:
-    image: tdengine/tdengine:2.4.0.16
+    image: tdengine/tdengine:3.0.2.5
     environment:
       TAOS_FQDN: localhsot
   grafana:
