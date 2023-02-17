@@ -23,8 +23,9 @@ export function ConfigEditor(props: EditorProps): ReactElement {
                     <FormField label='Host'
                                labelWidth={7}
                                inputWidth={23}
-                               // tooltip="datasource's host"
+                        // tooltip="datasource's host"
                                onChange={onChangeUrl}
+                               onBlur={onChangeUrl}
                                value={secureJsonData?.url || ''}
                                placeholder='http://localhost:6041'
                     />
@@ -34,8 +35,9 @@ export function ConfigEditor(props: EditorProps): ReactElement {
                         <FormField label='User'
                                    labelWidth={7}
                                    inputWidth={8}
-                                   // tooltip="datasource's username"
+                            // tooltip="datasource's username"
                                    onChange={onChangeUser}
+                                   onBlur={onChangeUser}
                                    value={secureJsonData?.user || ''}
                         />
                     </div>
@@ -44,11 +46,12 @@ export function ConfigEditor(props: EditorProps): ReactElement {
                             // isConfigured={(secureJsonFields && secureJsonFields.password) as boolean}
                                          value={secureJsonData?.password || ''}
                                          label='Password'
-                                         // tooltip="datasource's token"
+                            // tooltip="datasource's token"
                                          labelWidth={7}
                                          inputWidth={8}
                                          onReset={onResetPassword}
                                          onChange={onChangePassword}
+                                         onBlur={onChangePassword}
                         />
                     </div>
                 </div>
@@ -57,12 +60,13 @@ export function ConfigEditor(props: EditorProps): ReactElement {
                         // isConfigured={(secureJsonFields && secureJsonFields.password) as boolean}
                                      value={secureJsonData?.token || ''}
                                      label='Cloud Token'
-                                     // tooltip="datasource's cloud token"
+                        // tooltip="datasource's cloud token"
                                      placeholder=''
                                      labelWidth={7}
                                      inputWidth={23}
                                      onReset={onResetToken}
                                      onChange={onChangeToken}
+                                     onBlur={onChangeToken}
                     />
                 </div>
             </FieldSet>

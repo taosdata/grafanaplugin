@@ -12,12 +12,16 @@ export function QueryEditor(props: EditorProps): ReactElement {
     }
 
     const onChangeQueryType = useChangeSelectableValue(props, {propertyName: 'queryType', runQuery: true})
-    const onChangeAlias = useChangeOptions(props, {propertyName: 'alias', runQuery: true})
-    const onChangeSql = useChangeOptions(props, {propertyName: 'sql', runQuery: true})
+    const onChangeAlias = useChangeOptions(props, {propertyName: 'alias', runQuery: false})
+    const onblurAlias = useChangeOptions(props, {propertyName: 'alias', runQuery: true})
+    const onChangeSql = useChangeOptions(props, {propertyName: 'sql', runQuery: false})
+    const onblurSql = useChangeOptions(props, {propertyName: 'sql', runQuery: true})
     const onchangeTimeShiftPeriod = useChangeOptions(props, {propertyName: 'timeShiftPeriod', runQuery: false})
     const onchangeTimeShiftUnit = useChangeSelectableValue(props, {propertyName: 'timeShiftUnit', runQuery: false})
-    const onchangeGroupColumns = useChangeOptions(props, {propertyName: 'colNameToGroup', runQuery: true})
-    const onchangeFormatStr = useChangeOptions(props, {propertyName: 'colNameFormatStr', runQuery: true})
+    const onchangeGroupColumns = useChangeOptions(props, {propertyName: 'colNameToGroup', runQuery: false})
+    const onblurGroupColumns = useChangeOptions(props, {propertyName: 'colNameToGroup', runQuery: true})
+    const onchangeFormatStr = useChangeOptions(props, {propertyName: 'colNameFormatStr', runQuery: false})
+    const onblurFormatStr = useChangeOptions(props, {propertyName: 'colNameFormatStr', runQuery: true})
 
     const ShowGeneratedSql = () => {
         const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -73,7 +77,6 @@ export function QueryEditor(props: EditorProps): ReactElement {
                 <InlineField id="queryType" label='Query Type' labelWidth={20}>
                     <Select
                         inputId={"queryType"}
-
                         width={20}
                         options={queryTypeOptions}
                         defaultValue={queryTypeOptions[0]}
@@ -85,6 +88,7 @@ export function QueryEditor(props: EditorProps): ReactElement {
                     <Input
                         width={20}
                         onChange={onChangeAlias}
+                        onBlur={onblurAlias}
                         value={query.alias ?? ''}
                         placeholder={"Naming pattern: a,{{'{{'}}col}}"}
                     />
@@ -102,6 +106,7 @@ export function QueryEditor(props: EditorProps): ReactElement {
                         className={'min-width-30 max-width-100 gf-form--grow'}
                         placeholder={'select avg(mem_system)  from log.dnodes_info where ts >= $from and ts < $to interval($interval)'}
                         onChange={onChangeSql}
+                        onBlur={onblurSql}
                         value={query.sql}
                     />
                 </InlineField>
@@ -117,6 +122,7 @@ export function QueryEditor(props: EditorProps): ReactElement {
                     <Input
                         width={20}
                         onChange={onchangeTimeShiftPeriod}
+                        onBlur={onchangeTimeShiftPeriod}
                         value={query.timeShiftPeriod ?? ''}
                         placeholder={'period number like: 1'}
                     />
@@ -140,6 +146,7 @@ export function QueryEditor(props: EditorProps): ReactElement {
                     <Input
                         width={20}
                         onChange={onchangeGroupColumns}
+                        onBlur={onblurGroupColumns}
                         value={query.colNameToGroup ?? ''}
                     />
                 </InlineField>
@@ -147,8 +154,9 @@ export function QueryEditor(props: EditorProps): ReactElement {
                     <Input
                         width={20}
                         onChange={onchangeFormatStr}
+                        onBlur={onblurFormatStr}
                         value={query.colNameFormatStr ?? ''}
-                        placeholder={'prefix_{{\'{{\'}}group_field}}_suffix'}
+                        placeholder={'prefix_{{group_field}}_suffix'}
                     />
                 </InlineField>
                 <div className="gf-form gf-form--grow">

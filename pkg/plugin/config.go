@@ -49,6 +49,40 @@ const (
 	CTypeUnsignedBigIntStr   = "BIGINT UNSIGNED"
 )
 
+var cTypeMapping = map[int]string{
+	CTypeBool:             CTypeBoolStr,
+	CTypeTinyInt:          CTypeTinyIntStr,
+	CTypeSmallInt:         CTypeSmallIntStr,
+	CTypeInt:              CTypeIntStr,
+	CTypeBigInt:           CTypeBigIntStr,
+	CTypeFloat:            CTypeFloatStr,
+	CTypeDouble:           CTypeDoubleStr,
+	CTypeBinary:           CTypeBinaryStr,
+	CTypeTimestamp:        CTypeTimestampStr,
+	CTypeNChar:            CTypeNCharStr,
+	CTypeUnsignedTinyInt:  CTypeUnsignedTinyIntStr,
+	CTypeUnsignedSmallInt: CTypeUnsignedSmallIntStr,
+	CTypeUnsignedInt:      CTypeUnsignedIntStr,
+	CTypeUnsignedBigInt:   CTypeUnsignedBigIntStr,
+}
+
+func cType2CTypeStr(typeNum int) string {
+	return cTypeMapping[typeNum]
+}
+
+func trans2CTypeStr(t any) string {
+	switch t := t.(type) {
+	case string:
+		return t
+	case int64:
+		return cType2CTypeStr(int(t))
+	case float64:
+		return cType2CTypeStr(int(t))
+	default:
+		return toString(t)
+	}
+}
+
 // Check if the target type of `typeNum` is boolean or not.
 func isBoolType(typeNum int) bool {
 	return typeNum == CTypeBool

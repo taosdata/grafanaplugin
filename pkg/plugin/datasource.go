@@ -245,6 +245,9 @@ func (d *Datasource) formatGroupData(res *dataResult, query *queryModel) error {
 
 	var gotValueField bool
 	for i, colMeta := range res.ColumnMeta {
+		// trans columnMeta num to str for 2.x
+		colMeta[1] = trans2CTypeStr(colMeta[1])
+
 		colName := toString(colMeta[0])
 		colType := toString(colMeta[1])
 		fieldIndex[colName] = i
