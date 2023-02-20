@@ -68,12 +68,15 @@ jobs:
           version: latest
           args: coverage
 
-      - name: Build backend
-        if: steps.check-for-backend.outputs.has-backend == 'true'
-        uses: magefile/mage-action@v1
-        with:
-          version: latest
-          args: buildAll
+#      - name: Build backend
+#        if: steps.check-for-backend.outputs.has-backend == 'true'
+#        uses: magefile/mage-action@v1
+#        with:
+#          version: latest
+#          args: buildAll
+
+      - name: Build dist
+        run: yarn build:dist
 
       - name: Sign plugin
         run: yarn sign
