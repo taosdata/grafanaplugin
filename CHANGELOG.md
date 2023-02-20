@@ -4,17 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## [3.3.0] - 2023-02-20
 
-### Bug Fixes
-
-- Revert `testDatasource` function
-
 ### Enhancements
 
 - Refactor by grafana/create-plugin (#179)
-
-### Build
-
-- Fix release workflow for missing module.js.map
 
 ## [3.2.9] - 2023-02-08
 
