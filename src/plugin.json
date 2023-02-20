@@ -1,29 +1,25 @@
 {
-  "name": "TDengine",
-  "id": "tdengine-datasource",
+  "$schema": "https://raw.githubusercontent.com/grafana/grafana/master/docs/sources/developers/plugins/plugin.schema.json",
   "type": "datasource",
-
+  "name": "TDengine Datasource",
+  "id": "tdengine-datasource",
   "metrics": true,
-  "annotations": false,
-  "alerting": true,
   "backend": true,
+  "alerting": true,
   "executable": "tdengine-datasource",
-
-  "routes": [
+  "includes": [
     {
-      "path": "sqlutc",
-      "url": "{{ .SecureJsonData.url }}/rest/sqlutc",
-      "method": "POST",
-      "headers": [
-        {
-          "name": "Authorization",
-          "content": "Basic {{ .SecureJsonData.basicAuth }}"
-        }
-      ],
-      "urlParams": [
-        { "name": "token", "content": "{{ .SecureJsonData.token }}" }
-      ]
+      "type": "dashboard",
+      "name": "TDinsightV3",
+      "path": "dashboards/TDinsightV3.json"
     },
+    {
+      "type": "dashboard",
+      "name": "TDinsight",
+      "path": "dashboards/TDinsight.json"
+    }
+  ],
+  "routes": [
     {
       "path": "sql",
       "url": "{{ .SecureJsonData.url }}/rest/sql",
@@ -35,43 +31,65 @@
         }
       ],
       "urlParams": [
-        { "name": "token", "content": "{{ .SecureJsonData.token }}" }
+        {
+          "name": "token",
+          "content": "{{ .SecureJsonData.token }}"
+        }
+      ]
+    },
+    {
+      "path": "sqlutc",
+      "url": "{{ .SecureJsonData.url }}/rest/sqlutc",
+      "method": "POST",
+      "headers": [
+        {
+          "name": "Authorization",
+          "content": "Basic {{ .SecureJsonData.basicAuth }}"
+        }
+      ],
+      "urlParams": [
+        {
+          "name": "token",
+          "content": "{{ .SecureJsonData.token }}"
+        }
       ]
     }
   ],
-  "includes": [
-    {
-      "type": "dashboard",
-      "name": "TDinsight",
-      "path": "dashboards/TDinsight.json"
-    },
-    {
-      "type": "dashboard",
-      "name": "TDinsightV3",
-      "path": "dashboards/TDinsightV3.json"
-    }
-  ],
   "info": {
-    "screenshots": [{ "name": "config", "path": "img/howto-add-datasource.png" }],
-    "keywords": ["taosdata", "TDengine"],
     "description": "Grafana datasource plugin for TDengine",
     "author": {
       "name": "TAOS Data Inc.",
       "url": "https://tdengine.com"
     },
+    "keywords": [
+      "taosdata",
+      "TDengine"
+    ],
     "logos": {
       "small": "img/taosdata_logo.png",
       "large": "img/taosdata_logo.png"
     },
     "links": [
-      { "name": "GitHub", "url": "https://github.com/taosdata/grafanaplugin" },
-      { "name": "AGPL-3.0", "url": "https://github.com/taosdata/grafanaplugin/blob/master/LICENSE" }
+      {
+        "name": "GitHub",
+        "url": "https://github.com/taosdata/grafanaplugin"
+      },
+      {
+        "name": "AGPL-3.0",
+        "url": "https://github.com/taosdata/grafanaplugin/blob/master/LICENSE"
+      }
     ],
-    "version": "3.2.9",
-    "updated": "2023-02-07"
+    "screenshots": [
+      {
+        "name": "config",
+        "path": "img/howto-add-datasource.jpg"
+      }
+    ],
+    "version": "%VERSION%",
+    "updated": "%TODAY%"
   },
-
   "dependencies": {
-    "grafanaDependency": ">=7.3.0"
+    "grafanaDependency": ">=7.5.0",
+    "plugins": []
   }
 }
