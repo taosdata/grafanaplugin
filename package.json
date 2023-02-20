@@ -4,6 +4,7 @@
   "description": "Grafana datasource plugin for TDengine",
   "scripts": {
     "build": "webpack -c ./.config/webpack/webpack.config.ts --env development",
+    "build:prod": "webpack -c ./.config/webpack/webpack.config.ts --env production",
     "build:dist": "webpack -c ./.config/webpack/webpack.config.ts --env production && mage",
     "build:all": "webpack -c ./.config/webpack/webpack.config.ts --env production && mage && npx --yes @grafana/sign-plugin && scripts/package.sh",
     "test": "jest --watch --onlyChanged",

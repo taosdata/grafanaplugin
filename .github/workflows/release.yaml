@@ -51,7 +51,7 @@ jobs:
           steps.cache-node-modules.outputs.cache-hit != 'true'
 
       - name: Build and test frontend
-        run: yarn build
+        run: yarn build && yarn build:prod
 
       - name: Check for backend
         id: check-for-backend
@@ -68,15 +68,12 @@ jobs:
           version: latest
           args: coverage
 
-#      - name: Build backend
-#        if: steps.check-for-backend.outputs.has-backend == 'true'
-#        uses: magefile/mage-action@v1
-#        with:
-#          version: latest
-#          args: buildAll
-
-      - name: Build dist
-        run: yarn build:dist
+      - name: Build backend
+        if: steps.check-for-backend.outputs.has-backend == 'true'
+        uses: magefile/mage-action@v1
+        with:
+          version: latest
+          args: buildAll
 
       - name: Sign plugin
         run: yarn sign
