@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
 	"strings"
 	"sync"
@@ -12,6 +13,7 @@ import (
 
 	"github.com/araddon/dateparse"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
+	"github.com/grafana/grafana-plugin-sdk-go/backend/httpclient"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/instancemgmt"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/log"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
@@ -29,19 +31,44 @@ var (
 )
 
 // NewDatasource creates a new datasource instance.
-func NewDatasource(_ backend.DataSourceInstanceSettings) (instancemgmt.Instance, error) {
-	return &Datasource{}, nil
+func NewDatasource(settings backend.DataSourceInstanceSettings) (instancemgmt.Instance, error) {
+	ops, err := settings.HTTPClientOptions()
+	if err != nil {
+		return nil, fmt.Errorf("http client options: %w", err)
+	}
+	client, err := httpclient.New(ops)
+	if err != nil {
+		return nil, fmt.Errorf("new httpclient error: %w", err)
+	}
+
+	ds := Datasource{
+		settings: settings,
+		client:   client,
+		token:    settings.DecryptedSecureJSONData["token"],
+	}
+	endpoint, err := ds.detectEndpoint()
+	if err != nil {
+		return nil, fmt.Errorf("detect datasource endpoint error: %w", err)
+	}
+	ds.endpoint = endpoint
+	return &ds, nil
 }
 
 // Datasource is an example datasource which can respond to data queries, reports
 // its health and has streaming skills.
-type Datasource struct{}
+type Datasource struct {
+	settings backend.DataSourceInstanceSettings
+	client   *http.Client
+	token    string
+	endpoint string
+}
 
 // Dispose here tells plugin SDK that plugin wants to clean up resources when a new instance
 // created. As soon as datasource settings change detected by SDK old datasource instance will
 // be disposed and a new one will be created using NewSampleDatasource factory function.
 func (d *Datasource) Dispose() {
 	// Clean up datasource instance resources.
+	d.client.CloseIdleConnections()
 }
 
 type dataResponse struct {
@@ -87,7 +114,7 @@ func (d *Datasource) QueryData(ctx context.Context, req *backend.QueryDataReques
 	return response, nil
 }
 
-func (d *Datasource) query(ctx context.Context, pCtx backend.PluginContext, query backend.DataQuery) (response backend.DataResponse) {
+func (d *Datasource) query(ctx context.Context, _ backend.PluginContext, query backend.DataQuery) (response backend.DataResponse) {
 	// Unmarshal the JSON into our queryModel.
 	qm, ok, msg := getQueryModel(query)
 	if !ok {
@@ -95,7 +122,7 @@ func (d *Datasource) query(ctx context.Context, pCtx backend.PluginContext, quer
 	}
 
 	// query data from datasource
-	result, err := d.queryDataFromDatasource(ctx, pCtx, qm)
+	result, err := d.queryDataFromDatasource(ctx, qm)
 	if err != nil {
 		log.DefaultLogger.Error("## query data error ", err)
 		return backend.ErrDataResponse(http.StatusBadRequest, err.Error())
@@ -171,24 +198,8 @@ func (d *Datasource) query(ctx context.Context, pCtx backend.PluginContext, quer
 	return response
 }
 
-func (d *Datasource) queryDataFromDatasource(ctx context.Context, pCtx backend.PluginContext, query *queryModel) (*dataResult, error) {
-	url := pCtx.DataSourceInstanceSettings.URL
-	jsonData := pCtx.DataSourceInstanceSettings.DecryptedSecureJSONData
-	user := toString(jsonData["user"])
-	password := toString(jsonData["password"])
-	basicAuth := toString(jsonData["basicAuth"])
-	token := toString(jsonData["token"])
-
-	sqlUrl, err := defaultDbVersion.sqlUrl(ctx, user, password, basicAuth, url, token)
-	if err != nil {
-		log.DefaultLogger.Error("## get sql url error ", err)
-		return nil, err
-	}
-	if token != "" {
-		sqlUrl = sqlUrl + "?token=" + token
-	}
-
-	body, err := doHttpPost(ctx, user, password, basicAuth, sqlUrl, query.Sql)
+func (d *Datasource) queryDataFromDatasource(ctx context.Context, query *queryModel) (*dataResult, error) {
+	body, err := d.doHttpPost(ctx, d.endpoint, query.Sql)
 	if err != nil {
 		log.DefaultLogger.Error("## query data error ", err)
 		return nil, err
@@ -319,7 +330,7 @@ func (d *Datasource) CheckHealth(ctx context.Context, req *backend.CheckHealthRe
 	var status = backend.HealthStatusOk
 	var message = "Data source is working"
 
-	if _, err := d.queryDataFromDatasource(ctx, req.PluginContext, &queryModel{Sql: "show databases"}); err != nil {
+	if _, err := d.queryDataFromDatasource(ctx, &queryModel{Sql: "show databases"}); err != nil {
 		status = backend.HealthStatusError
 		message = fmt.Sprintf("failed get connect to tdengine. %s", err.Error())
 	}
@@ -328,6 +339,56 @@ func (d *Datasource) CheckHealth(ctx context.Context, req *backend.CheckHealthRe
 		Status:  status,
 		Message: message,
 	}, nil
+}
+
+const sqlEndPoint = "/rest/sql"
+const utcSqlEndPoint = "/rest/sqlutc"
+
+func (d *Datasource) detectEndpoint() (string, error) {
+	respData, err := d.doHttpPost(context.Background(), d.settings.URL+sqlEndPoint, "select server_version()")
+	if err != nil {
+		return "", err
+	}
+
+	var ver serverVer
+	if err = json.Unmarshal(respData, &ver); err != nil {
+		log.DefaultLogger.Error("unmarshall server version data ", err)
+		return "", err
+	}
+	if len(ver.Data) != 1 || len(ver.Data[0]) != 1 {
+		log.DefaultLogger.Error("get server version data error, resp data is ", string(respData))
+		return "", err
+	}
+
+	if is30(ver.Data[0][0]) {
+		return d.settings.URL + sqlEndPoint, nil
+	}
+	return d.settings.URL + utcSqlEndPoint, nil
+}
+
+func (d *Datasource) doHttpPost(ctx context.Context, url, data string) (respData []byte, err error) {
+	if len(d.token) > 0 {
+		url = "?token=" + d.token
+	}
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, url, strings.NewReader(data))
+	if err != nil {
+		log.DefaultLogger.Error(fmt.Sprintf("query %s error: %v", url, err))
+		return nil, err
+	}
+	resp, err := d.client.Do(req)
+	if err != nil {
+		log.DefaultLogger.Error(fmt.Sprintf("query error: %v", err))
+		return nil, err
+	}
+
+	defer func() { _ = resp.Body.Close() }()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("http request for [%s] received code: %d, status %s ", data,
+			resp.StatusCode, resp.Status)
+	}
+
+	return io.ReadAll(resp.Body)
 }
 
 func getQueryModel(query backend.DataQuery) (model *queryModel, success bool, errMsg string) {

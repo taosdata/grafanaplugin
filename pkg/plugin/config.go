@@ -1,17 +1,11 @@
 package plugin
 
 import (
-	"context"
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"io"
-	"net/http"
 	"strconv"
 	"strings"
 	"time"
-
-	"github.com/grafana/grafana-plugin-sdk-go/backend/log"
 )
 
 const (
@@ -254,30 +248,6 @@ func toFloat(f interface{}) (float64, error) {
 	}
 }
 
-func doHttpPost(ctx context.Context, user, password, basicAuth string, url string, data string) ([]byte, error) {
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, url, strings.NewReader(data))
-	if err != nil {
-		log.DefaultLogger.Error(fmt.Sprintf("query %s error: %v", url, err))
-		return nil, err
-	}
-	if len(basicAuth) == 0 {
-		basicAuth = base64.StdEncoding.EncodeToString([]byte(user + ":" + password))
-	}
-	req.Header.Set("Authorization", "Basic "+basicAuth) // cm9vdDp0YW9zZGF0YQ==
-	resp, err := http.DefaultClient.Do(req)
-	if err != nil {
-		log.DefaultLogger.Error(fmt.Sprintf("query %s error: %v", url, err))
-		return nil, err
-	}
-	defer func() { _ = resp.Body.Close() }()
-
-	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		return nil, fmt.Errorf("when writing to [] received status code: %d", resp.StatusCode)
-	}
-
-	return io.ReadAll(resp.Body)
-}
-
 type queryModel struct {
 	Alias            string `json:"alias,omitempty"`
 	ColNameFormatStr string `json:"colNameFormatStr,omitempty"`
@@ -298,4 +268,12 @@ type dataResult struct {
 	ColumnMeta [][]interface{} `json:"column_meta"`
 	Data       [][]interface{} `json:"data"`
 	Rows       int             `json:"rows"`
+}
+
+type serverVer struct {
+	Data [][]string
+}
+
+func is30(version string) bool {
+	return strings.HasPrefix(version, "3")
 }
