@@ -31,6 +31,7 @@ export interface SecureJsonData {
     password?: string
     token?: string
     basicAuth?: string
+    basicAuthPassword?: string
 }
 
 export type ChangeOptions<T> = {

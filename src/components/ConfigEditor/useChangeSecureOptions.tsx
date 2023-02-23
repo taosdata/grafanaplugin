@@ -10,16 +10,23 @@ export function useChangeSecureOptions(props: EditorProps, propertyName: keyof S
                 options.url = event.target.value
             }
 
+            if (propertyName === 'user') {
+                options.user = event.target.value
+                options.basicAuthUser = event.target.value
+            }
+
             if (propertyName === 'user' && options.secureJsonData?.password) {
                 options.basicAuth = true
-                options.basicAuthUser = event.target.value
                 options.secureJsonData.basicAuth = encode(event.target.value + ":" + options.secureJsonData.password)
             }
 
             if (propertyName === "password" && options.secureJsonData?.user) {
                 options.basicAuth = true
-                options.basicAuthUser = options.secureJsonData?.user
                 options.secureJsonData.basicAuth = encode(options.secureJsonData.user + ":" + event.target.value)
+            }
+
+            if (propertyName === 'password' && options.secureJsonData) {
+                options.secureJsonData.basicAuthPassword = event.target.value
             }
 
             onOptionsChange({
