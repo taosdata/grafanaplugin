@@ -372,7 +372,7 @@ func (d *Datasource) doHttpPost(ctx context.Context, url, data string) (respData
 	}
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, url, strings.NewReader(data))
 	if err != nil {
-		log.DefaultLogger.Error(fmt.Sprintf("query %s error: %v", url, err))
+		log.DefaultLogger.Error(fmt.Sprintf("query for %s error: %v", data, err))
 		return nil, err
 	}
 	resp, err := d.client.Do(req)
