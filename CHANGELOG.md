@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [3.3.0] - 2023-02-23
+## [3.3.0] - 2023-02-24
 
 ### Enhancements
 
