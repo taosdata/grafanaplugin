@@ -4,7 +4,7 @@
 
 TDinsight v3.x 是使用 [TDengine 3.0] 监控数据库和 [Grafana] 对 TDengine 进行监控的解决方案。
 
-TDengine 通过 [Taoskeeper](https://github.com/taosdata/taoskeeper) 将服务器的 CPU、内存、硬盘空间、带宽、请求数、磁盘读写速度、
+TDengine 通过 [taoskeeper](https://github.com/taosdata/taoskeeper) 将服务器的 CPU、内存、硬盘空间、带宽、请求数、磁盘读写速度、
 慢查询等信息定时写入指定数据库，并对重要的系统操作（比如登录、创建、删除数据库等）以及各种错误报警信息进行记录。通过 [Grafana]
 和
 [TDengine 数据源插件](https://github.com/taosdata/grafanaplugin/releases)， TDinsight 将集群状态、节点信息、插入及查询请求、
