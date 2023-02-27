@@ -282,57 +282,6 @@ To completely uninstall TDinsight during a manual installation, you need to clea
 2. the Data Source in Grafana.
 3. the `tdengine-datasource` plugin in Grafana.
 
-## Integrated Docker Example
-
-```bash
-git clone --depth 1 https://github.com/taosdata/grafanaplugin.git
-cd grafanaplugin
-```
-
-Change as needed in the `docker-compose.yml` file:
-
-```yaml
-version: "3.7"
-
-services:
-  tdengine:
-    image: tdengine/tdengine:3.0.2.5
-    environment:
-      TAOS_FQDN: localhost
-  grafana:
-    image: grafana/grafana:9.5.20
-    volumes:
-      - ./dist:/var/lib/grafana/plugins/tdengine-datasource
-      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
-      - ./grafana/provisioning/:/etc/grafana/provisioning/
-      - grafana-data:/var/lib/grafana
-    environment:
-      TDENGINE_API: ${TDENGINE_API}
-      TDENGINE_USER: ${TDENGINE_USER}
-      TDENGINE_PASS: ${TDENGINE_PASS}
-      SMS_ACCESS_KEY_ID: ${SMS_ACCESS_KEY_ID}
-      SMS_ACCESS_KEY_SECRET: ${SMS_ACCESS_KEY_SECRET}
-      SMS_SIGN_NAME: ${SMS_SIGN_NAME}
-      SMS_TEMPLATE_CODE: ${SMS_TEMPLATE_CODE}
-      SMS_TEMPLATE_PARAM: "${SMS_TEMPLATE_PARAM}"
-      SMS_PHONE_NUMBERS: $SMS_PHONE_NUMBERS
-      SMS_LISTEN_ADDR: ${SMS_LISTEN_ADDR}
-    ports:
-      - 3000:3000
-volumes:
-  grafana-data:
-```
-
-Replace the environment variables in `docker-compose.yml` or save the environment variables to the `.env` file, then
-start Grafana with `docker-compose up`. For more information of  `docker-compose`, please refer
-to [Docker Compose Reference](https://docs.docker.com/compose/)
-
-```bash
-docker-compose up -d
-```
-
-Then the TDinsight was deployed via Provisioning. Go to http://localhost:3000/d/tdinsight/ to view the dashboard.
-
 [Grafana]: https://grafana.com
 
 [TDengine]: https://www.taosdata.com

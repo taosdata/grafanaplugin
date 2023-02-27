@@ -269,56 +269,6 @@ TDinsight 仪表盘旨在提供TDengine
 2. 删除 Grafana 中的 Data Source 数据源。
 3. 删除 Grafana 中的 `tdengine-datasource` 插件。
 
-## 整合的Docker示例
-
-```bash
-git clone --depth 1 https://github.com/taosdata/grafanaplugin.git
-cd grafanaplugin
-```
-
-根据需要在 `docker-compose.yml` 文件中修改：
-
-```yaml
-version: "3.7"
-
-services:
-  tdengine:
-    image: tdengine/tdengine:3.0.2.5
-    environment:
-      TAOS_FQDN: localhost
-  grafana:
-    image: grafana/grafana:9.5.20
-    volumes:
-      - ./dist:/var/lib/grafana/plugins/tdengine-datasource
-      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
-      - ./grafana/provisioning/:/etc/grafana/provisioning/
-      - grafana-data:/var/lib/grafana
-    environment:
-      TDENGINE_API: ${TDENGINE_API}
-      TDENGINE_USER: ${TDENGINE_USER}
-      TDENGINE_PASS: ${TDENGINE_PASS}
-      SMS_ACCESS_KEY_ID: ${SMS_ACCESS_KEY_ID}
-      SMS_ACCESS_KEY_SECRET: ${SMS_ACCESS_KEY_SECRET}
-      SMS_SIGN_NAME: ${SMS_SIGN_NAME}
-      SMS_TEMPLATE_CODE: ${SMS_TEMPLATE_CODE}
-      SMS_TEMPLATE_PARAM: "${SMS_TEMPLATE_PARAM}"
-      SMS_PHONE_NUMBERS: $SMS_PHONE_NUMBERS
-      SMS_LISTEN_ADDR: ${SMS_LISTEN_ADDR}
-    ports:
-      - 3000:3000
-volumes:
-  grafana-data:
-```
-
-替换`docker-compose.yml`中的环境变量或保存环境变量到`.env`文件，然后用`docker-compose up`启动Grafana。`docker-compose`
-工具的具体用法参见 [Docker Compose Reference](https://docs.docker.com/compose/)
-
-```bash
-docker-compose up -d
-```
-
-TDinsight 已经通过 Provisioning 部署完毕，请到 http://localhost:3000/d/tdinsight/ 查看仪表盘。
-
 [Grafana]: https://grafana.com
 
 [TDengine]: https://www.taosdata.com
