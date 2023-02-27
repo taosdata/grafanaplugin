@@ -130,7 +130,7 @@ func (d *Datasource) query(ctx context.Context, _ backend.PluginContext, query b
 	if len(result.Data) == 0 || len(result.Data[0]) == 0 {
 		return
 	}
-	// if don't hava timestamp col
+	// if don't have timestamp col
 	hasTs := true
 	if len(result.ColumnMeta) == 1 && result.ColumnMeta[0][1] != CTypeTimestampStr && result.ColumnMeta[0][1] != CTypeTimestamp {
 		hasTs = false

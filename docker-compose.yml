@@ -4,7 +4,7 @@ services:
   tdengine:
     image: tdengine/tdengine:3.0.2.5
     environment:
-      TAOS_FQDN: localhsot
+      TAOS_FQDN: localhost
   grafana:
     image: grafana/grafana:7.5.10
     volumes:
