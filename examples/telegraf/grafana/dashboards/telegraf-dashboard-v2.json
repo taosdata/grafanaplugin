@@ -4132,14 +4132,25 @@
         "type": "datasource"
       },
       {
-        "description": null,
-        "error": null,
-        "hide": 2,
-        "label": null,
+        "current": {
+          "isNone": true,
+          "selected": false,
+          "text": "None",
+          "value": ""
+        },
+        "datasource": "${datasource}",
+        "definition": "show databases;",
+        "hide": 0,
+        "includeAll": false,
+        "multi": false,
         "name": "database",
-        "query": "metrics",
+        "options": [],
+        "query": "show databases;",
+        "refresh": 1,
+        "regex": "/([^,]+),?/",
         "skipUrlSync": false,
-        "type": "constant"
+        "sort": 0,
+        "type": "query"
       },
       {
         "auto": true,
@@ -4420,5 +4431,5 @@
   "timezone": "browser",
   "title": "Telegraf System Dashboard",
   "uid": "telegraf-host-metrics-tdengine",
-  "version": 2
+  "version": 3
 }
