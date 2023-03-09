@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file.
 
 ### Bug Fixes
 
+- Typos
+- Typos
 - Fix for telegraf dashboard (#187)
 - Fix for unused formatType config
 
