@@ -4,7 +4,7 @@ export interface Query extends DataQuery {
     alias?: string
     colNameFormatStr: string
     colNameToGroup: string
-    formatType: string
+    formatType: string // @Deprecated
     queryType: string
     sql: string
     timeShiftPeriod: number

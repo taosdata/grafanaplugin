@@ -227,6 +227,7 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
     }
 
     formatColumn(colFormat: string, labelName: any) {
+        console.log(colFormat)
         let placeholders = colFormat.match(/\{\{(\w+)\}\}/g)
         if (!placeholders) {
             return colFormat;
@@ -320,7 +321,7 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
     }
 
     groupDataByColName(dataRecv: any, query: Query, options: DataQueryRequest<Query>) {
-        if (query.formatType === "Time series" && query.queryType === "SQL") {
+        if (query.queryType === "SQL") {
             let groupBy = null;
             if (!!query.colNameToGroup) {
                 groupBy = _.trim(query.colNameToGroup);
@@ -414,7 +415,7 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
             const cols = headers.length;
             if (!!headers && !!headers[0] && !!headers[0][1]) {
                 const timeSeriesIndex = headers.findIndex((item: number[]) => item[1] === 9);
-                if (timeSeriesIndex === -1 || query.formatType === 'Table') {
+                if (timeSeriesIndex === -1) {
                     result.push({
                         columns: headers.map((item: any[]) => ({text: item[0]})),
                         rows: data,
