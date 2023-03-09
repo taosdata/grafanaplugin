@@ -2,11 +2,33 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.3.1] - 2023-03-09
+
+### Bug Fixes
+
+- Fix for telegraf dashboard (#187)
+- Fix for unused formatType config
+
+### Documentation
+
+- Add readme for tdinsight v3
+
 ## [3.3.0] - 2023-02-24
+
+### Bug Fixes
+
+- Revert `testDatasource` function
+- Change httpclient and delete sensitive log
+- Delete token from log (#184)
 
 ### Enhancements
 
 - Refactor by grafana/create-plugin (#179)
+
+### Build
+
+- Fix release workflow for missing module.js.map
+- Fix release work flow
 
 ## [3.2.9] - 2023-02-08
 
@@ -15,7 +37,7 @@ All notable changes to this project will be documented in this file.
 - Tdinsight v3.x support grafana 7.x (#170)
 - Fix http request dashboard
 - Fix block while format column name
-- Add error message when query data error
+- Add error message when query data eror
 
 ### Enhancements
 
@@ -195,7 +217,7 @@ All notable changes to this project will be documented in this file.
 
 ### [TD-14180]<fix>
 
-- Fix cpu and memory percent in taosAdapter (#108)
+- Fix cpu and memery percent in taosAdapter (#108)
 
 ### [TDREL-24]<docs>
 
