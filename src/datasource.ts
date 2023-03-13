@@ -227,7 +227,6 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
     }
 
     formatColumn(colFormat: string, labelName: any) {
-        console.log(colFormat)
         let placeholders = colFormat.match(/\{\{(\w+)\}\}/g)
         if (!placeholders) {
             return colFormat;
