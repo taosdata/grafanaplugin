@@ -37,7 +37,7 @@ All notable changes to this project will be documented in this file.
 - Tdinsight v3.x support grafana 7.x (#170)
 - Fix http request dashboard
 - Fix block while format column name
-- Add error message when query data eror
+- Add error message when query data error
 
 ### Enhancements
 
@@ -217,7 +217,7 @@ All notable changes to this project will be documented in this file.
 
 ### [TD-14180]<fix>
 
-- Fix cpu and memery percent in taosAdapter (#108)
+- Fix cpu and memory percent in taosAdapter (#108)
 
 ### [TDREL-24]<docs>
 

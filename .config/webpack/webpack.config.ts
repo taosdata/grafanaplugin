@@ -35,7 +35,6 @@ const config = async (env: { production: any; development: any; }): Promise<Conf
 
   externals: [
     'lodash',
-    'jquery',
     'moment',
     'slate',
     'emotion',
@@ -52,7 +51,6 @@ const config = async (env: { production: any; development: any; }): Promise<Conf
     'react-router',
     'react-router-dom',
     'd3',
-    'angular',
     '@grafana/ui',
     '@grafana/runtime',
     '@grafana/data',
