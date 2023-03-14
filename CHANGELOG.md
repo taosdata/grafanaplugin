@@ -2,12 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [3.3.1] - 2023-03-13
+## [3.3.1] - 2023-03-14
 
 ### Bug Fixes
 
 - Fix for telegraf dashboard (#187)
 - Fix for unused formatType config
+- Delete console log in datasource.ts (#191)
+- Refactor readme 
+- Fix for tdinsight-v3
 
 ### Documentation
 
