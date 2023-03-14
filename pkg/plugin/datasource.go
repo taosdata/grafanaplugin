@@ -83,7 +83,7 @@ type dataResponse struct {
 func (d *Datasource) QueryData(ctx context.Context, req *backend.QueryDataRequest) (*backend.QueryDataResponse, error) {
 	// when logging at a non-Debug level, make sure you don't include sensitive information in the message
 	// (like the *backend.QueryDataRequest)
-	log.DefaultLogger.Debug("## QueryData called", req.Queries)
+	log.DefaultLogger.Debug("## QueryData called", "queries", req.Queries)
 
 	// create response struct
 	response := backend.NewQueryDataResponse()
@@ -124,7 +124,7 @@ func (d *Datasource) query(ctx context.Context, _ backend.PluginContext, query b
 	// query data from datasource
 	result, err := d.queryDataFromDatasource(ctx, qm)
 	if err != nil {
-		log.DefaultLogger.Error("## query data error ", err)
+		log.DefaultLogger.Error("## query data error ", "error", err)
 		return backend.ErrDataResponse(http.StatusBadRequest, err.Error())
 	}
 	if len(result.Data) == 0 || len(result.Data[0]) == 0 {
@@ -137,7 +137,7 @@ func (d *Datasource) query(ctx context.Context, _ backend.PluginContext, query b
 	}
 	// format data
 	if err = d.formatData(result, qm, hasTs); err != nil {
-		log.DefaultLogger.Error("## format data error ", err)
+		log.DefaultLogger.Error("## format data error ", "error", err)
 		return backend.ErrDataResponse(http.StatusBadRequest, err.Error())
 	}
 
@@ -170,7 +170,7 @@ func (d *Datasource) query(ctx context.Context, _ backend.PluginContext, query b
 	for i := 0; i < len(result.Data); i++ {
 		if hasTs {
 			if result.Data[i][0], err = time.Parse(timeLayout, toString(result.Data[i][0])); err != nil {
-				log.DefaultLogger.Error(fmt.Sprint("parse error:", err))
+				log.DefaultLogger.Error(fmt.Sprint("parse error:", "error", err))
 				return backend.ErrDataResponse(http.StatusBadRequest, fmt.Sprintf("ts parse error: %s", err.Error()))
 			}
 		}
@@ -183,7 +183,7 @@ func (d *Datasource) query(ctx context.Context, _ backend.PluginContext, query b
 			}
 			if isIntegerTypesForInterface(result.ColumnMeta[j][1]) {
 				if result.Data[i][j], err = toFloat(result.Data[i][j]); err != nil {
-					log.DefaultLogger.Error(fmt.Sprint("parse numeric data error:", err))
+					log.DefaultLogger.Error(fmt.Sprint("parse numeric data error:", "error", err))
 					return backend.ErrDataResponse(http.StatusBadRequest, fmt.Sprintf("parse numeric data error: %s", err.Error()))
 				}
 			}
@@ -201,19 +201,19 @@ func (d *Datasource) query(ctx context.Context, _ backend.PluginContext, query b
 func (d *Datasource) queryDataFromDatasource(ctx context.Context, query *queryModel) (*dataResult, error) {
 	body, err := d.doHttpPost(ctx, d.endpoint, query.Sql)
 	if err != nil {
-		log.DefaultLogger.Error("## query data error ", err)
+		log.DefaultLogger.Error("## query data error ", "error", err)
 		return nil, err
 	}
 
 	var result dataResult
 	if err = json.Unmarshal(body, &result); err != nil {
-		log.DefaultLogger.Error("## unmarshal result data error ", err)
+		log.DefaultLogger.Error("## unmarshal result data error ", "error", err)
 		return nil, err
 	}
 
 	if result.Code != 0 {
 		err = fmt.Errorf("query data by sql %s error, response code is %d ", query.Sql, result.Code)
-		log.DefaultLogger.Error("query data error", err)
+		log.DefaultLogger.Error("query data error", "error", err)
 		return nil, err
 	}
 
@@ -236,7 +236,7 @@ var configError = errors.New("query config error")
 
 func (d *Datasource) formatGroupData(res *dataResult, query *queryModel) error {
 	if len(query.ColNameToGroup) == 0 {
-		log.DefaultLogger.Error("config error, group fields is nil", query.Sql)
+		log.DefaultLogger.Error("config error, group fields is nil", "query sql", query.Sql)
 		return fmt.Errorf("%v, %s", configError, "group_by_column config is null")
 	}
 	groups := strings.Split(query.ColNameToGroup, ",")
@@ -352,11 +352,11 @@ func (d *Datasource) detectEndpoint() (string, error) {
 
 	var ver serverVer
 	if err = json.Unmarshal(respData, &ver); err != nil {
-		log.DefaultLogger.Error("unmarshall server version data ", err)
+		log.DefaultLogger.Error("unmarshall server version data ", "error", err)
 		return "", err
 	}
 	if len(ver.Data) != 1 || len(ver.Data[0]) != 1 {
-		log.DefaultLogger.Error("get server version data error, resp data is ", string(respData))
+		log.DefaultLogger.Error("get server version data error, resp data is ", "resp data", string(respData))
 		return "", err
 	}
 
@@ -372,12 +372,12 @@ func (d *Datasource) doHttpPost(ctx context.Context, url, data string) (respData
 	}
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, url, strings.NewReader(data))
 	if err != nil {
-		log.DefaultLogger.Error(fmt.Sprintf("query for %s error: %v", data, err))
+		log.DefaultLogger.Error("query error", "data", data, "error", err)
 		return nil, err
 	}
 	resp, err := d.client.Do(req)
 	if err != nil {
-		log.DefaultLogger.Error(fmt.Sprintf("query error: %v", err))
+		log.DefaultLogger.Error("query error", "error", err)
 		return nil, err
 	}
 
@@ -394,7 +394,7 @@ func (d *Datasource) doHttpPost(ctx context.Context, url, data string) (respData
 func getQueryModel(query backend.DataQuery) (model *queryModel, success bool, errMsg string) {
 	err := json.Unmarshal(query.JSON, &model)
 	if err != nil {
-		log.DefaultLogger.Error("## unmarshal query to query model error ", query.JSON, err)
+		log.DefaultLogger.Error("## unmarshal query to query model error ", "query", query.JSON, "error", err)
 		return nil, false, fmt.Sprintf("json unmarshal: %v", err.Error())
 	}
 
@@ -414,7 +414,7 @@ func getQueryModel(query backend.DataQuery) (model *queryModel, success bool, er
 	}
 	timeZone, err := time.LoadLocation("")
 	if err != nil {
-		log.DefaultLogger.Error("## get time location zone: %w", err)
+		log.DefaultLogger.Error("## get time location zone: %w", "error", err)
 		return nil, false, fmt.Sprintf("get time location zone: %v", err)
 	}
 	if query.Interval > 0 {
@@ -424,7 +424,7 @@ func getQueryModel(query backend.DataQuery) (model *queryModel, success bool, er
 	sql = strings.ReplaceAll(sql, "$begin", "'"+fmt.Sprint(query.TimeRange.From.In(timeZone).Format(time.RFC3339Nano))+"'")
 	sql = strings.ReplaceAll(sql, "$to", "'"+fmt.Sprint(query.TimeRange.To.In(timeZone).Format(time.RFC3339Nano))+"'")
 	sql = strings.ReplaceAll(sql, "$end", "'"+fmt.Sprint(query.TimeRange.To.In(timeZone).Format(time.RFC3339Nano))+"'")
-	log.DefaultLogger.Debug("## query sql", sql)
+	log.DefaultLogger.Debug("## query sql", "sql", sql)
 
 	model.Sql = sql
 	success = true

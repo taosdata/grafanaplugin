@@ -167,6 +167,17 @@ jobs:
           asset_name: TDinsight.json
           asset_content_type: text/plain
 
+      - name: Add TDinsightV3.json to release
+        id: upload-tdinsightV3-json
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./dashboards/TDinsightV3.json
+          asset_name: TDinsightV3.json
+          asset_content_type: text/plain
+
       - name: Add TDinsight.sh to release
         id: upload-tdinsight-script
         uses: actions/upload-release-asset@v1

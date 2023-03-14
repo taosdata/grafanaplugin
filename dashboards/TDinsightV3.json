@@ -659,7 +659,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select dnodes_total as total,dnodes_alive as alive from $database.cluster_info where ts >= $from and ts <= $to"
+          "sql": "select dnodes_total as total, dnodes_alive as dnodes_alive from $database.cluster_info where ts >= $from and ts <= $to"
         }
       ],
       "title": "DNodes",
@@ -717,7 +717,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select mnodes_total as total,mnodes_alive as alive from $database.cluster_info where ts >= $from and ts <= $to"
+          "sql": "select mnodes_total as total, mnodes_alive as mnodes_alive from $database.cluster_info where ts >= $from and ts <= $to"
         }
       ],
       "title": "MNodes",
@@ -775,7 +775,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select vgroups_total as total, vgroups_alive as alive from $database.cluster_info where ts >= $from and ts <= $to"
+          "sql": "select vgroups_total as total, vgroups_alive as vgroups_alive from $database.cluster_info where ts >= $from and ts <= $to"
         }
       ],
       "title": "VGroups",
@@ -833,7 +833,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select vnodes_total as total, vnodes_alive as alive from $database.cluster_info where ts >= $from and ts <= $to"
+          "sql": "select vnodes_total as total, vnodes_alive as vnodes_alive from $database.cluster_info where ts >= $from and ts <= $to"
         }
       ],
       "title": "VNodes",
@@ -1694,7 +1694,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, avg(dnodes_total) as total, avg(dnodes_alive) as alive from $database.cluster_info where ts >= $from and ts <= $to interval($interval) fill(null)"
+              "sql": "select _wstart as ts, avg(dnodes_total) as total, avg(dnodes_alive) as dnodes_alive from $database.cluster_info where ts >= $from and ts <= $to interval($interval) fill(null)"
             }
           ],
           "thresholds": [],
@@ -1854,7 +1854,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, avg(mnodes_total) as total, avg(mnodes_alive) as alive from $database.cluster_info where ts >= $from and ts <= $to interval($interval) fill(null)"
+              "sql": "select _wstart as ts, avg(mnodes_total) as total, avg(mnodes_alive) as mnodes_alive from $database.cluster_info where ts >= $from and ts <= $to interval($interval) fill(null)"
             }
           ],
           "thresholds": [],
