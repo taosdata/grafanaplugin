@@ -170,7 +170,7 @@ func (d *Datasource) query(ctx context.Context, _ backend.PluginContext, query b
 	for i := 0; i < len(result.Data); i++ {
 		if hasTs {
 			if result.Data[i][0], err = time.Parse(timeLayout, toString(result.Data[i][0])); err != nil {
-				log.DefaultLogger.Error(fmt.Sprint("parse error:", "error", err))
+				log.DefaultLogger.Error("parse error:", "error", err)
 				return backend.ErrDataResponse(http.StatusBadRequest, fmt.Sprintf("ts parse error: %s", err.Error()))
 			}
 		}
@@ -183,7 +183,7 @@ func (d *Datasource) query(ctx context.Context, _ backend.PluginContext, query b
 			}
 			if isIntegerTypesForInterface(result.ColumnMeta[j][1]) {
 				if result.Data[i][j], err = toFloat(result.Data[i][j]); err != nil {
-					log.DefaultLogger.Error(fmt.Sprint("parse numeric data error:", "error", err))
+					log.DefaultLogger.Error("parse numeric data error:", "error", err)
 					return backend.ErrDataResponse(http.StatusBadRequest, fmt.Sprintf("parse numeric data error: %s", err.Error()))
 				}
 			}
