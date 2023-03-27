@@ -186,7 +186,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select last(first_ep) from $database.cluster_info group by first_ep"
+          "sql": "select last(first_ep) from $database.cluster_info"
         }
       ],
       "timeFrom": null,

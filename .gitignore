@@ -37,3 +37,4 @@ profile.cov
 dist
 .vscode
 tdengine-datasource*
+.DS_Store
