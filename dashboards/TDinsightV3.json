@@ -172,7 +172,7 @@
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "/^last\\(first_ep\\)$/",
+          "fields": "first_ep",
           "values": false
         },
         "text": {},
@@ -186,7 +186,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select last(first_ep) from $database.cluster_info"
+          "sql": "select last(first_ep) as first_ep from $database.cluster_info"
         }
       ],
       "timeFrom": null,
@@ -234,7 +234,7 @@
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "/^last\\(version\\)$/",
+          "fields": "version",
           "values": false
         },
         "text": {},
@@ -248,7 +248,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select last(version) from $database.cluster_info"
+          "sql": "select last(version) as version from $database.cluster_info"
         }
       ],
       "title": "Version",
