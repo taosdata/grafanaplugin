@@ -3965,7 +3965,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": null,
+          "datasource": "${DS_TDENGINE}",
           "fieldConfig": {
             "defaults": {
               "unit": "short"
