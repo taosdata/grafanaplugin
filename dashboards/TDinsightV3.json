@@ -2461,7 +2461,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last(tbs_total) as tbs_total from $database.cluster_info where first_ep = '$fqdn'"
+              "sql": "select last(tbs_total) as tbs_total from $database.cluster_info"
             }
           ],
           "title": "Total Tables",
