@@ -2,11 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [3.3.2] - 2023-04-03
+## [3.3.2] - 2023-04-04
 
 ### Bug Fixes
 
-- Fix for TDinsightV3 (#201)
+- Fix for TDinsight V3 (#201)
 
 ### Build
 
@@ -16,26 +16,21 @@ All notable changes to this project will be documented in this file.
 
 ### Bug Fixes
 
+- Revert `testDatasource` function
+- Change httpclient and delete sensitive log
+- Delete token from log (#184)
 - Typos
 - Typos
 - Fix for telegraf dashboard (#187)
 - Fix for unused formatType config
 - Delete console log in datasource.ts (#191)
-- Refector readme and upgrade dependence and fix tdinsight v3
+- Refactor readme and upgrade dependence and fix tdinsight v3
 - Typos
 - Fix for log (#194)
 
 ### Documentation
 
 - Add readme for tdinsight v3
-
-## [3.3.0] - 2023-02-24
-
-### Bug Fixes
-
-- Revert `testDatasource` function
-- Change httpclient and delete sensitive log
-- Delete token from log (#184)
 
 ### Enhancements
 
@@ -53,7 +48,7 @@ All notable changes to this project will be documented in this file.
 - Tdinsight v3.x support grafana 7.x (#170)
 - Fix http request dashboard
 - Fix block while format column name
-- Add error message when query data eror
+- Add error message when query data error
 
 ### Enhancements
 
@@ -233,7 +228,7 @@ All notable changes to this project will be documented in this file.
 
 ### [TD-14180]<fix>
 
-- Fix cpu and memery percent in taosAdapter (#108)
+- Fix cpu and memory percent in taosAdapter (#108)
 
 ### [TDREL-24]<docs>
 
