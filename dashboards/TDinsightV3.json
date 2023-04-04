@@ -2275,7 +2275,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, last(tables_num) as tables_num from $database.vgroups_info where ts > $from and ts <= $to interval($interval) fill(null)"
+              "sql": "select _wstart as ts, last(tbs_total) as tables_num from $database.cluster_info where ts > $from and ts <= $to interval($interval) fill(null)"
             }
           ],
           "thresholds": [],
@@ -2468,7 +2468,7 @@
           "type": "stat"
         }
       ],
-      "title": "Tables Summary from [ $database ]",
+      "title": "Tables Summary",
       "type": "row"
     },
     {
