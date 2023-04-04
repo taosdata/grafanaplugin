@@ -2,14 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.3.2] - 2023-04-03
+
+### Bug Fixes
+
+- Fix for TDinsightV3 (#201)
+
+### Build
+
+- Bump webpack from 5.75.0 to 5.76.0 (#195)
+
 ## [3.3.1] - 2023-03-15
 
 ### Bug Fixes
 
+- Typos
+- Typos
 - Fix for telegraf dashboard (#187)
+- Fix for unused formatType config
 - Delete console log in datasource.ts (#191)
-- Refactor readme and upgrade dependence
-- Fix tdinsight v3
+- Refector readme and upgrade dependence and fix tdinsight v3
+- Typos
+- Fix for log (#194)
 
 ### Documentation
 
@@ -39,7 +53,7 @@ All notable changes to this project will be documented in this file.
 - Tdinsight v3.x support grafana 7.x (#170)
 - Fix http request dashboard
 - Fix block while format column name
-- Add error message when query data error
+- Add error message when query data eror
 
 ### Enhancements
 
@@ -219,7 +233,7 @@ All notable changes to this project will be documented in this file.
 
 ### [TD-14180]<fix>
 
-- Fix cpu and memory percent in taosAdapter (#108)
+- Fix cpu and memery percent in taosAdapter (#108)
 
 ### [TDREL-24]<docs>
 
