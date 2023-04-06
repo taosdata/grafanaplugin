@@ -2,11 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
-## [3.3.2] - 2023-04-04
+## [3.3.2] - 2023-04-06
 
 ### Bug Fixes
 
-- Fix for TDinsight V3 (#201)
+- Fix for TDinsightV3 dashboard
+- Fix for table data type
 
 ### Build
 
@@ -16,16 +17,10 @@ All notable changes to this project will be documented in this file.
 
 ### Bug Fixes
 
-- Revert `testDatasource` function
-- Change httpclient and delete sensitive log
-- Delete token from log (#184)
-- Typos
-- Typos
 - Fix for telegraf dashboard (#187)
 - Fix for unused formatType config
 - Delete console log in datasource.ts (#191)
 - Refactor readme and upgrade dependence and fix tdinsight v3
-- Typos
 - Fix for log (#194)
 
 ### Documentation
@@ -57,7 +52,7 @@ All notable changes to this project will be documented in this file.
 
 ### Features
 
-- Support set legend aliais by setting formatstr
+- Support set legend alias by setting format string
 
 ### Build
 
@@ -158,7 +153,7 @@ All notable changes to this project will be documented in this file.
 
 ### Bug Fixes
 
-- Remove sentitive logging, fix ts layout format parsing method (#127)
+- Remove sensitive logging, fix ts layout format parsing method (#127)
 
 ## [3.2.0] - 2022-05-25
 
@@ -191,7 +186,7 @@ All notable changes to this project will be documented in this file.
 
 ### Bug Fixes
 
-- Change link to tdengine.com for plugincheck (#117)
+- Change link to tdengine.com for plugin-check (#117)
 
 ## [3.1.5] - 2022-05-05
 
@@ -271,7 +266,7 @@ All notable changes to this project will be documented in this file.
 
 ### [TS-790]<fix>
 
-- Fix incrrect time range in TDinsight disk/net panels (#88)
+- Fix incorrect time range in TDinsight disk/net panels (#88)
 
 ## [3.1.3] - 2021-11-26
 
@@ -299,7 +294,7 @@ All notable changes to this project will be documented in this file.
 
 ### [TD-11147]<fix>
 
-- Fill(null) caused taosadapter/httpd coredump (#76)
+- Fill(null) caused taosadapter/httpd core-dump (#76)
 
 ### [TD-11242]<fix>
 
@@ -435,7 +430,7 @@ All notable changes to this project will be documented in this file.
 
 ### [TD-5109]<feature>
 
-- Support arithmetic calculation among queris
+- Support arithmetic calculation among queries
 
 ### [TD-5215]<fix>
 
