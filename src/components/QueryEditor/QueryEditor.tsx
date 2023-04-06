@@ -10,6 +10,9 @@ export function QueryEditor(props: EditorProps): ReactElement {
     if (!query.queryType) {
         query.queryType = "SQL"
     }
+    if (!query.formatType) {
+        query.formatType = "Time series"
+    }
 
     const onChangeQueryType = useChangeSelectableValue(props, {propertyName: 'queryType', runQuery: true})
     const onChangeAlias = useChangeOptions(props, {propertyName: 'alias', runQuery: false})
@@ -18,6 +21,7 @@ export function QueryEditor(props: EditorProps): ReactElement {
     const onblurSql = useChangeOptions(props, {propertyName: 'sql', runQuery: true})
     const onchangeTimeShiftPeriod = useChangeOptions(props, {propertyName: 'timeShiftPeriod', runQuery: false})
     const onchangeTimeShiftUnit = useChangeSelectableValue(props, {propertyName: 'timeShiftUnit', runQuery: false})
+    const onChangeFormatType = useChangeSelectableValue(props, {propertyName: 'formatType', runQuery: true})
     const onchangeGroupColumns = useChangeOptions(props, {propertyName: 'colNameToGroup', runQuery: false})
     const onblurGroupColumns = useChangeOptions(props, {propertyName: 'colNameToGroup', runQuery: true})
     const onchangeFormatStr = useChangeOptions(props, {propertyName: 'colNameFormatStr', runQuery: false})
@@ -30,7 +34,7 @@ export function QueryEditor(props: EditorProps): ReactElement {
         return (
             <Collapse
                 label='Generate SQL'
-                className='gf-form-label width-15'
+                className='gf-form-label width-10'
                 collapsible={true}
                 isOpen={isOpen}
                 onToggle={() =>
@@ -57,7 +61,7 @@ export function QueryEditor(props: EditorProps): ReactElement {
         return (
             <Collapse
                 label='Show Help'
-                className='gf-form-label width-15'
+                className='gf-form-label width-10'
                 collapsible={true}
                 isOpen={isOpen}
                 onToggle={() =>
@@ -69,7 +73,14 @@ export function QueryEditor(props: EditorProps): ReactElement {
         )
     }
 
-    const queryTypeOptions = [{label: 'SQL', value: 'SQL'}, {label: 'Arithmetic', value: 'Arithmetic'}]
+    const queryTypeOptions = [
+        {label: 'SQL', value: 'SQL'},
+        {label: 'Arithmetic', value: 'Arithmetic'}
+    ]
+    const formatTypeOptions = [
+        {label: 'Time series', value: 'Time series'},
+        {label: 'Table', value: 'Table'}
+    ]
 
     return (
         <div className='gf-form-group'>
@@ -115,6 +126,16 @@ export function QueryEditor(props: EditorProps): ReactElement {
             <InlineFieldRow>
                 <ShowGeneratedSql/>
                 <ShowHelpCollapse/>
+                <InlineField id="formatType" label='Format new col' labelWidth={20}>
+                    <Select
+                        inputId={"formatType"}
+                        width={20}
+                        options={formatTypeOptions}
+                        defaultValue={formatTypeOptions[0]}
+                        onChange={onChangeFormatType}
+                        value={useSelectableValue(query.formatType)}
+                    />
+                </InlineField>
             </InlineFieldRow>
 
             <InlineFieldRow>
