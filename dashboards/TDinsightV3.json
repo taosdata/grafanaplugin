@@ -2097,7 +2097,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "C",
-              "sql": "select _wstart as ts, avg(req_select_rate) as req_select_rate from $database.dnodes_info where ts >= $from and ts <= $to partition by dnode_ep interval($interval) fill(null)"
+              "sql": "select _wstart as ts, avg(req_select_rate) as dnode_req_select_rate from $database.dnodes_info where ts >= $from and ts <= $to partition by dnode_ep interval($interval) fill(null)"
             },
             {
               "colNameFormatStr": "",
