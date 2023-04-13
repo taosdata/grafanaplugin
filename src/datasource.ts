@@ -7,7 +7,7 @@ import {
 } from '@grafana/data'
 import {BackendSrv, getBackendSrv, getTemplateSrv, TemplateSrv} from '@grafana/runtime'
 import {DataSourceOptions, Query} from './types';
-import _ from "lodash";
+import _, {uniqBy} from "lodash";
 // eslint-disable-next-line no-restricted-imports
 import moment from 'moment';
 
@@ -68,15 +68,44 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
 
     metricFindQuery(query: any, options: any): Promise<MetricFindValue[]> {
         return this.request(this.generateSql(query, options)).then(res => {
-            if (!res || !res.data || !res.data.data) {
+            if (!res?.data?.data) {
                 return [];
+            }
+
+            const column_meta = res.data.column_meta || [];
+            const hasTextAndValue = column_meta.length === 2 &&
+                ((column_meta[0][0] === "__text" && column_meta[1][0] === "__value")
+                    || (column_meta[1][0] === "__text" && column_meta[0][0] === "__value"));
+
+            let values: MetricFindValue[] = [];
+            if (hasTextAndValue) {
+                let text_index = 0;
+                let string_value = false;
+                if (res.data.column_meta[1][0] === "__text") {
+                    text_index = 1
+                }
+                let value_type = res.data.column_meta[1 - text_index][1].toUpperCase();
+                if (value_type === "NCHAR" || value_type === "BINARY" || value_type === "VARCHAR") {
+                    string_value = true
+                }
+
+                for (let i = 0; i < res.data.data.length; i++) {
+                    let text = '' + res.data.data[i][text_index];
+                    let value = res.data.data[i][1 - text_index]
+
+                    if (string_value) {
+                        value = "'" + value + "'";
+                    }
+
+                    values.push({text: text, value: value})
+                }
             } else {
-                let values = [];
                 for (let i = 0; i < res.data.data.length; i++) {
                     values.push({text: '' + res.data.data[i]});
                 }
-                return values;
             }
+
+            return uniqBy(values, "text");
         });
     }
 
@@ -135,11 +164,16 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
     }
 
     convertResult(src: any) {
-        let dist = {}
+        let dist = {
+            status: "",
+            code: undefined,
+            desc: undefined,
+            column_meta: undefined,
+            data: undefined,
+            rows: 0,
+        }
         if (src.code === 0) {
-            // @ts-ignore
             dist.status = "succ";
-            // @ts-ignore
             dist.column_meta = src.column_meta;
             // @ts-ignore
             dist.column_meta.forEach(element => {
@@ -147,18 +181,14 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
                     element[1] = 9;
                 }
             });
-            // @ts-ignore
             dist.data = src.data;
-            // @ts-ignore
             dist.rows = src.rows;
         } else {
-            // @ts-ignore
             dist.status = "error";
-            // @ts-ignore
             dist.code = src.code;
-            // @ts-ignore
             dist.desc = src.desc;
         }
+
         return dist;
     }
 
