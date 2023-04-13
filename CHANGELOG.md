@@ -2,12 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
-## [3.3.2] - 2023-04-06
+## [3.3.2] - 2023-04-13
 
 ### Bug Fixes
 
 - Fix for TDinsightV3 dashboard
 - Fix for table data type
+
+### Enhancements
+
+- Support variables query key/value
 
 ### Build
 
