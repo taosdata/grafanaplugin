@@ -4015,7 +4015,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, status_code, count(*) from $database.taosadapter_restful_http_request_total where _ts >= $from and _ts <= $to partition by status_code interval($interval) fill(null)"
+              "sql": "select _wstart as ts, status_code, sum(gauge) from $database.taosadapter_restful_http_request_total where _ts >= $from and _ts <= $to partition by status_code interval($interval) fill(null)"
             }
           ],
           "thresholds": [],
