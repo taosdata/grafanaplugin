@@ -26,12 +26,12 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "8.2.2"
+      "version": "7.5.10"
     },
     {
       "type": "panel",
       "id": "graph",
-      "name": "Graph (old)",
+      "name": "Graph",
       "version": ""
     },
     {
@@ -50,6 +50,12 @@
       "type": "panel",
       "id": "text",
       "name": "Text",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "timeseries",
+      "name": "Time series",
       "version": ""
     }
   ],
@@ -73,16 +79,18 @@
     ]
   },
   "editable": true,
-  "fiscalYearStartMonth": 0,
-  "gnetId": 15164,
+  "gnetId": 18587,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1643250932259,
+  "iteration": 1683711442408,
   "links": [],
-  "liveNow": false,
   "panels": [
     {
       "datasource": "${DS_PROMETHEUS}",
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
       "gridPos": {
         "h": 3,
         "w": 24,
@@ -94,7 +102,7 @@
         "content": "<h1><center>TDengine Cluster Dashboard (First EP: ${firstEp}, Version: ${version})</center></h1>",
         "mode": "markdown"
       },
-      "pluginVersion": "8.2.2",
+      "pluginVersion": "7.5.10",
       "repeatDirection": "h",
       "targets": [
         {
@@ -187,7 +195,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.2",
+      "pluginVersion": "7.5.10",
       "targets": [
         {
           "colNameFormatStr": "",
@@ -263,7 +271,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.2",
+      "pluginVersion": "7.5.10",
       "targets": [
         {
           "colNameFormatStr": "",
@@ -297,7 +305,7 @@
     },
     {
       "datasource": "${DS_PROMETHEUS}",
-      "description": "MNode 被选举后经过的时长",
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -313,7 +321,7 @@
               }
             ]
           },
-          "unit": "s"
+          "unit": "d"
         },
         "overrides": []
       },
@@ -339,7 +347,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.2",
+      "pluginVersion": "7.5.10",
       "targets": [
         {
           "colNameFormatStr": "",
@@ -372,7 +380,7 @@
     },
     {
       "datasource": "${DS_PROMETHEUS}",
-      "description": "企业版授权到期时间",
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -401,7 +409,7 @@
       "id": 99,
       "options": {
         "colorMode": "value",
-        "graphMode": "area",
+        "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
@@ -414,7 +422,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.2",
+      "pluginVersion": "7.5.10",
       "targets": [
         {
           "colNameFormatStr": "",
@@ -436,7 +444,7 @@
     },
     {
       "datasource": "${DS_PROMETHEUS}",
-      "description": "企业版授权已用测点数",
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -454,20 +462,7 @@
           },
           "unit": "none"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byFrameRefID",
-              "options": "A"
-            },
-            "properties": [
-              {
-                "id": "noValue",
-                "value": "unlimited"
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 4,
@@ -481,7 +476,7 @@
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
-            "last"
+            "lastNotNull"
           ],
           "fields": "",
           "values": false
@@ -489,13 +484,13 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "8.2.2",
+      "pluginVersion": "7.5.10",
       "targets": [
         {
           "colNameFormatStr": "",
           "colNameToGroup": "",
           "exemplar": true,
-          "expr": "taos_dnodes_info_disk_engine{cluster_id=\"$cluster\"}",
+          "expr": "sum(taos_grants_info_timeseries_used{cluster_id=\"$cluster\"}) by (dnode_ep)",
           "formatType": "Time series",
           "interval": "",
           "legendFormat": "used",
@@ -506,20 +501,20 @@
         },
         {
           "exemplar": true,
-          "expr": "taos_dnodes_info_disk_total{cluster_id=\"$cluster\"}",
+          "expr": "sum(taos_grants_info_timeseries_total{cluster_id=\"$cluster\"}) by (dnode_ep)",
           "hide": false,
           "interval": "",
           "legendFormat": "total",
           "refId": "B"
         }
       ],
-      "title": "Used Meassuring Points",
+      "title": "Used Measuring Points",
       "transformations": [],
       "type": "bargauge"
     },
     {
       "datasource": "${DS_PROMETHEUS}",
-      "description": "数据库个数",
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -564,7 +559,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.2",
+      "pluginVersion": "7.5.10",
       "repeatDirection": "h",
       "targets": [
         {
@@ -572,7 +567,7 @@
           "colNameFormatStr": "",
           "colNameToGroup": "",
           "exemplar": true,
-          "expr": "count(taos_vgroups_info_status{cluster_id=\"$cluster\"})",
+          "expr": "taos_cluster_info_dbs_total{cluster_id=\"$cluster\"}",
           "format": "time_series",
           "formatType": "Time series",
           "instant": false,
@@ -607,7 +602,7 @@
     },
     {
       "datasource": "${DS_PROMETHEUS}",
-      "description": "所有数据库的表数量之和",
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -648,7 +643,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.2",
+      "pluginVersion": "7.5.10",
       "repeatDirection": "h",
       "targets": [
         {
@@ -718,7 +713,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.2",
+      "pluginVersion": "7.5.10",
       "targets": [
         {
           "colNameFormatStr": "",
@@ -739,7 +734,7 @@
     },
     {
       "datasource": "${DS_PROMETHEUS}",
-      "description": "当前TDengine集群DNode数量，Alive 为存活，Total 为所有",
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -778,7 +773,7 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "8.2.2",
+      "pluginVersion": "7.5.10",
       "targets": [
         {
           "alias": "",
@@ -803,7 +798,7 @@
     },
     {
       "datasource": "${DS_PROMETHEUS}",
-      "description": "当前TDengine集群MNode数量，Alive 为存活，Total 为所有",
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -842,7 +837,7 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "8.2.2",
+      "pluginVersion": "7.5.10",
       "targets": [
         {
           "alias": "",
@@ -867,7 +862,7 @@
     },
     {
       "datasource": "${DS_PROMETHEUS}",
-      "description": "当前TDengine集群 VGroups 数量，Alive 为存活，Total 为所有",
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -906,14 +901,14 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "8.2.2",
+      "pluginVersion": "7.5.10",
       "targets": [
         {
           "alias": "",
           "colNameFormatStr": "",
           "colNameToGroup": "",
           "exemplar": true,
-          "expr": "count(count(taos_vgroups_info_status{cluster_id=\"$cluster\"}) by (vgroup_id))",
+          "expr": "taos_cluster_info_vgroups_total",
           "formatType": "Time series",
           "interval": "",
           "legendFormat": "",
@@ -931,7 +926,7 @@
     },
     {
       "datasource": "${DS_PROMETHEUS}",
-      "description": "当前TDengine集群 VNodes 数量，Alive 为存活，Total 为所有",
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -970,14 +965,14 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "8.2.2",
+      "pluginVersion": "7.5.10",
       "targets": [
         {
           "alias": "",
           "colNameFormatStr": "",
           "colNameToGroup": "",
           "exemplar": true,
-          "expr": "taos_cluster_info_vgroups_alive{cluster_id=\"$cluster\"}",
+          "expr": "sum(sum(taos_dnodes_info_vnodes_num{cluster_id=\"$cluster\"}) by (dnode_id))",
           "formatType": "Time series",
           "interval": "",
           "legendFormat": "",
@@ -1034,6 +1029,50 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "${DS_PROMETHEUS}",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "graph": false,
+              "legend": false,
+              "tooltip": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 5,
+            "pointSize": 10,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -1057,7 +1096,15 @@
       "linewidth": 1,
       "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
+        "alertThreshold": true,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltipOptions": {
+          "mode": "single"
+        }
       },
       "percentage": false,
       "pluginVersion": "8.2.2",
@@ -1102,7 +1149,7 @@
         "sort": 0,
         "value_type": "individual"
       },
-      "type": "graph",
+      "type": "timeseries",
       "xaxis": {
         "buckets": null,
         "mode": "time",
@@ -1112,7 +1159,6 @@
       },
       "yaxes": [
         {
-          "$$hashKey": "object:71",
           "format": "percentunit",
           "label": null,
           "logBase": 1,
@@ -1121,7 +1167,6 @@
           "show": true
         },
         {
-          "$$hashKey": "object:72",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -1176,6 +1221,50 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "${DS_PROMETHEUS}",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "graph": false,
+              "legend": false,
+              "tooltip": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 5,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -1199,7 +1288,15 @@
       "linewidth": 1,
       "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
+        "alertThreshold": true,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltipOptions": {
+          "mode": "single"
+        }
       },
       "percentage": false,
       "pluginVersion": "8.2.2",
@@ -1245,7 +1342,7 @@
         "sort": 0,
         "value_type": "individual"
       },
-      "type": "graph",
+      "type": "timeseries",
       "xaxis": {
         "buckets": null,
         "mode": "time",
@@ -1255,7 +1352,6 @@
       },
       "yaxes": [
         {
-          "$$hashKey": "object:221",
           "format": "percentunit",
           "label": null,
           "logBase": 1,
@@ -1264,7 +1360,6 @@
           "show": true
         },
         {
-          "$$hashKey": "object:222",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -1319,6 +1414,50 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "${DS_PROMETHEUS}",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "graph": false,
+              "legend": false,
+              "tooltip": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 5,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -1342,7 +1481,15 @@
       "linewidth": 1,
       "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
+        "alertThreshold": true,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltipOptions": {
+          "mode": "single"
+        }
       },
       "percentage": false,
       "pluginVersion": "8.2.2",
@@ -1388,7 +1535,7 @@
         "sort": 0,
         "value_type": "individual"
       },
-      "type": "graph",
+      "type": "timeseries",
       "xaxis": {
         "buckets": null,
         "mode": "time",
@@ -1398,7 +1545,6 @@
       },
       "yaxes": [
         {
-          "$$hashKey": "object:256",
           "format": "percentunit",
           "label": null,
           "logBase": 1,
@@ -1407,7 +1553,6 @@
           "show": true
         },
         {
-          "$$hashKey": "object:257",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -1462,6 +1607,50 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "${DS_PROMETHEUS}",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "graph": false,
+              "legend": false,
+              "tooltip": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 5,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -1485,7 +1674,15 @@
       "linewidth": 1,
       "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
+        "alertThreshold": true,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltipOptions": {
+          "mode": "single"
+        }
       },
       "percentage": false,
       "pluginVersion": "8.2.2",
@@ -1531,7 +1728,7 @@
         "sort": 0,
         "value_type": "individual"
       },
-      "type": "graph",
+      "type": "timeseries",
       "xaxis": {
         "buckets": null,
         "mode": "time",
@@ -1541,7 +1738,6 @@
       },
       "yaxes": [
         {
-          "$$hashKey": "object:291",
           "format": "percentunit",
           "label": null,
           "logBase": 1,
@@ -1550,7 +1746,6 @@
           "show": true
         },
         {
-          "$$hashKey": "object:292",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -1565,110 +1760,78 @@
       }
     },
     {
-      "alert": {
-        "alertRuleTags": {},
-        "conditions": [
-          {
-            "evaluator": {
-              "params": [
-                0.95
-              ],
-              "type": "gt"
-            },
-            "operator": {
-              "type": "and"
-            },
-            "query": {
-              "params": [
-                "A",
-                "1m",
-                "now"
-              ]
-            },
-            "reducer": {
-              "params": [],
-              "type": "avg"
-            },
-            "type": "query"
-          },
-          {
-            "evaluator": {
-              "params": [
-                0,
-                1
-              ],
-              "type": "within_range"
-            },
-            "operator": {
-              "type": "and"
-            },
-            "query": {
-              "params": [
-                "A",
-                "1m",
-                "now"
-              ]
-            },
-            "reducer": {
-              "params": [],
-              "type": "avg"
-            },
-            "type": "query"
-          }
-        ],
-        "executionErrorState": "keep_state",
-        "for": "1m",
-        "frequency": "10s",
-        "handler": 1,
-        "name": "DNodes Alive Percent alert",
-        "noDataState": "ok",
-        "notifications": []
-      },
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
       "datasource": "${DS_PROMETHEUS}",
-      "fill": 1,
-      "fillGradient": 0,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "graph": false,
+              "legend": false,
+              "tooltip": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true
+          },
+          "mappings": [],
+          "max": 1,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
       "gridPos": {
         "h": 6,
         "w": 6,
         "x": 0,
         "y": 18
       },
-      "hiddenSeries": false,
       "id": 104,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
+        "graph": {},
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltipOptions": {
+          "mode": "single"
+        }
       },
-      "percentage": false,
-      "pluginVersion": "8.2.2",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      "pluginVersion": "7.5.10",
       "targets": [
         {
           "colNameFormatStr": "",
           "colNameToGroup": "",
           "exemplar": true,
-          "expr": "taos_grants_info_timeseries_used / taos_grants_info_timeseries_total {cluster_id=\"$cluster\"}",
+          "expr": "taos_grants_info_timeseries_used {cluster_id=\"$cluster\"}/ taos_grants_info_timeseries_total {cluster_id=\"$cluster\"}",
           "formatType": "Time series",
           "interval": "",
           "legendFormat": "percent",
@@ -1678,140 +1841,94 @@
           "type": "timeserie"
         }
       ],
-      "thresholds": [
-        {
-          "colorMode": "critical",
-          "fill": true,
-          "line": true,
-          "op": "gt",
-          "value": 0.95,
-          "visible": true
-        }
-      ],
       "timeFrom": null,
-      "timeRegions": [],
       "timeShift": null,
-      "title": "Messuring Points Used Percent Alert",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:333",
-          "decimals": null,
-          "format": "percentunit",
-          "label": null,
-          "logBase": 1,
-          "max": "1",
-          "min": "0",
-          "show": true
-        },
-        {
-          "$$hashKey": "object:334",
-          "format": "percentunit",
-          "label": null,
-          "logBase": 1,
-          "max": "1",
-          "min": "0",
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
+      "title": "Measuring Points Used Percent Alert",
+      "type": "timeseries"
     },
     {
-      "alert": {
-        "alertRuleTags": {},
-        "conditions": [
-          {
-            "evaluator": {
-              "params": [
-                86400
-              ],
-              "type": "lt"
-            },
-            "operator": {
-              "type": "and"
-            },
-            "query": {
-              "params": [
-                "A",
-                "1m",
-                "now"
-              ]
-            },
-            "reducer": {
-              "params": [],
-              "type": "min"
-            },
-            "type": "query"
-          }
-        ],
-        "executionErrorState": "keep_state",
-        "for": "1m",
-        "frequency": "10s",
-        "handler": 1,
-        "name": "Grants Expire Time alert",
-        "noDataState": "no_data",
-        "notifications": []
-      },
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
       "datasource": "${DS_PROMETHEUS}",
-      "fill": 1,
-      "fillGradient": 0,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "graph": false,
+              "legend": false,
+              "tooltip": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true
+          },
+          "mappings": [],
+          "min": 864000,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "percent"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percentunit"
+              },
+              {
+                "id": "max",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      },
       "gridPos": {
         "h": 6,
         "w": 6,
         "x": 6,
         "y": 18
       },
-      "hiddenSeries": false,
       "id": 105,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "8.2.2",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "$$hashKey": "object:368",
-          "alias": "percent",
-          "yaxis": 2
+        "graph": {},
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltipOptions": {
+          "mode": "single"
         }
-      ],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      },
+      "pluginVersion": "7.5.10",
       "targets": [
         {
           "colNameFormatStr": "",
@@ -1827,147 +1944,95 @@
           "type": "timeserie"
         }
       ],
-      "thresholds": [
-        {
-          "colorMode": "critical",
-          "fill": true,
-          "line": true,
-          "op": "lt",
-          "value": 86400,
-          "visible": true
-        }
-      ],
       "timeFrom": null,
-      "timeRegions": [],
       "timeShift": null,
       "title": "Grants Expire Time",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:375",
-          "decimals": null,
-          "format": "s",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": "0",
-          "show": true
-        },
-        {
-          "$$hashKey": "object:376",
-          "format": "percentunit",
-          "label": null,
-          "logBase": 1,
-          "max": "1",
-          "min": "0",
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
+      "type": "timeseries"
     },
     {
-      "alert": {
-        "alertRuleTags": {},
-        "conditions": [
-          {
-            "evaluator": {
-              "params": [
-                10
-              ],
-              "type": "gt"
-            },
-            "operator": {
-              "type": "and"
-            },
-            "query": {
-              "params": [
-                "A",
-                "1m",
-                "now"
-              ]
-            },
-            "reducer": {
-              "params": [],
-              "type": "avg"
-            },
-            "type": "query"
-          }
-        ],
-        "executionErrorState": "alerting",
-        "for": "1m",
-        "frequency": "10s",
-        "handler": 1,
-        "name": "Error Rate alert",
-        "noDataState": "no_data",
-        "notifications": []
-      },
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
       "datasource": "${DS_PROMETHEUS}",
-      "description": "错误率（每秒错误数）",
+      "description": "",
       "fieldConfig": {
         "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "graph": false,
+              "legend": false,
+              "tooltip": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
           "unit": "cps"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "percent"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percentunit"
+              },
+              {
+                "id": "max",
+                "value": 1
+              }
+            ]
+          }
+        ]
       },
-      "fill": 1,
-      "fillGradient": 0,
       "gridPos": {
         "h": 6,
         "w": 6,
         "x": 12,
         "y": 18
       },
-      "hiddenSeries": false,
       "id": 106,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "8.2.2",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "$$hashKey": "object:410",
-          "alias": "percent",
-          "yaxis": 2
+        "graph": {},
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltipOptions": {
+          "mode": "single"
         }
-      ],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      },
+      "pluginVersion": "7.5.10",
       "targets": [
         {
           "colNameFormatStr": "",
@@ -1983,371 +2048,10 @@
           "type": "timeserie"
         }
       ],
-      "thresholds": [
-        {
-          "colorMode": "critical",
-          "fill": true,
-          "line": true,
-          "op": "gt",
-          "value": 10,
-          "visible": true
-        }
-      ],
       "timeFrom": null,
-      "timeRegions": [],
       "timeShift": null,
       "title": "Error Rate",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:417",
-          "decimals": null,
-          "format": "cps",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": "0",
-          "show": true
-        },
-        {
-          "$$hashKey": "object:418",
-          "format": "percentunit",
-          "label": null,
-          "logBase": 1,
-          "max": "1",
-          "min": "0",
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "collapsed": false,
-      "datasource": "${DS_PROMETHEUS}",
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 24
-      },
-      "id": 24,
-      "panels": [],
-      "repeat": null,
-      "title": "DNodes Overview",
-      "type": "row"
-    },
-    {
-      "datasource": "${DS_PROMETHEUS}",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "s"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 4,
-        "x": 0,
-        "y": 25
-      },
-      "id": 90,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "value_and_name"
-      },
-      "pluginVersion": "8.2.2",
-      "repeat": null,
-      "targets": [
-        {
-          "alias": "",
-          "colNameFormatStr": "{{groupValue}}",
-          "colNameToGroup": "dnode_ep",
-          "exemplar": true,
-          "expr": "taos_dnodes_info_uptime{cluster_id=\"$cluster\"}",
-          "formatType": "Time series",
-          "interval": "",
-          "legendFormat": "{{dnode_ep}}",
-          "queryType": "SQL",
-          "refId": "A",
-          "target": "select metric",
-          "type": "timeserie"
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "DNodes Lifetime",
-      "type": "stat"
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
-      "fieldConfig": {
-        "defaults": {
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 6,
-        "w": 10,
-        "x": 4,
-        "y": 25
-      },
-      "hiddenSeries": false,
-      "id": 88,
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "8.2.2",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
-          "exemplar": true,
-          "expr": "taos_cluster_info_dnodes_total{cluster_id=\"$cluster\"}",
-          "formatType": "Time series",
-          "interval": "",
-          "legendFormat": "total",
-          "queryType": "SQL",
-          "refId": "A",
-          "target": "select metric",
-          "type": "timeserie"
-        },
-        {
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
-          "exemplar": true,
-          "expr": "taos_cluster_info_dnodes_alive{cluster_id=\"$cluster\"}",
-          "formatType": "Time series",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "alive",
-          "queryType": "SQL",
-          "refId": "B",
-          "target": "select metric",
-          "type": "timeserie"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "DNodes Number",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:128",
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "$$hashKey": "object:129",
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
-      "fieldConfig": {
-        "defaults": {
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 6,
-        "w": 10,
-        "x": 14,
-        "y": 25
-      },
-      "hiddenSeries": false,
-      "id": 89,
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "8.2.2",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
-          "exemplar": true,
-          "expr": "taos_cluster_info_mnodes_total{cluster_id=\"$cluster\"}",
-          "formatType": "Time series",
-          "interval": "",
-          "legendFormat": "total",
-          "queryType": "SQL",
-          "refId": "A",
-          "target": "select metric",
-          "type": "timeserie"
-        },
-        {
-          "exemplar": true,
-          "expr": "taos_cluster_info_mnodes_alive{cluster_id=\"$cluster\"}",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "alive",
-          "refId": "B"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "MNodes Number",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:452",
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "$$hashKey": "object:453",
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
+      "type": "timeseries"
     },
     {
       "collapsed": true,
@@ -2356,61 +2060,377 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 31
+        "y": 24
+      },
+      "id": 24,
+      "panels": [
+        {
+          "datasource": "${DS_PROMETHEUS}",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "d"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 4,
+            "x": 0,
+            "y": 5
+          },
+          "id": 90,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "orientation": "horizontal",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "text": {},
+            "textMode": "value_and_name"
+          },
+          "pluginVersion": "7.5.10",
+          "repeat": null,
+          "targets": [
+            {
+              "alias": "",
+              "colNameFormatStr": "{{groupValue}}",
+              "colNameToGroup": "dnode_ep",
+              "exemplar": true,
+              "expr": "taos_dnodes_info_uptime{cluster_id=\"$cluster\"}",
+              "formatType": "Time series",
+              "interval": "",
+              "legendFormat": "{{dnode_ep}}",
+              "queryType": "SQL",
+              "refId": "A",
+              "target": "select metric",
+              "type": "timeserie"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "DNodes Lifetime",
+          "type": "stat"
+        },
+        {
+          "datasource": "${DS_PROMETHEUS}",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "graph": false,
+                  "legend": false,
+                  "tooltip": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": true
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 10,
+            "x": 4,
+            "y": 5
+          },
+          "id": 88,
+          "options": {
+            "graph": {},
+            "legend": {
+              "calcs": [],
+              "displayMode": "table",
+              "placement": "bottom"
+            },
+            "tooltipOptions": {
+              "mode": "single"
+            }
+          },
+          "pluginVersion": "7.5.10",
+          "targets": [
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "exemplar": true,
+              "expr": "taos_cluster_info_dnodes_total{cluster_id=\"$cluster\"}",
+              "formatType": "Time series",
+              "interval": "",
+              "legendFormat": "total",
+              "queryType": "SQL",
+              "refId": "A",
+              "target": "select metric",
+              "type": "timeserie"
+            },
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "exemplar": true,
+              "expr": "taos_cluster_info_dnodes_alive{cluster_id=\"$cluster\"}",
+              "formatType": "Time series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "alive",
+              "queryType": "SQL",
+              "refId": "B",
+              "target": "select metric",
+              "type": "timeserie"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "DNodes Number",
+          "type": "timeseries"
+        },
+        {
+          "datasource": "${DS_PROMETHEUS}",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "graph": false,
+                  "legend": false,
+                  "tooltip": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": true
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 10,
+            "x": 14,
+            "y": 5
+          },
+          "id": 89,
+          "options": {
+            "graph": {},
+            "legend": {
+              "calcs": [],
+              "displayMode": "table",
+              "placement": "bottom"
+            },
+            "tooltipOptions": {
+              "mode": "single"
+            }
+          },
+          "pluginVersion": "7.5.10",
+          "targets": [
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "exemplar": true,
+              "expr": "taos_cluster_info_mnodes_total{cluster_id=\"$cluster\"}",
+              "formatType": "Time series",
+              "interval": "",
+              "legendFormat": "total",
+              "queryType": "SQL",
+              "refId": "A",
+              "target": "select metric",
+              "type": "timeserie"
+            },
+            {
+              "exemplar": true,
+              "expr": "taos_cluster_info_mnodes_alive{cluster_id=\"$cluster\"}",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "alive",
+              "refId": "B"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "MNodes Number",
+          "type": "timeseries"
+        }
+      ],
+      "repeat": null,
+      "title": "DNodes Overview",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "datasource": "${DS_PROMETHEUS}",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 25
       },
       "id": 108,
       "panels": [
         {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
           "datasource": "${DS_PROMETHEUS}",
-          "description": "Include two parts:",
-          "fill": 1,
-          "fillGradient": 0,
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "graph": false,
+                  "legend": false,
+                  "tooltip": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": true
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "short"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "/success_rate/"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "percentunit"
+                  },
+                  {
+                    "id": "min",
+                    "value": 0
+                  },
+                  {
+                    "id": "max",
+                    "value": 1
+                  }
+                ]
+              }
+            ]
+          },
           "gridPos": {
             "h": 9,
             "w": 24,
             "x": 0,
-            "y": 32
+            "y": 6
           },
-          "hiddenSeries": false,
           "id": 110,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": false,
-            "max": true,
-            "min": true,
-            "rightSide": true,
-            "show": true,
-            "sideWidth": 600,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
           "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "8.2.2",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [
-            {
-              "$$hashKey": "object:66",
-              "alias": "/success_rate/",
-              "yaxis": 2
+            "graph": {},
+            "legend": {
+              "calcs": [
+                "mean",
+                "lastNotNull",
+                "max",
+                "min",
+                "sum"
+              ],
+              "displayMode": "table",
+              "placement": "right"
+            },
+            "tooltipOptions": {
+              "mode": "single"
             }
-          ],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
+          },
+          "pluginVersion": "7.5.10",
           "targets": [
             {
               "colNameFormatStr": "",
@@ -2482,91 +2502,79 @@
           "timeRegions": [],
           "timeShift": null,
           "title": "Requests (Inserts)",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "percentunit",
-              "label": null,
-              "logBase": 1,
-              "max": "1",
-              "min": "0",
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          "type": "timeseries"
         },
         {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
           "datasource": "${DS_PROMETHEUS}",
           "fieldConfig": {
             "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "graph": false,
+                  "legend": false,
+                  "tooltip": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": true
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
               "unit": "cps"
             },
             "overrides": []
           },
-          "fill": 1,
-          "fillGradient": 0,
           "gridPos": {
             "h": 9,
             "w": 24,
             "x": 0,
-            "y": 41
+            "y": 15
           },
-          "hiddenSeries": false,
           "id": 112,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "max": true,
-            "min": true,
-            "rightSide": true,
-            "show": true,
-            "sideWidth": 600,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
           "options": {
-            "alertThreshold": true
+            "graph": {},
+            "legend": {
+              "calcs": [
+                "mean",
+                "lastNotNull",
+                "max",
+                "min",
+                "sum"
+              ],
+              "displayMode": "table",
+              "placement": "right"
+            },
+            "tooltipOptions": {
+              "mode": "single"
+            }
           },
-          "percentage": false,
-          "pluginVersion": "8.2.2",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
+          "pluginVersion": "7.5.10",
           "targets": [
             {
               "colNameFormatStr": "",
@@ -2608,96 +2616,95 @@
               "refId": "D"
             }
           ],
-          "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Requests Rate (Inserts per Second)",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "cps",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          "type": "timeseries"
         },
         {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
           "datasource": "${DS_PROMETHEUS}",
-          "fill": 1,
-          "fillGradient": 0,
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "graph": false,
+                  "legend": false,
+                  "tooltip": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": true
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "short"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "/rate/"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "cps"
+                  }
+                ]
+              }
+            ]
+          },
           "gridPos": {
             "h": 8,
             "w": 24,
             "x": 0,
-            "y": 50
+            "y": 24
           },
-          "hiddenSeries": false,
           "id": 114,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "max": true,
-            "min": true,
-            "rightSide": true,
-            "show": true,
-            "sideWidth": 600,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
           "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "8.2.2",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [
-            {
-              "$$hashKey": "object:227",
-              "alias": "/rate/",
-              "yaxis": 2
+            "graph": {},
+            "legend": {
+              "calcs": [
+                "mean",
+                "lastNotNull",
+                "max",
+                "min",
+                "sum"
+              ],
+              "displayMode": "table",
+              "placement": "right"
+            },
+            "tooltipOptions": {
+              "mode": "single"
             }
-          ],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
+          },
+          "pluginVersion": "7.5.10",
           "targets": [
             {
               "colNameFormatStr": "",
@@ -2747,46 +2754,10 @@
               "refId": "D"
             }
           ],
-          "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Requests (Selects)",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "cps",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          "type": "timeseries"
         }
       ],
       "title": "Requests",
@@ -2799,13 +2770,13 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 34
+        "y": 26
       },
       "id": 20,
       "panels": [
         {
           "datasource": "${DS_PROMETHEUS}",
-          "description": "启动时长",
+          "description": "",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -2822,7 +2793,7 @@
                   }
                 ]
               },
-              "unit": "s"
+              "unit": "d"
             },
             "overrides": []
           },
@@ -2830,7 +2801,7 @@
             "h": 6,
             "w": 4,
             "x": 0,
-            "y": 69
+            "y": 7
           },
           "id": 120,
           "options": {
@@ -2848,7 +2819,14 @@
             "text": {},
             "textMode": "auto"
           },
-          "pluginVersion": "8.2.2",
+          "pluginVersion": "7.5.10",
+          "scopedVars": {
+            "fqdn": {
+              "selected": true,
+              "text": "26e4f37c41a7:6030",
+              "value": "26e4f37c41a7:6030"
+            }
+          },
           "targets": [
             {
               "alias": "disk_used",
@@ -2887,7 +2865,7 @@
         },
         {
           "datasource": "${DS_PROMETHEUS}",
-          "description": "是否有MNode",
+          "description": "",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -2905,7 +2883,16 @@
                       "text": "Yes"
                     }
                   },
-                  "type": "value"
+                  "text": "Yes",
+                  "type": 1,
+                  "value": "1"
+                },
+                {
+                  "from": "",
+                  "id": null,
+                  "text": "",
+                  "to": "",
+                  "type": 1
                 }
               ],
               "thresholds": {
@@ -2925,12 +2912,12 @@
             "h": 6,
             "w": 2,
             "x": 4,
-            "y": 69
+            "y": 7
           },
           "id": 121,
           "options": {
             "colorMode": "value",
-            "graphMode": "area",
+            "graphMode": "none",
             "justifyMode": "auto",
             "orientation": "auto",
             "reduceOptions": {
@@ -2943,7 +2930,14 @@
             "text": {},
             "textMode": "auto"
           },
-          "pluginVersion": "8.2.2",
+          "pluginVersion": "7.5.10",
+          "scopedVars": {
+            "fqdn": {
+              "selected": true,
+              "text": "26e4f37c41a7:6030",
+              "value": "26e4f37c41a7:6030"
+            }
+          },
           "targets": [
             {
               "alias": "",
@@ -2971,7 +2965,7 @@
         },
         {
           "datasource": "${DS_PROMETHEUS}",
-          "description": "CPU 核数",
+          "description": "",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -2996,7 +2990,7 @@
             "h": 6,
             "w": 2,
             "x": 6,
-            "y": 69
+            "y": 7
           },
           "id": 122,
           "options": {
@@ -3014,7 +3008,14 @@
             "text": {},
             "textMode": "auto"
           },
-          "pluginVersion": "8.2.2",
+          "pluginVersion": "7.5.10",
+          "scopedVars": {
+            "fqdn": {
+              "selected": true,
+              "text": "26e4f37c41a7:6030",
+              "value": "26e4f37c41a7:6030"
+            }
+          },
           "targets": [
             {
               "alias": "",
@@ -3042,7 +3043,7 @@
         },
         {
           "datasource": "${DS_PROMETHEUS}",
-          "description": "VNodes 数量",
+          "description": "",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -3066,7 +3067,7 @@
             "h": 6,
             "w": 2,
             "x": 8,
-            "y": 69
+            "y": 7
           },
           "id": 123,
           "options": {
@@ -3084,7 +3085,14 @@
             "text": {},
             "textMode": "auto"
           },
-          "pluginVersion": "8.2.2",
+          "pluginVersion": "7.5.10",
+          "scopedVars": {
+            "fqdn": {
+              "selected": true,
+              "text": "26e4f37c41a7:6030",
+              "value": "26e4f37c41a7:6030"
+            }
+          },
           "targets": [
             {
               "alias": "",
@@ -3112,7 +3120,7 @@
         },
         {
           "datasource": "${DS_PROMETHEUS}",
-          "description": "Master VNodes 数量",
+          "description": "",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -3136,7 +3144,7 @@
             "h": 6,
             "w": 2,
             "x": 10,
-            "y": 69
+            "y": 7
           },
           "id": 124,
           "options": {
@@ -3154,7 +3162,14 @@
             "text": {},
             "textMode": "auto"
           },
-          "pluginVersion": "8.2.2",
+          "pluginVersion": "7.5.10",
+          "scopedVars": {
+            "fqdn": {
+              "selected": true,
+              "text": "26e4f37c41a7:6030",
+              "value": "26e4f37c41a7:6030"
+            }
+          },
           "targets": [
             {
               "alias": "",
@@ -3182,82 +3197,54 @@
         },
         {
           "datasource": "${DS_PROMETHEUS}",
-          "description": "当前 taosd 线程 CPU 使用率",
+          "description": "",
           "fieldConfig": {
             "defaults": {
               "color": {
                 "mode": "continuous-GrYlRd"
               },
               "mappings": [],
-              "max": 100,
-              "min": 0,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
                     "color": "green",
                     "value": null
-                  },
-                  {
-                    "color": "#EAB839",
-                    "value": 0.5
-                  },
-                  {
-                    "color": "red",
-                    "value": 0.8
                   }
                 ]
               },
               "unit": "percent"
             },
-            "overrides": [
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "last(cpu_taosd)"
-                },
-                "properties": [
-                  {
-                    "id": "thresholds",
-                    "value": {
-                      "mode": "absolute",
-                      "steps": [
-                        {
-                          "color": "green",
-                          "value": null
-                        },
-                        {
-                          "color": "red",
-                          "value": 80
-                        }
-                      ]
-                    }
-                  }
-                ]
-              }
-            ]
+            "overrides": []
           },
           "gridPos": {
             "h": 6,
             "w": 4,
             "x": 12,
-            "y": 69
+            "y": 7
           },
           "id": 45,
           "options": {
             "orientation": "auto",
             "reduceOptions": {
               "calcs": [
-                "mean"
+                "last"
               ],
               "fields": "",
               "values": false
             },
-            "showThresholdLabels": true,
-            "showThresholdMarkers": true,
+            "showThresholdLabels": false,
+            "showThresholdMarkers": false,
             "text": {}
           },
-          "pluginVersion": "8.2.2",
+          "pluginVersion": "7.5.10",
+          "scopedVars": {
+            "fqdn": {
+              "selected": true,
+              "text": "26e4f37c41a7:6030",
+              "value": "26e4f37c41a7:6030"
+            }
+          },
           "targets": [
             {
               "alias": "mem_taosd",
@@ -3265,7 +3252,9 @@
               "colNameToGroup": "",
               "exemplar": true,
               "expr": "taos_dnodes_info_cpu_engine{cluster_id=\"$cluster\",dnode_ep=\"$fqdn\"}",
+              "format": "time_series",
               "formatType": "Table",
+              "instant": false,
               "interval": "",
               "legendFormat": "",
               "queryType": "SQL",
@@ -3281,14 +3270,13 @@
         },
         {
           "datasource": "${DS_PROMETHEUS}",
-          "description": "当前 taosd 线程 内存 使用率",
+          "description": "",
           "fieldConfig": {
             "defaults": {
               "color": {
                 "mode": "continuous-GrYlRd"
               },
               "mappings": [],
-              "min": 0,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
@@ -3298,7 +3286,7 @@
                   }
                 ]
               },
-              "unit": "decmbytes"
+              "unit": "deckbytes"
             },
             "overrides": []
           },
@@ -3306,23 +3294,30 @@
             "h": 6,
             "w": 4,
             "x": 16,
-            "y": 69
+            "y": 7
           },
           "id": 66,
           "options": {
             "orientation": "auto",
             "reduceOptions": {
               "calcs": [
-                "mean"
+                "lastNotNull"
               ],
               "fields": "/^taosd$/",
               "values": false
             },
-            "showThresholdLabels": true,
-            "showThresholdMarkers": true,
+            "showThresholdLabels": false,
+            "showThresholdMarkers": false,
             "text": {}
           },
-          "pluginVersion": "8.2.2",
+          "pluginVersion": "7.5.10",
+          "scopedVars": {
+            "fqdn": {
+              "selected": true,
+              "text": "26e4f37c41a7:6030",
+              "value": "26e4f37c41a7:6030"
+            }
+          },
           "targets": [
             {
               "alias": "memory",
@@ -3339,19 +3334,12 @@
               "type": "timeserie"
             },
             {
-              "alias": "memory",
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "exemplar": true,
               "expr": "taos_dnodes_info_mem_total{cluster_id=\"$cluster\",dnode_ep=\"$fqdn\"}",
-              "formatType": "Time series",
               "hide": false,
               "interval": "",
-              "legendFormat": "total",
-              "queryType": "SQL",
-              "refId": "B",
-              "target": "select metric",
-              "type": "timeserie"
+              "legendFormat": "",
+              "refId": "B"
             }
           ],
           "timeFrom": null,
@@ -3399,7 +3387,7 @@
             "h": 6,
             "w": 4,
             "x": 20,
-            "y": 69
+            "y": 7
           },
           "id": 51,
           "options": {
@@ -3415,7 +3403,14 @@
             "showUnfilled": true,
             "text": {}
           },
-          "pluginVersion": "8.2.2",
+          "pluginVersion": "7.5.10",
+          "scopedVars": {
+            "fqdn": {
+              "selected": true,
+              "text": "26e4f37c41a7:6030",
+              "value": "26e4f37c41a7:6030"
+            }
+          },
           "targets": [
             {
               "alias": "disk_used",
@@ -3448,10 +3443,10 @@
           "dashLength": 10,
           "dashes": false,
           "datasource": "${DS_PROMETHEUS}",
-          "description": "CPU 资源占用情况。",
+          "description": "",
           "fieldConfig": {
             "defaults": {
-              "links": []
+              "unit": "percent"
             },
             "overrides": []
           },
@@ -3461,7 +3456,7 @@
             "h": 11,
             "w": 12,
             "x": 0,
-            "y": 75
+            "y": 13
           },
           "hiddenSeries": false,
           "hideTimeOverride": true,
@@ -3469,10 +3464,11 @@
           "legend": {
             "alignAsTable": true,
             "avg": true,
-            "current": true,
+            "current": false,
             "hideZero": false,
             "max": true,
             "min": true,
+            "rightSide": false,
             "show": true,
             "total": false,
             "values": true
@@ -3485,10 +3481,17 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "8.2.2",
+          "pluginVersion": "7.5.10",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
+          "scopedVars": {
+            "fqdn": {
+              "selected": true,
+              "text": "26e4f37c41a7:6030",
+              "value": "26e4f37c41a7:6030"
+            }
+          },
           "seriesOverrides": [],
           "spaceLength": 10,
           "stack": false,
@@ -3499,9 +3502,10 @@
               "colNameFormatStr": "",
               "colNameToGroup": "",
               "exemplar": true,
-              "expr": "avg_over_time(taos_dnodes_info_cpu_engine{cluster_id=\"$cluster\",dnode_ep=\"$fqdn\"}[$__interval])",
+              "expr": "taos_dnodes_info_cpu_engine{cluster_id=\"$cluster\",dnode_ep=\"$fqdn\"}",
               "formatType": "Time series",
               "hide": false,
+              "instant": false,
               "interval": "",
               "legendFormat": "taosd",
               "queryType": "SQL",
@@ -3514,7 +3518,8 @@
               "colNameFormatStr": "",
               "colNameToGroup": "",
               "exemplar": true,
-              "expr": "avg_over_time(taos_dnodes_info_cpu_system{cluster_id=\"$cluster\",dnode_ep=\"$fqdn\"}[$__interval])",
+              "expr": "taos_dnodes_info_cpu_system{cluster_id=\"$cluster\",dnode_ep=\"$fqdn\"}",
+              "format": "time_series",
               "formatType": "Time series",
               "hide": false,
               "interval": "",
@@ -3547,7 +3552,7 @@
             {
               "decimals": null,
               "format": "percent",
-              "label": "使用占比",
+              "label": "",
               "logBase": 1,
               "max": null,
               "min": null,
@@ -3574,10 +3579,10 @@
           "dashLength": 10,
           "dashes": false,
           "datasource": "${DS_PROMETHEUS}",
-          "description": "内存资源占用情况",
+          "description": "",
           "fieldConfig": {
             "defaults": {
-              "links": []
+              "unit": "deckbytes"
             },
             "overrides": []
           },
@@ -3587,7 +3592,7 @@
             "h": 11,
             "w": 12,
             "x": 12,
-            "y": 75
+            "y": 13
           },
           "hiddenSeries": false,
           "hideTimeOverride": true,
@@ -3595,7 +3600,7 @@
           "legend": {
             "alignAsTable": true,
             "avg": true,
-            "current": true,
+            "current": false,
             "max": true,
             "min": true,
             "show": true,
@@ -3610,10 +3615,17 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "8.2.2",
+          "pluginVersion": "7.5.10",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
+          "scopedVars": {
+            "fqdn": {
+              "selected": true,
+              "text": "26e4f37c41a7:6030",
+              "value": "26e4f37c41a7:6030"
+            }
+          },
           "seriesOverrides": [],
           "spaceLength": 10,
           "stack": false,
@@ -3624,7 +3636,7 @@
               "colNameFormatStr": "",
               "colNameToGroup": "",
               "exemplar": true,
-              "expr": "avg_over_time(taos_dnodes_info_mem_engine{cluster_id=\"$cluster\",dnode_ep=\"$fqdn\"}[$__interval])",
+              "expr": "taos_dnodes_info_mem_engine{cluster_id=\"$cluster\",dnode_ep=\"$fqdn\"}",
               "formatType": "Time series",
               "hide": false,
               "interval": "",
@@ -3639,7 +3651,7 @@
               "colNameFormatStr": "",
               "colNameToGroup": "",
               "exemplar": true,
-              "expr": "avg_over_time(taos_dnodes_info_mem_system{cluster_id=\"$cluster\",dnode_ep=\"$fqdn\"}[$__interval])",
+              "expr": "taos_dnodes_info_mem_system{cluster_id=\"$cluster\",dnode_ep=\"$fqdn\"}",
               "formatType": "Time series",
               "hide": false,
               "interval": "",
@@ -3654,9 +3666,9 @@
               "colNameFormatStr": "",
               "colNameToGroup": "",
               "exemplar": true,
-              "expr": "avg_over_time(taos_dnodes_info_mem_total{cluster_id=\"$cluster\",dnode_ep=\"$fqdn\"}[$__interval])",
+              "expr": "taos_dnodes_info_mem_total{cluster_id=\"$cluster\",dnode_ep=\"$fqdn\"}",
               "formatType": "Time series",
-              "hide": false,
+              "hide": true,
               "interval": "",
               "legendFormat": "total",
               "queryType": "SQL",
@@ -3685,9 +3697,8 @@
           },
           "yaxes": [
             {
-              "decimals": null,
-              "format": "decmbytes",
-              "label": "使用占比",
+              "format": "deckbytes",
+              "label": null,
               "logBase": 1,
               "max": null,
               "min": null,
@@ -3699,7 +3710,7 @@
               "logBase": 1,
               "max": null,
               "min": null,
-              "show": false
+              "show": true
             }
           ],
           "yaxis": {
@@ -3708,65 +3719,96 @@
           }
         },
         {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
           "datasource": "${DS_PROMETHEUS}",
-          "fill": 1,
-          "fillGradient": 0,
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "graph": false,
+                  "legend": false,
+                  "tooltip": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": true
+              },
+              "mappings": [],
+              "min": 1024000,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "bytes"
+            },
+            "overrides": []
+          },
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 86
+            "y": 24
           },
-          "hiddenSeries": false,
           "id": 117,
-          "legend": {
-            "alignAsTable": true,
-            "avg": false,
-            "current": true,
-            "hideEmpty": false,
-            "hideZero": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "sideWidth": 400,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
           "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "8.2.2",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [
-            {
-              "$$hashKey": "object:84",
-              "alias": "/percent/",
-              "yaxis": 2
+            "graph": {},
+            "legend": {
+              "calcs": [
+                "mean",
+                "lastNotNull",
+                "max",
+                "min",
+                "sum"
+              ],
+              "displayMode": "table",
+              "placement": "bottom"
+            },
+            "tooltipOptions": {
+              "mode": "single"
             }
-          ],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
+          },
+          "pluginVersion": "7.5.10",
+          "repeat": null,
+          "repeatDirection": "h",
+          "scopedVars": {
+            "fqdn": {
+              "selected": true,
+              "text": "26e4f37c41a7:6030",
+              "value": "26e4f37c41a7:6030"
+            }
+          },
           "targets": [
             {
               "alias": "",
               "colNameFormatStr": "",
               "colNameToGroup": "",
               "exemplar": true,
-              "expr": "avg_over_time(taos_data_dir_used{cluster_id=\"$cluster\",dnode_ep=\"$fqdn\"}[$__interval])",
+              "expr": "taos_data_dir_used{cluster_id=\"$cluster\",dnode_ep=\"$fqdn\"}",
               "formatType": "Time series",
               "hide": false,
+              "instant": false,
               "interval": "",
               "legendFormat": "level0_used",
               "queryType": "SQL",
@@ -3782,9 +3824,10 @@
               "colNameFormatStr": "",
               "colNameToGroup": "",
               "exemplar": true,
-              "expr": "avg_over_time(taos_data_dir_total{cluster_id=\"$cluster\",dnode_ep=\"$fqdn\"}[$__interval])",
+              "expr": "taos_data_dir_total{cluster_id=\"$cluster\",dnode_ep=\"$fqdn\"}",
               "formatType": "Time series",
-              "hide": false,
+              "hide": true,
+              "instant": false,
               "interval": "",
               "legendFormat": "level0_total",
               "queryType": "SQL",
@@ -3796,47 +3839,11 @@
               "type": "timeserie"
             }
           ],
-          "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Disk Used",
-          "tooltip": {
-            "shared": false,
-            "sort": 0,
-            "value_type": "individual"
-          },
           "transformations": [],
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "gbytes",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "percentunit",
-              "label": "Disk Used",
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          "type": "timeseries"
         },
         {
           "aliasColors": {},
@@ -3844,13 +3851,19 @@
           "dashLength": 10,
           "dashes": false,
           "datasource": "${DS_PROMETHEUS}",
+          "fieldConfig": {
+            "defaults": {
+              "unit": "binBps"
+            },
+            "overrides": []
+          },
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 86
+            "y": 24
           },
           "hiddenSeries": false,
           "id": 64,
@@ -3873,10 +3886,17 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "8.2.2",
+          "pluginVersion": "7.5.10",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
+          "scopedVars": {
+            "fqdn": {
+              "selected": true,
+              "text": "26e4f37c41a7:6030",
+              "value": "26e4f37c41a7:6030"
+            }
+          },
           "seriesOverrides": [],
           "spaceLength": 10,
           "stack": false,
@@ -3921,7 +3941,7 @@
           },
           "yaxes": [
             {
-              "format": "MBs",
+              "format": "binBps",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -3930,7 +3950,7 @@
             },
             {
               "format": "percentunit",
-              "label": "Disk Used",
+              "label": "",
               "logBase": 1,
               "max": null,
               "min": null,
@@ -3949,10 +3969,10 @@
           "dashLength": 10,
           "dashes": false,
           "datasource": "${DS_PROMETHEUS}",
-          "description": "io",
+          "description": "",
           "fieldConfig": {
             "defaults": {
-              "links": []
+              "unit": "KBs"
             },
             "overrides": []
           },
@@ -3962,7 +3982,7 @@
             "h": 12,
             "w": 12,
             "x": 0,
-            "y": 96
+            "y": 34
           },
           "hiddenSeries": false,
           "hideTimeOverride": true,
@@ -3986,13 +4006,19 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "8.2.2",
+          "pluginVersion": "7.5.10",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
+          "scopedVars": {
+            "fqdn": {
+              "selected": true,
+              "text": "26e4f37c41a7:6030",
+              "value": "26e4f37c41a7:6030"
+            }
+          },
           "seriesOverrides": [
             {
-              "$$hashKey": "object:302",
               "alias": "/last/",
               "dashLength": 5,
               "dashes": true,
@@ -4055,8 +4081,8 @@
           "yaxes": [
             {
               "decimals": null,
-              "format": "MBs",
-              "label": "IO Rate",
+              "format": "KBs",
+              "label": "",
               "logBase": 1,
               "max": null,
               "min": null,
@@ -4083,11 +4109,11 @@
           "dashLength": 10,
           "dashes": false,
           "datasource": "${DS_PROMETHEUS}",
-          "description": "io",
+          "description": "",
           "fieldConfig": {
             "defaults": {
               "links": [],
-              "unit": "Mbits"
+              "unit": "KBs"
             },
             "overrides": []
           },
@@ -4097,7 +4123,7 @@
             "h": 12,
             "w": 12,
             "x": 12,
-            "y": 96
+            "y": 34
           },
           "hiddenSeries": false,
           "hideTimeOverride": true,
@@ -4120,13 +4146,19 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "8.2.2",
+          "pluginVersion": "7.5.10",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
+          "scopedVars": {
+            "fqdn": {
+              "selected": true,
+              "text": "26e4f37c41a7:6030",
+              "value": "26e4f37c41a7:6030"
+            }
+          },
           "seriesOverrides": [
             {
-              "$$hashKey": "object:347",
               "alias": "/in/",
               "transform": "negative-Y"
             }
@@ -4187,8 +4219,8 @@
           "yaxes": [
             {
               "decimals": null,
-              "format": "Mbits",
-              "label": "IO Rate",
+              "format": "KBs",
+              "label": "",
               "logBase": 1,
               "max": null,
               "min": null,
@@ -4212,136 +4244,10 @@
       "repeat": "fqdn",
       "title": "DNode Usage [ $fqdn ]",
       "type": "row"
-    },
-    {
-      "collapsed": true,
-      "datasource": "${DS_PROMETHEUS}",
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 35
-      },
-      "id": 63,
-      "panels": [
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
-          "fieldConfig": {
-            "defaults": {
-              "displayName": "Logins Per Minute",
-              "unit": "cpm"
-            },
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 8,
-            "w": 12,
-            "x": 0,
-            "y": 10
-          },
-          "hiddenSeries": false,
-          "id": 61,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "8.2.2",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [
-            {
-              "$$hashKey": "object:67",
-              "alias": "logins",
-              "nullPointMode": "null as zero"
-            }
-          ],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "alias": "logins",
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
-              "exemplar": true,
-              "expr": "count_over_time(taos_logs_content{cluster_id=\"$cluster\"}[1m])",
-              "formatType": "Time series",
-              "interval": "",
-              "legendFormat": "",
-              "queryType": "SQL",
-              "refId": "A",
-              "target": "select metric",
-              "type": "timeserie"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Login Counts per Minute",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "$$hashKey": "object:74",
-              "format": "cpm",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "$$hashKey": "object:75",
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        }
-      ],
-      "title": "Login History",
-      "type": "row"
     }
   ],
-  "schemaVersion": 31,
+  "refresh": "5s",
+  "schemaVersion": 27,
   "style": "dark",
   "tags": [
     "TDengine",
@@ -4371,7 +4277,11 @@
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,
-        "type": "query"
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
       },
       {
         "allValue": null,
@@ -4394,7 +4304,11 @@
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,
-        "type": "query"
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
       },
       {
         "allValue": null,
@@ -4417,7 +4331,11 @@
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,
-        "type": "query"
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
       },
       {
         "allValue": null,
@@ -4440,7 +4358,11 @@
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,
-        "type": "query"
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
       },
       {
         "allValue": null,
@@ -4463,7 +4385,11 @@
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,
-        "type": "query"
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
       },
       {
         "allValue": null,
@@ -4486,7 +4412,11 @@
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,
-        "type": "query"
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
       },
       {
         "auto": true,
@@ -4587,7 +4517,7 @@
     ]
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {
@@ -4606,6 +4536,6 @@
   },
   "timezone": "",
   "title": "TaosKeeper Prometheus Dashboard for 3.x",
-  "version": 1,
+  "version": 2,
   "description": "Metrics display for TDengine database for 3.x"
 }
