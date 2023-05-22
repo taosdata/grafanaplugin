@@ -149,7 +149,7 @@ Aliyun SMS as Notifier:
 假设您在主机 `tdengine` 上启动 TDengine 数据库，HTTP API 端口为 `6041`，用户为 `root1`，密码为 `pass5ord`。执行脚本：
 
 ```bash
-sudo ./TDinsight.sh -a http://tdengine:6041 -u root1 -p pass5ord
+./TDinsight.sh -a http://tdengine:6041 -u root1 -p pass5ord
 ```
 
 我们提供了一个“-E”选项，用于从命令行配置 TDinsight 使用现有的通知通道(Notification Channel)。假设你的 Grafana 用户和密码是 `admin:admin`，使用以下命令获取已有的通知通道的`uid`：
@@ -161,7 +161,7 @@ curl --no-progress-meter -u admin:admin http://localhost:3000/api/alert-notifica
 使用上面获取的 `uid` 值作为 `-E` 输入。
 
 ```bash
-sudo ./TDinsight.sh -a http://tdengine:6041 -u root1 -p pass5ord -E existing-notifier
+./TDinsight.sh -a http://tdengine:6041 -u root1 -p pass5ord -E existing-notifier
 ```
 
 如果你想使用[阿里云短信](https://www.aliyun.com/product/sms)服务作为通知渠道，你应该使用`-s`标志启用并添加以下参数：
