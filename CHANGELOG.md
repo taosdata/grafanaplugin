@@ -2,12 +2,42 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.3.3] - 2023-07-11
+
+### Bug Fixes
+
+- Fix for http status code
+- Fix for taoskeeper prometheus dashboard v3
+- Fix for tdinsight v3 and prometheus v3 dashboard
+
+### Documentation
+
+- Update tdinsight document
+
+### Enhancements
+
+- Add default value to database and delete `user db`
+
+### Features
+
+- Add taoskeeper prometheus dashboard (#209)
+
+### Build
+
+- Bump google.golang.org/grpc from 1.41.0 to 1.53.0 (#213)
+- Bump semver from 5.7.1 to 5.7.2 (#214)
+
 ## [3.3.2] - 2023-04-13
 
 ### Bug Fixes
 
-- Fix for TDinsightV3 dashboard
+- Remove group by
+- Adapt keepColName params
+- Set datasource for http status code dashboard (#200)
+- Fix for total tables (#201)
+- Fix for table summary
 - Fix for table data type
+- Fix for duplicate metric name
 
 ### Enhancements
 
@@ -21,10 +51,16 @@ All notable changes to this project will be documented in this file.
 
 ### Bug Fixes
 
+- Revert `testDatasource` function
+- Change httpclient and delete sensitive log
+- Delete token from log (#184)
+- Typos
+- Typos
 - Fix for telegraf dashboard (#187)
 - Fix for unused formatType config
 - Delete console log in datasource.ts (#191)
 - Refactor readme and upgrade dependence and fix tdinsight v3
+- Typos
 - Fix for log (#194)
 
 ### Documentation
@@ -56,7 +92,7 @@ All notable changes to this project will be documented in this file.
 
 ### Features
 
-- Support set legend alias by setting format string
+- Support set legend aliais by setting formatstr
 
 ### Build
 
@@ -157,7 +193,7 @@ All notable changes to this project will be documented in this file.
 
 ### Bug Fixes
 
-- Remove sensitive logging, fix ts layout format parsing method (#127)
+- Remove sentitive logging, fix ts layout format parsing method (#127)
 
 ## [3.2.0] - 2022-05-25
 
@@ -190,7 +226,7 @@ All notable changes to this project will be documented in this file.
 
 ### Bug Fixes
 
-- Change link to tdengine.com for plugin-check (#117)
+- Change link to tdengine.com for plugincheck (#117)
 
 ## [3.1.5] - 2022-05-05
 
@@ -270,7 +306,7 @@ All notable changes to this project will be documented in this file.
 
 ### [TS-790]<fix>
 
-- Fix incorrect time range in TDinsight disk/net panels (#88)
+- Fix incrrect time range in TDinsight disk/net panels (#88)
 
 ## [3.1.3] - 2021-11-26
 
@@ -298,7 +334,7 @@ All notable changes to this project will be documented in this file.
 
 ### [TD-11147]<fix>
 
-- Fill(null) caused taosadapter/httpd core-dump (#76)
+- Fill(null) caused taosadapter/httpd coredump (#76)
 
 ### [TD-11242]<fix>
 
@@ -434,7 +470,7 @@ All notable changes to this project will be documented in this file.
 
 ### [TD-5109]<feature>
 
-- Support arithmetic calculation among queries
+- Support arithmetic calculation among queris
 
 ### [TD-5215]<fix>
 

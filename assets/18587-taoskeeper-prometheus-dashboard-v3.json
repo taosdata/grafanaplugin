@@ -522,7 +522,7 @@
           "refId": "B"
         }
       ],
-      "title": "Used Meassuring Points",
+      "title": "Used Measuring Points",
       "transformations": [],
       "type": "bargauge"
     },
@@ -1906,7 +1906,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Messuring Points Used Percent Alert",
+      "title": "Measuring Points Used Percent Alert",
       "tooltip": {
         "shared": true,
         "sort": 0,
