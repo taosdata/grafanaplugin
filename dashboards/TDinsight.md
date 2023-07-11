@@ -149,7 +149,7 @@ Most of the CLI options are environment variable recognizable.
 Suppose you are serving TDengine on host `tdengine`, with HTTP API port `6041`, user `root1`, password `pass5ord`. Use the script as:
 
 ```bash
-sudo ./TDinsight.sh -a http://tdengine:6041 -u root1 -p pass5ord
+./TDinsight.sh -a http://tdengine:6041 -u root1 -p pass5ord
 ```
 
 We are providing a `-E` options to configure existing notification channel for TDinsight from command line. Suppose your Grafana user and password is `admin:admin`, use the following command to get the notification channels:
@@ -161,7 +161,7 @@ curl --no-progress-meter -u admin:admin http://localhost:3000/api/alert-notifica
 Here, we use `uid` property of the notification channel as `-E` input.
 
 ```bash
-sudo ./TDinsight.sh -a http://tdengine:6041 -u root1 -p pass5ord -E existing-notifier
+./TDinsight.sh -a http://tdengine:6041 -u root1 -p pass5ord -E existing-notifier
 ```
 
 If you want to use [Aliyun SMS](https://www.aliyun.com/product/sms) service as notification channel, you should enable it with `-s` flag and the settings:
