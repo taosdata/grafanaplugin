@@ -3861,7 +3861,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, status_code, sum(gauge) from $database.taosadapter_restful_http_request_total where _ts >= $from and _ts <= $to partition by status_code interval($interval) fill(null)"
+              "sql": "select ts, status_code, gauge from (select _wstart as ts, status_code, last(gauge) as last_gauge, first(gauge) as first_gauge, last(gauge)-first(gauge) as gauge from $database.taosadapter_restful_http_request_total where _ts >= $from and _ts <= $to partition by status_code interval($interval) fill(null))"
             }
           ],
           "thresholds": [],
@@ -3888,7 +3888,7 @@
               "label": null,
               "logBase": 1,
               "max": null,
-              "min": null,
+              "min": 0,
               "show": true
             },
             {

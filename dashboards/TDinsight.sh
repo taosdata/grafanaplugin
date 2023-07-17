@@ -469,7 +469,7 @@ EOF
 
 remove_dashboard() {
   set +e
-  $SUDO rm $GF_PROVISIONING_DASHBOARDS_DIR/$TDINSIGHT_DASHBOARD_UID.{json,yaml}
+  $SUDO rm -f $GF_PROVISIONING_DASHBOARDS_DIR/$TDINSIGHT_DASHBOARD_UID.{json,yaml}
   set -e
 }
 
