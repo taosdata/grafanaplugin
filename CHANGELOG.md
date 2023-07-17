@@ -2,7 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## [3.3.3] - 2023-07-11
+## [3.3.4] - 2023-07-17
+
+### Bug Fixes
+
+- Fix for http status code dashboard
+
+## [3.3.3] - 2023-07-12
 
 ### Bug Fixes
 
@@ -92,7 +98,7 @@ All notable changes to this project will be documented in this file.
 
 ### Features
 
-- Support set legend aliais by setting formatstr
+- Support set legend alias by setting format-str
 
 ### Build
 
@@ -193,7 +199,7 @@ All notable changes to this project will be documented in this file.
 
 ### Bug Fixes
 
-- Remove sentitive logging, fix ts layout format parsing method (#127)
+- Remove sensitive logging, fix ts layout format parsing method (#127)
 
 ## [3.2.0] - 2022-05-25
 
@@ -226,7 +232,7 @@ All notable changes to this project will be documented in this file.
 
 ### Bug Fixes
 
-- Change link to tdengine.com for plugincheck (#117)
+- Change link to tdengine.com for plugin-check (#117)
 
 ## [3.1.5] - 2022-05-05
 
