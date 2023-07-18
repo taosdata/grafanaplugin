@@ -2,11 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [3.3.4] - 2023-07-17
+## [3.3.4] - 2023-07-18
 
 ### Bug Fixes
 
 - Fix for http status code dashboard
+
+### Enhancements
+
+- Check tdengine api schema in tdinsight.sh
 
 ## [3.3.3] - 2023-07-12
 
