@@ -170,7 +170,12 @@ while true; do
     ;;
   -a | --tdengine-api)
     shift
-    export TDENGINE_API=$1
+    if [[ $1 == "http"* || $1 == "https"* ]]; then
+      export TDENGINE_API=$1
+    else
+      echo "TDengine API endpoint must start with http or https"
+      exit 1
+    fi
     ;;
   -u | --tdengine-user)
     shift
