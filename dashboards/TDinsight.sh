@@ -287,13 +287,13 @@ echoerr() {
 
 download_plugin() {
   [ "$verbose" = "0" ] || echoerr "** download plugin version $TDENGINE_PLUGIN_VERSION"
-  if [ -s tdengine-datasource.zip.md5sum ] && md5sum -c tdengine-datasource.zip.md5sum >/dev/null; then
+  if [ -s tdengine-datasource.zip.md5 ] && md5sum -c tdengine-datasource.zip.md5 >/dev/null; then
     echoerr "** plugin has been downloaded"
   else
     echoerr "** downloading from github"
     wget -c -o /dev/stderr https://github.com/taosdata/grafanaplugin/releases/download/v$TDENGINE_PLUGIN_VERSION/tdengine-datasource-$TDENGINE_PLUGIN_VERSION.zip \
       -O tdengine-datasource.zip
-    md5sum tdengine-datasource.zip > tdengine-datasource.zip.md5sum
+    md5sum tdengine-datasource.zip > tdengine-datasource.zip.md5
   fi
 }
 
@@ -496,7 +496,7 @@ if [ "$DOWNLOAD_ONLY" = "1" ]; then
   cd $BIN
   download_plugin
   echo tdengine-datasource.zip
-  echo tdengine-datasource.zip.md5sum
+  echo tdengine-datasource.zip.md5
   exit 0
 fi
 
@@ -505,7 +505,7 @@ if [ "$INSTALL_FROM_GRAFANA" = "1" ]; then
   install_plugin_from_grafana
 else
 
-  if [ "$OFFLINE" = "1" ] && [ -f "$BIN/tdengine-datasource.zip.md5sum" ]; then
+  if [ "$OFFLINE" = "1" ] && [ -f "$BIN/tdengine-datasource.zip.md5" ]; then
     echoerr using offline plugin
     cd $BIN
   elif [ "$TDENGINE_PLUGIN_VERSION" = "latest" ]; then
