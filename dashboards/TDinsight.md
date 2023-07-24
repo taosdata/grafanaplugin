@@ -101,21 +101,6 @@ Install and configure TDinsight dashboard in Grafana on Ubuntu 18.04/20.04 syste
 -i, --tdinsight-uid <string>                Replace with a non-space ASCII code as the dashboard id. [default: tdinsight]
 -t, --tdinsight-title <string>              Dashboard title. [default: TDinsight]
 -e, --tdinsight-editable                    If the provisioning dashboard could be editable. [default: false]
-
--E, --external-notifier <string>            Apply external notifier uid to TDinsight dashboard.
-
-Aliyun SMS as Notifier:
--s, --sms-enabled                           To enable tdengine-datasource plugin builtin aliyun sms webhook.
--N, --sms-notifier-name <string>            Provisioning notifier name.[default: TDinsight Builtin SMS]
--U, --sms-notifier-uid <string>             Provisioning notifier uid, use lowercase notifier name by default.
--D, --sms-notifier-is-default               Set notifier as default.
--I, --sms-access-key-id <string>            Aliyun sms access key id
--K, --sms-access-key-secret <string>        Aliyun sms access key secret
--S, --sms-sign-name <string>                Sign name
--C, --sms-template-code <string>            Template code
--T, --sms-template-param <string>           Template param, a escaped json string like '{"alarm_level":"%s","time":"%s","name":"%s","content":"%s"}'
--B, --sms-phone-numbers <string>            Comma-separated numbers list, eg "189xxxxxxxx,132xxxxxxxx"
--L, --sms-listen-addr <string>              [default: 127.0.0.1:9100]
 ```
 
 Most of the CLI options are environment variable recognizable.
@@ -133,18 +118,6 @@ Most of the CLI options are environment variable recognizable.
 | -i    | --tdinsight-uid            | TDINSIGHT_DASHBOARD_UID      | TDinsight dashboard `uid`. [default: tdinsight]                        |
 | -t    | --tdinsight-title          | TDINSIGHT_DASHBOARD_TITLE    | TDinsight dashboard title. [default: TDinsight]                        |
 | -e    | --tdinsight-editable       | TDINSIGHT_DASHBOARD_EDITABLE | If the provisioning dashboard could be editable. [default: false]      |
-| -E    | --external-notifier        | EXTERNAL_NOTIFIER            | Apply external notifier uid to TDinsight dashboard.                    |
-| -s    | --sms-enabled              | SMS_ENABLED                  | To enable tdengine-datasource plugin builtin aliyun sms webhook.       |
-| -N    | --sms-notifier-name        | SMS_NOTIFIER_NAME            | Provisioning notifier name.[default: TDinsight Builtin SMS]            |
-| -U    | --sms-notifier-uid         | SMS_NOTIFIER_UID             | Provisioning notifier uid, use lowercase notifier name by default.     |
-| -D    | --sms-notifier-is-default  | SMS_NOTIFIER_IS_DEFAULT      | Set notifier as default.                                               |
-| -I    | --sms-access-key-id        | SMS_ACCESS_KEY_ID            | Aliyun sms access key id                                               |
-| -K    | --sms-access-key-secret    | SMS_ACCESS_KEY_SECRET        | Aliyun sms access key secret                                           |
-| -S    | --sms-sign-name            | SMS_SIGN_NAME                | Sign name                                                              |
-| -C    | --sms-template-code        | SMS_TEMPLATE_CODE            | Template code                                                          |
-| -T    | --sms-template-param       | SMS_TEMPLATE_PARAM           | Template params json format                                            |
-| -B    | --sms-phone-numbers        | SMS_PHONE_NUMBERS            | Comma-separated numbers list, eg `"189xxxxxxxx,132xxxxxxxx"`           |
-| -L    | --sms-listen-addr          | SMS_LISTEN_ADDR              | The builtin sms webhook listening address, default is `127.0.0.1:9100` |
 
 Suppose you are serving TDengine on host `tdengine`, with HTTP API port `6041`, user `root1`, password `pass5ord`. Use the script as:
 
@@ -164,24 +137,10 @@ Here, we use `uid` property of the notification channel as `-E` input.
 ./TDinsight.sh -a http://tdengine:6041 -u root1 -p pass5ord -E existing-notifier
 ```
 
-If you want to use [Aliyun SMS](https://www.aliyun.com/product/sms) service as notification channel, you should enable it with `-s` flag and the settings:
-
-- `-N`: Notification channel name, default is `TDinsight Builtin SMS`.
-- `-U`: Notification channel uid, default is lowercase of the `name` with any other characters replaced with -, for default `-N`, it is `tdinsight-builtin-sms`.
-- `-I`: Aliyun SMS access key id.
-- `-K`: Aliyun SMS access key secret.
-- `-S`: Aliyun SMS sign name.
-- `-C`: Aliyun SMS template id.
-- `-T`: Aliyun SMS template params JSON format, `'{"alarm_level":"%s","time":"%s","name":"%s","content":"%s"}'`. It has four params: alerting level, alerting time, the name of alert rule, and the content text of the alert rule.
-- `-B`: Target phone numbers list, separated by comma `,`.
-
-If you want to monitor multiple TDengine clusters, you need to setup multiple TDinsight dashboards. There's some required changes to setup non-default TDinsight - `-n` `-i` `-t` options are need to be changed to some other names, if you are using SMS alerting feature, `-N` and `-L` should be changed too.
+If you want to monitor multiple TDengine clusters, you need to setup multiple TDinsight dashboards. There's some required changes to setup non-default TDinsight - `-n` `-i` `-t` options are need to be changed to some other names.
 
 ```bash
 sudo ./TDengine.sh -n TDengine-Env1 -a http://another:6041 -u root -p taosdata -i tdinsight-env1 -t 'TDinsight Env1'
-# if use builtin sms notifier.
-sudo ./TDengine.sh -n TDengine-Env1 -a http://another:6041 -u root -p taosdata -i tdinsight-env1 -t 'TDinsight Env1' \
-  -s -N 'Env1 SMS' -I xx -K xx -S xx -C SMS_XX -T '' -B 00000000000 -L 127.0.0.01:10611
 ```
 
 Note that, the provisioning data sources, notification channels and dashboards are not changeable at frontend. You should update the configuration by this script again or change the provisioning configurations manually. The provisioning configurations are all located in `/etc/grafana/provisioning` directory (the directory is grafana default, change it with `-P` option as you need).
@@ -411,13 +370,6 @@ services:
       TDENGINE_API: ${TDENGINE_API}
       TDENGINE_USER: ${TDENGINE_USER}
       TDENGINE_PASS: ${TDENGINE_PASS}
-      SMS_ACCESS_KEY_ID: ${SMS_ACCESS_KEY_ID}
-      SMS_ACCESS_KEY_SECRET: ${SMS_ACCESS_KEY_SECRET}
-      SMS_SIGN_NAME: ${SMS_SIGN_NAME}
-      SMS_TEMPLATE_CODE: ${SMS_TEMPLATE_CODE}
-      SMS_TEMPLATE_PARAM: "${SMS_TEMPLATE_PARAM}"
-      SMS_PHONE_NUMBERS: $SMS_PHONE_NUMBERS
-      SMS_LISTEN_ADDR: ${SMS_LISTEN_ADDR}
     ports:
       - 3000:3000
 

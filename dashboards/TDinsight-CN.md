@@ -101,21 +101,6 @@ Install and configure TDinsight dashboard in Grafana on Ubuntu 18.04/20.04 syste
 -i, --tdinsight-uid <string>                Replace with a non-space ASCII code as the dashboard id. [default: tdinsight]
 -t, --tdinsight-title <string>              Dashboard title. [default: TDinsight]
 -e, --tdinsight-editable                    If the provisioning dashboard could be editable. [default: false]
-
--E, --external-notifier <string>            Apply external notifier uid to TDinsight dashboard.
-
-Aliyun SMS as Notifier:
--s, --sms-enabled                           To enable tdengine-datasource plugin builtin Aliyun sms webhook.
--N, --sms-notifier-name <string>            Provisioning notifier name.[default: TDinsight Builtin SMS]
--U, --sms-notifier-uid <string>             Provisioning notifier uid, use lowercase notifier name by default.
--D, --sms-notifier-is-default               Set notifier as default.
--I, --sms-access-key-id <string>            Aliyun sms access key id
--K, --sms-access-key-secret <string>        Aliyun sms access key secret
--S, --sms-sign-name <string>                Sign name
--C, --sms-template-code <string>            Template code
--T, --sms-template-param <string>           Template param, a escaped json string like '{"alarm_level":"%s","time":"%s","name":"%s","content":"%s"}'
--B, --sms-phone-numbers <string>            Comma-separated numbers list, eg "189xxxxxxxx,132xxxxxxxx"
--L, --sms-listen-addr <string>              [default: 127.0.0.1:9100]
 ```
 
 大多数命令行选项都可以通过环境变量获得同样的效果。
@@ -133,18 +118,6 @@ Aliyun SMS as Notifier:
 | -i     | --tdinsight-uid            | TDINSIGHT_DASHBOARD_UID      | TDinsight 仪表盘`uid`。 [默认值：tdinsight]                                 |
 | -t     | --tdinsight-title          | TDINSIGHT_DASHBOARD_TITLE    | TDinsight 仪表盘标题。 [默认：TDinsight]                                    |
 | -e     | --tdinsight-可编辑         | TDINSIGHT_DASHBOARD_EDITABLE | 如果配置仪表盘可以编辑。 [默认值：false]                                    |
-| -E     | --external-notifier        | EXTERNAL_NOTIFIER            | 将外部通知程序 uid 应用于 TDinsight 仪表盘。                                |
-| -s     | --sms-enabled              | SMS_ENABLED                  | 启用阿里云短信 webhook 内置的 tdengine-datasource 插件。                    |
-| -N     | --sms-notifier-name        | SMS_NOTIFIER_NAME            | 供应通知程序名称。[默认：`TDinsight Builtin SMS`]                           |
-| -U     | --sms-notifier-uid         | SMS_NOTIFIER_UID             | "Notification Channel" `uid`，默认使用程序名称的小写，其他字符用 “-” 代替。 |
-| -D     | --sms-notifier-is-default  | SMS_NOTIFIER_IS_DEFAULT      | 将内置短信通知设置为默认值。                                                |
-| -I     | --sms-access-key-id        | SMS_ACCESS_KEY_ID            | 阿里云短信访问密钥id                                                        |
-| -K     | --sms-access-key-secret    | SMS_ACCESS_KEY_SECRET        | 阿里云短信访问秘钥                                                          |
-| -S     | --sms-sign-name            | SMS_SIGN_NAME                | 签名                                                                        |
-| -C     | --sms-template-code        | SMS_TEMPLATE_CODE            | 模板代码                                                                    |
-| -T     | --sms-template-param       | SMS_TEMPLATE_PARAM           | 模板参数的 JSON 模板                                                        |
-| -B     | --sms-phone-numbers        | SMS_PHONE_NUMBERS            | 逗号分隔的手机号列表，例如`"189xxxxxxxx,132xxxxxxxx"`                       |
-| -L     | --sms-listen-addr          | SMS_LISTEN_ADDR              | 内置sms webhook监听地址，默认为`127.0.0.1:9100`                             |
 
 假设您在主机 `tdengine` 上启动 TDengine 数据库，HTTP API 端口为 `6041`，用户为 `root1`，密码为 `pass5ord`。执行脚本：
 
@@ -164,24 +137,10 @@ curl --no-progress-meter -u admin:admin http://localhost:3000/api/alert-notifica
 ./TDinsight.sh -a http://tdengine:6041 -u root1 -p pass5ord -E existing-notifier
 ```
 
-如果你想使用[阿里云短信](https://www.aliyun.com/product/sms)服务作为通知渠道，你应该使用`-s`标志启用并添加以下参数：
-
-- `-N`：Notification Channel 名，默认为`TDinsight Builtin SMS`。
-- `-U`：Channel uid，默认是 `name` 的小写，任何其他字符都替换为 - ，对于默认的 `-N`，其 uid 为 `tdinsight-builtin-sms`。
-- `-I`：阿里云短信访问密钥id。
-- `-K`：阿里云短信访问秘钥。
-- `-S`：阿里云短信签名。
-- `-C`：阿里云短信模板ID。
-- `-T`：阿里云短信模板参数，为JSON格式模板，示例如下 `'{"alarm_level":"%s","time":"%s","name":"%s","content":"%s "}'`。有四个参数：告警级别、时间、名称和告警内容。
-- `-B`：电话号码列表，以逗号`,`分隔。
-
-如果要监控多个 TDengine 集群，则需要设置多个 TDinsight 仪表盘。设置非默认 TDinsight 需要进行一些更改： `-n` `-i` `-t` 选项需要更改为非默认名称，如果使用 内置短信告警功能，`-N` 和 `-L` 也应该改变。
+如果要监控多个 TDengine 集群，则需要设置多个 TDinsight 仪表盘。设置非默认 TDinsight 需要进行一些更改： `-n` `-i` `-t` 选项需要更改为非默认名称。
 
 ```bash
 sudo ./TDengine.sh -n TDengine-Env1 -a http://another:6041 -u root -p taosdata -i tdinsight-env1 -t 'TDinsight Env1'
-# 如果使用内置短信通知
-sudo ./TDengine.sh -n TDengine-Env1 -a http://another:6041 -u root -p taosdata -i tdinsight-env1 -t 'TDinsight Env1' \
-  -s -N 'Env1 SMS' -I xx -K xx -S xx -C SMS_XX -T '' -B 00000000000 -L 127.0.0.01:10611
 ```
 
 请注意，配置数据源、通知Channel和仪表盘在前端是不可更改的。您应该再次通过此脚本更新配置或手动更改 `/etc/grafana/provisioning` 目录（这是Grafana的默认目录，根据需要使用`-P`选项更改）中的配置文件。
@@ -398,13 +357,6 @@ services:
       TDENGINE_API: ${TDENGINE_API}
       TDENGINE_USER: ${TDENGINE_USER}
       TDENGINE_PASS: ${TDENGINE_PASS}
-      SMS_ACCESS_KEY_ID: ${SMS_ACCESS_KEY_ID}
-      SMS_ACCESS_KEY_SECRET: ${SMS_ACCESS_KEY_SECRET}
-      SMS_SIGN_NAME: ${SMS_SIGN_NAME}
-      SMS_TEMPLATE_CODE: ${SMS_TEMPLATE_CODE}
-      SMS_TEMPLATE_PARAM: "${SMS_TEMPLATE_PARAM}"
-      SMS_PHONE_NUMBERS: $SMS_PHONE_NUMBERS
-      SMS_LISTEN_ADDR: ${SMS_LISTEN_ADDR}
     ports:
       - 3000:3000
 volumes:
