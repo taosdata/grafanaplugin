@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [3.3.4] - 2023-07-24
+## [3.3.4] - 2023-07-25
 
 ### Bug Fixes
 
@@ -11,6 +11,11 @@ All notable changes to this project will be documented in this file.
 ### Enhancements
 
 - Check tdengine api schema in tdinsight.sh
+- Delete login history dashboard
+
+### Build
+
+- Bump word-wrap from 1.2.3 to 1.2.4 (#218)
 
 ## [3.3.3] - 2023-07-12
 
