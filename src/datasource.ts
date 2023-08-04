@@ -30,6 +30,8 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
     query(options: DataQueryRequest<Query>): Promise<DataQueryResponse> {
         if (options.timezone) {
             this.timezone = options.timezone === "browser" ? Intl.DateTimeFormat().resolvedOptions().timeZone : options.timezone;
+        } else {
+            this.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         }
         const targets = options.targets.filter((target) => (!target.queryType || target.queryType === "SQL") && target.sql && !(target.hide === true));
         if (targets.length === 0) {
@@ -144,7 +146,7 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
 
     querySql(sql: string) {
         return this.backendSrv.datasourceRequest({
-            url: this.baseUrl + "/sql",
+            url: this.baseUrl + "/rest/sql",
             data: sql,
             method: 'POST',
         }).then((result) => {
@@ -157,7 +159,7 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
 
     querySqlUtc(sql: string) {
         return this.backendSrv.datasourceRequest({
-            url: this.baseUrl + "/sqlutc",
+            url: this.baseUrl + "/rest/sqlutc",
             data: sql,
             method: 'POST',
         });

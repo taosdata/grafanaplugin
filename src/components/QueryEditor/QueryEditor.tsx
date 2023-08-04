@@ -81,6 +81,14 @@ export function QueryEditor(props: EditorProps): ReactElement {
         {label: 'Time series', value: 'Time series'},
         {label: 'Table', value: 'Table'}
     ]
+    const timeShiftUnit = [
+        {label: 'seconds', value: 'seconds'},
+        {label: 'minutes', value: 'minutes'},
+        {label: 'hours', value: 'hours'},
+        {label: 'days', value: 'days'},
+        {label: 'weeks', value: 'weeks'},
+        {label: 'months', value: 'months'}
+    ]
 
     return (
         <div className='gf-form-group'>
@@ -151,8 +159,7 @@ export function QueryEditor(props: EditorProps): ReactElement {
                 <InlineField label='Time Shift Unit' labelWidth={20} tooltip=''>
                     <Select
                         width={20}
-                        options={[{label: 'seconds'}, {label: 'minutes'}, {label: 'hours'}, {label: 'days'},
-                            {label: 'weeks'}, {label: 'months'}]}
+                        options={timeShiftUnit}
                         onChange={onchangeTimeShiftUnit}
                         value={useSelectableValue(query.timeShiftUnit)}
                     />
