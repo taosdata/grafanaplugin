@@ -123,7 +123,7 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
         }
         if (this.serverVersion === 0) {
             return this.backendSrv.datasourceRequest({
-                url: this.baseUrl + "/sql",
+                url: this.baseUrl + "/rest/sql",
                 data: "select server_version()",
                 method: 'POST',
             }).then((res) => {
