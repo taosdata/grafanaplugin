@@ -46,9 +46,9 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Build and test frontend
+        run: yarn build && yarn sign
         env:
           GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
-        run: yarn build && yarn sign
 
       - name: Check for backend
         id: check-for-backend
