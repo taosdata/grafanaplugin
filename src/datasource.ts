@@ -123,7 +123,7 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
         }
         if (this.serverVersion === 0) {
             return this.backendSrv.datasourceRequest({
-                url: this.baseUrl + "/rest/sql",
+                url: this.baseUrl + "/sql",
                 data: "select server_version()",
                 method: 'POST',
             }).then((res) => {
@@ -146,7 +146,7 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
 
     querySql(sql: string) {
         return this.backendSrv.datasourceRequest({
-            url: this.baseUrl + "/rest/sql",
+            url: this.baseUrl + "/sql",
             data: sql,
             method: 'POST',
         }).then((result) => {
@@ -159,7 +159,7 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
 
     querySqlUtc(sql: string) {
         return this.backendSrv.datasourceRequest({
-            url: this.baseUrl + "/rest/sqlutc",
+            url: this.baseUrl + "/sqlutc",
             data: sql,
             method: 'POST',
         });

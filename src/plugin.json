@@ -21,8 +21,8 @@
   ],
   "routes": [
     {
-      "path": "sql",
-      "url": "{{ .SecureJsonData.url }}/rest/sql",
+      "path": "sqlutc",
+      "url": "{{ .SecureJsonData.url }}/rest/sqlutc",
       "method": "POST",
       "headers": [
         {
@@ -38,8 +38,8 @@
       ]
     },
     {
-      "path": "sqlutc",
-      "url": "{{ .SecureJsonData.url }}/rest/sqlutc",
+      "path": "sql",
+      "url": "{{ .SecureJsonData.url }}/rest/sql",
       "method": "POST",
       "headers": [
         {
