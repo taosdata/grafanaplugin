@@ -93,23 +93,7 @@ After import:
         basicAuth: "${TDENGINE_BASIC_AUTH}"
         # <string> cloud service token of TDengine,  optional.
         token: "$TDENGINE_CLOUD_TOKEN"
-
-        # aliSms* is configuration options for builtin sms notifier powered by Aliyun Cloud SMS
-
-        # <string> the key id from Aliyun.
-        aliSmsAccessKeyId: "$SMS_ACCESS_KEY_ID"
-        # <string> key secret paired to key id.
-        aliSmsAccessKeySecret: "$SMS_ACCESS_KEY_SECRET"
-        aliSmsSignName: "$SMS_SIGN_NAME"
-        # <string> sms template code from Aliyun. e.g. SMS_123010240
-        aliSmsTemplateCode: "$SMS_TEMPLATE_CODE"
-        # <string> serialized json string for sms template parameters. eg.
-        #  `'{"alarm_level":"%s","time":"%s","name":"%s","content":"%s"}'`
-        aliSmsTemplateParam: "$SMS_TEMPLATE_PARAM"
-        # <string> phone number list, separated by comma `,`
-        aliSmsPhoneNumbersList: "$SMS_PHONE_NUMBERS"
-        # <string> builtin sms notifier webhook address.
-        aliSmsListenAddr: "$SMS_LISTEN_ADDR"
+   
       version: 1
       # <bool> allow users to edit datasources from the UI.
       editable: true
