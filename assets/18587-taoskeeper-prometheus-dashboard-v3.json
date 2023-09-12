@@ -4137,7 +4137,7 @@
       "description": "",
       "fieldConfig": {
         "defaults": {
-          "unit": "KBs"
+          "unit": "binBps"
         },
         "overrides": []
       },
@@ -4239,7 +4239,7 @@
       "yaxes": [
         {
           "decimals": null,
-          "format": "KBs",
+          "format": "binBps",
           "label": "",
           "logBase": 1,
           "max": null,
@@ -4271,7 +4271,7 @@
       "fieldConfig": {
         "defaults": {
           "links": [],
-          "unit": "KBs"
+          "unit": "binBps"
         },
         "overrides": []
       },
@@ -4370,7 +4370,7 @@
       "yaxes": [
         {
           "decimals": null,
-          "format": "KBs",
+          "format": "binBps",
           "label": "",
           "logBase": 1,
           "max": null,
