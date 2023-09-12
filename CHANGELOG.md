@@ -2,12 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## [3.3.5] - 2023-08-10
+## [3.3.5] - 2023-09-12
 
 ### Bug Fixes
 
 - Fix for time shift
-- Fix datasource url
+- Fix unit in tdinsight v3
+- Fix for datasource routing
 
 ## [3.3.4] - 2023-07-25
 
