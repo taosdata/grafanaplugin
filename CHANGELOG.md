@@ -2,13 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
-## [3.3.5] - 2023-09-12
+## [3.3.5] - 2023-09-21
 
 ### Bug Fixes
 
 - Fix for time shift
+- Fix request url
 - Fix unit in tdinsight v3
 - Fix for datasource routing
+- Fix display of host and user when save clicked
+
+### Build
+
+- Bump @adobe/css-tools from 4.1.0 to 4.3.1 (#224)
 
 ## [3.3.4] - 2023-07-25
 
