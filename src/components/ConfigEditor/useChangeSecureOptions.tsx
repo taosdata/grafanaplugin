@@ -29,6 +29,10 @@ export function useChangeSecureOptions(props: EditorProps, propertyName: keyof S
                 options.secureJsonData.basicAuthPassword = event.target.value
             }
 
+            if (propertyName === 'token' && options.secureJsonData) {
+                options.secureJsonData.token = event.target.value
+            }
+
             onOptionsChange({
                 ...options,
                 secureJsonData: {
@@ -38,48 +42,6 @@ export function useChangeSecureOptions(props: EditorProps, propertyName: keyof S
             })
         },
         [onOptionsChange, options, propertyName]
-    );
-}
-
-export function useChangeUser(props: EditorProps): (event: ChangeEvent<HTMLInputElement>) => void {
-    const {onOptionsChange, options} = props;
-
-    return useCallback((event: ChangeEvent<HTMLInputElement>) => {
-            onOptionsChange({
-                ...options,
-                user: event.target.value,
-                secureJsonData: {
-                    ...options.secureJsonData,
-                    user: event.target.value,
-                },
-            })
-
-            if (options.secureJsonData?.password) {
-                options.secureJsonData.basicAuth = encode(event.target.value + ':'
-                    + options.secureJsonData.password)
-            }
-        },
-        [onOptionsChange, options]
-    );
-}
-
-export function useChangePassword(props: EditorProps): (event: ChangeEvent<HTMLInputElement>) => void {
-    const {onOptionsChange, options} = props;
-
-    return useCallback((event: ChangeEvent<HTMLInputElement>) => {
-            onOptionsChange({
-                ...options,
-                secureJsonData: {
-                    ...options.secureJsonData,
-                    password: event.target.value,
-                },
-            })
-            if (options.secureJsonData?.password) {
-                options.secureJsonData.basicAuth = encode(options.secureJsonData.user + ':'
-                    + event.target.value)
-            }
-        },
-        [onOptionsChange, options]
     );
 }
 

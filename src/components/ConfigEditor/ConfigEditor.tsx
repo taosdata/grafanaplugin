@@ -8,9 +8,12 @@ const {SecretFormField, FormField} = LegacyForms;
 
 export function ConfigEditor(props: EditorProps): ReactElement {
     const {secureJsonData} = props.options;
+    const {secureJsonFields} = props.options;
 
     const onChangeUrl = useChangeSecureOptions(props, 'url')
+    const onResetUrl = useResetSecureOptions(props, 'url')
     const onChangeUser = useChangeSecureOptions(props, 'user')
+    const onResetUser = useResetSecureOptions(props, 'user')
     const onChangePassword = useChangeSecureOptions(props, 'password')
     const onResetPassword = useResetSecureOptions(props, 'password')
     const onChangeToken = useChangeSecureOptions(props, 'token')
@@ -23,11 +26,14 @@ export function ConfigEditor(props: EditorProps): ReactElement {
                     <FormField label='Host'
                                labelWidth={7}
                                inputWidth={23}
-                        // tooltip="datasource's host"
+                               tooltip="datasource's host"
                                onChange={onChangeUrl}
                                onBlur={onChangeUrl}
-                               value={secureJsonData?.url || ''}
+                               onReset={onResetUrl}
+                               value={props.options.url || ''}
                                placeholder='http://localhost:6041'
+                               required={true}
+                               disabled={props.options.readOnly}
                     />
                 </div>
                 <div className='gf-form-inline'>
@@ -35,38 +41,43 @@ export function ConfigEditor(props: EditorProps): ReactElement {
                         <FormField label='User'
                                    labelWidth={7}
                                    inputWidth={8}
-                            // tooltip="datasource's username"
+                                   tooltip="datasource's username"
                                    onChange={onChangeUser}
                                    onBlur={onChangeUser}
-                                   value={secureJsonData?.user || ''}
+                                   onReset={onResetUser}
+                                   value={props.options.user || ''}
+                                   disabled={props.options.readOnly}
+                                   placeholder={secureJsonFields.basicAuth ? 'basic_auth configured' : 'username'}
                         />
                     </div>
                     <div className='gf-form max-width-15'>
-                        <SecretFormField isConfigured={false}
-                            // isConfigured={(secureJsonFields && secureJsonFields.password) as boolean}
+                        <SecretFormField isConfigured={(secureJsonFields && secureJsonFields.password) as boolean}
                                          value={secureJsonData?.password || ''}
                                          label='Password'
-                            // tooltip="datasource's token"
+                                         tooltip="datasource's token"
                                          labelWidth={7}
                                          inputWidth={8}
                                          onReset={onResetPassword}
                                          onChange={onChangePassword}
                                          onBlur={onChangePassword}
+                                         disabled={props.options.readOnly}
+                                         placeholder={secureJsonFields.basicAuth ? 'basic_auth configured' : 'password'}
                         />
                     </div>
                 </div>
                 <div className='gf-form max-width-30'>
-                    <SecretFormField isConfigured={false}
-                        // isConfigured={(secureJsonFields && secureJsonFields.password) as boolean}
-                                     value={secureJsonData?.token || ''}
-                                     label='Cloud Token'
-                        // tooltip="datasource's cloud token"
-                                     placeholder=''
-                                     labelWidth={7}
-                                     inputWidth={23}
-                                     onReset={onResetToken}
-                                     onChange={onChangeToken}
-                                     onBlur={onChangeToken}
+                    <SecretFormField
+                        isConfigured={(secureJsonFields && secureJsonFields.token && secureJsonData?.token?.length) as boolean}
+                        value={secureJsonData?.token || ''}
+                        label='Cloud Token'
+                        tooltip="datasource's cloud token"
+                        placeholder='token of TDengine cloud'
+                        labelWidth={7}
+                        inputWidth={23}
+                        onReset={onResetToken}
+                        onChange={onChangeToken}
+                        onBlur={onChangeToken}
+                        disabled={props.options.readOnly}
                     />
                 </div>
             </FieldSet>
