@@ -347,6 +347,7 @@ const utcSqlEndPoint = "/rest/sqlutc"
 func (d *Datasource) detectEndpoint() (string, error) {
 	respData, err := d.doHttpPost(context.Background(), d.settings.URL+sqlEndPoint, "select server_version()")
 	if err != nil {
+		log.DefaultLogger.Error("query server version error ", "error", err)
 		return "", err
 	}
 
@@ -368,7 +369,7 @@ func (d *Datasource) detectEndpoint() (string, error) {
 
 func (d *Datasource) doHttpPost(ctx context.Context, url, data string) (respData []byte, err error) {
 	if len(d.token) > 0 {
-		url = "?token=" + d.token
+		url += "?token=" + d.token
 	}
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, url, strings.NewReader(data))
 	if err != nil {
