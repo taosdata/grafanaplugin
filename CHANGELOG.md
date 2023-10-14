@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.3.6] - 2023-10-14
+
+### Bug Fixes
+
+- Fix sql in telgraf dashboard
+
+### Enhancements
+
+- Change datasource config page
+
 ## [3.3.5] - 2023-09-22
 
 ### Bug Fixes
@@ -80,9 +90,6 @@ All notable changes to this project will be documented in this file.
 
 ### Bug Fixes
 
-- Revert `testDatasource` function
-- Change httpclient and delete sensitive log
-- Delete token from log (#184)
 - Typos
 - Typos
 - Fix for telegraf dashboard (#187)
@@ -95,6 +102,14 @@ All notable changes to this project will be documented in this file.
 ### Documentation
 
 - Add readme for tdinsight v3
+
+## [3.3.0] - 2023-02-24
+
+### Bug Fixes
+
+- Revert `testDatasource` function
+- Change httpclient and delete sensitive log
+- Delete token from log (#184)
 
 ### Enhancements
 
