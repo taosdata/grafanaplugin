@@ -1,10 +1,12 @@
 import React, {ReactElement} from 'react'
-import {FieldSet, LegacyForms} from '@grafana/ui'
+import {FieldSet, LegacyForms, Tab, TabContent, TabsBar} from '@grafana/ui'
 import type {EditorProps} from './types'
 import {useChangeSecureOptions} from './useChangeSecureOptions'
 import {useResetSecureOptions} from './useResetSecureOptions'
 
 const {SecretFormField, FormField} = LegacyForms;
+
+enum authType {Basic = 'basic', Token = 'token'}
 
 export function ConfigEditor(props: EditorProps): ReactElement {
     const {secureJsonData} = props.options;
@@ -19,9 +21,14 @@ export function ConfigEditor(props: EditorProps): ReactElement {
     const onChangeToken = useChangeSecureOptions(props, 'token')
     const onResetToken = useResetSecureOptions(props, 'token')
 
+    const [active, setActive] = React.useState(authType.Basic)
+    if (secureJsonFields && secureJsonFields.token && secureJsonData?.token?.length) {
+        setActive(authType.Token)
+    }
+
     return (
         <div className='gf-form-group'>
-            <FieldSet label="TDengine Connection">
+            <FieldSet label="TDengine Host">
                 <div className='gf-form max-width-30'>
                     <FormField label='Host'
                                labelWidth={7}
@@ -36,51 +43,74 @@ export function ConfigEditor(props: EditorProps): ReactElement {
                                disabled={props.options.readOnly}
                     />
                 </div>
-                <div className='gf-form-inline'>
-                    <div className='gf-form max-width-15'>
-                        <FormField label='User'
-                                   labelWidth={7}
-                                   inputWidth={8}
-                                   tooltip="datasource's username"
-                                   onChange={onChangeUser}
-                                   onBlur={onChangeUser}
-                                   onReset={onResetUser}
-                                   value={props.options.user || ''}
-                                   disabled={props.options.readOnly}
-                                   placeholder={secureJsonFields.basicAuth ? 'basic_auth configured' : 'username'}
-                        />
-                    </div>
-                    <div className='gf-form max-width-15'>
-                        <SecretFormField isConfigured={(secureJsonFields && secureJsonFields.password) as boolean}
-                                         value={secureJsonData?.password || ''}
-                                         label='Password'
-                                         tooltip="datasource's token"
-                                         labelWidth={7}
-                                         inputWidth={8}
-                                         onReset={onResetPassword}
-                                         onChange={onChangePassword}
-                                         onBlur={onChangePassword}
-                                         disabled={props.options.readOnly}
-                                         placeholder={secureJsonFields.basicAuth ? 'basic_auth configured' : 'password'}
-                        />
-                    </div>
-                </div>
-                <div className='gf-form max-width-30'>
-                    <SecretFormField
-                        isConfigured={(secureJsonFields && secureJsonFields.token && secureJsonData?.token?.length) as boolean}
-                        value={secureJsonData?.token || ''}
-                        label='Cloud Token'
-                        tooltip="datasource's cloud token"
-                        placeholder='token of TDengine cloud'
-                        labelWidth={7}
-                        inputWidth={23}
-                        onReset={onResetToken}
-                        onChange={onChangeToken}
-                        onBlur={onChangeToken}
-                        disabled={props.options.readOnly}
+            </FieldSet>
+            <FieldSet label="TDengine Authentication">
+                <TabsBar>
+                    <Tab label={'Basic auth'}
+                         active={active === authType.Basic}
+                         onChangeTab={() => setActive(authType.Basic)}
                     />
-                </div>
+                    <Tab label={'Token'}
+                         active={active === authType.Token}
+                         onChangeTab={() => setActive(authType.Token)}
+                    />
+                </TabsBar>
+                <TabContent>
+                    {
+                        active === authType.Basic &&
+                        <div>
+                            <div className='gf-form max-width-20'>
+                                <FormField label='User'
+                                           labelWidth={7}
+                                           inputWidth={10}
+                                           tooltip="datasource's username"
+                                           onChange={onChangeUser}
+                                           onBlur={onChangeUser}
+                                           onReset={onResetUser}
+                                           value={props.options.user || ''}
+                                           disabled={props.options.readOnly}
+                                           placeholder={secureJsonFields.basicAuth ? 'basic_auth configured' : 'username'}
+                                />
+                            </div>
+                            <div className='gf-form max-width-20'>
+                                <SecretFormField
+                                    isConfigured={(secureJsonFields && secureJsonFields.password) as boolean}
+                                    value={secureJsonData?.password || ''}
+                                    label='Password'
+                                    tooltip="datasource's token"
+                                    labelWidth={7}
+                                    inputWidth={10}
+                                    onReset={onResetPassword}
+                                    onChange={onChangePassword}
+                                    onBlur={onChangePassword}
+                                    disabled={props.options.readOnly}
+                                    placeholder={secureJsonFields.basicAuth ? 'basic_auth configured' : 'password'}
+                                />
+                            </div>
+                        </div>
+                    }
+                    {
+                        active === authType.Token &&
+                        <div className='gf-form max-width-30'>
+                            <SecretFormField
+                                isConfigured={(secureJsonFields && secureJsonFields.token && secureJsonData?.token?.length) as boolean}
+                                value={secureJsonData?.token || ''}
+                                label='Cloud Token'
+                                tooltip="datasource's cloud token"
+                                placeholder='token of TDengine cloud'
+                                labelWidth={7}
+                                inputWidth={23}
+                                onReset={onResetToken}
+                                onChange={onChangeToken}
+                                onBlur={onChangeToken}
+                                disabled={props.options.readOnly}
+                            />
+                        </div>
+                    }
+                </TabContent>
             </FieldSet>
         </div>
     )
 }
+
+
