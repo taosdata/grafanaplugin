@@ -31,8 +31,8 @@ export function ConfigEditor(props: EditorProps): ReactElement {
             <FieldSet label="TDengine Host">
                 <div className='gf-form max-width-30'>
                     <FormField label='Host'
-                               labelWidth={7}
-                               inputWidth={23}
+                               labelWidth={8}
+                               inputWidth={22}
                                tooltip="datasource's host"
                                onChange={onChangeUrl}
                                onBlur={onChangeUrl}
@@ -46,11 +46,11 @@ export function ConfigEditor(props: EditorProps): ReactElement {
             </FieldSet>
             <FieldSet label="TDengine Authentication">
                 <TabsBar>
-                    <Tab label={'Basic auth'}
+                    <Tab label={'by user and password'}
                          active={active === authType.Basic}
                          onChangeTab={() => setActive(authType.Basic)}
                     />
-                    <Tab label={'Token'}
+                    <Tab label={'by token'}
                          active={active === authType.Token}
                          onChangeTab={() => setActive(authType.Token)}
                     />
@@ -61,7 +61,7 @@ export function ConfigEditor(props: EditorProps): ReactElement {
                         <div>
                             <div className='gf-form max-width-20'>
                                 <FormField label='User'
-                                           labelWidth={7}
+                                           labelWidth={8}
                                            inputWidth={10}
                                            tooltip="datasource's username"
                                            onChange={onChangeUser}
@@ -78,7 +78,7 @@ export function ConfigEditor(props: EditorProps): ReactElement {
                                     value={secureJsonData?.password || ''}
                                     label='Password'
                                     tooltip="datasource's token"
-                                    labelWidth={7}
+                                    labelWidth={8}
                                     inputWidth={10}
                                     onReset={onResetPassword}
                                     onChange={onChangePassword}
@@ -95,11 +95,11 @@ export function ConfigEditor(props: EditorProps): ReactElement {
                             <SecretFormField
                                 isConfigured={(secureJsonFields && secureJsonFields.token && secureJsonData?.token?.length) as boolean}
                                 value={secureJsonData?.token || ''}
-                                label='Cloud Token'
+                                label='Token'
                                 tooltip="datasource's cloud token"
                                 placeholder='token of TDengine cloud'
-                                labelWidth={7}
-                                inputWidth={23}
+                                labelWidth={8}
+                                inputWidth={22}
                                 onReset={onResetToken}
                                 onChange={onChangeToken}
                                 onBlur={onChangeToken}
