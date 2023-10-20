@@ -50,7 +50,7 @@
       "type": "datasource",
       "id": "tdengine-datasource",
       "name": "TDengine Datasource",
-      "version": "3.3.2"
+      "version": "3.3.6"
     },
     {
       "type": "panel",
@@ -83,7 +83,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1683700137030,
+  "iteration": 1697619638432,
   "links": [],
   "panels": [
     {
@@ -3367,18 +3367,19 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 30
+        "y": 29
       },
       "id": 78,
       "panels": [
         {
-          "datasource": "${DS_TDENGINE}",
+          "datasource": null,
           "fieldConfig": {
             "defaults": {
               "color": {
-                "mode": "palette-classic"
+                "mode": "thresholds"
               },
               "mappings": [],
+              "noValue": "0",
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
@@ -3393,16 +3394,14 @@
           },
           "gridPos": {
             "h": 6,
-            "w": 6,
+            "w": 12,
             "x": 0,
-            "y": 31
+            "y": 7
           },
-          "id": 84,
+          "id": 134,
           "options": {
-            "colorMode": "value",
-            "graphMode": "area",
-            "justifyMode": "auto",
-            "orientation": "auto",
+            "displayMode": "gradient",
+            "orientation": "vertical",
             "reduceOptions": {
               "calcs": [
                 "lastNotNull"
@@ -3410,211 +3409,26 @@
               "fields": "",
               "values": false
             },
-            "text": {},
-            "textMode": "auto"
-          },
-          "pluginVersion": "7.5.0",
-          "targets": [
-            {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
-              "formatType": "Time series",
-              "queryType": "SQL",
-              "refId": "A",
-              "sql": "select sum(gauge) from (select last(gauge) as gauge from $database.taosadapter_restful_http_request_total group by client_ip, endpoint, request_method, request_uri, status_code)"
-            }
-          ],
-          "title": "Http Request Total",
-          "type": "stat"
-        },
-        {
-          "datasource": "${DS_TDENGINE}",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  }
-                ]
-              }
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 6,
-            "w": 6,
-            "x": 6,
-            "y": 31
-          },
-          "id": 86,
-          "options": {
-            "colorMode": "value",
-            "graphMode": "area",
-            "justifyMode": "auto",
-            "orientation": "auto",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "text": {},
-            "textMode": "auto"
-          },
-          "pluginVersion": "7.5.0",
-          "targets": [
-            {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
-              "formatType": "Time series",
-              "queryType": "SQL",
-              "refId": "A",
-              "sql": "select sum(gauge) from (select last(gauge) as gauge from $database.taosadapter_restful_http_request_fail group by client_ip, endpoint, request_method, request_uri, status_code)"
-            }
-          ],
-          "title": "Http Request Fail",
-          "type": "stat"
-        },
-        {
-          "datasource": "${DS_TDENGINE}",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "thresholds"
-              },
-              "mappings": [],
-              "max": 100,
-              "min": 0,
-              "thresholds": {
-                "mode": "percentage",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  },
-                  {
-                    "color": "#EAB839",
-                    "value": 60
-                  },
-                  {
-                    "color": "red",
-                    "value": 90
-                  }
-                ]
-              },
-              "unit": "percent"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 6,
-            "w": 6,
-            "x": 12,
-            "y": 31
-          },
-          "id": 88,
-          "options": {
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "showThresholdLabels": false,
-            "showThresholdMarkers": true,
+            "showUnfilled": true,
             "text": {}
           },
           "pluginVersion": "7.5.0",
           "targets": [
             {
-              "alias": "cpu_used",
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Time series",
+              "hide": false,
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last(gauge) as cpu_percent from $database.taosadapter_system_cpu_percent where _ts >= $from and _ts <= $to"
+              "sql": "select sum(`total`) as `Total`, sum(`success`) as `Successful`, sum(`fail`) as `Failed`, sum(`query`) as `Queries`, sum(`write`) as `Writes`, sum(`other`) as `Other` from $database.adapter_requests where req_type=0"
             }
           ],
-          "title": "CPU Used",
-          "type": "gauge"
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "RESTful Requests",
+          "type": "bargauge"
         },
         {
-          "datasource": "${DS_TDENGINE}",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "thresholds"
-              },
-              "mappings": [],
-              "max": 100,
-              "min": 0,
-              "thresholds": {
-                "mode": "percentage",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  },
-                  {
-                    "color": "#EAB839",
-                    "value": 80
-                  },
-                  {
-                    "color": "red",
-                    "value": 90
-                  }
-                ]
-              },
-              "unit": "percent"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 6,
-            "w": 6,
-            "x": 18,
-            "y": 31
-          },
-          "id": 90,
-          "options": {
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "showThresholdLabels": false,
-            "showThresholdMarkers": true,
-            "text": {}
-          },
-          "pluginVersion": "7.5.0",
-          "targets": [
-            {
-              "alias": "memory_used",
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
-              "formatType": "Time series",
-              "queryType": "SQL",
-              "refId": "A",
-              "sql": "select last(gauge) as mem_percent from $database.taosadapter_system_mem_percent where _ts >= $from and _ts <= $to"
-            }
-          ],
-          "title": "Memory Used",
-          "type": "gauge"
-        },
-        {
-          "datasource": "${DS_TDENGINE}",
+          "datasource": null,
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -3625,7 +3439,7 @@
                 "axisPlacement": "auto",
                 "barAlignment": 0,
                 "drawStyle": "line",
-                "fillOpacity": 0,
+                "fillOpacity": 10,
                 "gradientMode": "none",
                 "hideFrom": {
                   "graph": false,
@@ -3638,8 +3452,8 @@
                 "scaleDistribution": {
                   "type": "linear"
                 },
-                "showPoints": "auto",
-                "spanNulls": false
+                "showPoints": "never",
+                "spanNulls": true
               },
               "mappings": [],
               "thresholds": {
@@ -3648,6 +3462,10 @@
                   {
                     "color": "green",
                     "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
                   }
                 ]
               },
@@ -3658,16 +3476,22 @@
           "gridPos": {
             "h": 6,
             "w": 12,
-            "x": 0,
-            "y": 37
+            "x": 12,
+            "y": 7
           },
-          "id": 82,
+          "id": 129,
           "options": {
             "graph": {},
             "legend": {
-              "calcs": [],
-              "displayMode": "list",
-              "placement": "bottom"
+              "calcs": [
+                "min",
+                "max",
+                "lastNotNull",
+                "sum",
+                "mean"
+              ],
+              "displayMode": "table",
+              "placement": "right"
             },
             "tooltipOptions": {
               "mode": "single"
@@ -3676,115 +3500,340 @@
           "pluginVersion": "7.5.0",
           "targets": [
             {
-              "colNameFormatStr": "request_in_flight_{{endpoint}}",
+              "colNameFormatStr": "{{endpoint}}_queries",
               "colNameToGroup": "endpoint",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, avg(gauge) as request_in_flight, endpoint from $database.taosadapter_restful_http_request_in_flight where _ts >= $from and _ts <= $to partition by endpoint interval($interval)"
+              "sql": "select _wstart as ts, endpoint, sum(`query`)/($interval/1s) as `query` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0 partition by endpoint interval($interval) fill(null)"
+            },
+            {
+              "colNameFormatStr": "{{endpoint}}_query_successful",
+              "colNameToGroup": "endpoint",
+              "formatType": "Time series",
+              "hide": false,
+              "queryType": "SQL",
+              "refId": "B",
+              "sql": "select _wstart as ts, endpoint, sum(`query_success`)/($interval/1s) as `query_success` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0 partition by endpoint interval($interval) fill(null)"
+            },
+            {
+              "colNameFormatStr": "{{endpoint}}_query_failed",
+              "colNameToGroup": "endpoint",
+              "formatType": "Time series",
+              "hide": false,
+              "queryType": "SQL",
+              "refId": "C",
+              "sql": "select _wstart as ts, endpoint, sum(`query_fail`)/($interval/1s) as `query_fail` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0 partition by endpoint interval($interval) fill(null)"
+            },
+            {
+              "colNameFormatStr": "{{endpoint}}_query_in_process",
+              "colNameToGroup": "endpoint",
+              "formatType": "Time series",
+              "hide": false,
+              "queryType": "SQL",
+              "refId": "D",
+              "sql": "select _wstart as ts, endpoint, sum(`query_in_process`)/($interval/1s) as `query_in_process` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0 partition by endpoint interval($interval) fill(null)"
+            },
+            {
+              "colNameFormatStr": "{{endpoint}}_writes",
+              "colNameToGroup": "endpoint",
+              "formatType": "Time series",
+              "hide": false,
+              "queryType": "SQL",
+              "refId": "E",
+              "sql": "select _wstart as ts, endpoint, sum(`write`)/($interval/1s) as `write` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0 partition by endpoint interval($interval) fill(null)"
+            },
+            {
+              "colNameFormatStr": "{{endpoint}}_write_successful",
+              "colNameToGroup": "endpoint",
+              "formatType": "Time series",
+              "hide": false,
+              "queryType": "SQL",
+              "refId": "F",
+              "sql": "select _wstart as ts, endpoint, sum(`write_success`)/($interval/1s) as `write_success` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0 partition by endpoint interval($interval) fill(null)"
+            },
+            {
+              "colNameFormatStr": "{{endpoint}}_write_failed",
+              "colNameToGroup": "endpoint",
+              "formatType": "Time series",
+              "hide": false,
+              "queryType": "SQL",
+              "refId": "G",
+              "sql": "select _wstart as ts, endpoint, sum(`write_fail`)/($interval/1s) as `write_fail` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0 partition by endpoint interval($interval) fill(null)"
+            },
+            {
+              "colNameFormatStr": "{{endpoint}}_write_in_process",
+              "colNameToGroup": "endpoint",
+              "formatType": "Time series",
+              "hide": false,
+              "queryType": "SQL",
+              "refId": "H",
+              "sql": "select _wstart as ts, endpoint, sum(`write_in_process`)/($interval/1s) as `write_in_process` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0 partition by endpoint interval($interval) fill(null)"
+            },
+            {
+              "colNameFormatStr": "{{endpoint}}_others",
+              "colNameToGroup": "endpoint",
+              "formatType": "Time series",
+              "hide": false,
+              "queryType": "SQL",
+              "refId": "I",
+              "sql": "select _wstart as ts, endpoint, sum(`other`)/($interval/1s) as `other` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0 partition by endpoint interval($interval) fill(null)"
+            },
+            {
+              "colNameFormatStr": "{{endpoint}}_other_successful",
+              "colNameToGroup": "endpoint",
+              "formatType": "Time series",
+              "hide": false,
+              "queryType": "SQL",
+              "refId": "J",
+              "sql": "select _wstart as ts, endpoint, sum(`other_success`)/($interval/1s) as `other_success` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0 partition by endpoint interval($interval) fill(null)"
+            },
+            {
+              "colNameFormatStr": "{{endpoint}}_other_failed",
+              "colNameToGroup": "endpoint",
+              "formatType": "Time series",
+              "hide": false,
+              "queryType": "SQL",
+              "refId": "K",
+              "sql": "select _wstart as ts, endpoint, sum(`other_fail`)/($interval/1s) as `other_fail` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0 partition by endpoint interval($interval) fill(null)"
             }
           ],
-          "title": "Http Request Inflight",
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "request by rest",
           "type": "timeseries"
         },
         {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${DS_TDENGINE}",
+          "datasource": null,
           "fieldConfig": {
             "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "noValue": "0",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 12,
+            "x": 0,
+            "y": 13
+          },
+          "id": 135,
+          "options": {
+            "displayMode": "gradient",
+            "orientation": "vertical",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "showUnfilled": true,
+            "text": {}
+          },
+          "pluginVersion": "7.5.0",
+          "targets": [
+            {
+              "formatType": "Time series",
+              "hide": false,
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select sum(`total`) as `Total`, sum(`success`) as `Successful`, sum(`fail`) as `Failed`, sum(`query`) as `Queries`, sum(`write`) as `Writes`, sum(`other`) as `Other` from $database.adapter_requests where req_type=1"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "WebSocket Requests",
+          "type": "bargauge"
+        },
+        {
+          "datasource": null,
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "graph": false,
+                  "legend": false,
+                  "tooltip": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": true
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
               "unit": "short"
             },
             "overrides": []
           },
-          "fill": 1,
-          "fillGradient": 0,
           "gridPos": {
             "h": 6,
             "w": 12,
             "x": 12,
-            "y": 37
+            "y": 13
           },
-          "hiddenSeries": false,
-          "id": 118,
-          "legend": {
-            "alignAsTable": true,
-            "avg": false,
-            "current": true,
-            "max": true,
-            "min": true,
-            "rightSide": true,
-            "show": true,
-            "total": true,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
+          "id": 130,
           "options": {
-            "alertThreshold": true
+            "graph": {},
+            "legend": {
+              "calcs": [
+                "min",
+                "max",
+                "lastNotNull",
+                "sum",
+                "mean"
+              ],
+              "displayMode": "table",
+              "placement": "right"
+            },
+            "tooltipOptions": {
+              "mode": "single"
+            }
           },
-          "percentage": false,
           "pluginVersion": "7.5.0",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
           "targets": [
             {
-              "colNameFormatStr": "{{status_code}}",
-              "colNameToGroup": "status_code",
+              "colNameFormatStr": "{{endpoint}}_queries",
+              "colNameToGroup": "endpoint",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select ts, status_code, gauge from (select _wstart as ts, status_code, last(gauge) as last_gauge, first(gauge) as first_gauge, last(gauge)-first(gauge) as gauge from $database.taosadapter_restful_http_request_total where _ts >= $from and _ts <= $to partition by status_code interval($interval) fill(null))"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Http Status Code",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": 0,
-              "show": true
+              "sql": "select _wstart as ts, endpoint, sum(`query`)/($interval/1s) as `query` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1 partition by endpoint interval($interval) fill(null)"
             },
             {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
+              "colNameFormatStr": "{{endpoint}}_query_successful",
+              "colNameToGroup": "endpoint",
+              "formatType": "Time series",
+              "hide": false,
+              "queryType": "SQL",
+              "refId": "B",
+              "sql": "select _wstart as ts, endpoint, sum(`query_success`)/($interval/1s) as `query_success` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1 partition by endpoint interval($interval) fill(null)"
+            },
+            {
+              "colNameFormatStr": "{{endpoint}}_query_failed",
+              "colNameToGroup": "endpoint",
+              "formatType": "Time series",
+              "hide": false,
+              "queryType": "SQL",
+              "refId": "C",
+              "sql": "select _wstart as ts, endpoint, sum(`query_fail`)/($interval/1s) as `query_fail` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1 partition by endpoint interval($interval) fill(null)"
+            },
+            {
+              "colNameFormatStr": "{{endpoint}}_query_in_process",
+              "colNameToGroup": "endpoint",
+              "formatType": "Time series",
+              "hide": false,
+              "queryType": "SQL",
+              "refId": "D",
+              "sql": "select _wstart as ts, endpoint, sum(`query_in_process`)/($interval/1s) as `query_in_process` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1 partition by endpoint interval($interval) fill(null)"
+            },
+            {
+              "colNameFormatStr": "{{endpoint}}_writes",
+              "colNameToGroup": "endpoint",
+              "formatType": "Time series",
+              "hide": false,
+              "queryType": "SQL",
+              "refId": "E",
+              "sql": "select _wstart as ts, endpoint, sum(`write`)/($interval/1s) as `write` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1 partition by endpoint interval($interval) fill(null)"
+            },
+            {
+              "colNameFormatStr": "{{endpoint}}_write_successful",
+              "colNameToGroup": "endpoint",
+              "formatType": "Time series",
+              "hide": false,
+              "queryType": "SQL",
+              "refId": "F",
+              "sql": "select _wstart as ts, endpoint, sum(`write_success`)/($interval/1s) as `write_success` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1 partition by endpoint interval($interval) fill(null)"
+            },
+            {
+              "colNameFormatStr": "{{endpoint}}_write_failed",
+              "colNameToGroup": "endpoint",
+              "formatType": "Time series",
+              "hide": false,
+              "queryType": "SQL",
+              "refId": "G",
+              "sql": "select _wstart as ts, endpoint, sum(`write_fail`)/($interval/1s) as `write_fail` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1 partition by endpoint interval($interval) fill(null)"
+            },
+            {
+              "colNameFormatStr": "{{endpoint}}_write_in_process",
+              "colNameToGroup": "endpoint",
+              "formatType": "Time series",
+              "hide": false,
+              "queryType": "SQL",
+              "refId": "H",
+              "sql": "select _wstart as ts, endpoint, sum(`write_in_process`)/($interval/1s) as `write_in_process` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1 partition by endpoint interval($interval) fill(null)"
+            },
+            {
+              "colNameFormatStr": "{{endpoint}}_others",
+              "colNameToGroup": "endpoint",
+              "formatType": "Time series",
+              "hide": false,
+              "queryType": "SQL",
+              "refId": "I",
+              "sql": "select _wstart as ts, endpoint, sum(`other`)/($interval/1s) as `other` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1 partition by endpoint interval($interval) fill(null)"
+            },
+            {
+              "colNameFormatStr": "{{endpoint}}_other_successful",
+              "colNameToGroup": "endpoint",
+              "formatType": "Time series",
+              "hide": false,
+              "queryType": "SQL",
+              "refId": "J",
+              "sql": "select _wstart as ts, endpoint, sum(`other_success`)/($interval/1s) as `other_success` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1 partition by endpoint interval($interval) fill(null)"
+            },
+            {
+              "colNameFormatStr": "{{endpoint}}_other_failed",
+              "colNameToGroup": "endpoint",
+              "formatType": "Time series",
+              "hide": false,
+              "queryType": "SQL",
+              "refId": "K",
+              "sql": "select _wstart as ts, endpoint, sum(`other_fail`)/($interval/1s) as `other_fail` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1 partition by endpoint interval($interval) fill(null)"
             }
           ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "request by ws",
+          "type": "timeseries"
         }
       ],
       "title": "TaosAdapter",
@@ -4003,5 +4052,5 @@
   "timepicker": {},
   "timezone": "",
   "title": "TDinsight for 3.x",
-  "version": 38
+  "version": 39
 }
