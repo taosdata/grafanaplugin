@@ -3419,7 +3419,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select sum(`total`) as `Total`, sum(`success`) as `Successful`, sum(`fail`) as `Failed`, sum(`query`) as `Queries`, sum(`write`) as `Writes`, sum(`other`) as `Other` from $database.adapter_requests where req_type=0"
+              "sql": "select sum(`total`) as `Total`, sum(`success`) as `Successful`, sum(`fail`) as `Failed`, sum(`query`) as `Queries`, sum(`write`) as `Writes`, sum(`other`) as `Other` from $database.adapter_requests where req_type=0 and ts >= $from and ts <= $to"
             }
           ],
           "timeFrom": null,
@@ -3484,10 +3484,9 @@
             "graph": {},
             "legend": {
               "calcs": [
+                "lastNotNull",
                 "min",
                 "max",
-                "lastNotNull",
-                "sum",
                 "mean"
               ],
               "displayMode": "table",
@@ -3651,7 +3650,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select sum(`total`) as `Total`, sum(`success`) as `Successful`, sum(`fail`) as `Failed`, sum(`query`) as `Queries`, sum(`write`) as `Writes`, sum(`other`) as `Other` from $database.adapter_requests where req_type=1"
+              "sql": "select sum(`total`) as `Total`, sum(`success`) as `Successful`, sum(`fail`) as `Failed`, sum(`query`) as `Queries`, sum(`write`) as `Writes`, sum(`other`) as `Other` from $database.adapter_requests where req_type=1 and ts >= $from and ts <= $to"
             }
           ],
           "timeFrom": null,
@@ -3716,10 +3715,9 @@
             "graph": {},
             "legend": {
               "calcs": [
+                "lastNotNull",
                 "min",
                 "max",
-                "lastNotNull",
-                "sum",
                 "mean"
               ],
               "displayMode": "table",
