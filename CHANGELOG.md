@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.4.0] - 2023-10-31
+
+### Bug Fixes
+
+### Features
+
+- New Taosadapter dashboard
+- Add datasource for adapter dashboard
+- Change legend for adapter dashboard
+
 ## [3.3.6] - 2023-10-14
 
 ### Bug Fixes
