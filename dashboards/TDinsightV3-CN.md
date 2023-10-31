@@ -248,14 +248,16 @@ TDinsight 仪表盘旨在提供TDengine
 
 ![taosadapter](../assets/TDinsightV3-8-taosadaper.png)
 
-包含 taosAdapter 请求统计和状态详情。包括：
+包含 taosAdapter rest和websocket的请求统计详情。包括：
 
-1. **http_request**: 包含总请求数，请求失败数以及正在处理的请求数
-2. **Http Request Fail**: 处理失败的请求数
-3. **CPU Used**: taosAdapter cpu 使用情况
-4. **Memory Used**: taosAdapter 内存使用情况
-5. **Http Request Inflight**: 每个 endpoint http 请求统计
-6. **Http Status Code**: Http 状态码统计
+1. **Total**: 总请求数
+2. **Successful**: 总成功数
+3. **Failed**: 总失败数
+4. **Queries**: 总查询数
+5. **Writes**: 总写入数
+6. **Other**: 总其他请求数
+
+还有上述分类的细分维度折线图。
 
 ## 升级
 

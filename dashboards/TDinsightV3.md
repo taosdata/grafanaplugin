@@ -261,14 +261,16 @@ Currently, only the number of logins per minute is reported.
 
 ![taosadapter](../assets/TDinsightV3-8-taosadaper.png)
 
-Support monitoring taosAdapter request statistics and status details.
+Support monitoring taosAdapter rest and websocket request statistics. Including:
 
-1. **http_request**: number of total requests.
-2. **Http Request Fail**: number of failed requests.
-3. **CPU Used**: usage of taosAdapter.
-4. **Memory Used**: Memory usage of taosAdapter.
-5. **Http Request Inflight**: number of real-time requests of each endpoint.
-6. **Http Status Code**: taosAdapter http status code.
+1. **Total**: number of total requests.
+2. **Successful**: number of total successful requests.
+3. **Failed**: number of total failed requests.
+4.  **Queries**: number of total queries.
+5.  **Writes**: number of total inserts or updates.
+6.  **Other**: number of total other requests.
+
+There is also line charts for detail dimensions.
 
 ## Upgrade
 
