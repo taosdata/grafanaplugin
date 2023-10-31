@@ -1,9 +1,11 @@
 # Install the Grafana Plugin for TDengine
 
-- [One-line installer](#one-line-installer)
-- [Install with GUI](#install-with-gui)
-- [Install Manually](#install-manually)
-- [Installation on macOS](#installation-on-macos)
+- [Install the Grafana Plugin for TDengine](#install-the-grafana-plugin-for-tdengine)
+  - [Compatiable with TDengine version](#compatiable-with-tdengine-version)
+  - [One-line installer](#one-line-installer)
+  - [Install with GUI](#install-with-gui)
+  - [Install Manually](#install-manually)
+  - [Installation on macOS](#installation-on-macos)
 
 [TDengine] is open-sourced big data platform under GNU AGPL v3.0, designed and optimized for the Internet of Things (
 IoT), Connected Cars, Industrial IoT, and IT Infrastructure and Application Monitoring, developed
@@ -16,6 +18,13 @@ and other options specific to this data source.
 At first, please refer to [Add a data source](https://grafana.com/docs/grafana/latest/datasources/add-a-data-source/)
 for instructions on how to add a data source to Grafana. Note that, only users with the organization admin role can add
 data sources.
+
+## Compatiable with TDengine version
+| TDengine grafana plugin version |     major changes     | TDengine version |
+| :-----------------------------: | :-------------------: | :--------------: |
+|              3.4.0              | new adapter dashboard | 3.2.0.1 or later |
+|              3.2.7              | support TDengine 3.0  | 3.0.0.0 or later |
+
 
 ## One-line installer
 
