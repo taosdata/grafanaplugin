@@ -17,6 +17,16 @@
       "type": "dashboard",
       "name": "TDinsight",
       "path": "dashboards/TDinsight.json"
+    },
+    {
+      "type": "dashboard",
+      "name": "TDsmeters",
+      "path": "dashboards/TDsmeters.json"
+    },
+    {
+      "type": "dashboard",
+      "name": "TDpower",
+      "path": "dashboards/TDpower.json"
     }
   ],
   "routes": [
