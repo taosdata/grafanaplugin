@@ -1,9 +1,9 @@
 {
     "__inputs": [
         {
-            "name": "DS_DBMART_POWERPLANT DEMO",
+            "name": "TDpower",
             "label": "DBmart PowerPlant Demo",
-            "description": "",
+            "description": "Get connect information from  https://cloud.tdengine.com/ website",
             "type": "datasource",
             "pluginId": "tdengine-datasource",
             "pluginName": "TDengine Datasource"
@@ -79,7 +79,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -135,7 +135,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -148,7 +148,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -162,7 +162,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -178,7 +178,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -261,7 +261,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -277,7 +277,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -294,7 +294,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -313,7 +313,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -370,7 +370,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -386,7 +386,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -405,7 +405,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "description": "",
             "fieldConfig": {
@@ -485,7 +485,7 @@
                     "alias": "Site C LMP",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -496,7 +496,7 @@
                     "alias": "Site A LMP",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -512,7 +512,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "description": "",
             "fieldConfig": {
@@ -568,7 +568,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -585,7 +585,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -602,7 +602,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -620,7 +620,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -675,7 +675,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -688,7 +688,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -704,7 +704,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -759,7 +759,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -775,7 +775,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -807,7 +807,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -873,7 +873,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -889,7 +889,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -906,7 +906,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -925,7 +925,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -984,7 +984,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -1000,7 +1000,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -1017,7 +1017,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -1036,7 +1036,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -1089,7 +1089,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -1105,7 +1105,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -1122,7 +1122,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -1141,7 +1141,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "description": "",
             "fieldConfig": {
@@ -1197,7 +1197,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -1214,7 +1214,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -1232,7 +1232,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -1286,7 +1286,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -1303,7 +1303,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -1320,7 +1320,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -1371,7 +1371,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -1388,7 +1388,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -1406,7 +1406,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -1457,7 +1457,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -1474,7 +1474,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -1491,7 +1491,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -1543,7 +1543,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -1560,7 +1560,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -1577,7 +1577,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -1629,7 +1629,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -1646,7 +1646,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -1663,7 +1663,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -1715,7 +1715,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -1732,7 +1732,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -1749,7 +1749,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -1805,7 +1805,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -1820,7 +1820,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -1875,7 +1875,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -1892,7 +1892,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -1909,7 +1909,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -1926,7 +1926,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -1943,7 +1943,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -1960,7 +1960,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -1977,7 +1977,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -2031,7 +2031,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -2048,7 +2048,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -2065,7 +2065,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -2081,7 +2081,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -2099,7 +2099,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -2153,7 +2153,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -2170,7 +2170,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -2186,7 +2186,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -2203,7 +2203,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -2221,7 +2221,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -2276,7 +2276,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -2293,7 +2293,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -2309,7 +2309,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -2326,7 +2326,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -2344,7 +2344,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "description": "",
             "fieldConfig": {
@@ -2400,7 +2400,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -2419,7 +2419,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -2504,7 +2504,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -2522,7 +2522,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -2576,7 +2576,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -2593,7 +2593,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -2610,7 +2610,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -2661,7 +2661,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -2678,7 +2678,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -2695,7 +2695,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -2746,7 +2746,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -2763,7 +2763,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -2780,7 +2780,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -2835,7 +2835,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -2852,7 +2852,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -2882,7 +2882,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -2948,7 +2948,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -2964,7 +2964,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -2981,7 +2981,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -3000,7 +3000,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -3059,7 +3059,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -3075,7 +3075,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -3092,7 +3092,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -3111,7 +3111,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -3164,7 +3164,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -3180,7 +3180,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -3197,7 +3197,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -3216,7 +3216,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -3270,7 +3270,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -3287,7 +3287,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -3304,7 +3304,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -3355,7 +3355,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -3372,7 +3372,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -3389,7 +3389,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -3440,7 +3440,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -3457,7 +3457,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -3474,7 +3474,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -3526,7 +3526,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -3543,7 +3543,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -3560,7 +3560,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -3612,7 +3612,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -3629,7 +3629,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -3646,7 +3646,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -3698,7 +3698,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -3715,7 +3715,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -3732,7 +3732,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "description": "",
             "fieldConfig": {
@@ -3789,7 +3789,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -3805,7 +3805,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -3860,7 +3860,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -3877,7 +3877,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -3894,7 +3894,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -3949,7 +3949,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -3966,7 +3966,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -3983,7 +3983,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -4037,7 +4037,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -4054,7 +4054,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -4071,7 +4071,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -4087,7 +4087,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -4105,7 +4105,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "description": "",
             "fieldConfig": {
@@ -4161,7 +4161,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -4180,7 +4180,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -4265,7 +4265,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -4283,7 +4283,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -4334,7 +4334,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -4351,7 +4351,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -4368,7 +4368,7 @@
         {
             "datasource": {
                 "type": "tdengine-datasource",
-                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                "uid": "${TDpower}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -4419,7 +4419,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "hide": false,
@@ -4436,7 +4436,7 @@
                     "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "formatType": "Time series",
                     "queryType": "SQL",
@@ -4463,7 +4463,7 @@
                 {
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "fieldConfig": {
                         "defaults": {
@@ -4529,7 +4529,7 @@
                             "colNameToGroup": "",
                             "datasource": {
                                 "type": "tdengine-datasource",
-                                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                                "uid": "${TDpower}"
                             },
                             "formatType": "Time series",
                             "queryType": "SQL",
@@ -4542,7 +4542,7 @@
                             "colNameToGroup": "",
                             "datasource": {
                                 "type": "tdengine-datasource",
-                                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                                "uid": "${TDpower}"
                             },
                             "formatType": "Time series",
                             "hide": false,
@@ -4558,7 +4558,7 @@
                 {
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "fieldConfig": {
                         "defaults": {
@@ -4616,7 +4616,7 @@
                             "colNameToGroup": "",
                             "datasource": {
                                 "type": "tdengine-datasource",
-                                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                                "uid": "${TDpower}"
                             },
                             "formatType": "Time series",
                             "queryType": "SQL",
@@ -4632,7 +4632,7 @@
                             "colNameToGroup": "",
                             "datasource": {
                                 "type": "tdengine-datasource",
-                                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                                "uid": "${TDpower}"
                             },
                             "formatType": "Time series",
                             "hide": false,
@@ -4651,7 +4651,7 @@
                 {
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "fieldConfig": {
                         "defaults": {
@@ -4709,7 +4709,7 @@
                             "colNameToGroup": "",
                             "datasource": {
                                 "type": "tdengine-datasource",
-                                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                                "uid": "${TDpower}"
                             },
                             "formatType": "Time series",
                             "queryType": "SQL",
@@ -4725,7 +4725,7 @@
                             "colNameToGroup": "",
                             "datasource": {
                                 "type": "tdengine-datasource",
-                                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                                "uid": "${TDpower}"
                             },
                             "formatType": "Time series",
                             "hide": false,
@@ -4742,7 +4742,7 @@
                             "colNameToGroup": "",
                             "datasource": {
                                 "type": "tdengine-datasource",
-                                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                                "uid": "${TDpower}"
                             },
                             "formatType": "Time series",
                             "hide": false,
@@ -4759,7 +4759,7 @@
                             "colNameToGroup": "",
                             "datasource": {
                                 "type": "tdengine-datasource",
-                                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                                "uid": "${TDpower}"
                             },
                             "formatType": "Time series",
                             "hide": false,
@@ -4778,7 +4778,7 @@
                 {
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "fieldConfig": {
                         "defaults": {
@@ -4828,7 +4828,7 @@
                             "colNameToGroup": "",
                             "datasource": {
                                 "type": "tdengine-datasource",
-                                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                                "uid": "${TDpower}"
                             },
                             "formatType": "Time series",
                             "hide": false,
@@ -4845,7 +4845,7 @@
                             "colNameToGroup": "",
                             "datasource": {
                                 "type": "tdengine-datasource",
-                                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                                "uid": "${TDpower}"
                             },
                             "formatType": "Time series",
                             "queryType": "SQL",
@@ -4861,7 +4861,7 @@
                             "colNameToGroup": "",
                             "datasource": {
                                 "type": "tdengine-datasource",
-                                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                                "uid": "${TDpower}"
                             },
                             "formatType": "Time series",
                             "hide": false,
@@ -4878,7 +4878,7 @@
                             "colNameToGroup": "",
                             "datasource": {
                                 "type": "tdengine-datasource",
-                                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                                "uid": "${TDpower}"
                             },
                             "formatType": "Time series",
                             "hide": false,
@@ -4896,7 +4896,7 @@
                 {
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "fieldConfig": {
                         "defaults": {
@@ -4952,7 +4952,7 @@
                             "colNameToGroup": "",
                             "datasource": {
                                 "type": "tdengine-datasource",
-                                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                                "uid": "${TDpower}"
                             },
                             "formatType": "Time series",
                             "hide": false,
@@ -4969,7 +4969,7 @@
                             "colNameToGroup": "",
                             "datasource": {
                                 "type": "tdengine-datasource",
-                                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                                "uid": "${TDpower}"
                             },
                             "formatType": "Time series",
                             "hide": false,
@@ -4988,7 +4988,7 @@
                 {
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "description": "",
                     "fieldConfig": {
@@ -5035,7 +5035,7 @@
                         {
                             "datasource": {
                                 "type": "tdengine-datasource",
-                                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                                "uid": "${TDpower}"
                             },
                             "formatType": "Time series",
                             "queryType": "SQL",
@@ -5050,7 +5050,7 @@
                 {
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "fieldConfig": {
                         "defaults": {
@@ -5130,7 +5130,7 @@
                             "colNameToGroup": "",
                             "datasource": {
                                 "type": "tdengine-datasource",
-                                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                                "uid": "${TDpower}"
                             },
                             "formatType": "Time series",
                             "hide": false,
@@ -5147,7 +5147,7 @@
                             "colNameToGroup": "",
                             "datasource": {
                                 "type": "tdengine-datasource",
-                                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                                "uid": "${TDpower}"
                             },
                             "formatType": "Time series",
                             "hide": false,
@@ -5166,7 +5166,7 @@
                 {
                     "datasource": {
                         "type": "tdengine-datasource",
-                        "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                        "uid": "${TDpower}"
                     },
                     "description": "",
                     "fieldConfig": {
@@ -5221,7 +5221,7 @@
                             "colNameToGroup": "",
                             "datasource": {
                                 "type": "tdengine-datasource",
-                                "uid": "${DS_DBMART_POWERPLANT DEMO}"
+                                "uid": "${TDpower}"
                             },
                             "formatType": "Time series",
                             "queryType": "SQL",
@@ -5263,7 +5263,7 @@
         ]
     },
     "timezone": "utc",
-    "title": "DBMart Power Plants Demo",
+    "title": "TDpower",
     "uid": "a2cbc0ee-4355-4e7a-811f-d2ef0f1c0c6d",
     "version": 20,
     "weekStart": ""

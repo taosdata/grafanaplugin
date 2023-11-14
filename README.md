@@ -1,14 +1,15 @@
 # Grafana Plugin for TDengine
 
-- [Usage](#usage)
-  - [Add Data Source](#add-data-source)
-  - [Import Dashboard](#import-dashboard)
-- [Important changes](#important-changes)
-  - [v3.2.0](#v320)
-- [Monitor TDengine Database with TDengine Data Source Plugin](#monitor-tdengine-database-with-tdengine-data-source-plugin)
-  - [TDinsight](#tdinsight)
-- [Docker Stack](#docker-stack)
-- [Dashboards](#dashboards)
+- [Grafana Plugin for TDengine](#grafana-plugin-for-tdengine)
+  - [Usage](#usage)
+    - [Add Data Source](#add-data-source)
+    - [Import Dashboard](#import-dashboard)
+  - [Important changes](#important-changes)
+    - [v3.2.0](#v320)
+  - [Monitor TDengine Database with TDengine Data Source Plugin](#monitor-tdengine-database-with-tdengine-data-source-plugin)
+    - [TDinsight](#tdinsight)
+  - [Docker Stack](#docker-stack)
+  - [Dashboards](#dashboards)
 
 [TDengine] is open-sourced big data platform under GNU AGPL v3.0, designed and optimized for the Internet of Things (IoT), Connected Cars, Industrial IoT, and IT Infrastructure and Application Monitoring, developed by [TDengine](https://tdengine.com/).
 
@@ -133,7 +134,9 @@ Here is a short list:
 
 - [15167](https://grafana.com/grafana/dashboards/15167): TDinsight
 - [18180](https://grafana.com/grafana/dashboards/18180): TDinsightV3
-
+- [19910](https://grafana.com/grafana/dashboards/19910): TDsmeters
+- [19953](https://grafana.com/grafana/dashboards/19953): TDpower
+  
 You could open a pr to add one if you want to share your dashboard with TDengine community, we appreciate your contribution!
 
 [TDengine]: https://github.com/taosdata/TDengine
