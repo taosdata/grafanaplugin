@@ -2,9 +2,9 @@
 
 ![TDpower-overview](../assets/TDpower-full.png)
 
+**需要Grafana版本10.0以上** 
 
 TDpower插件是一个实时显示插件，用于在TDengine云服务数据集市中动态收集发电厂数据。安装和使用非常简单，分为两个步骤：
-
 
 
 一、建立数据源连接
@@ -24,7 +24,6 @@ TDpower插件是一个实时显示插件，用于在TDengine云服务数据集�
 7.配置完成后，点击保存测试按钮，测试连接正确。
 
 8.打开https://cloud.tdengine.com/， 转到数据集市页面，打开“Aveva PI流式数据实时发电厂演示”共享库
-
 
 
 二、安装TDpower插件

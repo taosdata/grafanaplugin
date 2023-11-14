@@ -2,6 +2,8 @@
 
 ![TDsmeters-overview](../assets/TDsmeters-full.jpeg)
 
+**Grafana version 10.0 or above is required**
+
 The TDsmeters plugin is a real-time display plugin for the dynamic collection process of smart meter data in TDengine Cloud as a Service DBMark. Installation and use are very simple, divided into two steps:
 
 I. Establish a data source connection

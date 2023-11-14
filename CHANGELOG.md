@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.4.1] - 2023-11-14
+
+### Bug Fixes
+
+### Features
+
+- New dashboards: TDpower and TDsmeters.
+
 ## [3.4.0] - 2023-10-31
 
 ### Bug Fixes

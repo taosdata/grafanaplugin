@@ -2,6 +2,7 @@
 
 ![TDsmeters-overview](../assets/TDsmeters-full.jpeg)
 
+**需要Grafana版本10.0以上**
 
 TDsmeters插件是一个实时显示插件，用于TDengine云服务数据集市中智能电表数据的动态收集过程。安装和使用非常简单，分为两个步骤：
 
