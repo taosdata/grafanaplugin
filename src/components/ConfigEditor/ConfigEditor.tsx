@@ -21,10 +21,7 @@ export function ConfigEditor(props: EditorProps): ReactElement {
     const onChangeToken = useChangeSecureOptions(props, 'token')
     const onResetToken = useResetSecureOptions(props, 'token')
 
-    const [active, setActive] = React.useState(authType.Basic)
-    if (secureJsonFields && secureJsonFields.token && secureJsonData?.token?.length) {
-        setActive(authType.Token)
-    }
+    const [active, setActive] = React.useState((secureJsonFields && secureJsonFields.token && secureJsonData?.token?.length) ? authType.Token : authType.Basic )
 
     return (
         <div className='gf-form-group'>
@@ -77,7 +74,7 @@ export function ConfigEditor(props: EditorProps): ReactElement {
                                     isConfigured={(secureJsonFields && secureJsonFields.password) as boolean}
                                     value={secureJsonData?.password || ''}
                                     label='Password'
-                                    tooltip="datasource's token"
+                                    tooltip="datasource's password"
                                     labelWidth={8}
                                     inputWidth={10}
                                     onReset={onResetPassword}

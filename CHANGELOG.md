@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.4.2] - 2023-12-13  
+
+### Bug Fixes
+fix token input bug
+
+### Features
+modify TDinsight to TDinsight 2.x
+  
 ## [3.4.1] - 2023-11-14
 
 ### Bug Fixes

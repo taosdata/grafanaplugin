@@ -2,7 +2,7 @@
 
 Languages: _English_ _[简体中文](https://www.taosdata.com/cn/documentation/tools/insight)_
 
-TDinsight uses TDengine's built-in database(`log`) and [Grafana] to monitor TDengine itself.
+TDinsight v2.x uses TDengine's built-in database(`log`) and [Grafana] to monitor TDengine itself.
 
 After TDengine starts, it will automatically create a database named `log`, and regularly record the server's CPU, memory, disk usage, network bandwidth, number of requests, disk reading/writing throughput, slow queries, and other information for monitoring purposes. It also records important system operations(such as logging in, creating or deleting databases, etc.) and errors. TDinsight will visualize the TDengine cluster status, nodes information, insertion and query requests, resource usage, etc., with [Grafana] and [TDengine data source plugin for Grafana](https://github.com/taosdata/grafanaplugin/releases). It also supports abnormal status alarms of nodes including vnode, dnode, and mnode, which provides convenience for the operators to monitor the running status of TDengine clusters in real-time. In this document, we'll guide users to install the Grafana server, and then install the TDengine data source plugin and deploy the TDinsight visualization dashboard through the `TDinsight.sh` script automatically or manually.
 
@@ -58,7 +58,7 @@ sudo yum install \
   https://dl.grafana.com/oss/release/grafana-7.5.11-1.x86_64.rpm
 ```
 
-## Setup TDinsight Automatically
+## Setup TDinsight v2.x Automatically
 
 We've created a [`TDinsight.sh`](https://github.com/taosdata/grafanaplugin/releases/latest/download/TDinsight.sh) script for automation with Grafana [provisioning](https://grafana.com/docs/grafana/latest/administration/provisioning/) strategy.
 
@@ -147,7 +147,7 @@ Note that, the provisioning data sources, notification channels and dashboards a
 
 For special use cases, `-O` would set the organization id when you use Grafana Cloud or use a different organization. `-G` let you choose the grafana plugins install directory. `-e` would set the dashboard to be editable.
 
-## Setup TDinsight Manually
+## Setup TDinsight v2.x Manually
 
 ### Install TDengine Data Source Plugin
 
@@ -219,7 +219,7 @@ The full page view for TDengine will like below.
 
 ![display](../assets/TDinsight-full.png)
 
-## TDinsight Dashboard Details
+## TDinsight v2.x Dashboard Details
 
 The TDinsight dashboard aims to provide TDengine cluster resources usage and status of [dnodes, mnodes, vnodes](https://www.taosdata.com/cn/documentation/architecture#cluster), or databases. There're several partitions of metrics.
 
@@ -383,7 +383,7 @@ Replace the environment variables in `docker-compose.yml` or set it `.env`, then
 docker-compose up -d
 ```
 
-TDinsight is builtin, please go to http://localhost:3000/d/tdinsight/ to see the dashboard.
+TDinsight v2.x is builtin, please go to http://localhost:3000/dashboards to see the dashboard.
 
 [Grafana]: https://grafana.com
 [TDengine]: https://www.taosdata.com
