@@ -163,8 +163,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./dashboards/TDinsight.json
-          asset_name: TDinsight.json
+          asset_path: ./dashboards/TDinsightV2.json
+          asset_name: TDinsightV2.json
           asset_content_type: text/plain
 
       - name: Add TDinsightV3.json to release
