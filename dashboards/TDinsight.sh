@@ -273,7 +273,7 @@ remove_datasource() {
 
 download_dashboard() {
   #get_dashboard_by_id $TDINSIGHT_DASHBOARD_ID TDinsight-$TDINSIGHT_DASHBOARD_ID.json
-  #wget -c https://github.com/taosdata/grafanaplugin/releases/download/v$TDENGINE_PLUGIN_VERSION/TDinsight.json -O TDinsight-$TDINSIGHT_DASHBOARD_ID.json
+  #wget -c https://github.com/taosdata/grafanaplugin/releases/download/v$TDENGINE_PLUGIN_VERSION/TDinsightV2.json -O TDinsight-$TDINSIGHT_DASHBOARD_ID.json
   echo "**deprecated: 3.2.6 and above will not download dashboard from grafana, use builtin dashboards via grafana datasource settings.**" >&2
   true
 }

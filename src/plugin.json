@@ -15,8 +15,8 @@
     },
     {
       "type": "dashboard",
-      "name": "TDinsight",
-      "path": "dashboards/TDinsight.json"
+      "name": "TDinsightV2",
+      "path": "dashboards/TDinsightV2.json"
     },
     {
       "type": "dashboard",

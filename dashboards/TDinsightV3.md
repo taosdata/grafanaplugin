@@ -27,7 +27,7 @@ v3.x.
 
 ## Install Grafana
 
-We recommend using the latest [Grafana](https://grafana.com/) version 8 or 9. You can install Grafana on any
+We recommend using the latest [Grafana](https://grafana.com/) version 9 or 10. You can install Grafana on any
 supported operating system by following
 the [official Grafana documentation Instructions](https://grafana.com/docs/grafana/latest/installation/) to install
 Grafana.

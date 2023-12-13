@@ -2,7 +2,7 @@
 
 语言: _[English](https://www.taosdata.com/en/documentation/tools/insight)_ _简体中文_
 
-TDinsight v3.x 是使用 [TDengine 3.0] 监控数据库和 [Grafana] 对 TDengine 进行监控的解决方案。
+TDinsight v3.x 是使用 [TDengine 3.x] 监控数据库和 [Grafana] 对 TDengine 进行监控的解决方案。
 
 TDengine 通过 [taosKeeper](https://github.com/taosdata/taoskeeper) 将服务器的 CPU、内存、硬盘空间、带宽、请求数、磁盘读写速度、
 慢查询等信息定时写入指定数据库，并对重要的系统操作（比如登录、创建、删除数据库等）以及各种错误报警信息进行记录。通过 [Grafana]

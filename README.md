@@ -132,7 +132,7 @@ You can get other dashboards in the examples' directory, or search in grafana wi
 
 Here is a short list:
 
-- [15167](https://grafana.com/grafana/dashboards/15167): TDinsight
+- [15167](https://grafana.com/grafana/dashboards/15167): TDinsightV2
 - [18180](https://grafana.com/grafana/dashboards/18180): TDinsightV3
 - [19910](https://grafana.com/grafana/dashboards/19910): TDsmeters
 - [19953](https://grafana.com/grafana/dashboards/19953): TDpower

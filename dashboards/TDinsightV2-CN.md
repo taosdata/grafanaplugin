@@ -2,7 +2,7 @@
 
 语言: _[English](https://www.taosdata.com/en/documentation/tools/insight)_ _简体中文_
 
-TDinsight 是使用 [TDengine] 原生监控数据库和 [Grafana] 对 TDengine 进行监控的解决方案。
+TDinsight v2.x 是使用 [TDengine 2.x] 原生监控数据库和 [Grafana] 对 TDengine 进行监控的解决方案。
 
 TDengine启动后，会自动创建一个监测数据库log，并自动将服务器的CPU、内存、硬盘空间、带宽、请求数、磁盘读写速度、慢查询等信息定时写入该数据库，并对重要的系统操作（比如登录、创建、删除数据库等）以及各种错误报警信息进行记录。通过 [Grafana] 和 [TDengine 数据源插件](https://github.com/taosdata/grafanaplugin/releases)，TDinsight 将集群状态、节点信息、插入及查询请求、资源使用情况等进行可视化展示，同时还支持vnode、dnode、mnode 节点状态异常告警，为开发者实时监控TDengine集群运行状态提供了便利。本文将指导用户安装 Grafana 服务器并通过 `TDinsight.sh` 安装脚本自动安装 TDengine 数据源插件及部署 TDinsight 可视化面板。
 
@@ -58,7 +58,7 @@ sudo yum install \
   https://dl.grafana.com/oss/release/grafana-7.5.11-1.x86_64.rpm
 ```
 
-## 自动部署 TDinsight
+## 自动部署 TDinsight v2.x
 
 我们提供了一个自动化安装脚本 [`TDinsight.sh`](https://github.com/taosdata/grafanaplugin/releases/latest/download/TDinsight.sh) 脚本以便用户快速进行安装配置。
 
@@ -216,7 +216,7 @@ sudo systemctl enable grafana-server
 
 ![显示](../assets/TDinsight-full.png)
 
-## TDinsight 仪表盘详细信息
+## TDinsight v2.x 仪表盘详细信息
 
 TDinsight 仪表盘旨在提供TDengine 相关资源使用情况[dnodes, mnodes, vnodes](https://www.taosdata.com/cn/documentation/architecture#cluster)或数据库的使用情况和状态。
 
@@ -369,7 +369,7 @@ volumes:
 docker-compose up -d
 ```
 
-TDinsight 已经通过 Provisioning 部署完毕，请到 http://localhost:3000/d/tdinsight/ 查看仪表盘。
+TDinsight v2.x 已经通过 Provisioning 部署完毕，请到 http://localhost:3000/dashboards 查看仪表盘。
 
 [Grafana]: https://grafana.com
 [TDengine]: https://www.taosdata.com
