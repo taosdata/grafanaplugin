@@ -32,7 +32,7 @@ export function useChangeSecureOptions(props: EditorProps, propertyName: keyof S
             if (propertyName === 'token' && options.secureJsonData) {
                 options.secureJsonData.token = event.target.value
             }
-
+            
             onOptionsChange({
                 ...options,
                 secureJsonData: {

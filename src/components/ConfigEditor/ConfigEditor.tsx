@@ -21,7 +21,10 @@ export function ConfigEditor(props: EditorProps): ReactElement {
     const onChangeToken = useChangeSecureOptions(props, 'token')
     const onResetToken = useResetSecureOptions(props, 'token')
 
-    const [active, setActive] = React.useState((secureJsonFields && secureJsonFields.token && secureJsonData?.token?.length) ? authType.Token : authType.Basic )
+    console.log("ConfigEditor:" + secureJsonData?.token)
+    console.log("secureJsonFields.token:" + secureJsonFields.token)
+
+    const [active, setActive] = React.useState((secureJsonFields && secureJsonFields.token) ? authType.Token : authType.Basic )
 
     return (
         <div className='gf-form-group'>
@@ -80,7 +83,7 @@ export function ConfigEditor(props: EditorProps): ReactElement {
                                     onReset={onResetPassword}
                                     onChange={onChangePassword}
                                     onBlur={onChangePassword}
-                                    disabled={props.options.readOnly}
+                                    disabled={props.options.readOnly || (secureJsonFields && secureJsonFields.password) as boolean}
                                     placeholder={secureJsonFields.basicAuth ? 'basic_auth configured' : 'password'}
                                 />
                             </div>
@@ -90,7 +93,7 @@ export function ConfigEditor(props: EditorProps): ReactElement {
                         active === authType.Token &&
                         <div className='gf-form max-width-30'>
                             <SecretFormField
-                                isConfigured={(secureJsonFields && secureJsonFields.token && secureJsonData?.token?.length) as boolean}
+                                isConfigured={(secureJsonFields && secureJsonFields.token) as boolean}
                                 value={secureJsonData?.token || ''}
                                 label='Token'
                                 tooltip="datasource's cloud token"
@@ -100,7 +103,7 @@ export function ConfigEditor(props: EditorProps): ReactElement {
                                 onReset={onResetToken}
                                 onChange={onChangeToken}
                                 onBlur={onChangeToken}
-                                disabled={props.options.readOnly}
+                                disabled={props.options.readOnly || (secureJsonFields && secureJsonFields.token) as boolean}
                             />
                         </div>
                     }
