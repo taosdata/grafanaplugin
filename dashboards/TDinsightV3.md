@@ -15,6 +15,8 @@ and many other metrics. This is very convenient for developers who want to monit
 This article will guide users to install the Grafana server and TDengine Data Source Plugin, and deploy the TDinsight
 v3.x.
 
+> :exclamation: **Note：** This Dashboard does not support TDengine Cloud Service.
+
 ## Requirements
 
 - a single-node TDengine server or a multi-node TDengine cluster and a Grafana server are required. This dashboard
