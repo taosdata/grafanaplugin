@@ -12,6 +12,8 @@ TDengine 通过 [taosKeeper](https://github.com/taosdata/taoskeeper) 将服务�
 
 本文将指导用户安装 Grafana 服务，安装 TDengine 数据源插件，以及部署 TDinsight v3.x 可视化面板。
 
+> :exclamation: **注意：** 此面板暂不支持云服务。
+
 ## 系统要求
 
 - 单节点的 TDengine 服务器或多节点的 [TDengine] 集群，以及一个 [Grafana] 服务器。 此仪表盘需要 TDengine 3.0.1.0
