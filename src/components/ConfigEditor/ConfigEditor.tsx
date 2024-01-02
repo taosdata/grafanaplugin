@@ -21,8 +21,8 @@ export function ConfigEditor(props: EditorProps): ReactElement {
     const onChangeToken = useChangeSecureOptions(props, 'token')
     const onResetToken = useResetSecureOptions(props, 'token')
 
-    console.log("ConfigEditor:" + secureJsonData?.token)
-    console.log("secureJsonFields.token:" + secureJsonFields.token)
+    // console.log("ConfigEditor:" + secureJsonData?.token)
+    // console.log("secureJsonFields.token:" + secureJsonFields.token)
 
     const [active, setActive] = React.useState((secureJsonFields && secureJsonFields.token) ? authType.Token : authType.Basic )
 

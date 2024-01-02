@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+
+## [3.4.5] - 2023-12-22  
+
+### Bug Fixes
+fix slow sqls
+remove console log
+
+## [3.4.3] - 2023-12-22  
+
+### Bug Fixes
+fix problem with the token field  
+update some outdated pictures
+
 ## [3.4.2] - 2023-12-13  
 
 ### Bug Fixes
