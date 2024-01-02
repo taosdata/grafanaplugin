@@ -2440,7 +2440,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last(uptime) as uptime from $database.dnodes_info where dnode_ep = '$fqdn'"
+              "sql": "select last(uptime) as uptime from $database.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to"
             }
           ],
           "title": "Uptime",
@@ -2571,7 +2571,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last(cpu_cores) as cpu_cores from $database.dnodes_info where dnode_ep = '$fqdn' interval ($interval)"
+              "sql": "select last(cpu_cores) as cpu_cores from $database.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to"
             }
           ],
           "title": "CPU Cores",
