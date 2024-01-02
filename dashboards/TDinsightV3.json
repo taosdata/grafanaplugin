@@ -2957,7 +2957,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, last(cpu_engine) as taosd, last(cpu_system) as system from $database.dnodes_info where dnode_ep='$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)"
+              "sql": "select _wstart as ts, last(cpu_engine) as taosd, last(cpu_system) as `system` from $database.dnodes_info where dnode_ep='$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)"
             }
           ],
           "timeFrom": null,
@@ -3043,7 +3043,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, last(mem_engine) as taosd, last(mem_system) as system, last(mem_total) as total from $database.dnodes_info where dnode_ep='$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)"
+              "sql": "select _wstart as ts, last(mem_engine) as taosd, last(mem_system) as `system`, last(mem_total) as total from $database.dnodes_info where dnode_ep='$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)"
             }
           ],
           "timeFrom": null,

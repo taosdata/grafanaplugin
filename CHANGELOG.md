@@ -2,11 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-
-## [3.4.5] - 2023-12-22  
+## [3.4.6] - 2024-01-02  
 
 ### Bug Fixes
 fix slow sqls
+fix sql bug
 remove console log
 
 ## [3.4.3] - 2023-12-22  
