@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.4.7] - 2024-01-27
+
+### Bug Fixes
+
+### Features
+
+- remove TDpower dashboard.
+  
 ## [3.4.6] - 2024-01-02  
 
 ### Bug Fixes
