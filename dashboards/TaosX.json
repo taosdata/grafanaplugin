@@ -1,0 +1,3002 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "Monitor taosX",
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": 16,
+  "iteration": 1704787077606,
+  "links": [],
+  "panels": [
+    {
+      "collapsed": false,
+      "datasource": {
+        "type": "tdengine-datasource",
+        "uid": "TDengine Datasource"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "panels": [],
+      "targets": [
+        {
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "TDengine Datasource"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "taosX",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "tdengine-datasource",
+        "uid": "TDengine Datasource"
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 24,
+        "x": 0,
+        "y": 1
+      },
+      "id": 4,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "<h1><center>taosX Dashboard (ID: ${taosX_id})</center></h1>",
+        "mode": "markdown"
+      },
+      "pluginVersion": "7.5.10",
+      "targets": [
+        {
+          "colNameFormatStr": "",
+          "colNameToGroup": "",
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "TDengine Datasource"
+          },
+          "formatType": "Time series",
+          "queryType": "SQL",
+          "refId": "A"
+        }
+      ],
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "tdengine-datasource",
+        "uid": "TDengine Datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 4,
+        "y": 4
+      },
+      "id": 8,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^cpus$/",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "7.5.10",
+      "targets": [
+        {
+          "colNameFormatStr": "",
+          "colNameToGroup": "",
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "TDengine Datasource"
+          },
+          "formatType": "Time series",
+          "queryType": "SQL",
+          "refId": "A",
+          "sql": "select last(sys_cpu_cores) as cpus from $database.taosx_sys"
+        }
+      ],
+      "title": "CPU Cores",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "tdengine-datasource",
+        "uid": "TDengine Datasource"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "gbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 6,
+        "y": 4
+      },
+      "id": 12,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "7.5.10",
+      "targets": [
+        {
+          "colNameFormatStr": "",
+          "colNameToGroup": "",
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "TDengine Datasource"
+          },
+          "formatType": "Time series",
+          "queryType": "SQL",
+          "refId": "A",
+          "sql": "select last(sys_total_memory)/(1024*1024*1024) from $database.taosx_sys"
+        }
+      ],
+      "title": "Total Memory",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "tdengine-datasource",
+        "uid": "TDengine Datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 9,
+        "y": 4
+      },
+      "id": 10,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^seconds$/",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "7.5.10",
+      "targets": [
+        {
+          "colNameFormatStr": "",
+          "colNameToGroup": "",
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "TDengine Datasource"
+          },
+          "formatType": "Time series",
+          "queryType": "SQL",
+          "refId": "A",
+          "sql": "select last(uptime)as seconds from $database.taosx_sys  where taosx_id = '$taosX_id' and _ts >= $from and _ts <= $to"
+        }
+      ],
+      "title": "Uptime",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "tdengine-datasource",
+        "uid": "TDengine Datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 60
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 5,
+        "x": 12,
+        "y": 4
+      },
+      "id": 102,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "text": {}
+      },
+      "pluginVersion": "7.5.10",
+      "targets": [
+        {
+          "alias": "cpu_taosd",
+          "colNameFormatStr": "",
+          "colNameToGroup": "",
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "TDengine Datasource"
+          },
+          "formatType": "Table",
+          "queryType": "SQL",
+          "refId": "A",
+          "sql": "select last(process_cpu_percent)  from $database.taosx_sys where taosx_id = '$taosX_id' and _ts >= $from and _ts <= $to"
+        }
+      ],
+      "title": "CPU Usage of taosX",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "tdengine-datasource",
+        "uid": "TDengine Datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 5,
+        "x": 17,
+        "y": 4
+      },
+      "id": 104,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "/^memory$/",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "text": {}
+      },
+      "pluginVersion": "7.5.10",
+      "targets": [
+        {
+          "alias": "mem_taosd",
+          "colNameFormatStr": "",
+          "colNameToGroup": "",
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "TDengine Datasource"
+          },
+          "formatType": "Time series",
+          "queryType": "SQL",
+          "refId": "A",
+          "sql": "select last(process_memory_percent) as memory from $database.taosx_sys where taosx_id = '$taosX_id' and _ts >= $from and _ts <= $to"
+        }
+      ],
+      "title": "Memory Usage of taosX",
+      "type": "gauge"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": {
+        "type": "tdengine-datasource",
+        "uid": "TDengine Datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 5,
+        "x": 0,
+        "y": 8
+      },
+      "hiddenSeries": false,
+      "id": 30,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "7.5.10",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "colNameFormatStr": "",
+          "colNameToGroup": "",
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "TDengine Datasource"
+          },
+          "formatType": "Time series",
+          "queryType": "SQL",
+          "refId": "A",
+          "sql": "select _wstart as ts, avg(process_cpu_percent) as cpu_usage from $database.taosx_sys where taosx_id = '$taosX_id'  and _ts >= $from and _ts <= $to interval(30s) fill(null)"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "CPU Usage of taosX",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "percent",
+          "logBase": 1,
+          "max": "100",
+          "min": "0",
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": {
+        "type": "tdengine-datasource",
+        "uid": "TDengine Datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 5,
+        "x": 5,
+        "y": 8
+      },
+      "hiddenSeries": false,
+      "id": 200,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "7.5.10",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "colNameFormatStr": "",
+          "colNameToGroup": "",
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "TDengine Datasource"
+          },
+          "formatType": "Time series",
+          "queryType": "SQL",
+          "refId": "A",
+          "sql": "select _wstart as ts, avg(process_memory_percent) as memory_usage from $database.taosx_sys where taosx_id = '$taosX_id'  and _ts >= $from and _ts <= $to interval(30s) fill(null)"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Memory Usage of taosX",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "percent",
+          "logBase": 1,
+          "max": "100",
+          "min": "0",
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": {
+        "type": "tdengine-datasource",
+        "uid": "TDengine Datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 5,
+        "x": 10,
+        "y": 8
+      },
+      "hiddenSeries": false,
+      "id": 137,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "7.5.10",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "colNameFormatStr": "",
+          "colNameToGroup": "",
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "TDengine Datasource"
+          },
+          "formatType": "Time series",
+          "queryType": "SQL",
+          "refId": "A",
+          "sql": "select _wstart as ts, avg(running_tasks) as running_tasks from $database.taosx_sys where taosx_id = '$taosX_id'  and _ts >= $from and _ts <= $to interval(30s) fill(null)"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Running Tasks",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "none",
+          "logBase": 1,
+          "max": "100",
+          "min": "0",
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": {
+        "type": "tdengine-datasource",
+        "uid": "TDengine Datasource"
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 5,
+        "x": 15,
+        "y": 8
+      },
+      "hiddenSeries": false,
+      "id": 139,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "7.5.10",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "colNameFormatStr": "",
+          "colNameToGroup": "",
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "TDengine Datasource"
+          },
+          "formatType": "Time series",
+          "queryType": "SQL",
+          "refId": "A",
+          "sql": "select _wstart as ts, avg(failed_tasks_in_24h) as failed_tasks_in_24h from $database.taosx_sys where taosx_id = '$taosX_id'  and _ts >= $from and _ts <= $to interval(30s) fill(null)"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Failed Tasks in Last 24h",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "none",
+          "logBase": 1,
+          "min": "0",
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": {
+        "type": "tdengine-datasource",
+        "uid": "TDengine Datasource"
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 4,
+        "x": 20,
+        "y": 8
+      },
+      "hiddenSeries": false,
+      "id": 138,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "7.5.10",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "colNameFormatStr": "",
+          "colNameToGroup": "",
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "TDengine Datasource"
+          },
+          "formatType": "Time series",
+          "queryType": "SQL",
+          "refId": "A",
+          "sql": "select _wstart as ts, avg(complete_tasks_in_24h) as complete_tasks_in_24h from $database.taosx_sys where taosx_id = '$taosX_id'  and _ts >= $from and _ts <= $to interval(30s) fill(null)"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Complete Tasks in Last 24h",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "none",
+          "logBase": 1,
+          "min": "0",
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
+    },
+    {
+      "collapsed": true,
+      "datasource": {
+        "type": "tdengine-datasource",
+        "uid": "TDengine Datasource"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 16
+      },
+      "id": 76,
+      "panels": [
+        {
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "TDengine Datasource"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 2,
+            "x": 4,
+            "y": 17
+          },
+          "id": 152,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "/^cpus$/",
+              "values": false
+            },
+            "text": {},
+            "textMode": "auto"
+          },
+          "pluginVersion": "7.5.0",
+          "targets": [
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "datasource": {
+                "type": "tdengine-datasource",
+                "uid": "TDengine Datasource"
+              },
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select last(sys_cpu_cores) as cpus from $database.taosx_agent where agent_id = '$agent_id' and _ts >= $from and _ts <= $to"
+            }
+          ],
+          "title": "CPU Cores",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "TDengine Datasource"
+          },
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "gbytes"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 3,
+            "x": 6,
+            "y": 17
+          },
+          "id": 166,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "text": {},
+            "textMode": "auto"
+          },
+          "pluginVersion": "7.5.0",
+          "targets": [
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "datasource": {
+                "type": "tdengine-datasource",
+                "uid": "TDengine Datasource"
+              },
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": " select last(sys_total_memory)/(1024*1024*1024) from $database.taosx_agent where agent_id = '$agent_id' and _ts >= $from and _ts <= $to"
+            }
+          ],
+          "title": "Total Memory",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "TDengine Datasource"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 3,
+            "x": 9,
+            "y": 17
+          },
+          "id": 181,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "/^seconds$/",
+              "values": false
+            },
+            "text": {},
+            "textMode": "auto"
+          },
+          "pluginVersion": "7.5.0",
+          "targets": [
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "datasource": {
+                "type": "tdengine-datasource",
+                "uid": "TDengine Datasource"
+              },
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select last(uptime)as seconds from  $database.taosx_agent where agent_id = '$agent_id' and _ts >= $from and _ts <= $to"
+            }
+          ],
+          "title": "Uptime",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "TDengine Datasource"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "max": 100,
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "#EAB839",
+                    "value": 60
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "percent"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 5,
+            "x": 12,
+            "y": 17
+          },
+          "id": 182,
+          "options": {
+            "minVizHeight": 75,
+            "minVizWidth": 75,
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "showThresholdLabels": false,
+            "showThresholdMarkers": true,
+            "text": {}
+          },
+          "pluginVersion": "7.5.0",
+          "targets": [
+            {
+              "alias": "cpu_taosd",
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "datasource": {
+                "type": "tdengine-datasource",
+                "uid": "TDengine Datasource"
+              },
+              "formatType": "Table",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select last(process_cpu_percent)  from $database.taosx_agent where agent_id = '$agent_id' and _ts >= $from and _ts <= $to"
+            }
+          ],
+          "title": "CPU Usage of Agent",
+          "type": "gauge"
+        },
+        {
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "TDengine Datasource"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "percent"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 5,
+            "x": 17,
+            "y": 17
+          },
+          "id": 183,
+          "options": {
+            "minVizHeight": 75,
+            "minVizWidth": 75,
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "fields": "/^memory$/",
+              "values": false
+            },
+            "showThresholdLabels": false,
+            "showThresholdMarkers": true,
+            "text": {}
+          },
+          "pluginVersion": "7.5.0",
+          "targets": [
+            {
+              "alias": "mem_taosd",
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "datasource": {
+                "type": "tdengine-datasource",
+                "uid": "TDengine Datasource"
+              },
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select last(process_memory_percent) as memory from $database.taosx_agent where agent_id = '$agent_id' and _ts >= $from and _ts <= $to"
+            }
+          ],
+          "title": "Memory Usage of Agent",
+          "type": "gauge"
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "TDengine Datasource"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percent"
+            },
+            "overrides": []
+          },
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 8,
+            "w": 9,
+            "x": 4,
+            "y": 21
+          },
+          "hiddenSeries": false,
+          "id": 136,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "7.5.0",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "datasource": {
+                "type": "tdengine-datasource",
+                "uid": "TDengine Datasource"
+              },
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select _wstart as ts, avg(process_cpu_percent) as cpu_usage  from $database.taosx_agent where agent_id = '$agent_id'  and _ts >= $from and _ts <= $to interval(30s) fill(null)"
+            }
+          ],
+          "thresholds": [],
+          "timeRegions": [],
+          "title": "CPU Usage of Agent",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "percent",
+              "logBase": 1,
+              "max": "100",
+              "min": "0",
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "TDengine Datasource"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percent"
+            },
+            "overrides": []
+          },
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 8,
+            "w": 9,
+            "x": 13,
+            "y": 21
+          },
+          "hiddenSeries": false,
+          "id": 218,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "7.5.0",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "datasource": {
+                "type": "tdengine-datasource",
+                "uid": "TDengine Datasource"
+              },
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select _wstart as ts, avg(process_memory_percent) as memory_usage from $database.taosx_agent where agent_id = '$agent_id' and _ts >= $from and _ts <= $to interval(30s) fill(null)"
+            }
+          ],
+          "thresholds": [],
+          "timeRegions": [],
+          "title": "Memory Usage of Agent",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "percent",
+              "logBase": 1,
+              "max": "100",
+              "min": "0",
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false
+          }
+        }
+      ],
+      "repeat": "agent_id",
+      "repeatDirection": "h",
+      "targets": [
+        {
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "TDengine Datasource"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "Agent [ $agent_id ]",
+      "type": "row"
+    },
+    {
+      "collapsed": false,
+      "datasource": {
+        "type": "tdengine-datasource",
+        "uid": "TDengine Datasource"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 17
+      },
+      "id": 58,
+      "panels": [],
+      "targets": [
+        {
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "TDengine Datasource"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "OPC",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "tdengine-datasource",
+        "uid": "TDengine Datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "center",
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "uptime"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "s"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 18
+      },
+      "id": 255,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "enablePagination": false,
+          "fields": [],
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "7.5.10",
+      "targets": [
+        {
+          "colNameFormatStr": "",
+          "colNameToGroup": "",
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "TDengine Datasource"
+          },
+          "formatType": "Table",
+          "queryType": "SQL",
+          "refId": "A",
+          "sql": "select task_id, last(execute_time) as uptime, last(written_rows) as written_rows  from $database.taosx_task_opc  where _ts >= $from and _ts <= $to  partition by task_id ",
+          "timeShiftPeriod": ""
+        }
+      ],
+      "title": "Task Uptime",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "tdengine-datasource",
+        "uid": "TDengine Datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "graph": false,
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "cps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 6,
+        "x": 0,
+        "y": 24
+      },
+      "id": 60,
+      "options": {
+        "graph": {},
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "tooltipOptions": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "7.5.0",
+      "targets": [
+        {
+          "colNameFormatStr": "{{task_id}}",
+          "colNameToGroup": "task_id",
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "TDengine Datasource"
+          },
+          "formatType": "Time series",
+          "queryType": "SQL",
+          "refId": "A",
+          "sql": "select _wstart as ts, task_id,  avg(rows_per_second) as rows_per_second from $database.taosx_task_opc where ('$task' = '' OR task_id = '$task') and _ts >= $from and _ts <= $to  partition by task_id interval($interval) fill(null) order by task_id"
+        }
+      ],
+      "title": "Insert rows Rate",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "tdengine-datasource",
+        "uid": "TDengine Datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "graph": false,
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "cps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 6,
+        "x": 6,
+        "y": 24
+      },
+      "id": 227,
+      "options": {
+        "graph": {},
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "tooltipOptions": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "7.5.0",
+      "targets": [
+        {
+          "colNameFormatStr": "{{task_id}}",
+          "colNameToGroup": "task_id",
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "TDengine Datasource"
+          },
+          "formatType": "Time series",
+          "queryType": "SQL",
+          "refId": "A",
+          "sql": "select _wstart as ts, task_id,  avg(points_per_second) as points_per_second from $database.taosx_task_opc where ('$task' = '' OR task_id = '$task') and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
+        }
+      ],
+      "title": "Insert Points Rate",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "tdengine-datasource",
+        "uid": "TDengine Datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "graph": false,
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 6,
+        "x": 12,
+        "y": 24
+      },
+      "id": 378,
+      "options": {
+        "graph": {},
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "tooltipOptions": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "7.5.0",
+      "targets": [
+        {
+          "colNameFormatStr": "{{task_id}}_processed_batches",
+          "colNameToGroup": "task_id",
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "TDengine Datasource"
+          },
+          "formatType": "Time series",
+          "queryType": "SQL",
+          "refId": "A",
+          "sql": "select _wstart as ts, task_id,  avg(processed_batches) as processed_batches from $database.taosx_task_opc where ('$task' = '' OR task_id = '$task') and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
+        },
+        {
+          "colNameFormatStr": "{{task_id}}_received_batches",
+          "colNameToGroup": "task_id",
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "TDengine Datasource"
+          },
+          "formatType": "Time series",
+          "hide": false,
+          "queryType": "SQL",
+          "refId": "B",
+          "sql": "select _wstart as ts, task_id,  avg(processed_batches) as processed_batches from $database.taosx_task_opc where ('$task' = '' OR task_id = '$task') and  _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
+        }
+      ],
+      "title": "Processed/Received Batches",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "tdengine-datasource",
+        "uid": "TDengine Datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "graph": false,
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 6,
+        "x": 18,
+        "y": 24
+      },
+      "id": 228,
+      "options": {
+        "graph": {},
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "tooltipOptions": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "7.5.0",
+      "targets": [
+        {
+          "colNameFormatStr": "{{task_id}}",
+          "colNameToGroup": "task_id",
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "TDengine Datasource"
+          },
+          "formatType": "Time series",
+          "queryType": "SQL",
+          "refId": "A",
+          "sql": "select _wstart as ts, task_id,  avg(failed_sqls) as failed_sqls from $database.taosx_task_opc where ('$task' = '' OR task_id = '$task') and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
+        }
+      ],
+      "title": "Failed Sqls",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 34
+      },
+      "id": 273,
+      "panels": [],
+      "title": "MQTT",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "tdengine-datasource",
+        "uid": "TDengine Datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "center",
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "uptime"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "s"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 35
+      },
+      "id": 380,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "enablePagination": false,
+          "fields": [],
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "7.5.10",
+      "targets": [
+        {
+          "colNameFormatStr": "",
+          "colNameToGroup": "",
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "TDengine Datasource"
+          },
+          "formatType": "Table",
+          "queryType": "SQL",
+          "refId": "A",
+          "sql": "select task_id, last(execute_time) as uptime, last(written_rows) as written_rows  from $database.taosx_task_mqtt  where _ts >= $from and _ts <= $to  partition by task_id ",
+          "timeShiftPeriod": ""
+        }
+      ],
+      "title": "Task Uptime",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "tdengine-datasource",
+        "uid": "TDengine Datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "graph": false,
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "cps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 6,
+        "x": 0,
+        "y": 41
+      },
+      "id": 292,
+      "options": {
+        "graph": {},
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "tooltipOptions": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "7.5.0",
+      "targets": [
+        {
+          "colNameFormatStr": "{{task_id}}",
+          "colNameToGroup": "task_id",
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "TDengine Datasource"
+          },
+          "formatType": "Time series",
+          "queryType": "SQL",
+          "refId": "A",
+          "sql": "select _wstart as ts, task_id,  avg(rows_per_second) as rows_per_second from $database.taosx_task_mqtt where ('$task' = '' OR task_id = '$task') and  _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
+        }
+      ],
+      "title": "Insert rows Rate",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "tdengine-datasource",
+        "uid": "TDengine Datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "graph": false,
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "cps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 6,
+        "x": 6,
+        "y": 41
+      },
+      "id": 293,
+      "options": {
+        "graph": {},
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "tooltipOptions": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "7.5.0",
+      "targets": [
+        {
+          "colNameFormatStr": "{{task_id}}",
+          "colNameToGroup": "task_id",
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "TDengine Datasource"
+          },
+          "formatType": "Time series",
+          "queryType": "SQL",
+          "refId": "A",
+          "sql": "select _wstart as ts, task_id,  avg(points_per_second) as points_per_second from $database.taosx_task_mqtt where ('$task' = '' OR task_id = '$task') and  _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
+        }
+      ],
+      "title": "Insert Points Rate",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "tdengine-datasource",
+        "uid": "TDengine Datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "graph": false,
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 6,
+        "x": 12,
+        "y": 41
+      },
+      "id": 379,
+      "options": {
+        "graph": {},
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "tooltipOptions": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "7.5.0",
+      "targets": [
+        {
+          "colNameFormatStr": "{{task_id}}_processed_batches",
+          "colNameToGroup": "task_id",
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "TDengine Datasource"
+          },
+          "formatType": "Time series",
+          "queryType": "SQL",
+          "refId": "A",
+          "sql": "select _wstart as ts, task_id,  avg(processed_batches) as processed_batches from $database.taosx_task_mqtt where ('$task' = '' OR task_id = '$task') and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
+        },
+        {
+          "colNameFormatStr": "{{task_id}}_received_batches",
+          "colNameToGroup": "task_id",
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "TDengine Datasource"
+          },
+          "formatType": "Time series",
+          "hide": false,
+          "queryType": "SQL",
+          "refId": "B",
+          "sql": "select _wstart as ts, task_id,  avg(processed_batches) as processed_batches from $database.taosx_task_mqtt where ('$task' = '' OR task_id = '$task') and  _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
+        }
+      ],
+      "title": "Processed/Received Batches",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "tdengine-datasource",
+        "uid": "TDengine Datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "graph": false,
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 6,
+        "x": 18,
+        "y": 41
+      },
+      "id": 302,
+      "options": {
+        "graph": {},
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "tooltipOptions": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "7.5.0",
+      "targets": [
+        {
+          "colNameFormatStr": "{{task_id}}",
+          "colNameToGroup": "task_id",
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "TDengine Datasource"
+          },
+          "formatType": "Time series",
+          "queryType": "SQL",
+          "refId": "A",
+          "sql": "select _wstart as ts, task_id,  avg(failed_sqls) as failed_sqls from $database.taosx_task_mqtt where ('$task' = '' OR task_id = '$task') and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
+        }
+      ],
+      "title": "Failed Sqls",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 51
+      },
+      "id": 311,
+      "panels": [],
+      "title": "TDengine 3.x",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "tdengine-datasource",
+        "uid": "TDengine Datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "center",
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "uptime"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "s"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 52
+      },
+      "id": 381,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "enablePagination": false,
+          "fields": [],
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "7.5.10",
+      "targets": [
+        {
+          "colNameFormatStr": "",
+          "colNameToGroup": "",
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "TDengine Datasource"
+          },
+          "formatType": "Table",
+          "queryType": "SQL",
+          "refId": "A",
+          "sql": "select task_id, last(execute_time) as uptime, last(written_rows) as written_rows  from $database.taosx_task_tdengine3  where _ts >= $from and _ts <= $to  partition by task_id ",
+          "timeShiftPeriod": ""
+        }
+      ],
+      "title": "Task Uptime",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "tdengine-datasource",
+        "uid": "TDengine Datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "graph": false,
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "cps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 6,
+        "x": 0,
+        "y": 58
+      },
+      "id": 330,
+      "options": {
+        "graph": {},
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "tooltipOptions": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "7.5.0",
+      "targets": [
+        {
+          "colNameFormatStr": "{{task_id}}",
+          "colNameToGroup": "task_id",
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "TDengine Datasource"
+          },
+          "formatType": "Time series",
+          "queryType": "SQL",
+          "refId": "A",
+          "sql": "select _wstart as ts, task_id,  avg(rows_per_second) as rows_per_second from $database.taosx_task_tdengine3 where _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
+        }
+      ],
+      "title": "Insert rows Rate",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "tdengine-datasource",
+        "uid": "TDengine Datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "graph": false,
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "cps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 6,
+        "x": 6,
+        "y": 58
+      },
+      "id": 339,
+      "options": {
+        "graph": {},
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "tooltipOptions": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "7.5.0",
+      "targets": [
+        {
+          "colNameFormatStr": "{{task_id}}",
+          "colNameToGroup": "task_id",
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "TDengine Datasource"
+          },
+          "formatType": "Time series",
+          "queryType": "SQL",
+          "refId": "A",
+          "sql": "select _wstart as ts, task_id,  avg(points_per_second) as points_per_second from $database.taosx_task_tdengine3 where _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
+        }
+      ],
+      "title": "Insert Points Rate",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "tdengine-datasource",
+        "uid": "TDengine Datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "graph": false,
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 6,
+        "x": 12,
+        "y": 58
+      },
+      "id": 340,
+      "options": {
+        "graph": {},
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "tooltipOptions": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "7.5.0",
+      "targets": [
+        {
+          "colNameFormatStr": "{{task_id}}",
+          "colNameToGroup": "task_id",
+          "datasource": {
+            "type": "tdengine-datasource",
+            "uid": "TDengine Datasource"
+          },
+          "formatType": "Time series",
+          "queryType": "SQL",
+          "refId": "A",
+          "sql": "select _wstart as ts, task_id,  avg(write_raw_fails) as write_raw_fails from $database.taosx_task_tdengine3 where _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
+        }
+      ],
+      "title": "Write Raw Fails",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 27,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "allValue": null,
+        "current": {},
+        "datasource": {
+          "type": "tdengine-datasource",
+          "uid": "TDengine Datasource"
+        },
+        "definition": "select name from information_schema.ins_databases where `vgroups` is not null",
+        "description": null,
+        "error": {},
+        "hide": 0,
+        "includeAll": false,
+        "label": "Log from",
+        "multi": false,
+        "name": "database",
+        "options": [],
+        "query": "select name from information_schema.ins_databases where `vgroups` is not null",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "auto": true,
+        "auto_count": 100,
+        "auto_min": "10s",
+        "current": {
+          "selected": false,
+          "text": "auto",
+          "value": "$__auto_interval_interval"
+        },
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "label": "Interval",
+        "name": "interval",
+        "options": [
+          {
+            "selected": true,
+            "text": "auto",
+            "value": "$__auto_interval_interval"
+          },
+          {
+            "selected": false,
+            "text": "5s",
+            "value": "5s"
+          },
+          {
+            "selected": false,
+            "text": "10s",
+            "value": "10s"
+          },
+          {
+            "selected": false,
+            "text": "15s",
+            "value": "15s"
+          },
+          {
+            "selected": false,
+            "text": "20s",
+            "value": "20s"
+          },
+          {
+            "selected": false,
+            "text": "30s",
+            "value": "30s"
+          },
+          {
+            "selected": false,
+            "text": "1m",
+            "value": "1m"
+          },
+          {
+            "selected": false,
+            "text": "2m",
+            "value": "2m"
+          },
+          {
+            "selected": false,
+            "text": "5m",
+            "value": "5m"
+          },
+          {
+            "selected": false,
+            "text": "10m",
+            "value": "10m"
+          },
+          {
+            "selected": false,
+            "text": "30m",
+            "value": "30m"
+          },
+          {
+            "selected": false,
+            "text": "1h",
+            "value": "1h"
+          },
+          {
+            "selected": false,
+            "text": "6h",
+            "value": "6h"
+          },
+          {
+            "selected": false,
+            "text": "12h",
+            "value": "12h"
+          },
+          {
+            "selected": false,
+            "text": "1d",
+            "value": "1d"
+          }
+        ],
+        "query": "5s,10s,15s,20s,30s,1m,2m,5m,10m,30m,1h,6h,12h,1d",
+        "queryValue": "",
+        "refresh": 2,
+        "skipUrlSync": false,
+        "type": "interval"
+      },
+      {
+        "allValue": null,
+        "current": {},
+        "datasource": {
+          "type": "tdengine-datasource",
+          "uid": "TDengine Datasource"
+        },
+        "definition": "select distinct(taosx_id) from $database.taosx_sys where _ts >= $from and _ts <= $to",
+        "description": null,
+        "error": {},
+        "hide": 0,
+        "includeAll": false,
+        "label": "taosX",
+        "multi": false,
+        "name": "taosX_id",
+        "options": [],
+        "query": "select distinct(taosx_id) from $database.taosx_sys where _ts >= $from and _ts <= $to",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {},
+        "datasource": {
+          "type": "tdengine-datasource",
+          "uid": "TDengine Datasource"
+        },
+        "definition": "select distinct(agent_id) from $database.taosx_agent where taosx_id = '$taosX_id' and _ts >= $from and _ts <= $to",
+        "description": null,
+        "error": {},
+        "hide": 0,
+        "includeAll": true,
+        "label": "Agent",
+        "multi": true,
+        "name": "agent_id",
+        "options": [],
+        "query": "select distinct(agent_id) from $database.taosx_agent where taosx_id = '$taosX_id' and _ts >= $from and _ts <= $to",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {},
+        "datasource": {
+          "type": "tdengine-datasource",
+          "uid": "TDengine Datasource"
+        },
+        "definition": "SELECT 'TDengine2' AS datasource  UNION  SELECT 'TDengine3' UNION  SELECT 'Influxdb'UNION  SELECT 'Opentsdb'UNION  SELECT 'OPC'UNION  SELECT 'PI'UNION  SELECT 'CSV'UNION  SELECT 'MQTT'UNION\n SELECT 'Hisotorian'UNION  SELECT 'Kafka' order by datasource",
+        "description": null,
+        "error": {},
+        "hide": 0,
+        "includeAll": true,
+        "label": "DataSource",
+        "multi": false,
+        "name": "datasource",
+        "options": [],
+        "query": "SELECT 'TDengine2' AS datasource  UNION  SELECT 'TDengine3' UNION  SELECT 'Influxdb'UNION  SELECT 'Opentsdb'UNION  SELECT 'OPC'UNION  SELECT 'PI'UNION  SELECT 'CSV'UNION  SELECT 'MQTT'UNION\n SELECT 'Hisotorian'UNION  SELECT 'Kafka' order by datasource",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 2,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {},
+        "datasource": {
+          "type": "tdengine-datasource",
+          "uid": "TDengine Datasource"
+        },
+        "definition": "select distinct(task_id) from $database.taosx_task_$datasource where  _ts >= $from and _ts <= $to",
+        "description": null,
+        "error": {},
+        "hide": 0,
+        "includeAll": false,
+        "label": "Task",
+        "multi": false,
+        "name": "task",
+        "options": [],
+        "query": "select distinct(task_id) from $database.taosx_task_$datasource where  _ts >= $from and _ts <= $to",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      }
+    ]
+  },
+  "time": {
+    "from": "now-5m",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "TDinsight for taosX",
+  "uid": "b6674aab-325c-414b-92ae-f7932cc55d49",
+  "version": 1
+}
