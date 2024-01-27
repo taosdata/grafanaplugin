@@ -15,6 +15,11 @@
     },
     {
       "type": "dashboard",
+      "name": "taosX",
+      "path": "dashboards/Taosx.json"
+    },    
+    {
+      "type": "dashboard",
       "name": "TDinsightV2",
       "path": "dashboards/TDinsightV2.json"
     },
