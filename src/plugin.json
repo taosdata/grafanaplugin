@@ -22,11 +22,6 @@
       "type": "dashboard",
       "name": "TDsmeters",
       "path": "dashboards/TDsmeters.json"
-    },
-    {
-      "type": "dashboard",
-      "name": "TDpower",
-      "path": "dashboards/TDpower.json"
     }
   ],
   "routes": [

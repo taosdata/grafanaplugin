@@ -135,7 +135,6 @@ Here is a short list:
 - [15167](https://grafana.com/grafana/dashboards/15167): TDinsightV2
 - [18180](https://grafana.com/grafana/dashboards/18180): TDinsightV3
 - [19910](https://grafana.com/grafana/dashboards/19910): TDsmeters
-- [19953](https://grafana.com/grafana/dashboards/19953): TDpower
   
 You could open a pr to add one if you want to share your dashboard with TDengine community, we appreciate your contribution!
 
