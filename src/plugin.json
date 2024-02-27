@@ -22,6 +22,11 @@
       "type": "dashboard",
       "name": "TDsmeters",
       "path": "dashboards/TDsmeters.json"
+    },
+    {
+      "type": "dashboard",
+      "name": "taosX",
+      "path": "dashboards/taosX.json"
     }
   ],
   "routes": [
