@@ -4,6 +4,12 @@ Languages: _English_ _[简体中文](https://www.taosdata.com/cn/documentation/t
 
 TDinsight v3.x is a solution for monitoring TDengine using the builtin native monitoring database and Grafana.
 
+The correspondence between TDinsight v3.x and TDengine versions is as follows:
+| TDinsight v3.x Version |  TDengine Version |
+| :---------------------: | :--------------: |
+|          3.x            |  from 3.0.1.0 to 3.1.x |
+|          4.x            |  from 3.2.x |
+
 TDengine writes monitoring data into a special database through [taosKeeper](https://github.com/taosdata/taoskeeper).
 The metrics may include the server's CPU, memory, hard disk space, network bandwidth, number of requests, disk
 read/write speed, slow queries, other information like important system operations (user login, database creation,
@@ -20,7 +26,7 @@ v3.x.
 ## Requirements
 
 - a single-node TDengine server or a multi-node TDengine cluster and a Grafana server are required. This dashboard
-  requires TDengine 3.0.1.0 and above, with the monitoring feature enabled. For detailed configuration, please refer to
+  requires TDengine with the monitoring feature enabled. For detailed configuration, please refer to
   [TDengine monitoring configuration](https://docs.tdengine.com/reference/config/#monitoring-parameters).
 - taosAdapter has been instaleld and running, please refer
   to [taosAdapter](https://docs.tdengine.com/reference/taosadapter/).
@@ -188,7 +194,7 @@ This section contains the current information and status of the cluster (from le
 - **Expire Time**: Enterprise version expiration time.
 - **Used Measuring Points**: The number of measuring points used by the Enterprise Edition.
 - **Databases**: The number of databases.
-- **Tables**: The number of table.
+- **Stables & Tables**: The total number of stable and table.
 - **Connections**: The number of current connections.
 - **DNodes/MNodes/VGroups/VNodes**: Total number of each resource and the number of survivors.
 - **DNodes/MNodes/VGroups/VNodes Alive Percent**: The ratio of the number of alive/total for each resource.
@@ -196,14 +202,12 @@ This section contains the current information and status of the cluster (from le
   default).
 - **Grants Expire Time**: the expiration time of the enterprise version (no data available for the community version,
   healthy by default).
-- **Error Rate**: Aggregate error rate (average number of errors per second) for alert-enabled clusters.
 
 ### DNodes Status
 
-![tdinsight-mnodes-overview](../assets/TDinsightV3-2-dnodes.png)
+![tdinsight-dnodes-overview](../assets/TDinsightV3-2-dnodes.png)
 
 - **DNodes Status**: simple table view of `show dnodes`.
-- **DNodes Lifetime**: the time elapsed since the dnode was created.
 - **DNodes Number**: the trends in the number of DNodes.
 
 ### MNode Overview
@@ -217,25 +221,24 @@ This section contains the current information and status of the cluster (from le
 
 ![tdinsight-requests](../assets/TDinsightV3-4-requests.png)
 
-1. **Requests Rate(Inserts per Second)**: average number of inserts per second.
-2. **Requests (Selects)**: number of query requests and rate of change (count of second).
+1. **Select Request**: select request in timeseries.
+2. **Delete Request**: delete request in timeseries.
+3. **Insert Request**: insert request in timeseries.
+4. **Inserted Rows**: inserted rows in timeseries.
+5. **Slow Sql**: number of slow query requests in timeseries.
 
-### Database
+### Tables Summary
 
-![tdinsight-database](../assets/TDinsightV3-5-database.png)
-
-Database usage, repeated for each value of the variable `$database`, one rows per database.
+![tdinsight-Tables-Summary](../assets/TDinsightV3-5-database.png)
 
 1. **STables**: number of super tables.
-2. **Total Tables**: number of all tables.
-3. **Tables**: number of normal tables.
+2. **Tables**: number of all tables.
+3. **Tables**: number of normal tables in timeseries.
 4. **Tables Number Foreach VGroups**: number of tables per vgroup.
 
 ### DNode Resource Usage
 
 ![dnode-usage](../assets/TDinsightV3-6-dnode-usage.png)
-
-数据节点资源使用情况展示, 对变量 `$fqdn` 即每个数据节点进行重复多行展示.包括:
 
 Data node resource usage display with repeated multiple rows for the variable `$fqdn`, one rows per dnode.
 
@@ -246,18 +249,12 @@ Data node resource usage display with repeated multiple rows for the variable `$
 5. **VNodes Masters**: the number of vnodes in the leader role.
 6. **Current CPU Usage of taosd**: CPU usage rate of taosd processes.
 7. **Current Memory Usage of taosd**: memory usage of taosd processes.
-8. **Disk Used**: The total disk usage percentage of the taosd data directory.
+8. **Max Disk Used**: the maximum disk usage rate corresponding to all taosd data directories.
 9. **CPU Usage**: Process and system CPU usage.
 10. **RAM Usage**: Time series view of RAM usage metrics.
 11. **Disk Used**: Disks used at each level of multi-level storage (default is level0).
 12. **Disk IO**: Disk IO rate.
-13. **Net IO**: Network IO, the aggregate network IO rate in addition to the local network.
-
-### Login History
-
-![login history](../assets/TDinsightV3-7-login-history.png)
-
-Currently, only the number of logins per minute is reported.
+13. **Net**: Network IO, the aggregate network IO rate in addition to the local network.
 
 ### taosAdapter
 

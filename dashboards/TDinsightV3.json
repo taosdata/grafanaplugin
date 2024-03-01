@@ -2101,7 +2101,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, avg(`count`) as `count`  from $database.taos_slow_sql where ('$username' = '' OR username in (${username:sqlstring})) and  ('$sql_result' = '' OR result in (${sql_result:sqlstring})) and  ('$duration' = '' OR `duration` in (${duration:sqlstring})) and _ts > $from and _ts <= $to interval($interval) fill(null)"
+              "sql": "select _wstart as ts, avg(`count`) as `count`  from $database.taos_slow_sql where ('$username' = '' OR username in (${username:sqlstring})) and  ('$sql_result' = '' OR result in (${sql_result:sqlstring})) and  ('$duration' = '' OR `duration` in (${duration:sqlstring})) and _ts > $from and _ts <= $to interval($interval) fill(VALUE, 0)"
             }
           ],
           "timeFrom": null,

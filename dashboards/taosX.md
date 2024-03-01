@@ -1,27 +1,92 @@
-# TDsmeters - TDengine DBMark dmeters database show data
+# TDinsight for taosX - A Monitoring Solution For [taosX] with [Grafana]
 
-![TDsmeters-overview](../assets/TDsmeters-full.jpeg)
+TaosX is a zero-code platform for data access, synchronization, backup, and recovery of TDengine, and is an important feature of TDengine Enterprise Edition. 
+TDinsight for taosX is a real-time display plugin used to monitor various components of taosX such as Agent, Connector, and various data source tasks. It is very simple to install and use.
 
-**Grafana version 10.0 or above is required**
+### Adding a TDengine Data Source
 
-The TDsmeters plugin is a real-time display plugin for the dynamic collection process of smart meter data in TDengine Cloud as a Service DBMark. Installation and use are very simple, divided into two steps:
+Point to the **Configurations** -> **Data Sources** menu, and click the **Add data source** button.
 
-I. Establish a data source connection
+![add datasource](../assets/howto-add-datasource-button.png)
 
-1. Open the locally installed grafana page and select add new connection from the main menu.
-2. Enter TDengine Datasource in the search box, and the TDengine data source connection plugin will appear below
-3. Click the plugin, go to the plugin installation page, click Install, ignore this step if the plugin is already installed
-4. Return to the main menu and select Data sources, click to enter the page, and click the add new data source button in the upper right corner of the page.
-5. Search box appears, enter TDengine Datasource, click this plugin
-6. Enter the plugin data source configuration page, the content configured inside needs to login https://cloud.tdengine.com/ go here to get the data source connection information, specifically in the tools - > grafana plugin - > Add Data Source column has detailed instructions
-7. After the configuration is completed, click the save & test button, and the test connection is correct.
-8. Open https://cloud.tdengine.com/ , go to the DBMark page, and open “the real-time collection of smart meters” shared library
+Search for and select **TDengine**.
 
-II. Install the TDsmeters plugin
+![add datasource](../assets/howto-add-datasource-tdengine.png)
 
-1. Open the grafana main page and select Dashborads from the main menu.
-2. After entering the Dashborads page, click the new button in the upper right corner and select the third item import.
-3. Enter the import page, enter the ID of the TDsmeters plugin in the box with the Dashborad URL or ID, and click the load button on the right to load it.
-4. After entering the plugin configuration page, enter the name you want to name the plugin. You don’t need to modify anything else. Just select the data source established in the above step in Select Data Source.
-5. After filling in the above, click the import button to complete the import.
-6. In this way, the plugin page is displayed in front of you. Click the refresh cycle to refresh regularly, and the dynamic data can be updated in real time.
+Configure the TDengine datasource.
+
+![datasource config](../assets/howto-add-datasource.png)
+
+Save and test. It will report 'TDengine Data source is working' in normal circumstances.
+
+![datasource testing](../assets/howto-add-datasource-test.png)
+
+### Importing dashboard
+
+#### Importing dashboard from datasource confining page.
+
+Click **Dashboard** tab in TDengine datasource confining page.
+
+![import dashboard and config](../assets/taosX-import.png)
+
+Click the "import" button of `TDinsight for taoX` to import the panel. 
+After the import is complete, the full page view of `TDinsight for taoX` is as shown below.
+
+![dashboard](../assets/TDinsight-taosX-full.png)
+
+
+## TDinsight for taosX Dashbord Detail
+
+### taosX
+
+![taosx-overview](../assets/taosX-main.png)
+
+This section includes the basic information of the currently selected taosX instance (from left to right, from top to bottom).
+
+- **CPU Cores**: The number of CPU cores of the machine where taosX is located.
+- **Total Memory**: The system memory of the machine where taosX is located.
+- **CPU Usage**: The percentage of CPU usage by the taosX process.
+- **Memory Usage**: The percentage of memory usage by the taosX process.
+- **Uptime**: The running time of taosX.
+- **Restart Times**: The number of times taosX has been restarted.
+- **CPU Usage**: The percentage of CPU usage by the taosX process, in time series form.
+- **Memory Usage**: The percentage of memory usage by the taosX process, in time series form.
+- **Running Tasks**: The number of tasks currently being executed.
+- **Failed Tasks**: The number of tasks failed.
+- **Completed Tasks**: The number of tasks completed.
+
+### Agent
+
+![taosx-agent](../assets/taosX-Agent.png)
+
+- **CPU Cores**: The number of CPU cores of the machine where the Agent is located.
+- **Total Memory**: The system memory of the machine where the Agent is located.
+- **CPU Usage**: The percentage of CPU usage by the Agent process.
+- **Memory Usage**: The percentage of memory usage by the Agent process.
+- **CPU Usage**: The percentage of CPU usage by the Agent process, in time series form.
+- **Memory Usage**: The percentage of memory usage by the Agent process, in time series form.
+
+### TDengine3
+
+![tdinsight-mnodes-overview](../assets/TDinsightV3-3-mnodes.png)
+
+-  **Task Info**: Task information, including task id, name, execution time, number of rows written, total execution time, and total number of rows written.
+-  **Inserted Rows Rate**: Insertion rate of rows.
+-  **Inserted Points Rate**: Insertion rate of points.
+-  **Write Raw Fails**: The number of times the writing of raw meta failed.
+
+### OPC-UA
+
+![tdinsight-mnodes-overview](../assets/taosX-opcua.png)
+
+- **Task Info**: Task information, including id, name, execution time, number of rows written, total execution time, and total number of rows written.
+- **Inserted Rows Rate**: Insertion rate of rows.
+- **Inserted Points Rate**: Insertion rate of points.
+- **Processed/Received Batches**: The number of batches processed & the number of data batches received through IPC Stream.
+- **Failed Sqls**: The total number of failed INSERT SQL statements during this task run.
+- **Connector CPU Percent**: The percentage of CPU usage by the Connector process, in time series form.
+- **Connector Memory Percent**: The percentage of memory usage by the Connector process, in time series form.
+- **Connector Disk Read Rate**: The disk read speed of the Connector process.
+- **Connector Disk Write Rate**: The disk write speed of the Connector process.
+
+The monitoring information of other types of data sources such as MQTT, CSV, Kafka, etc., is similar to OPC-UA.
