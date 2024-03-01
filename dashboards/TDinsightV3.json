@@ -525,10 +525,10 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select last(tbs_total) from $database.taosd_cluster_info where _ts >= $from and _ts <= $to"
+          "sql": "select last(stbs_total + tbs_total) from $database.taosd_cluster_info"
         }
       ],
-      "title": "Tables",
+      "title": "Stables & Tables",
       "type": "stat"
     },
     {
@@ -1412,7 +1412,8 @@
                   "to": "",
                   "type": 1,
                   "value": "0"
-                }],
+                }
+              ],
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
@@ -1440,10 +1441,10 @@
             {
               "colNameFormatStr": "",
               "colNameToGroup": "",
-              "formatType": "Time series",
+              "formatType": "Table",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select dnode_ep,  last(`status`) as status from $database.taosd_dnodes_status where _ts >= $from and _ts <= $to group by dnode_ep;"
+              "sql": "select dnode_ep,  last(`status`) as status from $database.taosd_dnodes_status where _ts = '$last_dnodes_ts' group by dnode_ep order by dnode_ep"
             }
           ],
           "title": "DNodes Status",
@@ -1599,7 +1600,8 @@
                   "to": "",
                   "type": 1,
                   "value": "104"
-                }],
+                }
+              ],
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
@@ -1630,7 +1632,7 @@
               "formatType": "Table",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select mnode_ep, last(role) as role from $database.taosd_mnodes_info where _ts >= $from and _ts <= $to group by mnode_ep;"
+              "sql": "select mnode_ep, last(role) as role from $database.taosd_mnodes_info where _ts = '$last_mnodes_ts' group by mnode_ep order by mnode_ep"
             }
           ],
           "title": "MNodes Status",
@@ -2385,7 +2387,7 @@
               "sql": "select last(tbs_total) as tbs_total from $database.taosd_cluster_info where _ts >= $from and _ts <= $to"
             }
           ],
-          "title": "Total Tables",
+          "title": "Tables",
           "type": "stat"
         }
       ],
@@ -2888,10 +2890,10 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last(disk_used) as used, last(disk_total) as total, last(disk_used) / last(disk_total) as percent from $database.taosd_dnodes_info where dnode_ep = '$fqdn' and _ts >= $from and _ts <= $to"
+              "sql": "select max(percent) as percent from (select data_dir_level, data_dir_name,last(used/total) as percent from $database.taosd_dnodes_data_dirs where dnode_ep = '$fqdn' and _ts >= $from and _ts <= $to partition by data_dir_level, data_dir_name)"
             }
           ],
-          "title": "Disk Used",
+          "title": "Max Disk Used",
           "type": "gauge"
         },
         {
@@ -3072,7 +3074,7 @@
                 "axisPlacement": "auto",
                 "barAlignment": 0,
                 "drawStyle": "line",
-                "fillOpacity": 10,
+                "fillOpacity": 0,
                 "gradientMode": "none",
                 "hideFrom": {
                   "graph": false,
@@ -3083,7 +3085,8 @@
                 "lineWidth": 1,
                 "pointSize": 5,
                 "scaleDistribution": {
-                  "type": "linear"
+                  "log": 10,
+                  "type": "log"
                 },
                 "showPoints": "never",
                 "spanNulls": true
@@ -3112,8 +3115,7 @@
           "options": {
             "graph": {},
             "legend": {
-              "calcs": [
-              ],
+              "calcs": [],
               "displayMode": "table",
               "placement": "right"
             },
@@ -3124,57 +3126,21 @@
           "pluginVersion": "7.5.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
+              "colNameFormatStr": "L{{data_dir_level}}-{{data_dir_name}}-used",
+              "colNameToGroup": "data_dir_level, data_dir_name",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, last(used) as level0_used, last(total) as level0_total from $database.taosd_dnodes_data_dirs where data_dir_level = 0 and dnode_ep = '$fqdn' and _ts >= $from and _ts <= $to interval($interval) fill(null)"
+              "sql": "select _wstart as ts, data_dir_level, data_dir_name, last(used) as used from $database.taosd_dnodes_data_dirs where dnode_ep = '$fqdn' and _ts >= $from and _ts <= $to partition by data_dir_level, data_dir_name interval($interval) fill(null) order by data_dir_level, data_dir_name"
             },
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
+              "colNameFormatStr": "L{{data_dir_level}}-{{data_dir_name}}-total",
+              "colNameToGroup": "data_dir_level, data_dir_name",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
               "refId": "B",
-              "sql": "select _wstart as ts, avg(used) as level1_used, avg(total) as level1_total from $database.taosd_dnodes_data_dirs where data_dir_level = 1 and dnode_ep = '$fqdn' and _ts >= $from and _ts <= $to interval($interval) fill(null)"
-            },
-            {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
-              "formatType": "Time series",
-              "hide": false,
-              "queryType": "SQL",
-              "refId": "C",
-              "sql": "select _wstart as ts, avg(used) as level2_used, avg(total) as level2_total from $database.taosd_dnodes_data_dirs where data_dir_level = 2 and dnode_ep = '$fqdn' and _ts >= $from and _ts <= $to interval($interval) fill(null)"
-            },
-            {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
-              "formatType": "Time series",
-              "hide": false,
-              "queryType": "SQL",
-              "refId": "D",
-              "sql": "select avg(used)/avg(total) as level0_percent from $database.taosd_dnodes_data_dirs where data_dir_level = 0 and dnode_ep = '$fqdn' and _ts >= $from and _ts <= $to interval($interval) fill(null)"
-            },
-            {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
-              "formatType": "Time series",
-              "hide": false,
-              "queryType": "SQL",
-              "refId": "E",
-              "sql": "select avg(used)/avg(total) as level1_percent from $database.taosd_dnodes_data_dirs where data_dir_level = 1 and dnode_ep = '$fqdn' and _ts >= $from and _ts <= $to interval($interval) fill(null)"
-            },
-            {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
-              "formatType": "Time series",
-              "hide": false,
-              "queryType": "SQL",
-              "refId": "F",
-              "sql": "select avg(used)/avg(total) as level2_percent from $database.taosd_dnodes_data_dirs where data_dir_level = 2 and dnode_ep = '$fqdn' and _ts >= $from and _ts <= $to interval($interval) fill(null)"
+              "sql": "select _wstart as ts, data_dir_level, data_dir_name, last(total) as total from $database.taosd_dnodes_data_dirs where dnode_ep = '$fqdn' and _ts >= $from and _ts <= $to partition by data_dir_level, data_dir_name interval($interval) fill(null) order by data_dir_level, data_dir_name"
             }
           ],
           "timeFrom": null,
@@ -3823,7 +3789,8 @@
   "style": "dark",
   "tags": [],
   "templating": {
-    "list": [{
+    "list": [
+      {
         "allValue": null,
         "current": {},
         "datasource": "${DS_TDENGINE}",
@@ -3846,78 +3813,80 @@
         "tagsQuery": "",
         "type": "query",
         "useTags": false
-    }, {
+      },
+      {
         "allValue": null,
         "current": {},
         "datasource": "${DS_TDENGINE}",
         "definition": "select distinct dnode_ep  from $database.taosd_dnodes_info where _ts >= $from and _ts <= $to",
-    "description": "TDengine Nodes FQDN (Hostname)",
-    "error": null,
-    "hide": 0,
-    "includeAll": true,
-    "label": null,
-    "multi": true,
-    "name": "fqdn",
-    "options": [],
+        "description": "TDengine Nodes FQDN (Hostname)",
+        "error": null,
+        "hide": 0,
+        "includeAll": true,
+        "label": null,
+        "multi": true,
+        "name": "fqdn",
+        "options": [],
         "query": "select distinct dnode_ep  from $database.taosd_dnodes_info where _ts >= $from and _ts <= $to",
-    "refresh": 1,
-    "regex": "",
-    "skipUrlSync": false,
-    "sort": 0,
-    "tagValuesQuery": "",
-    "tags": [],
-    "tagsQuery": "",
-    "type": "query",
-    "useTags": false
-  },
-  {
-    "allValue": null,
-    "current": {},
-    "datasource": "${DS_TDENGINE}",
-    "definition": "select last(cluster_version) from $database.taosd_cluster_basic where ts >= $from and ts <= $to",
-    "description": null,
-    "error": null,
-    "hide": 2,
-    "includeAll": false,
-    "label": null,
-    "multi": false,
-    "name": "version",
-    "options": [],
-    "query": "select last(cluster_version) from $database.taosd_cluster_basic where ts >= $from and ts <= $to",
-    "refresh": 1,
-    "regex": "",
-    "skipUrlSync": false,
-    "sort": 0,
-    "tagValuesQuery": "",
-    "tags": [],
-    "tagsQuery": "",
-    "type": "query",
-    "useTags": false
-  },
-  {
-    "allValue": null,
-    "current": {},
-    "datasource": "${DS_TDENGINE}",
-    "definition": "select last(first_ep) from $database.taosd_cluster_basic where ts >= $from and ts <= $to",
-    "description": null,
-    "error": null,
-    "hide": 2,
-    "includeAll": false,
-    "label": null,
-    "multi": false,
-    "name": "firstEp",
-    "options": [],
-    "query": "select last(first_ep) from $database.taosd_cluster_basic where ts >= $from and ts <= $to",
-    "refresh": 1,
-    "regex": "",
-    "skipUrlSync": false,
-    "sort": 0,
-    "tagValuesQuery": "",
-    "tags": [],
-    "tagsQuery": "",
-    "type": "query",
-    "useTags": false
-    }, {
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {},
+        "datasource": "${DS_TDENGINE}",
+        "definition": "select last(cluster_version) from $database.taosd_cluster_basic where ts >= $from and ts <= $to",
+        "description": null,
+        "error": null,
+        "hide": 2,
+        "includeAll": false,
+        "label": null,
+        "multi": false,
+        "name": "version",
+        "options": [],
+        "query": "select last(cluster_version) from $database.taosd_cluster_basic where ts >= $from and ts <= $to",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {},
+        "datasource": "${DS_TDENGINE}",
+        "definition": "select last(first_ep) from $database.taosd_cluster_basic where ts >= $from and ts <= $to",
+        "description": null,
+        "error": null,
+        "hide": 2,
+        "includeAll": false,
+        "label": null,
+        "multi": false,
+        "name": "firstEp",
+        "options": [],
+        "query": "select last(first_ep) from $database.taosd_cluster_basic where ts >= $from and ts <= $to",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
         "allValue": "",
         "current": {},
         "datasource": "${DS_TDENGINE}",
@@ -3931,7 +3900,7 @@
         "name": "username",
         "options": [],
         "query": "select distinct username  from $database.taos_sql_req where _ts >= $from and _ts <= $to",
-        "refresh": 1,
+        "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,
@@ -3940,7 +3909,8 @@
         "tagsQuery": "",
         "type": "query",
         "useTags": false
-    }, {
+      },
+      {
         "allValue": "",
         "current": {},
         "datasource": "${DS_TDENGINE}",
@@ -3963,7 +3933,8 @@
         "tagsQuery": "",
         "type": "query",
         "useTags": false
-    }, {
+      },
+      {
         "allValue": "",
         "current": {},
         "datasource": "${DS_TDENGINE}",
@@ -3986,7 +3957,8 @@
         "tagsQuery": "",
         "type": "query",
         "useTags": false
-    },{
+      },
+      {
         "allValue": null,
         "current": {},
         "datasource": "${DS_TDENGINE}",
@@ -4000,7 +3972,7 @@
         "name": "adapter_endpoint",
         "options": [],
         "query": "select  distinct endpoint  from $database.adapter_requests where ts >= $from and ts <= $to order by endpoint",
-        "refresh": 1,
+        "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,
@@ -4009,102 +3981,154 @@
         "tagsQuery": "",
         "type": "query",
         "useTags": false
-      },{
-    "auto": true,
-    "auto_count": 100,
-    "auto_min": "10s",
-    "current": {},
-    "description": null,
-    "error": null,
-    "hide": 0,
-    "label": "Interval",
-    "name": "interval",
-    "options": [
+      },       
       {
-        "selected": true,
-        "text": "auto",
-        "value": "$__auto_interval_interval"
+        "allValue": null,
+        "current": {},
+        "datasource": "${DS_TDENGINE}",
+        "definition": "select last(_ts) from $database.taosd_dnodes_status",
+        "description": null,
+        "error": null,
+        "hide": 2,
+        "includeAll": false,
+        "label": "last_dnodes_ts",
+        "multi": false,
+        "name": "last_dnodes_ts",
+        "options": [],
+        "query": "select last(_ts) from $database.taosd_dnodes_status",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
       },
       {
-        "selected": false,
-        "text": "5s",
-        "value": "5s"
-      },
+        "allValue": null,
+        "current": {},
+        "datasource": "${DS_TDENGINE}",
+        "definition": "select last(_ts) from $database.taosd_mnodes_info",
+        "description": null,
+        "error": null,
+        "hide": 2,
+        "includeAll": false,
+        "label": "last_mnodes_ts",
+        "multi": false,
+        "name": "last_mnodes_ts",
+        "options": [],
+        "query": "select last(_ts) from $database.taosd_mnodes_info",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },           
       {
-        "selected": false,
-        "text": "10s",
-        "value": "10s"
-      },
-      {
-        "selected": false,
-        "text": "15s",
-        "value": "15s"
-      },
-      {
-        "selected": false,
-        "text": "20s",
-        "value": "20s"
-      },
-      {
-        "selected": false,
-        "text": "30s",
-        "value": "30s"
-      },
-      {
-        "selected": false,
-        "text": "1m",
-        "value": "1m"
-      },
-      {
-        "selected": false,
-        "text": "2m",
-        "value": "2m"
-      },
-      {
-        "selected": false,
-        "text": "5m",
-        "value": "5m"
-      },
-      {
-        "selected": false,
-        "text": "10m",
-        "value": "10m"
-      },
-      {
-        "selected": false,
-        "text": "30m",
-        "value": "30m"
-      },
-      {
-        "selected": false,
-        "text": "1h",
-        "value": "1h"
-      },
-      {
-        "selected": false,
-        "text": "6h",
-        "value": "6h"
-      },
-      {
-        "selected": false,
-        "text": "12h",
-        "value": "12h"
-      },
-      {
-        "selected": false,
-        "text": "1d",
-        "value": "1d"
+        "auto": true,
+        "auto_count": 100,
+        "auto_min": "10s",
+        "current": {
+          "selected": false,
+          "text": "30s",
+          "value": "30s"
+        },
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "label": "Interval",
+        "name": "interval",
+        "options": [
+          {
+            "selected": true,
+            "text": "auto",
+            "value": "$__auto_interval_interval"
+          },
+          {
+            "selected": false,
+            "text": "5s",
+            "value": "5s"
+          },
+          {
+            "selected": false,
+            "text": "10s",
+            "value": "10s"
+          },
+          {
+            "selected": false,
+            "text": "15s",
+            "value": "15s"
+          },
+          {
+            "selected": false,
+            "text": "20s",
+            "value": "20s"
+          },
+          {
+            "selected": false,
+            "text": "30s",
+            "value": "30s"
+          },
+          {
+            "selected": false,
+            "text": "1m",
+            "value": "1m"
+          },
+          {
+            "selected": false,
+            "text": "2m",
+            "value": "2m"
+          },
+          {
+            "selected": false,
+            "text": "5m",
+            "value": "5m"
+          },
+          {
+            "selected": false,
+            "text": "10m",
+            "value": "10m"
+          },
+          {
+            "selected": false,
+            "text": "30m",
+            "value": "30m"
+          },
+          {
+            "selected": false,
+            "text": "1h",
+            "value": "1h"
+          },
+          {
+            "selected": false,
+            "text": "6h",
+            "value": "6h"
+          },
+          {
+            "selected": false,
+            "text": "12h",
+            "value": "12h"
+          },
+          {
+            "selected": false,
+            "text": "1d",
+            "value": "1d"
+          }
+        ],
+        "query": "5s,10s,15s,20s,30s,1m,2m,5m,10m,30m,1h,6h,12h,1d",
+        "queryValue": "",
+        "refresh": 2,
+        "skipUrlSync": false,
+        "type": "interval"
       }
-    ],
-    "query": "5s,10s,15s,20s,30s,1m,2m,5m,10m,30m,1h,6h,12h,1d",
-    "queryValue": "",
-    "refresh": 2,
-    "skipUrlSync": false,
-    "type": "interval"
-  }
-]
-},
-
+    ]
+  },
   "time": {
     "from": "now-30m",
     "to": "now"
