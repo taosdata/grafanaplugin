@@ -7,8 +7,8 @@ TDinsight v3.x 是使用 [TDengine 3.x] 监控数据库和 [Grafana] 对 TDengin
 TDinsight v3.x 和 TDengine 的版本对应关系如下：
 | TDinsight v3.x 版本 |  TDengine 版本 |
 | :---------------------: | :--------------: |
-|          3.x            |  3.0.1.0 至 3.1.x |
-|          4.x            |  3.2.X 及以上 |
+|          3.x            |  3.0.1.0 至 3.2.2.0 |
+|          4.x            |  3.2.3.0 及以上 |
 
 
 TDengine 通过 [taosKeeper](https://github.com/taosdata/taoskeeper) 将服务器的 CPU、内存、硬盘空间、带宽、请求数、磁盘读写速度、
