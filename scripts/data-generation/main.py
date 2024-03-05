@@ -34,7 +34,7 @@ def rand_data(v):
         elif suffix in ["f32", "f64"]:
             num = float(num)
             num = random.uniform(0, num * 2)
-            v = f"{num:.2f}{suffix}"
+            v = f"{num:.0f}{suffix}"
     except:
         print(f"indivisible v={v}")
     return v
