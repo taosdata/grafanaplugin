@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.0.0] - 2024-03-05
+
+### Bug Fixes
+
+### Features
+
+- add TDinsight for taosX dashboard.
+- new TDinsight for 3.x dashboard.
+    
 ## [3.4.7] - 2024-01-27
 
 ### Bug Fixes

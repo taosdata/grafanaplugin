@@ -4,11 +4,16 @@
 
 TDinsight v3.x 是使用 [TDengine 3.x] 监控数据库和 [Grafana] 对 TDengine 进行监控的解决方案。
 
+TDinsight v3.x 和 TDengine 的版本对应关系如下：
+| TDinsight v3.x 版本 |  TDengine 版本 |
+| :---------------------: | :--------------: |
+|          3.x            |  3.0.1.0 至 3.2.2.0 |
+|          4.x            |  3.2.3.0 及以上 |
+
+
 TDengine 通过 [taosKeeper](https://github.com/taosdata/taoskeeper) 将服务器的 CPU、内存、硬盘空间、带宽、请求数、磁盘读写速度、
 慢查询等信息定时写入指定数据库，并对重要的系统操作（比如登录、创建、删除数据库等）以及各种错误报警信息进行记录。通过 [Grafana]
-和
-[TDengine 数据源插件](https://github.com/taosdata/grafanaplugin/releases)， TDinsight 将集群状态、节点信息、插入及查询请求、
-资源使用情况等进行可视化展示，为开发者实时监控 TDengine 集群运行状态提供了便利。
+和 [TDengine 数据源插件](https://github.com/taosdata/grafanaplugin/releases)， TDinsight 将集群状态、节点信息、插入及查询请求、资源使用情况等进行可视化展示，为开发者实时监控 TDengine 集群运行状态提供了便利。
 
 本文将指导用户安装 Grafana 服务，安装 TDengine 数据源插件，以及部署 TDinsight v3.x 可视化面板。
 
@@ -16,14 +21,14 @@ TDengine 通过 [taosKeeper](https://github.com/taosdata/taoskeeper) 将服务�
 
 ## 系统要求
 
-- 单节点的 TDengine 服务器或多节点的 [TDengine] 集群，以及一个 [Grafana] 服务器。 此仪表盘需要 TDengine 3.0.1.0
-  及以上，并开启监控服务。具体配置请参考 [TDengine 监控配置](https://docs.taosdata.com/reference/config/#%E7%9B%91%E6%8E%A7%E7%9B%B8%E5%85%B3)
+- 单节点的 TDengine 服务器或多节点的 [TDengine] 集群，以及一个 [Grafana] 服务器。 
+  要求 TDengine 开启监控服务。具体配置请参考 [TDengine 监控配置](https://docs.taosdata.com/reference/config/#%E7%9B%91%E6%8E%A7%E7%9B%B8%E5%85%B3)
 - taosAdapter 已安装并正常运行，具体细节请参考 [taosAdapter 使用手册](https://docs.taosdata.com/reference/taosadapter/)
 - taosKeeper 已安装并正常运行，具体细节请参考 [taosKeeper 使用手册](https://docs.taosdata.com/reference/taosKeeper/)
 
 ## 安装 Grafana
 
-我们建议在此处使用最新的[Grafana](https://grafana.com/) 8 或 9 版本。您可以在任何
+我们建议在此处使用最新的[Grafana](https://grafana.com/) 版本，要求 Grafana 版本不低于 7.5。您可以在任何
 [支持的操作系统](https://grafana.com/docs/grafana/latest/installation/requirements/#supported-operating-systems)中，按照
 [Grafana 官方文档安装说明](https://grafana.com/docs/grafana/latest/installation/) 安装 [Grafana]。
 
@@ -175,24 +180,22 @@ TDinsight 仪表盘旨在提供TDengine
 
 - **First EP**：当前TDengine集群中的`firstEp`设置。
 - **Version**：TDengine 服务器版本（master mnode）。
-- **Master Uptime**: 当前Master MNode 被选举为 Master 后经过的时间。
-- **Expire Time** - 企业版过期时间。
-- **Used Measuring Points** - 企业版已使用的测点数。
-- **Databases** - 数据库个数。
-- **Tables** - （子）表个数。
-- **Connections** - 当前连接个数。
+- **Master Uptime**：当前Master MNode 被选举为 Master 后经过的时间。
+- **Expire Time**：企业版过期时间。
+- **Used Measuring Points**：企业版已使用的测点数。
+- **Databases**：数据库个数。
+- **STables & Tables**：超级表和表总数。
+- **Connections**：当前连接个数。
 - **DNodes/MNodes/VGroups/VNodes**：每种资源的总数和存活数。
 - **DNodes/MNodes/VGroups/VNodes Alive Percent**：每种资源的存活数/总数的比例。
 - **Measuring Points Used**：测点数用量（社区版无数据，默认情况下是健康的）。
 - **Grants Expire Time**：企业版过期时间（社区版无数据，默认情况是健康的）。
-- **Error Rate**：集群错误率（每秒平均错误数）。
 
 ### DNodes 状态
 
 ![tdinsight-mnodes-overview](../assets/TDinsightV3-2-dnodes.png)
 
 - **DNodes Status**：`show dnodes` 的简单表格视图。
-- **DNodes Lifetime**：从创建 dnode 开始经过的时间。
 - **DNodes Number**：DNodes 数量变化。
 
 ### MNode 概述
@@ -206,17 +209,18 @@ TDinsight 仪表盘旨在提供TDengine
 
 ![tdinsight-requests](../assets/TDinsightV3-4-requests.png)
 
-1. **Requests Rate(Inserts per Second)**：平均每秒插入次数。
-2. **Requests (Selects)**：查询请求数及变化率（count of second）。
+1. **Select Request**：select 请求数.
+2. **Delete Request**：delete 请求数.
+3. **Insert Request**：insert 请求数.
+4. **Inserted Rows**：实际插入行数.
+5. **Slow Sql**：慢查询数，可以在顶部分时长段过滤.
 
 ### 数据库
 
 ![tdinsight-database](../assets/TDinsightV3-5-database.png)
 
-数据库使用情况，对变量 `$database` 的每个值即每个数据库进行重复多行展示。
-
 1. **STables**：超级表数量。
-2. **Total Tables**：所有表数量。
+2. **Tables**：所有表数量。
 3. **Tables**：所有普通表数量随时间变化图。
 4. **Tables Number Foreach VGroups**：每个VGroups包含的表数量。
 
@@ -233,18 +237,12 @@ TDinsight 仪表盘旨在提供TDengine
 5. **VNodes Masters**：处于master角色的vnode数量。
 6. **Current CPU Usage of taosd**：taosd进程的CPU使用率。
 7. **Current Memory Usage of taosd**：taosd进程的内存使用情况。
-8. **Disk Used**：taosd数据目录的总磁盘使用百分比。
+8. **Max Disk Used**：taosd 所有数据目录对应的最大磁盘使用率。
 9. **CPU Usage**：进程和系统 CPU 使用率。
 10. **RAM Usage**：RAM 使用指标时间序列视图。
 11. **Disk Used**：多级存储下每个级别使用的磁盘（默认为 level0 级）。
 12. **Disk IO**：磁盘IO速率。
-13. **Net IO**：网络IO，除本机网络之外的总合网络IO速率。
-
-### 登录历史
-
-![登录历史](../assets/TDinsightV3-7-login-history.png)
-
-目前只报告每分钟登录次数。
+13. **Net**：网络IO，除本机网络之外的总合网络IO速率。
 
 ### taosAdapter
 
@@ -252,12 +250,12 @@ TDinsight 仪表盘旨在提供TDengine
 
 包含 taosAdapter rest和websocket的请求统计详情。包括：
 
-1. **Total**: 总请求数
-2. **Successful**: 总成功数
-3. **Failed**: 总失败数
-4. **Queries**: 总查询数
-5. **Writes**: 总写入数
-6. **Other**: 总其他请求数
+1. **Total**：总请求数
+2. **Successful**：总成功数
+3. **Failed**：总失败数
+4. **Queries**：总查询数
+5. **Writes**：总写入数
+6. **Other**：总其他请求数
 
 还有上述分类的细分维度折线图。
 

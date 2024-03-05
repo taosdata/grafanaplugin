@@ -50,7 +50,7 @@
       "type": "datasource",
       "id": "tdengine-datasource",
       "name": "TDengine Datasource",
-      "version": "3.4.0"
+      "version": "4.0.0"
     },
     {
       "type": "panel",
@@ -146,10 +146,6 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           }
@@ -186,7 +182,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select last(first_ep) as first_ep from $database.cluster_info"
+          "sql": "select last(first_ep) as first_ep from $database.taosd_cluster_basic where ts >= $from and ts <= $to"
         }
       ],
       "timeFrom": null,
@@ -208,10 +204,6 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           }
@@ -248,7 +240,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select last(version) as version from $database.cluster_info"
+          "sql": "select last(cluster_version) as version from $database.taosd_cluster_basic where ts >= $from and ts <= $to"
         }
       ],
       "title": "Version",
@@ -268,14 +260,10 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           },
-          "unit": "d"
+          "unit": "s"
         },
         "overrides": []
       },
@@ -309,7 +297,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select last(master_uptime) from $database.cluster_info"
+          "sql": "select last(cluster_uptime) from $database.taosd_cluster_info where _ts >= $from and _ts <= $to"
         }
       ],
       "title": "Master Uptime",
@@ -367,7 +355,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select last(expire_time) from $database.grants_info"
+          "sql": "select last(grants_expire_time) from $database.taosd_cluster_info where _ts >= $from and _ts <= $to"
         }
       ],
       "title": "Expire Time",
@@ -423,7 +411,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select max(timeseries_used) as used ,max(timeseries_total) as total from $database.grants_info where ts >= $from and ts <= $to interval(30s)"
+          "sql": "select max(grants_timeseries_used) as used ,max(grants_timeseries_total) as total from $database.taosd_cluster_info where _ts >= $from and _ts <= $to interval($interval)"
         }
       ],
       "title": "Used Measuring Points",
@@ -444,10 +432,6 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           }
@@ -484,7 +468,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select last(dbs_total) from $database.cluster_info"
+          "sql": "select last(dbs_total) from $database.taosd_cluster_info where _ts >= $from and _ts <= $to"
         }
       ],
       "title": "Databases",
@@ -505,10 +489,6 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           }
@@ -545,10 +525,10 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select last(tbs_total) from $database.cluster_info"
+          "sql": "select last(stbs_total + tbs_total) from $database.taosd_cluster_info"
         }
       ],
-      "title": "Tables",
+      "title": "Stables & Tables",
       "type": "stat"
     },
     {
@@ -565,10 +545,6 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           }
@@ -605,7 +581,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select connections_total from $database.cluster_info where ts >= $from and ts <= $to"
+          "sql": "select connections_total from $database.taosd_cluster_info where _ts >= $from and _ts <= $to"
         }
       ],
       "title": "Connections",
@@ -659,7 +635,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select dnodes_total as total, dnodes_alive as dnodes_alive from $database.cluster_info where ts >= $from and ts <= $to"
+          "sql": "select dnodes_total as total, dnodes_alive as dnodes_alive from $database.taosd_cluster_info where _ts >= $from and _ts <= $to"
         }
       ],
       "title": "DNodes",
@@ -679,10 +655,6 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           }
@@ -717,7 +689,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select mnodes_total as total, mnodes_alive as mnodes_alive from $database.cluster_info where ts >= $from and ts <= $to"
+          "sql": "select mnodes_total as total, mnodes_alive as mnodes_alive from $database.taosd_cluster_info where _ts >= $from and _ts <= $to"
         }
       ],
       "title": "MNodes",
@@ -737,10 +709,6 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           }
@@ -775,7 +743,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select vgroups_total as total, vgroups_alive as vgroups_alive from $database.cluster_info where ts >= $from and ts <= $to"
+          "sql": "select vgroups_total as total, vgroups_alive as vgroups_alive from $database.taosd_cluster_info where _ts >= $from and _ts <= $to"
         }
       ],
       "title": "VGroups",
@@ -795,10 +763,6 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           }
@@ -833,7 +797,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select vnodes_total as total, vnodes_alive as vnodes_alive from $database.cluster_info where ts >= $from and ts <= $to"
+          "sql": "select vnodes_total as total, vnodes_alive as vnodes_alive from $database.taosd_cluster_info where _ts >= $from and _ts <= $to"
         }
       ],
       "title": "VNodes",
@@ -890,7 +854,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select _wstart as ts, avg(dnodes_alive)/avg(dnodes_total) from $database.cluster_info where ts >= $from and ts <= $to interval(30s) fill(null)"
+          "sql": "select _wstart as ts, avg(dnodes_alive)/avg(dnodes_total) from $database.taosd_cluster_info where _ts >= $from and _ts <= $to interval($interval) fill(null)"
         }
       ],
       "thresholds": [],
@@ -985,7 +949,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select _wstart as ts, avg(mnodes_alive)/avg(mnodes_total) from $database.cluster_info where ts >= $from and ts <= $to interval(30s) fill(null)"
+          "sql": "select _wstart as ts, avg(mnodes_alive)/avg(mnodes_total) from $database.taosd_cluster_info where _ts >= $from and _ts <= $to interval($interval) fill(null)"
         }
       ],
       "thresholds": [],
@@ -1080,7 +1044,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select _wstart as ts, avg(vgroups_alive)/avg(vgroups_total) from $database.cluster_info where ts >= $from and ts <= $to interval(30s) fill(null)"
+          "sql": "select _wstart as ts, avg(vgroups_alive)/avg(vgroups_total) from $database.taosd_cluster_info where _ts >= $from and _ts <= $to interval($interval) fill(null)"
         }
       ],
       "thresholds": [],
@@ -1175,7 +1139,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select _wstart as ts, avg(vnodes_alive)/avg(vnodes_total) from $database.cluster_info where ts >= $from and ts <= $to interval(30s) fill(null)"
+          "sql": "select _wstart as ts, avg(vnodes_alive)/avg(vnodes_total) from $database.taosd_cluster_info where _ts >= $from and _ts <= $to interval($interval) fill(null)"
         }
       ],
       "thresholds": [],
@@ -1233,7 +1197,7 @@
       "fillGradient": 0,
       "gridPos": {
         "h": 6,
-        "w": 6,
+        "w": 12,
         "x": 0,
         "y": 18
       },
@@ -1276,7 +1240,7 @@
           "hide": false,
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select _wstart as ts, avg(timeseries_used)/avg(timeseries_total) as percent from $database.grants_info where ts >= $from and ts <= $to interval(30s) fill(null)"
+          "sql": "select _wstart as ts, avg(grants_timeseries_used)/avg(grants_timeseries_total) as percent from $database.taosd_cluster_info where _ts >= $from and _ts <= $to interval($interval) fill(null)"
         },
         {
           "colNameFormatStr": "",
@@ -1285,7 +1249,7 @@
           "hide": false,
           "queryType": "SQL",
           "refId": "B",
-          "sql": "select _wstart as ts, avg(timeseries_used) as used , avg(timeseries_total) as total from $database.grants_info where ts >= $from and ts <= $to interval(30s) fill(null)"
+          "sql": "select _wstart as ts, avg(grants_timeseries_used) as used , avg(grants_timeseries_total) as total from $database.taosd_cluster_info where _ts >= $from and _ts <= $to interval($interval) fill(null)"
         }
       ],
       "thresholds": [],
@@ -1368,7 +1332,7 @@
               },
               {
                 "color": "red",
-                "value": 80
+                "value": 604800
               }
             ]
           },
@@ -1378,8 +1342,8 @@
       },
       "gridPos": {
         "h": 6,
-        "w": 6,
-        "x": 6,
+        "w": 12,
+        "x": 12,
         "y": 18
       },
       "id": 40,
@@ -1402,108 +1366,13 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select _wstart as ts, last(expire_time) as expire_time from $database.grants_info where ts >= $from and ts <= $to interval(30s) fill(null)"
+          "sql": "select _wstart as ts, last(grants_expire_time) as expire_time from $database.taosd_cluster_info where _ts >= $from and _ts <= $to interval($interval) fill(null)"
         }
       ],
       "timeFrom": null,
       "timeShift": null,
       "title": "Grants Expire Time",
       "type": "timeseries"
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${DS_TDENGINE}",
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 6,
-        "w": 6,
-        "x": 12,
-        "y": 18
-      },
-      "hiddenSeries": false,
-      "id": 42,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "7.5.0",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
-          "formatType": "Time series",
-          "queryType": "SQL",
-          "refId": "A",
-          "sql": "select ts, derivative(errors, 1s, 1) as errors from (select _wstart as ts, sum(errors) as errors from $database.dnodes_info where ts >= $from and ts <= $to interval(1s))"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Error Rate",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "cps",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": "0",
-          "show": true
-        },
-        {
-          "format": "percentunit",
-          "label": null,
-          "logBase": 1,
-          "max": "1",
-          "min": "0",
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
     },
     {
       "collapsed": true,
@@ -1524,20 +1393,33 @@
                 "mode": "thresholds"
               },
               "custom": {
-                "align": null,
+                "align": "center",
                 "filterable": false
               },
-              "mappings": [],
+              "mappings": [
+                {
+                  "from": "",
+                  "id": 1,
+                  "text": "ready",
+                  "to": "",
+                  "type": 1,
+                  "value": "1"
+                },
+                {
+                  "from": "",
+                  "id": 2,
+                  "text": "offline",
+                  "to": "",
+                  "type": 1,
+                  "value": "0"
+                }
+              ],
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
                     "color": "green",
                     "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
                   }
                 ]
               }
@@ -1546,7 +1428,7 @@
           },
           "gridPos": {
             "h": 6,
-            "w": 6,
+            "w": 12,
             "x": 0,
             "y": 25
           },
@@ -1559,75 +1441,14 @@
             {
               "colNameFormatStr": "",
               "colNameToGroup": "",
-              "formatType": "Time series",
+              "formatType": "Table",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select endpoint, status from information_schema.ins_dnodes"
+              "sql": "select dnode_ep,  last(`status`) as status from $database.taosd_dnodes_status where _ts = '$last_dnodes_ts' group by dnode_ep order by dnode_ep"
             }
           ],
           "title": "DNodes Status",
           "type": "table"
-        },
-        {
-          "datasource": "${DS_TDENGINE}",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "thresholds"
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "d"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 6,
-            "w": 5,
-            "x": 6,
-            "y": 25
-          },
-          "id": 48,
-          "options": {
-            "colorMode": "value",
-            "graphMode": "none",
-            "justifyMode": "auto",
-            "orientation": "auto",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "text": {},
-            "textMode": "value_and_name"
-          },
-          "pluginVersion": "7.5.0",
-          "targets": [
-            {
-              "colNameFormatStr": "",
-              "colNameToGroup": "dnode_ep",
-              "formatType": "Time series",
-              "queryType": "SQL",
-              "refId": "A",
-              "sql": "select last(uptime) from $database.dnodes_info where ts >= $from and ts <= $to group by dnode_ep"
-            }
-          ],
-          "title": "DNodes Lifetime",
-          "type": "stat"
         },
         {
           "datasource": "${DS_TDENGINE}",
@@ -1664,10 +1485,6 @@
                   {
                     "color": "green",
                     "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
                   }
                 ]
               },
@@ -1677,8 +1494,8 @@
           },
           "gridPos": {
             "h": 6,
-            "w": 7,
-            "x": 11,
+            "w": 12,
+            "x": 12,
             "y": 25
           },
           "id": 50,
@@ -1701,7 +1518,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, avg(dnodes_total) as total, avg(dnodes_alive) as dnodes_alive from $database.cluster_info where ts >= $from and ts <= $to interval($interval) fill(null)"
+              "sql": "select _wstart as ts, max(dnodes_total) as total, max(dnodes_alive) as dnodes_alive from $database.taosd_cluster_info where _ts >= $from and _ts <= $to interval($interval) fill(null)"
             }
           ],
           "timeFrom": null,
@@ -1735,17 +1552,62 @@
                 "align": "center",
                 "filterable": false
               },
-              "mappings": [],
+              "mappings": [
+                {
+                  "from": "",
+                  "id": 1,
+                  "text": "offline",
+                  "to": "",
+                  "type": 1,
+                  "value": "0"
+                },
+                {
+                  "from": "",
+                  "id": 2,
+                  "text": "follower",
+                  "to": "",
+                  "type": 1,
+                  "value": "100"
+                },
+                {
+                  "from": "",
+                  "id": 3,
+                  "text": "candidate",
+                  "to": "",
+                  "type": 1,
+                  "value": "101"
+                },
+                {
+                  "from": "",
+                  "id": 4,
+                  "text": "leader",
+                  "to": "",
+                  "type": 1,
+                  "value": "102"
+                },
+                {
+                  "from": "",
+                  "id": 5,
+                  "text": "error",
+                  "to": "",
+                  "type": 1,
+                  "value": "103"
+                },
+                {
+                  "from": "",
+                  "id": 6,
+                  "text": "learner",
+                  "to": "",
+                  "type": 1,
+                  "value": "104"
+                }
+              ],
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
                     "color": "green",
                     "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
                   }
                 ]
               }
@@ -1770,7 +1632,7 @@
               "formatType": "Table",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select mnode_ep, last(role) as role from $database.m_info partition by mnode_ep, cluster_id"
+              "sql": "select mnode_ep, last(role) as role from $database.taosd_mnodes_info where _ts = '$last_mnodes_ts' group by mnode_ep order by mnode_ep"
             }
           ],
           "title": "MNodes Status",
@@ -1811,10 +1673,6 @@
                   {
                     "color": "green",
                     "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
                   }
                 ]
               },
@@ -1848,7 +1706,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, avg(mnodes_total) as total, avg(mnodes_alive) as mnodes_alive from $database.cluster_info where ts >= $from and ts <= $to interval($interval) fill(null)"
+              "sql": "select _wstart as ts, max(mnodes_total) as total, max(mnodes_alive) as mnodes_alive from $database.taosd_cluster_info where _ts >= $from and _ts <= $to interval($interval) fill(null)"
             }
           ],
           "timeFrom": null,
@@ -1906,36 +1764,26 @@
                   {
                     "color": "green",
                     "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
                   }
                 ]
               },
-              "unit": "cps"
+              "unit": "reqps"
             },
             "overrides": []
           },
           "gridPos": {
             "h": 9,
-            "w": 24,
+            "w": 12,
             "x": 0,
             "y": 27
           },
-          "id": 60,
+          "id": 140,
           "options": {
             "graph": {},
             "legend": {
-              "calcs": [
-                "mean",
-                "lastNotNull",
-                "max",
-                "min",
-                "sum"
-              ],
-              "displayMode": "table",
-              "placement": "right"
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
             },
             "tooltipOptions": {
               "mode": "single"
@@ -1945,25 +1793,16 @@
           "targets": [
             {
               "colNameFormatStr": "",
-              "colNameToGroup": "dnode_ep",
+              "colNameToGroup": "",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, avg(req_insert_rate) as insert_rate, avg(req_insert_batch_rate) as batch_rate from $database.dnodes_info where ts >= $from and ts <= $to partition by dnode_ep interval($interval) fill(null)"
-            },
-            {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
-              "formatType": "Time series",
-              "hide": false,
-              "queryType": "SQL",
-              "refId": "B",
-              "sql": "select _wstart as ts, avg(insert_rate) as cluster_insert_rate, avg(batch_rate) as cluster_batch_rate from (select _wstart as ts, sum(req_insert_rate) as insert_rate, sum(req_insert_batch_rate) as batch_rate from $database.dnodes_info where ts >= $from and ts <= $to interval(1s)) where ts >= $from and ts <= $to interval($interval) fill(null)"
+              "sql": "select _wstart as ts,  avg(`count`) as `select_count`  from $database.taos_sql_req where sql_type = 'select' and ('$username' = '' OR username in (${username:sqlstring})) and  ('$sql_result' = '' OR result in (${sql_result:sqlstring}))  and _ts > $from and _ts <= $to interval($interval) fill(null)"
             }
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Requests Rate (Inserts per Second)",
+          "title": "Select Request",
           "type": "timeseries"
         },
         {
@@ -2001,36 +1840,26 @@
                   {
                     "color": "green",
                     "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
                   }
                 ]
               },
-              "unit": "short"
+              "unit": "reqps"
             },
             "overrides": []
           },
           "gridPos": {
             "h": 9,
-            "w": 24,
-            "x": 0,
-            "y": 36
+            "w": 12,
+            "x": 12,
+            "y": 27
           },
-          "id": 62,
+          "id": 157,
           "options": {
             "graph": {},
             "legend": {
-              "calcs": [
-                "mean",
-                "lastNotNull",
-                "max",
-                "min",
-                "sum"
-              ],
-              "displayMode": "table",
-              "placement": "right"
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
             },
             "tooltipOptions": {
               "mode": "single"
@@ -2040,43 +1869,244 @@
           "targets": [
             {
               "colNameFormatStr": "",
-              "colNameToGroup": "dnode_ep",
+              "colNameToGroup": "",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, sum(req_select) as req_select from $database.dnodes_info where ts >= $from and ts <= $to partition by dnode_ep interval($interval) fill(null)"
-            },
-            {
-              "colNameFormatStr": "",
-              "colNameToGroup": "dnode_ep",
-              "formatType": "Time series",
-              "hide": false,
-              "queryType": "SQL",
-              "refId": "B",
-              "sql": "select _wstart as ts, sum(req_select) as total from $database.dnodes_info where ts >= $from and ts <= $to interval($interval) fill(null)"
-            },
-            {
-              "colNameFormatStr": "",
-              "colNameToGroup": "dnode_ep",
-              "formatType": "Time series",
-              "hide": false,
-              "queryType": "SQL",
-              "refId": "C",
-              "sql": "select _wstart as ts, avg(req_select_rate) as dnode_req_select_rate from $database.dnodes_info where ts >= $from and ts <= $to partition by dnode_ep interval($interval) fill(null)"
-            },
-            {
-              "colNameFormatStr": "",
-              "colNameToGroup": "dnode_ep",
-              "formatType": "Time series",
-              "hide": false,
-              "queryType": "SQL",
-              "refId": "D",
-              "sql": "select _wstart as ts, avg(req_select_rate) as req_select_rate from (select _wstart as ts, sum(req_select_rate) as req_select_rate from $database.dnodes_info where ts >= $from and ts <= $to interval(1s)) where ts >= $from and ts <= $to interval($interval) fill(null)"
+              "sql": "select _wstart as ts, avg(`count`) as `delete_count`  from $database.taos_sql_req where sql_type = 'delete' and ('$username' = '' OR username in (${username:sqlstring})) and  ('$sql_result' = '' OR result in (${sql_result:sqlstring}))  and _ts > $from and _ts <= $to interval($interval) fill(null)"
             }
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Requests (Selects)",
+          "title": "Delete Request",
+          "type": "timeseries"
+        },
+        {
+          "datasource": "${DS_TDENGINE}",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "graph": false,
+                  "legend": false,
+                  "tooltip": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": true
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "reqps"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 9,
+            "w": 12,
+            "x": 0,
+            "y": 36
+          },
+          "id": 156,
+          "options": {
+            "graph": {},
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltipOptions": {
+              "mode": "single"
+            }
+          },
+          "pluginVersion": "7.5.0",
+          "targets": [
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "formatType": "Time series",
+              "hide": false,
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select _wstart as ts,  avg(`count`) as `insert_count`  from $database.taos_sql_req where sql_type = 'insert' and ('$username' = '' OR username in (${username:sqlstring})) and  ('$sql_result' = '' OR result in (${sql_result:sqlstring}))  and _ts > $from and _ts <= $to interval($interval) fill(null)"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Insert Request",
+          "type": "timeseries"
+        },
+        {
+          "datasource": "${DS_TDENGINE}",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "graph": false,
+                  "legend": false,
+                  "tooltip": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": true
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "cps"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 9,
+            "w": 12,
+            "x": 12,
+            "y": 36
+          },
+          "id": 200,
+          "options": {
+            "graph": {},
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltipOptions": {
+              "mode": "single"
+            }
+          },
+          "pluginVersion": "7.5.0",
+          "targets": [
+            {
+              "formatType": "Time series",
+              "hide": false,
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select _wstart as ts, avg(`count`) as `inserted_rows`  from $database.taos_sql_req where sql_type = 'inserted_rows' and   ('$fqdn' = '' or  dnode_ep in (${fqdn:sqlstring})) and ('$username' = '' OR username in (${username:sqlstring})) and  ('$sql_result' = '' OR result in (${sql_result:sqlstring}))  and _ts > $from and _ts <= $to interval($interval) fill(null)"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Inserted Rows",
+          "type": "timeseries"
+        },
+        {
+          "datasource": "${DS_TDENGINE}",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "graph": false,
+                  "legend": false,
+                  "tooltip": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": true
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "reqps"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 9,
+            "w": 24,
+            "x": 0,
+            "y": 45
+          },
+          "id": 141,
+          "options": {
+            "graph": {},
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltipOptions": {
+              "mode": "single"
+            }
+          },
+          "pluginVersion": "7.5.0",
+          "targets": [
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select _wstart as ts, avg(`count`) as `count`  from $database.taos_slow_sql where ('$username' = '' OR username in (${username:sqlstring})) and  ('$sql_result' = '' OR result in (${sql_result:sqlstring})) and  ('$duration' = '' OR `duration` in (${duration:sqlstring})) and _ts > $from and _ts <= $to interval($interval) fill(VALUE, 0)"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Slow SQL",
           "type": "timeseries"
         }
       ],
@@ -2108,10 +2138,6 @@
                   {
                     "color": "green",
                     "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
                   }
                 ]
               }
@@ -2149,7 +2175,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last(stbs_total) from $database.cluster_info"
+              "sql": "select last(stbs_total) from $database.taosd_cluster_info where _ts >= $from and _ts <= $to"
             }
           ],
           "title": "STables",
@@ -2184,17 +2210,12 @@
                 "spanNulls": true
               },
               "mappings": [],
-              "min": 100,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
                     "color": "green",
                     "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
                   }
                 ]
               },
@@ -2228,7 +2249,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, last(tbs_total) as tables_num from $database.cluster_info where ts > $from and ts <= $to interval($interval) fill(null)"
+              "sql": "select _wstart as ts, last(tbs_total) as tables_num from $database.taosd_cluster_info where _ts >= $from and _ts <= $to interval($interval) fill(null)"
             }
           ],
           "timeFrom": null,
@@ -2271,10 +2292,6 @@
                   {
                     "color": "green",
                     "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
                   }
                 ]
               },
@@ -2308,7 +2325,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, vgroup_id, max(tables_num) as tables_num from $database.vgroups_info where ts > $from and ts <= $to partition by vgroup_id interval($interval) fill(null)"
+              "sql": "select _wstart as ts, vgroup_id, max(tables_num) as tables_num from $database.taosd_vgroups_info where _ts >= $from and _ts <= $to partition by vgroup_id interval($interval) fill(null) order by vgroup_id"
             }
           ],
           "timeFrom": null,
@@ -2367,10 +2384,10 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last(tbs_total) as tbs_total from $database.cluster_info"
+              "sql": "select last(tbs_total) as tbs_total from $database.taosd_cluster_info where _ts >= $from and _ts <= $to"
             }
           ],
-          "title": "Total Tables",
+          "title": "Tables",
           "type": "stat"
         }
       ],
@@ -2406,7 +2423,7 @@
                   }
                 ]
               },
-              "unit": "d"
+              "unit": "s"
             },
             "overrides": []
           },
@@ -2440,7 +2457,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last(uptime) as uptime from $database.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to"
+              "sql": "select last(uptime) as uptime from $database.taosd_dnodes_info where dnode_ep = '$fqdn' and _ts >= $from and _ts <= $to"
             }
           ],
           "title": "Uptime",
@@ -2514,7 +2531,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last(has_mnode) as has_mnode from $database.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to"
+              "sql": "select last(has_mnode) as has_mnode from $database.taosd_dnodes_info where dnode_ep = '$fqdn' and _ts >= $from and _ts <= $to"
             }
           ],
           "title": "Has MNode?",
@@ -2571,7 +2588,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last(cpu_cores) as cpu_cores from $database.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to"
+              "sql": "select last(cpu_cores) as cpu_cores from $database.taosd_dnodes_info where dnode_ep = '$fqdn' and _ts >= $from and _ts <= $to"
             }
           ],
           "title": "CPU Cores",
@@ -2627,7 +2644,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last(vnodes_num) as vnodes_num from $database.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)"
+              "sql": "select last(vnodes_num) as vnodes_num from $database.taosd_dnodes_info where dnode_ep = '$fqdn' and _ts >= $from and _ts <= $to interval($interval) fill(null)"
             }
           ],
           "title": "VNodes Number",
@@ -2683,7 +2700,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last(masters) as masters from $database.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)"
+              "sql": "select last(masters) as masters from $database.taosd_dnodes_info where dnode_ep = '$fqdn' and _ts >= $from and _ts <= $to interval($interval) fill(null)"
             }
           ],
           "title": "VNodes Masters",
@@ -2748,7 +2765,7 @@
               "formatType": "Table",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last(cpu_engine) from $database.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to"
+              "sql": "select last(cpu_engine) from $database.taosd_dnodes_info where dnode_ep = '$fqdn' and _ts >= $from and _ts <= $to"
             }
           ],
           "title": "Current CPU Usage of taosd",
@@ -2804,7 +2821,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last(mem_engine) as taosd, last(mem_total) as total from $database.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to"
+              "sql": "select last(mem_engine) as taosd, last(mem_total) as total from $database.taosd_dnodes_info where dnode_ep = '$fqdn' and _ts >= $from and _ts <= $to"
             }
           ],
           "title": "Current Memory Usage of taosd",
@@ -2873,10 +2890,10 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last(disk_used) as used, last(disk_total) as total, last(disk_used) / last(disk_total) as percent from $database.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to"
+              "sql": "select max(percent) as percent from (select data_dir_level, data_dir_name,last(used/total) as percent from $database.taosd_dnodes_data_dirs where dnode_ep = '$fqdn' and _ts >= $from and _ts <= $to partition by data_dir_level, data_dir_name)"
             }
           ],
-          "title": "Disk Used",
+          "title": "Max Disk Used",
           "type": "gauge"
         },
         {
@@ -2936,11 +2953,8 @@
             "graph": {},
             "legend": {
               "calcs": [
-                "mean",
-                "lastNotNull",
                 "max",
-                "min",
-                "sum"
+                "min"
               ],
               "displayMode": "table",
               "placement": "right"
@@ -2957,7 +2971,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, last(cpu_engine) as taosd, last(cpu_system) as `system` from $database.dnodes_info where dnode_ep='$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)"
+              "sql": "select _wstart as ts, last(cpu_engine) as taosd, last(cpu_system) as `system` from $database.taosd_dnodes_info where dnode_ep = '$fqdn' and _ts >= $from and _ts <= $to interval($interval) fill(null)"
             }
           ],
           "timeFrom": null,
@@ -3022,11 +3036,8 @@
             "graph": {},
             "legend": {
               "calcs": [
-                "mean",
-                "lastNotNull",
                 "max",
-                "min",
-                "sum"
+                "min"
               ],
               "displayMode": "table",
               "placement": "right"
@@ -3043,7 +3054,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, last(mem_engine) as taosd, last(mem_system) as `system`, last(mem_total) as total from $database.dnodes_info where dnode_ep='$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)"
+              "sql": "select _wstart as ts, last(mem_engine) as taosd, last(mem_free) as `free`, last(mem_total) as total from $database.taosd_dnodes_info where dnode_ep = '$fqdn' and _ts >= $from and _ts <= $to interval($interval) fill(null)"
             }
           ],
           "timeFrom": null,
@@ -3063,7 +3074,7 @@
                 "axisPlacement": "auto",
                 "barAlignment": 0,
                 "drawStyle": "line",
-                "fillOpacity": 10,
+                "fillOpacity": 0,
                 "gradientMode": "none",
                 "hideFrom": {
                   "graph": false,
@@ -3074,7 +3085,8 @@
                 "lineWidth": 1,
                 "pointSize": 5,
                 "scaleDistribution": {
-                  "type": "linear"
+                  "log": 10,
+                  "type": "log"
                 },
                 "showPoints": "never",
                 "spanNulls": true
@@ -3086,10 +3098,6 @@
                   {
                     "color": "green",
                     "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
                   }
                 ]
               },
@@ -3099,7 +3107,7 @@
           },
           "gridPos": {
             "h": 8,
-            "w": 12,
+            "w": 8,
             "x": 0,
             "y": 43
           },
@@ -3107,13 +3115,7 @@
           "options": {
             "graph": {},
             "legend": {
-              "calcs": [
-                "mean",
-                "lastNotNull",
-                "max",
-                "min",
-                "sum"
-              ],
+              "calcs": [],
               "displayMode": "table",
               "placement": "right"
             },
@@ -3124,57 +3126,21 @@
           "pluginVersion": "7.5.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
+              "colNameFormatStr": "L{{data_dir_level}}-{{data_dir_name}}-used",
+              "colNameToGroup": "data_dir_level, data_dir_name",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, last(used) as level0_used, last(total) as level0_total from $database.data_dir where level = 0 and dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)"
+              "sql": "select _wstart as ts, data_dir_level, data_dir_name, last(used) as used from $database.taosd_dnodes_data_dirs where dnode_ep = '$fqdn' and _ts >= $from and _ts <= $to partition by data_dir_level, data_dir_name interval($interval) fill(null) order by data_dir_level, data_dir_name"
             },
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
+              "colNameFormatStr": "L{{data_dir_level}}-{{data_dir_name}}-total",
+              "colNameToGroup": "data_dir_level, data_dir_name",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
               "refId": "B",
-              "sql": "select _wstart as ts, avg(used) as level1_used, avg(total) as level1_total from $database.data_dir where level = 1 and dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)"
-            },
-            {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
-              "formatType": "Time series",
-              "hide": false,
-              "queryType": "SQL",
-              "refId": "C",
-              "sql": "select _wstart as ts, avg(used) as level2_used, avg(total) as level2_total from $database.data_dir where level = 2 and dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)"
-            },
-            {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
-              "formatType": "Time series",
-              "hide": false,
-              "queryType": "SQL",
-              "refId": "D",
-              "sql": "select avg(used)/avg(total) as level0_percent from $database.data_dir where level = 0 and dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)"
-            },
-            {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
-              "formatType": "Time series",
-              "hide": false,
-              "queryType": "SQL",
-              "refId": "E",
-              "sql": "select avg(used)/avg(total) as level1_percent from $database.data_dir where level = 1 and dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)"
-            },
-            {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
-              "formatType": "Time series",
-              "hide": false,
-              "queryType": "SQL",
-              "refId": "F",
-              "sql": "select avg(used)/avg(total) as level2_percent from $database.data_dir where level = 2 and dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)"
+              "sql": "select _wstart as ts, data_dir_level, data_dir_name, last(total) as total from $database.taosd_dnodes_data_dirs where dnode_ep = '$fqdn' and _ts >= $from and _ts <= $to partition by data_dir_level, data_dir_name interval($interval) fill(null) order by data_dir_level, data_dir_name"
             }
           ],
           "timeFrom": null,
@@ -3217,10 +3183,6 @@
                   {
                     "color": "green",
                     "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
                   }
                 ]
               },
@@ -3230,8 +3192,8 @@
           },
           "gridPos": {
             "h": 8,
-            "w": 12,
-            "x": 12,
+            "w": 8,
+            "x": 8,
             "y": 43
           },
           "id": 114,
@@ -3240,10 +3202,7 @@
             "legend": {
               "calcs": [
                 "mean",
-                "lastNotNull",
-                "max",
-                "min",
-                "sum"
+                "max"
               ],
               "displayMode": "table",
               "placement": "right"
@@ -3260,7 +3219,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, last(io_read_disk) as io_read_taosd, last(io_write_disk) as io_write_taosd from $database.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)"
+              "sql": "select _wstart as ts, last(io_read_disk) as taosd_io_read, last(io_write_disk) as taosd_io_write from $database.taosd_dnodes_info where dnode_ep = '$fqdn' and _ts >= $from and _ts <= $to interval($interval) fill(null)"
             }
           ],
           "timeFrom": null,
@@ -3304,10 +3263,6 @@
                   {
                     "color": "green",
                     "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
                   }
                 ]
               },
@@ -3317,9 +3272,9 @@
           },
           "gridPos": {
             "h": 8,
-            "w": 12,
-            "x": 0,
-            "y": 51
+            "w": 8,
+            "x": 16,
+            "y": 43
           },
           "id": 116,
           "options": {
@@ -3329,8 +3284,7 @@
                 "mean",
                 "lastNotNull",
                 "max",
-                "min",
-                "sum"
+                "min"
               ],
               "displayMode": "table",
               "placement": "right"
@@ -3347,7 +3301,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, 0 - avg(net_in) as net_in, avg(net_out) as net_out from $database.dnodes_info where dnode_ep = '$fqdn' and ts >= $from and ts <= $to interval($interval) fill(null)"
+              "sql": "select _wstart as ts, 0 - avg(system_net_in) as system_net_in, avg(system_net_out) as system_net_out from $database.taosd_dnodes_info where dnode_ep = '$fqdn' and _ts >= $from and _ts <= $to interval($interval) fill(null)"
             }
           ],
           "timeFrom": null,
@@ -3462,10 +3416,6 @@
                   {
                     "color": "green",
                     "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
                   }
                 ]
               },
@@ -3504,7 +3454,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, endpoint, sum(`query`)/($interval/1s) as `query` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0 partition by endpoint interval($interval) fill(null)"
+              "sql": "select _wstart as ts, endpoint, sum(`query`)/($interval/1s) as `query` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
               "colNameFormatStr": "{{endpoint}}_query_successful",
@@ -3513,7 +3463,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "B",
-              "sql": "select _wstart as ts, endpoint, sum(`query_success`)/($interval/1s) as `query_success` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0 partition by endpoint interval($interval) fill(null)"
+              "sql": "select _wstart as ts, endpoint, sum(`query_success`)/($interval/1s) as `query_success` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
               "colNameFormatStr": "{{endpoint}}_query_failed",
@@ -3522,7 +3472,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "C",
-              "sql": "select _wstart as ts, endpoint, sum(`query_fail`)/($interval/1s) as `query_fail` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0 partition by endpoint interval($interval) fill(null)"
+              "sql": "select _wstart as ts, endpoint, sum(`query_fail`)/($interval/1s) as `query_fail` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
               "colNameFormatStr": "{{endpoint}}_query_in_process",
@@ -3531,7 +3481,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "D",
-              "sql": "select _wstart as ts, endpoint, sum(`query_in_process`)/($interval/1s) as `query_in_process` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0 partition by endpoint interval($interval) fill(null)"
+              "sql": "select _wstart as ts, endpoint, sum(`query_in_process`)/($interval/1s) as `query_in_process` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
               "colNameFormatStr": "{{endpoint}}_writes",
@@ -3540,7 +3490,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "E",
-              "sql": "select _wstart as ts, endpoint, sum(`write`)/($interval/1s) as `write` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0 partition by endpoint interval($interval) fill(null)"
+              "sql": "select _wstart as ts, endpoint, sum(`write`)/($interval/1s) as `write` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
               "colNameFormatStr": "{{endpoint}}_write_successful",
@@ -3549,7 +3499,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "F",
-              "sql": "select _wstart as ts, endpoint, sum(`write_success`)/($interval/1s) as `write_success` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0 partition by endpoint interval($interval) fill(null)"
+              "sql": "select _wstart as ts, endpoint, sum(`write_success`)/($interval/1s) as `write_success` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
               "colNameFormatStr": "{{endpoint}}_write_failed",
@@ -3558,7 +3508,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "G",
-              "sql": "select _wstart as ts, endpoint, sum(`write_fail`)/($interval/1s) as `write_fail` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0 partition by endpoint interval($interval) fill(null)"
+              "sql": "select _wstart as ts, endpoint, sum(`write_fail`)/($interval/1s) as `write_fail` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
               "colNameFormatStr": "{{endpoint}}_write_in_process",
@@ -3567,7 +3517,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "H",
-              "sql": "select _wstart as ts, endpoint, sum(`write_in_process`)/($interval/1s) as `write_in_process` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0 partition by endpoint interval($interval) fill(null)"
+              "sql": "select _wstart as ts, endpoint, sum(`write_in_process`)/($interval/1s) as `write_in_process` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
               "colNameFormatStr": "{{endpoint}}_others",
@@ -3576,7 +3526,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "I",
-              "sql": "select _wstart as ts, endpoint, sum(`other`)/($interval/1s) as `other` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0 partition by endpoint interval($interval) fill(null)"
+              "sql": "select _wstart as ts, endpoint, sum(`other`)/($interval/1s) as `other` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
               "colNameFormatStr": "{{endpoint}}_other_successful",
@@ -3585,7 +3535,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "J",
-              "sql": "select _wstart as ts, endpoint, sum(`other_success`)/($interval/1s) as `other_success` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0 partition by endpoint interval($interval) fill(null)"
+              "sql": "select _wstart as ts, endpoint, sum(`other_success`)/($interval/1s) as `other_success` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
               "colNameFormatStr": "{{endpoint}}_other_failed",
@@ -3594,7 +3544,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "K",
-              "sql": "select _wstart as ts, endpoint, sum(`other_fail`)/($interval/1s) as `other_fail` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0 partition by endpoint interval($interval) fill(null)"
+              "sql": "select _wstart as ts, endpoint, sum(`other_fail`)/($interval/1s) as `other_fail` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             }
           ],
           "timeFrom": null,
@@ -3693,10 +3643,6 @@
                   {
                     "color": "green",
                     "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
                   }
                 ]
               },
@@ -3735,7 +3681,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, endpoint, sum(`query`)/($interval/1s) as `query` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1 partition by endpoint interval($interval) fill(null)"
+              "sql": "select _wstart as ts, endpoint, sum(`query`)/($interval/1s) as `query` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
               "colNameFormatStr": "{{endpoint}}_query_successful",
@@ -3744,7 +3690,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "B",
-              "sql": "select _wstart as ts, endpoint, sum(`query_success`)/($interval/1s) as `query_success` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1 partition by endpoint interval($interval) fill(null)"
+              "sql": "select _wstart as ts, endpoint, sum(`query_success`)/($interval/1s) as `query_success` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
               "colNameFormatStr": "{{endpoint}}_query_failed",
@@ -3753,7 +3699,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "C",
-              "sql": "select _wstart as ts, endpoint, sum(`query_fail`)/($interval/1s) as `query_fail` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1 partition by endpoint interval($interval) fill(null)"
+              "sql": "select _wstart as ts, endpoint, sum(`query_fail`)/($interval/1s) as `query_fail` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
               "colNameFormatStr": "{{endpoint}}_query_in_process",
@@ -3762,7 +3708,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "D",
-              "sql": "select _wstart as ts, endpoint, sum(`query_in_process`)/($interval/1s) as `query_in_process` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1 partition by endpoint interval($interval) fill(null)"
+              "sql": "select _wstart as ts, endpoint, sum(`query_in_process`)/($interval/1s) as `query_in_process` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
               "colNameFormatStr": "{{endpoint}}_writes",
@@ -3771,7 +3717,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "E",
-              "sql": "select _wstart as ts, endpoint, sum(`write`)/($interval/1s) as `write` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1 partition by endpoint interval($interval) fill(null)"
+              "sql": "select _wstart as ts, endpoint, sum(`write`)/($interval/1s) as `write` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
               "colNameFormatStr": "{{endpoint}}_write_successful",
@@ -3780,7 +3726,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "F",
-              "sql": "select _wstart as ts, endpoint, sum(`write_success`)/($interval/1s) as `write_success` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1 partition by endpoint interval($interval) fill(null)"
+              "sql": "select _wstart as ts, endpoint, sum(`write_success`)/($interval/1s) as `write_success` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
               "colNameFormatStr": "{{endpoint}}_write_failed",
@@ -3789,7 +3735,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "G",
-              "sql": "select _wstart as ts, endpoint, sum(`write_fail`)/($interval/1s) as `write_fail` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1 partition by endpoint interval($interval) fill(null)"
+              "sql": "select _wstart as ts, endpoint, sum(`write_fail`)/($interval/1s) as `write_fail` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
               "colNameFormatStr": "{{endpoint}}_write_in_process",
@@ -3798,7 +3744,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "H",
-              "sql": "select _wstart as ts, endpoint, sum(`write_in_process`)/($interval/1s) as `write_in_process` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1 partition by endpoint interval($interval) fill(null)"
+              "sql": "select _wstart as ts, endpoint, sum(`write_in_process`)/($interval/1s) as `write_in_process` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
               "colNameFormatStr": "{{endpoint}}_others",
@@ -3807,7 +3753,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "I",
-              "sql": "select _wstart as ts, endpoint, sum(`other`)/($interval/1s) as `other` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1 partition by endpoint interval($interval) fill(null)"
+              "sql": "select _wstart as ts, endpoint, sum(`other`)/($interval/1s) as `other` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
               "colNameFormatStr": "{{endpoint}}_other_successful",
@@ -3816,7 +3762,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "J",
-              "sql": "select _wstart as ts, endpoint, sum(`other_success`)/($interval/1s) as `other_success` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1 partition by endpoint interval($interval) fill(null)"
+              "sql": "select _wstart as ts, endpoint, sum(`other_success`)/($interval/1s) as `other_success` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
               "colNameFormatStr": "{{endpoint}}_other_failed",
@@ -3825,7 +3771,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "K",
-              "sql": "select _wstart as ts, endpoint, sum(`other_fail`)/($interval/1s) as `other_fail` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1 partition by endpoint interval($interval) fill(null)"
+              "sql": "select _wstart as ts, endpoint, sum(`other_fail`)/($interval/1s) as `other_fail` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             }
           ],
           "timeFrom": null,
@@ -3846,13 +3792,9 @@
     "list": [
       {
         "allValue": null,
-        "current": {
-          "selected": true,
-          "text": "log",
-          "value": "log"
-        },
+        "current": {},
         "datasource": "${DS_TDENGINE}",
-        "definition": "select name from information_schema.ins_databases where `vgroups` is not null",
+        "definition": "select name from information_schema.ins_databases where `vgroups` is not null ORDER BY CASE WHEN name = 'log' THEN 1 ELSE 2 END, name;",
         "description": null,
         "error": null,
         "hide": 0,
@@ -3861,11 +3803,11 @@
         "multi": false,
         "name": "database",
         "options": [],
-        "query": "select name from information_schema.ins_databases where `vgroups` is not null",
+        "query": "select name from information_schema.ins_databases where `vgroups` is not null ORDER BY CASE WHEN name = 'log' THEN 1 ELSE 2 END, name;",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
-        "sort": 1,
+        "sort": 0,
         "tagValuesQuery": "",
         "tags": [],
         "tagsQuery": "",
@@ -3876,7 +3818,7 @@
         "allValue": null,
         "current": {},
         "datasource": "${DS_TDENGINE}",
-        "definition": "select endpoint from information_schema.ins_dnodes;",
+        "definition": "select distinct dnode_ep  from $database.taosd_dnodes_info where _ts >= $from and _ts <= $to",
         "description": "TDengine Nodes FQDN (Hostname)",
         "error": null,
         "hide": 0,
@@ -3885,8 +3827,8 @@
         "multi": true,
         "name": "fqdn",
         "options": [],
-        "query": "select endpoint from information_schema.ins_dnodes;",
-        "refresh": 1,
+        "query": "select distinct dnode_ep  from $database.taosd_dnodes_info where _ts >= $from and _ts <= $to",
+        "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,
@@ -3900,7 +3842,7 @@
         "allValue": null,
         "current": {},
         "datasource": "${DS_TDENGINE}",
-        "definition": "select last(version) from $database.cluster_info",
+        "definition": "select last(cluster_version) from $database.taosd_cluster_basic where ts >= $from and ts <= $to",
         "description": null,
         "error": null,
         "hide": 2,
@@ -3909,8 +3851,8 @@
         "multi": false,
         "name": "version",
         "options": [],
-        "query": "select last(version) from $database.cluster_info",
-        "refresh": 1,
+        "query": "select last(cluster_version) from $database.taosd_cluster_basic where ts >= $from and ts <= $to",
+        "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,
@@ -3924,7 +3866,7 @@
         "allValue": null,
         "current": {},
         "datasource": "${DS_TDENGINE}",
-        "definition": "select last(first_ep) from $database.cluster_info",
+        "definition": "select last(first_ep) from $database.taosd_cluster_basic where ts >= $from and ts <= $to",
         "description": null,
         "error": null,
         "hide": 2,
@@ -3933,8 +3875,8 @@
         "multi": false,
         "name": "firstEp",
         "options": [],
-        "query": "select last(first_ep) from $database.cluster_info",
-        "refresh": 1,
+        "query": "select last(first_ep) from $database.taosd_cluster_basic where ts >= $from and ts <= $to",
+        "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,
@@ -3945,13 +3887,157 @@
         "useTags": false
       },
       {
+        "allValue": "",
+        "current": {},
+        "datasource": "${DS_TDENGINE}",
+        "definition": "select distinct username  from $database.taos_sql_req where _ts >= $from and _ts <= $to",
+        "description": "User Name",
+        "error": null,
+        "hide": 0,
+        "includeAll": true,
+        "label": "User",
+        "multi": true,
+        "name": "username",
+        "options": [],
+        "query": "select distinct username  from $database.taos_sql_req where _ts >= $from and _ts <= $to",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": "",
+        "current": {},
+        "datasource": "${DS_TDENGINE}",
+        "definition": "select distinct result  from $database.taos_sql_req where _ts >= $from and _ts <= $to",
+        "description": "SQL Result",
+        "error": null,
+        "hide": 0,
+        "includeAll": true,
+        "label": "SqlResult",
+        "multi": true,
+        "name": "sql_result",
+        "options": [],
+        "query": "select distinct result  from $database.taos_sql_req where _ts >= $from and _ts <= $to",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": "",
+        "current": {},
+        "datasource": "${DS_TDENGINE}",
+        "definition": "select distinct `duration`  from $database.taos_slow_sql where _ts >= $from and _ts <= $to",
+        "description": "SQL Result",
+        "error": null,
+        "hide": 0,
+        "includeAll": true,
+        "label": "SlowSqlDuration",
+        "multi": true,
+        "name": "duration",
+        "options": [],
+        "query": "select distinct `duration`  from $database.taos_slow_sql where _ts >= $from and _ts <= $to",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {},
+        "datasource": "${DS_TDENGINE}",
+        "definition": "select  distinct endpoint  from $database.adapter_requests where ts >= $from and ts <= $to order by endpoint",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": true,
+        "label": "adapter_endpoint",
+        "multi": true,
+        "name": "adapter_endpoint",
+        "options": [],
+        "query": "select  distinct endpoint  from $database.adapter_requests where ts >= $from and ts <= $to order by endpoint",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },       
+      {
+        "allValue": null,
+        "current": {},
+        "datasource": "${DS_TDENGINE}",
+        "definition": "select last(_ts) from $database.taosd_dnodes_status",
+        "description": null,
+        "error": null,
+        "hide": 2,
+        "includeAll": false,
+        "label": "last_dnodes_ts",
+        "multi": false,
+        "name": "last_dnodes_ts",
+        "options": [],
+        "query": "select last(_ts) from $database.taosd_dnodes_status",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {},
+        "datasource": "${DS_TDENGINE}",
+        "definition": "select last(_ts) from $database.taosd_mnodes_info",
+        "description": null,
+        "error": null,
+        "hide": 2,
+        "includeAll": false,
+        "label": "last_mnodes_ts",
+        "multi": false,
+        "name": "last_mnodes_ts",
+        "options": [],
+        "query": "select last(_ts) from $database.taosd_mnodes_info",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },           
+      {
         "auto": true,
         "auto_count": 100,
         "auto_min": "10s",
         "current": {
           "selected": false,
-          "text": "auto",
-          "value": "$__auto_interval_interval"
+          "text": "30s",
+          "value": "30s"
         },
         "description": null,
         "error": null,
