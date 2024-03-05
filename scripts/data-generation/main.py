@@ -6,8 +6,7 @@ import taos
 import re
 from metrics import *
 
-# host = "127.0.0.1"
-host = "192.168.1.98"
+host = "tdengine"
 conn = taos.connect(host=host)
 dbname = "log"
 write_interval = 3
