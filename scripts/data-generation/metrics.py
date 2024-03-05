@@ -71,7 +71,7 @@ all_metrics = [
         "tags": [
             {"name": "taosx_id", "value": "taosx_id_1"},
             {"name": "ds_name", "value": "influxdb"},
-            {"name": "task_id", "value": "task_id_1"},
+            {"name": "task_id", "value": "task_id_6"},
         ],
         "metrics": [
             {"name": "process_uptime", "value": "100f64"},
@@ -88,7 +88,7 @@ all_metrics = [
         "tags": [
             {"name": "taosx_id", "value": "taosx_id_1"},
             {"name": "ds_name", "value": "opentsdb"},
-            {"name": "task_id", "value": "task_id_1"},
+            {"name": "task_id", "value": "task_id_7"},
         ],
         "metrics": [
             {"name": "process_uptime", "value": "100f64"},
@@ -105,7 +105,7 @@ all_metrics = [
         "tags": [
             {"name": "taosx_id", "value": "taosx_id_1"},
             {"name": "ds_name", "value": "opcua"},
-            {"name": "task_id", "value": "task_id_1"},
+            {"name": "task_id", "value": "task_id_2"},
         ],
         "metrics": [
             {"name": "process_uptime", "value": "100f64"},
@@ -122,7 +122,7 @@ all_metrics = [
         "tags": [
             {"name": "taosx_id", "value": "taosx_id_1"},
             {"name": "ds_name", "value": "opcda"},
-            {"name": "task_id", "value": "task_id_1"},
+            {"name": "task_id", "value": "task_id_opcda_1"},
         ],
         "metrics": [
             {"name": "process_uptime", "value": "100f64"},
@@ -139,7 +139,7 @@ all_metrics = [
         "tags": [
             {"name": "taosx_id", "value": "taosx_id_1"},
             {"name": "ds_name", "value": "pi"},
-            {"name": "task_id", "value": "task_id_1"},
+            {"name": "task_id", "value": "task_id_8"},
         ],
         "metrics": [
             {"name": "process_uptime", "value": "100f64"},
@@ -156,7 +156,7 @@ all_metrics = [
         "tags": [
             {"name": "taosx_id", "value": "taosx_id_1"},
             {"name": "ds_name", "value": "pibackfill"},
-            {"name": "task_id", "value": "task_id_1"},
+            {"name": "task_id", "value": "task_id_9"},
         ],
         "metrics": [
             {"name": "process_uptime", "value": "100f64"},
@@ -173,7 +173,24 @@ all_metrics = [
         "tags": [
             {"name": "taosx_id", "value": "taosx_id_1"},
             {"name": "ds_name", "value": "mqtt"},
-            {"name": "task_id", "value": "task_id_1"},
+            {"name": "task_id", "value": "task_id_4"},
+        ],
+        "metrics": [
+            {"name": "process_uptime", "value": "100f64"},
+            {"name": "process_cpu_percent", "value": "30f64"},
+            {"name": "process_memory_percent", "value": "30f64"},
+            {"name": "process_disk_read_bytes", "value": "6000000000f64"},
+            {"name": "process_disk_written_bytes", "value": "6000000000f64"},
+            {"name": "process_id", "value": "12343f64"},
+        ],
+    },
+    {
+        "ts": "1703484955810",
+        "stable_name": "taosx_connector",
+        "tags": [
+            {"name": "taosx_id", "value": "taosx_id_1"},
+            {"name": "ds_name", "value": "mqtt"},
+            {"name": "task_id", "value": "task_id_5"},
         ],
         "metrics": [
             {"name": "process_uptime", "value": "100f64"},
@@ -189,8 +206,8 @@ all_metrics = [
         "stable_name": "taosx_task_tdengine2",
         "tags": [
             {"name": "taosx_id", "value": "taosx_id_1"},
-            {"name": "task_id", "value": "task_id_0"},
-            {"name": "task_name", "value": "task_name_0"},
+            {"name": "task_id", "value": "task_id_13"},
+            {"name": "task_name", "value": "task_name_13"},
         ],
         "metrics": [
             {"name": "total_execute_time", "value": "123456f64"},
