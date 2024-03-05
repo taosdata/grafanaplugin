@@ -4,11 +4,13 @@ Languages: _English_ _[简体中文](https://www.taosdata.com/cn/documentation/t
 
 TDinsight v3.x is a solution for monitoring TDengine using the builtin native monitoring database and Grafana.
 
-The correspondence between TDinsight v3.x and TDengine versions is as follows:
-| TDinsight v3.x Version |  TDengine Version |
-| :---------------------: | :--------------: |
-|          3.x            |  from 3.0.1.0 to 3.2.2.0 |
-|          4.x            |  from 3.2.3.0 |
+## Compatiable with TDengine version
+| TDengine grafana plugin version | TDengine version |
+| :-----------------------------: | :--------------: |
+|              3.5.0              | 3.2.3.0 or later |
+|              3.4.0              | 3.2.0.1 or later |
+|              3.2.7              | 3.0.0.0 or later |
+
 
 TDengine writes monitoring data into a special database through [taosKeeper](https://github.com/taosdata/taoskeeper).
 The metrics may include the server's CPU, memory, hard disk space, network bandwidth, number of requests, disk
