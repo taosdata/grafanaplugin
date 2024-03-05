@@ -1282,7 +1282,8 @@
           ],
           "title": "Memory Usage",
           "type": "gauge"
-        },{
+        },
+        {
           "aliasColors": {},
           "bars": false,
           "dashLength": 10,
@@ -1335,7 +1336,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, avg(process_cpu_percent) as cpu_usage  from $database.taosx_agent where taosx_id = '$taosX_id' and agent_id = '$agent_id'  and _ts >= $from and _ts <= $to interval($interval) fill(VALUE,0)"
+              "sql": "select _wstart as ts, avg(process_cpu_percent) as cpu_usage  from $database.taosx_agent where taosx_id = '$taosX_id' and agent_id = '$agent_id'  and _ts >= $from and _ts <= $to interval($interval) fill(null)"
             }
           ],
           "thresholds": [],
@@ -1608,6 +1609,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -1634,7 +1636,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id,  (max(total_written_rows) - min(total_written_rows)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as rows_per_second from $database.taosx_task_tdengine3 where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'TDengine3' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (max(total_written_rows) - min(total_written_rows)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as rows_per_second from $database.taosx_task_tdengine3 where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'TDengine3' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -1706,6 +1708,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -1732,7 +1735,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id,  (max(total_written_points) - min(total_written_points)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as points_per_second from $database.taosx_task_tdengine3 where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'TDengine3' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (max(total_written_points) - min(total_written_points)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as points_per_second from $database.taosx_task_tdengine3 where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'TDengine3' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -1804,6 +1807,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -1830,7 +1834,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id,  last(total_write_raw_fails) - first(total_write_raw_fails) as write_raw_fails from $database.taosx_task_tdengine3 where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'TDengine3' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  last(total_write_raw_fails) - first(total_write_raw_fails) as write_raw_fails from $database.taosx_task_tdengine3 where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'TDengine3' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -2002,6 +2006,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -2028,7 +2033,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id,  (max(total_written_rows) - min(total_written_rows)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as rows_per_second from $database.taosx_task_tdengine2 where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'TDengine2' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (max(total_written_rows) - min(total_written_rows)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as rows_per_second from $database.taosx_task_tdengine2 where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'TDengine2' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -2100,6 +2105,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -2126,7 +2132,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id,  (max(total_written_points) - min(total_written_points)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as points_per_second from $database.taosx_task_tdengine2 where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'TDengine2' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (max(total_written_points) - min(total_written_points)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as points_per_second from $database.taosx_task_tdengine2 where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'TDengine2' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -2298,6 +2304,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -2324,7 +2331,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id,  (max(total_written_rows) - min(total_written_rows)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as rows_per_second from $database.taosx_task_pibackfill where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'PIBackFill' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (max(total_written_rows) - min(total_written_rows)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as rows_per_second from $database.taosx_task_pibackfill where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'PIBackFill' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -2396,6 +2403,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -2422,7 +2430,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id,  (max(total_written_points) - min(total_written_points)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as points_per_second from $database.taosx_task_pibackfill where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'PIBackFill' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (max(total_written_points) - min(total_written_points)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as points_per_second from $database.taosx_task_pibackfill where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'PIBackFill' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -2494,6 +2502,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -2520,7 +2529,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id,  (last(total_processed_batches) - first(total_processed_batches)) as processed_batches from $database.taosx_task_pibackfill where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'PIBackFill' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (last(total_processed_batches) - first(total_processed_batches)) as processed_batches from $database.taosx_task_pibackfill where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'PIBackFill' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             },
             {
               "colNameFormatStr": "{{task_id}}_received_batches",
@@ -2529,7 +2538,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "B",
-              "sql": "select _wstart as ts, task_id,  (last(total_received_batches) - first(total_received_batches)) as received_batches from $database.taosx_task_pibackfill where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'PIBackFill' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (last(total_received_batches) - first(total_received_batches)) as received_batches from $database.taosx_task_pibackfill where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'PIBackFill' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -2601,6 +2610,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -2627,7 +2637,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id, (last(total_failed_sqls) - first(total_failed_sqls)) as failed_sqls from $database.taosx_task_pibackfill where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'PIBackFill' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id, (last(total_failed_sqls) - first(total_failed_sqls)) as failed_sqls from $database.taosx_task_pibackfill where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'PIBackFill' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -2699,6 +2709,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -2797,6 +2808,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -2895,6 +2907,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -2994,6 +3007,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -3192,6 +3206,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -3218,7 +3233,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id,  (max(total_written_rows) - min(total_written_rows)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as rows_per_second from $database.taosx_task_pi where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'PI' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (max(total_written_rows) - min(total_written_rows)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as rows_per_second from $database.taosx_task_pi where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'PI' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -3290,6 +3305,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -3316,7 +3332,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id,  (max(total_written_points) - min(total_written_points)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as points_per_second from $database.taosx_task_pi where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'PI' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (max(total_written_points) - min(total_written_points)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as points_per_second from $database.taosx_task_pi where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'PI' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -3388,6 +3404,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -3414,7 +3431,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id,  (last(total_processed_batches) - first(total_processed_batches)) as processed_batches from $database.taosx_task_pi where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'PI' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (last(total_processed_batches) - first(total_processed_batches)) as processed_batches from $database.taosx_task_pi where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'PI' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             },
             {
               "colNameFormatStr": "{{task_id}}_received_batches",
@@ -3423,7 +3440,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "B",
-              "sql": "select _wstart as ts, task_id,  (last(total_received_batches) - first(total_received_batches)) as received_batches from $database.taosx_task_pi where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'PI' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (last(total_received_batches) - first(total_received_batches)) as received_batches from $database.taosx_task_pi where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'PI' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -3495,6 +3512,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -3521,7 +3539,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id, (last(total_failed_sqls) - first(total_failed_sqls)) as failed_sqls from $database.taosx_task_pi where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'PI' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id, (last(total_failed_sqls) - first(total_failed_sqls)) as failed_sqls from $database.taosx_task_pi where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'PI' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -3593,6 +3611,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -3691,6 +3710,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -3789,6 +3809,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -3888,6 +3909,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -4087,6 +4109,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -4113,7 +4136,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id,  (max(total_written_rows) - min(total_written_rows)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as rows_per_second from $database.taosx_task_opentsdb where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'OpenTSDB' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (max(total_written_rows) - min(total_written_rows)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as rows_per_second from $database.taosx_task_opentsdb where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'OpenTSDB' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -4186,6 +4209,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -4212,7 +4236,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id,  (max(total_written_points) - min(total_written_points)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as points_per_second from $database.taosx_task_opentsdb where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'OpenTSDB' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (max(total_written_points) - min(total_written_points)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as points_per_second from $database.taosx_task_opentsdb where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'OpenTSDB' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -4284,6 +4308,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -4310,7 +4335,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id,  (last(total_processed_batches) - first(total_processed_batches)) as processed_batches from $database.taosx_task_opentsdb where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'OpenTSDB' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (last(total_processed_batches) - first(total_processed_batches)) as processed_batches from $database.taosx_task_opentsdb where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'OpenTSDB' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             },
             {
               "colNameFormatStr": "{{task_id}}_received_batches",
@@ -4319,7 +4344,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "B",
-              "sql": "select _wstart as ts, task_id,  (last(total_received_batches) - first(total_received_batches)) as received_batches from $database.taosx_task_opentsdb where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'OpenTSDB' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (last(total_received_batches) - first(total_received_batches)) as received_batches from $database.taosx_task_opentsdb where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'OpenTSDB' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -4391,6 +4416,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -4417,7 +4443,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id, (last(total_failed_sqls) - first(total_failed_sqls)) as failed_sqls from $database.taosx_task_opentsdb where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'OpenTSDB' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id, (last(total_failed_sqls) - first(total_failed_sqls)) as failed_sqls from $database.taosx_task_opentsdb where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'OpenTSDB' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -4489,6 +4515,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -4587,6 +4614,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -4685,6 +4713,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -4784,6 +4813,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -4983,6 +5013,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -5009,7 +5040,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id,  (max(total_written_rows) - min(total_written_rows)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as rows_per_second from $database.taosx_task_opcua where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'OPCUA' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (max(total_written_rows) - min(total_written_rows)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as rows_per_second from $database.taosx_task_opcua where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'OPCUA' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -5081,6 +5112,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -5107,7 +5139,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id,  (max(total_written_points) - min(total_written_points)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as points_per_second from $database.taosx_task_opcua where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'OPCUA' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (max(total_written_points) - min(total_written_points)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as points_per_second from $database.taosx_task_opcua where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'OPCUA' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -5179,6 +5211,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -5205,7 +5238,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id,  (last(total_processed_batches) - first(total_processed_batches)) as processed_batches from $database.taosx_task_opcua where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'OPCUA' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (last(total_processed_batches) - first(total_processed_batches)) as processed_batches from $database.taosx_task_opcua where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'OPCUA' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             },
             {
               "colNameFormatStr": "{{task_id}}_received_batches",
@@ -5214,7 +5247,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "B",
-              "sql": "select _wstart as ts, task_id,  (last(total_received_batches) - first(total_received_batches)) as received_batches from $database.taosx_task_opcua where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'OPCUA' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (last(total_received_batches) - first(total_received_batches)) as received_batches from $database.taosx_task_opcua where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'OPCUA' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -5286,6 +5319,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -5312,7 +5346,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id, (last(total_failed_sqls) - first(total_failed_sqls)) as failed_sqls from $database.taosx_task_opcua where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'OPCUA' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id, (last(total_failed_sqls) - first(total_failed_sqls)) as failed_sqls from $database.taosx_task_opcua where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'OPCUA' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -5384,6 +5418,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -5482,6 +5517,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -5580,6 +5616,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -5679,6 +5716,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -5877,6 +5915,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -5903,7 +5942,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id,  (max(total_written_rows) - min(total_written_rows)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as rows_per_second from $database.taosx_task_opcda where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'OPCDA' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (max(total_written_rows) - min(total_written_rows)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as rows_per_second from $database.taosx_task_opcda where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'OPCDA' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -5975,6 +6014,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -6001,7 +6041,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id,  (max(total_written_points) - min(total_written_points)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as points_per_second from $database.taosx_task_opcda where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'OPCDA' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (max(total_written_points) - min(total_written_points)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as points_per_second from $database.taosx_task_opcda where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'OPCDA' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -6073,6 +6113,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -6099,7 +6140,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id,  (last(total_processed_batches) - first(total_processed_batches)) as processed_batches from $database.taosx_task_opcda where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'OPCDA' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (last(total_processed_batches) - first(total_processed_batches)) as processed_batches from $database.taosx_task_opcda where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'OPCDA' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             },
             {
               "colNameFormatStr": "{{task_id}}_received_batches",
@@ -6108,7 +6149,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "B",
-              "sql": "select _wstart as ts, task_id,  (last(total_received_batches) - first(total_received_batches)) as received_batches from $database.taosx_task_opcda where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'OPCDA' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (last(total_received_batches) - first(total_received_batches)) as received_batches from $database.taosx_task_opcda where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'OPCDA' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -6180,6 +6221,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -6206,7 +6248,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id, (last(total_failed_sqls) - first(total_failed_sqls)) as failed_sqls from $database.taosx_task_opcda where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'OPCDA' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id, (last(total_failed_sqls) - first(total_failed_sqls)) as failed_sqls from $database.taosx_task_opcda where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'OPCDA' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -6278,6 +6320,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -6376,6 +6419,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -6474,6 +6518,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -6573,6 +6618,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -6771,6 +6817,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -6797,7 +6844,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id,  (max(total_written_rows) - min(total_written_rows)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as rows_per_second from $database.taosx_task_mqtt where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'MQTT' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (max(total_written_rows) - min(total_written_rows)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as rows_per_second from $database.taosx_task_mqtt where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'MQTT' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -6869,6 +6916,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -6895,7 +6943,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id,  (max(total_written_points) - min(total_written_points)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as points_per_second from $database.taosx_task_mqtt where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'MQTT' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (max(total_written_points) - min(total_written_points)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as points_per_second from $database.taosx_task_mqtt where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'MQTT' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -6967,6 +7015,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -6993,7 +7042,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id,  (last(total_processed_batches) - first(total_processed_batches)) as processed_batches from $database.taosx_task_mqtt where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'MQTT' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (last(total_processed_batches) - first(total_processed_batches)) as processed_batches from $database.taosx_task_mqtt where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'MQTT' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             },
             {
               "colNameFormatStr": "{{task_id}}_received_batches",
@@ -7002,7 +7051,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "B",
-              "sql": "select _wstart as ts, task_id,  (last(total_received_batches) - first(total_received_batches)) as received_batches from $database.taosx_task_mqtt where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'MQTT' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (last(total_received_batches) - first(total_received_batches)) as received_batches from $database.taosx_task_mqtt where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'MQTT' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -7074,6 +7123,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -7100,7 +7150,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id, (last(total_failed_sqls) - first(total_failed_sqls)) as failed_sqls from $database.taosx_task_mqtt where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'MQTT' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id, (last(total_failed_sqls) - first(total_failed_sqls)) as failed_sqls from $database.taosx_task_mqtt where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'MQTT' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -7172,6 +7222,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -7270,6 +7321,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -7368,6 +7420,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -7467,6 +7520,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -7665,6 +7719,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -7691,7 +7746,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id,  (max(total_written_rows) - min(total_written_rows)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as rows_per_second from $database.taosx_task_kafka where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'Kafka' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (max(total_written_rows) - min(total_written_rows)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as rows_per_second from $database.taosx_task_kafka where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'Kafka' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -7763,6 +7818,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -7789,7 +7845,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id,  (max(total_written_points) - min(total_written_points)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as points_per_second from $database.taosx_task_kafka where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'Kafka' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (max(total_written_points) - min(total_written_points)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as points_per_second from $database.taosx_task_kafka where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'Kafka' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -7861,6 +7917,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -7887,7 +7944,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id,  (last(total_processed_batches) - first(total_processed_batches)) as processed_batches from $database.taosx_task_kafka where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'Kafka' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (last(total_processed_batches) - first(total_processed_batches)) as processed_batches from $database.taosx_task_kafka where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'Kafka' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             },
             {
               "colNameFormatStr": "{{task_id}}_received_batches",
@@ -7896,7 +7953,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "B",
-              "sql": "select _wstart as ts, task_id,  (last(total_received_batches) - first(total_received_batches)) as received_batches from $database.taosx_task_kafka where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'Kafka' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (last(total_received_batches) - first(total_received_batches)) as received_batches from $database.taosx_task_kafka where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'Kafka' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -7968,6 +8025,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -7994,7 +8052,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id, (last(total_failed_sqls) - first(total_failed_sqls)) as failed_sqls from $database.taosx_task_kafka where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'Kafka' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id, (last(total_failed_sqls) - first(total_failed_sqls)) as failed_sqls from $database.taosx_task_kafka where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'Kafka' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -8166,6 +8224,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -8192,7 +8251,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id,  (max(total_written_rows) - min(total_written_rows)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as rows_per_second from $database.taosx_task_influxdb where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'Influxdb' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (max(total_written_rows) - min(total_written_rows)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as rows_per_second from $database.taosx_task_influxdb where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'Influxdb' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -8264,6 +8323,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -8290,7 +8350,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id,  (max(total_written_points) - min(total_written_points)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as points_per_second from $database.taosx_task_influxdb where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'Influxdb' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (max(total_written_points) - min(total_written_points)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as points_per_second from $database.taosx_task_influxdb where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'Influxdb' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -8362,6 +8422,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -8388,7 +8449,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id,  (last(total_processed_batches) - first(total_processed_batches)) as processed_batches from $database.taosx_task_influxdb where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'Influxdb' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (last(total_processed_batches) - first(total_processed_batches)) as processed_batches from $database.taosx_task_influxdb where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'Influxdb' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             },
             {
               "colNameFormatStr": "{{task_id}}_received_batches",
@@ -8397,7 +8458,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "B",
-              "sql": "select _wstart as ts, task_id,  (last(total_received_batches) - first(total_received_batches)) as received_batches from $database.taosx_task_influxdb where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'Influxdb' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (last(total_received_batches) - first(total_received_batches)) as received_batches from $database.taosx_task_influxdb where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'Influxdb' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -8469,6 +8530,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -8495,7 +8557,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id, (last(total_failed_sqls) - first(total_failed_sqls)) as failed_sqls from $database.taosx_task_influxdb where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'Influxdb' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id, (last(total_failed_sqls) - first(total_failed_sqls)) as failed_sqls from $database.taosx_task_influxdb where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'Influxdb' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -8567,6 +8629,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -8665,6 +8728,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -8763,6 +8827,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -8862,6 +8927,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -9060,6 +9126,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -9086,7 +9153,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id,  (max(total_written_rows) - min(total_written_rows)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as rows_per_second from $database.taosx_task_csv where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'CSV' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (max(total_written_rows) - min(total_written_rows)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as rows_per_second from $database.taosx_task_csv where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'CSV' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -9158,6 +9225,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -9184,7 +9252,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id,  (max(total_written_points) - min(total_written_points)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as points_per_second from $database.taosx_task_csv where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'CSV' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (max(total_written_points) - min(total_written_points)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as points_per_second from $database.taosx_task_csv where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'CSV' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -9256,6 +9324,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -9282,7 +9351,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id,  (last(total_processed_batches) - first(total_processed_batches)) as processed_batches from $database.taosx_task_csv where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'CSV' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (last(total_processed_batches) - first(total_processed_batches)) as processed_batches from $database.taosx_task_csv where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'CSV' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             },
             {
               "colNameFormatStr": "{{task_id}}_received_batches",
@@ -9291,7 +9360,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "B",
-              "sql": "select _wstart as ts, task_id,  (last(total_received_batches) - first(total_received_batches)) as received_batches from $database.taosx_task_csv where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'CSV' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (last(total_received_batches) - first(total_received_batches)) as received_batches from $database.taosx_task_csv where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'CSV' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -9363,6 +9432,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -9389,7 +9459,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id, (last(total_failed_sqls) - first(total_failed_sqls)) as failed_sqls from $database.taosx_task_csv where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'CSV' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id, (last(total_failed_sqls) - first(total_failed_sqls)) as failed_sqls from $database.taosx_task_csv where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'CSV' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -9561,6 +9631,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -9587,7 +9658,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id,  (max(total_written_rows) - min(total_written_rows)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as rows_per_second from $database.taosx_task_avevaHistorian where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'AvevaHistorian' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (max(total_written_rows) - min(total_written_rows)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as rows_per_second from $database.taosx_task_avevaHistorian where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'AvevaHistorian' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -9659,6 +9730,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -9685,7 +9757,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id,  (max(total_written_points) - min(total_written_points)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as points_per_second from $database.taosx_task_avevaHistorian where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'AvevaHistorian' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (max(total_written_points) - min(total_written_points)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as points_per_second from $database.taosx_task_avevaHistorian where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'AvevaHistorian' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -9757,6 +9829,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -9783,7 +9856,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id,  (last(total_processed_batches) - first(total_processed_batches)) as processed_batches from $database.taosx_task_avevaHistorian where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'AvevaHistorian' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (last(total_processed_batches) - first(total_processed_batches)) as processed_batches from $database.taosx_task_avevaHistorian where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'AvevaHistorian' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             },
             {
               "colNameFormatStr": "{{task_id}}_received_batches",
@@ -9792,7 +9865,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "B",
-              "sql": "select _wstart as ts, task_id,  (last(total_received_batches) - first(total_received_batches)) as received_batches from $database.taosx_task_avevaHistorian where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'AvevaHistorian' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (last(total_received_batches) - first(total_received_batches)) as received_batches from $database.taosx_task_avevaHistorian where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'AvevaHistorian' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -9864,6 +9937,7 @@
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -9890,7 +9964,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id, (last(total_failed_sqls) - first(total_failed_sqls)) as failed_sqls from $database.taosx_task_avevaHistorian where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'AvevaHistorian' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval(1m) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id, (last(total_failed_sqls) - first(total_failed_sqls)) as failed_sqls from $database.taosx_task_avevaHistorian where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'AvevaHistorian' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
@@ -10069,12 +10143,12 @@
       {
         "auto": true,
         "auto_count": 100,
-        "auto_min": "10s",
+        "auto_min": "30s",
         "current": {
           "selected": false,
-          "text": "30s",
-          "value": "30s"
-        },
+          "text": "auto",
+          "value": "$__auto_interval_interval"
+       },
         "description": null,
         "error": null,
         "hide": 0,
@@ -10085,26 +10159,6 @@
             "selected": false,
             "text": "auto",
             "value": "$__auto_interval_interval"
-          },
-          {
-            "selected": false,
-            "text": "5s",
-            "value": "5s"
-          },
-          {
-            "selected": false,
-            "text": "10s",
-            "value": "10s"
-          },
-          {
-            "selected": false,
-            "text": "15s",
-            "value": "15s"
-          },
-          {
-            "selected": false,
-            "text": "20s",
-            "value": "20s"
           },
           {
             "selected": true,
@@ -10157,7 +10211,7 @@
             "value": "1d"
           }
         ],
-        "query": "5s,10s,15s,20s,30s,1m,2m,5m,10m,30m,1h,6h,12h,1d",
+        "query": "30s,1m,2m,5m,10m,30m,1h,6h,12h,1d",
         "queryValue": "",
         "refresh": 2,
         "skipUrlSync": false,

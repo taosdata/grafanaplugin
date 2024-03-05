@@ -132,9 +132,10 @@ You can get other dashboards in the examples' directory, or search in grafana wi
 
 Here is a short list:
 
-- [15167](https://grafana.com/grafana/dashboards/15167): TDinsightV2
 - [18180](https://grafana.com/grafana/dashboards/18180): TDinsightV3
+- [15167](https://grafana.com/grafana/dashboards/15167): TDinsightV2
 - [19910](https://grafana.com/grafana/dashboards/19910): TDsmeters
+- [20631](https://grafana.com/grafana/dashboards/20631): taosX
   
 You could open a pr to add one if you want to share your dashboard with TDengine community, we appreciate your contribution!
 
