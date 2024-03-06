@@ -35,6 +35,6 @@ services:
         - -c
         - "while true; do taoskeeper --tdengine.host tdengine --taosAdapter.address tdengine:6041; done"
     simulator-taosx:
-        image: tdengine/simulator-taosx:1.0.0
+        image: image.cloud.taosdata.com/tdinsight/simulator-taosx:1.0.0
         depends_on:
         - tdengine
