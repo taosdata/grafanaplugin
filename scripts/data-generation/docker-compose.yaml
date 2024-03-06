@@ -1,0 +1,40 @@
+version: "3"
+services:
+    grafana: # min version image: grafana/grafana:7.5.0
+    # max version #
+      image: grafana/grafana:latest
+      pull_policy: always
+      ports:
+      - 3002:3000
+      environment:
+        GF_AUTH_ANONYMOUS_ENABLED: 1
+        GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
+        GF_INSTALL_PLUGINS: https://github.com/taosdata/grafanaplugin/releases/download/v3.4.7/tdengine-datasource-3.4.7.zip;tdengine-datasource,marcusolsson-static-datasource,marcusolsson-dynamictext-panel
+      # volumes:
+      # - ./provisioning:/etc/grafana/provisioning
+      depends_on:
+      - tdengine
+    tdengine:
+        image: tdengine/tdengine:3.2.1.0
+        volumes:
+        - ./tdengine/taos.cfg:/etc/taos/taos.cfg
+        ports:
+        - "8041:6041"
+    taoskeeper:
+        image: tdengine/tdengine:3.2.1.0
+        depends_on:
+        - tdengine
+        environment:
+        - TAOS_KEEPER_TDENGINE_HOST=tdengine
+        volumes:
+        - ./tdengine/taos.cfg:/etc/taos/taos.cfg
+        ports:
+        - "8043:6043"
+        entrypoint:
+        - /bin/sh
+        - -c
+        - "while true; do taoskeeper --tdengine.host tdengine --taosAdapter.address tdengine:6041; done"
+    simulator-taosx:
+        image: tdengine/simulator-taosx:1.0.0
+        depends_on:
+        - tdengine
