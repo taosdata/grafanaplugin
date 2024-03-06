@@ -22,7 +22,7 @@ data sources.
 ## Compatiable with TDengine version
 | TDengine grafana plugin version |     major changes     | TDengine version |
 | :-----------------------------: | :-------------------: | :--------------: |
-|              4.0.0              | new taosd and taosX dashboard | 3.2.3.0 or later |
+|              3.5.0              | new taosd and taosX dashboard | 3.2.3.0 or later |
 |              3.4.0              | new adapter dashboard | 3.2.0.1 or later |
 |              3.2.7              | support TDengine 3.0  | 3.0.0.0 or later |
 
