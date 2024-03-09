@@ -525,7 +525,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select last(stbs_total + tbs_total) from $database.taosd_cluster_info"
+          "sql": "select last(stbs_total + tbs_total) from $database.taosd_cluster_info where _ts >= $from and _ts <= $to"
         }
       ],
       "title": "Stables & Tables",
