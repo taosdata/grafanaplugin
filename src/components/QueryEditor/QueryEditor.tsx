@@ -123,7 +123,7 @@ export function QueryEditor(props: EditorProps): ReactElement {
                         style={{"width": "100%; min-width: 800px;"}}
                         width={100}
                         className={'min-width-30 max-width-100 gf-form--grow'}
-                        placeholder={'select avg(mem_system)  from log.dnodes_info where ts >= $from and ts < $to interval($interval)'}
+                        placeholder={'select _wstart as ts, avg(mem_free), dnode_ep from log.taosd_dnodes_info where _ts>=$from and _ts<=$to partition by dnode_ep interval($interval)'}
                         onChange={onChangeSql}
                         onBlur={onblurSql}
                         value={query.sql}
