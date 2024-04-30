@@ -44,7 +44,7 @@
       "type": "datasource",
       "id": "tdengine-datasource",
       "name": "TDengine Datasource",
-      "version": "3.5.0"
+      "version": "3.5.1"
     },
     {
       "type": "panel",
@@ -1549,7 +1549,7 @@
           },
           "gridPos": {
             "h": 6,
-            "w": 24,
+            "w": 12,
             "x": 0,
             "y": 20
           },
@@ -1575,7 +1575,7 @@
               "formatType": "Table",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select task_id, task_name, last(execute_time) as execute_time, last(written_rows) as written_rows, last(total_execute_time) as total_execute_time, last(total_written_rows) as total_written_rows  from $database.taosx_task_tdengine3 where taosx_id = '$taosX_id' and _ts >= $from and _ts <= $to  partition by task_id, task_name order by task_id desc",
+              "sql": "select task_id, task_name, last(execute_time) as execute_time, last(total_execute_time) as total_execute_time  from $database.taosx_task_tdengine3 where taosx_id = '$taosX_id' and _ts >= $from and _ts <= $to  partition by task_id, task_name order by task_id desc",
               "timeShiftPeriod": ""
             }
           ],
@@ -1583,202 +1583,78 @@
           "type": "table"
         },
         {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
           "datasource": "${DS_TDENGINE}",
           "fieldConfig": {
             "defaults": {
-              "unit": "cps"
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": "center",
+                "filterable": false
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "none"
             },
-            "overrides": []
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "update_time"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "dateTimeAsIso"
+                  }
+                ]
+              }
+            ]
           },
-          "fill": 1,
-          "fillGradient": 0,
           "gridPos": {
-            "h": 10,
-            "w": 8,
-            "x": 0,
-            "y": 26
+            "h": 6,
+            "w": 12,
+            "x": 13,
+            "y": 20
           },
-          "hiddenSeries": false,
-          "id": 330,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "rightSide": true,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
+          "id": 544,
           "options": {
-            "alertThreshold": true
+            "cellHeight": "sm",
+            "footer": {
+              "countRows": false,
+              "enablePagination": false,
+              "fields": [],
+              "reducer": [
+                "sum"
+              ],
+              "show": false
+            },
+            "showHeader": true
           },
-          "percentage": false,
           "pluginVersion": "7.5.10",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
-              "formatType": "Time series",
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "formatType": "Table",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id,  (max(total_written_rows) - min(total_written_rows)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as rows_per_second from $database.taosx_task_tdengine3 where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'TDengine3' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
+              "sql": "select last(_ts) as update_time, task_id, `topic`, `vgroup`, last(`offset`) as `offset`, last(`latest`) as `latest`  from $database.taosx_task_progress where taosx_id = '$taosX_id' and _ts >= $from and _ts <= $to  partition by task_id, `topic`, `vgroup` order by task_id, `topic`, `vgroup` desc",
+              "timeShiftPeriod": ""
             }
           ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Inserted rows Rate",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "decimals": 2,
-              "format": "cps",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": "0",
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${DS_TDENGINE}",
-          "fieldConfig": {
-            "defaults": {
-              "unit": "cps"
-            },
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 10,
-            "w": 8,
-            "x": 8,
-            "y": 26
-          },
-          "hiddenSeries": false,
-          "id": 339,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "rightSide": true,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.5.10",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
-              "formatType": "Time series",
-              "queryType": "SQL",
-              "refId": "A",
-              "sql": "select _wstart as ts, task_id,  (max(total_written_points) - min(total_written_points)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as points_per_second from $database.taosx_task_tdengine3 where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'TDengine3' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Inserted Points Rate",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "decimals": 2,
-              "format": "cps",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": "0",
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          "title": "VGroup Consumer Progress",
+          "transformations": [],
+          "type": "table"
         },
         {
           "aliasColors": {},
@@ -1796,8 +1672,8 @@
           "fillGradient": 0,
           "gridPos": {
             "h": 10,
-            "w": 8,
-            "x": 16,
+            "w": 24,
+            "x": 0,
             "y": 26
           },
           "hiddenSeries": false,

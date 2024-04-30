@@ -7,6 +7,7 @@ TDinsight v3.x is a solution for monitoring TDengine using the builtin native mo
 ## Compatiable with TDengine version
 | TDengine grafana plugin version | TDengine version |
 | :-----------------------------: | :--------------: |
+|              3.5.1              | 3.3.3.0 or later |
 |              3.5.0              | 3.2.3.0 or later |
 |              3.4.0              | 3.2.0.1 or later |
 |              3.2.7              | 3.0.0.0 or later |

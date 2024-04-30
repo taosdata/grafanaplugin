@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.5.1] - 2024-04-30
+
+### Bug Fixes
+
+### Features
+
+- update taosX and taosd dashboard.
+  
 ## [3.5.0] - 2024-03-05
 
 ### Bug Fixes
