@@ -70,6 +70,7 @@ TDinsight for taosX 是一个实时显示插件，用于监控 taosX 的各个�
 ![tdinsight-mnodes-overview](../assets/TDinsightV3-3-mnodes.png)
 
 -  **Task Info**：Task 信息，包括任务 id、名称、执行时间、写入行数、总执行时间和总写入行数。 
+-  **VGroup Consumer Progress**：VGroup 同步进度信息，包括更新时间、任务 id、topic 名称、vgroup、当前同步偏移量、最新偏移量。 
 -  **Inserted Rows Rate**：插入行速率。
 -  **Inserted Points Rate**：插入点速率。
 -  **Write Raw Fails**：写入 raw meta 失败的次数。

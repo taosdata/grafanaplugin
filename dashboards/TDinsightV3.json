@@ -50,7 +50,7 @@
       "type": "datasource",
       "id": "tdengine-datasource",
       "name": "TDengine Datasource",
-      "version": "3.5.0"
+      "version": "3.5.1"
     },
     {
       "type": "panel",
@@ -2025,7 +2025,7 @@
               "hide": false,
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, avg(`count`) as `inserted_rows`  from $database.taos_sql_req where sql_type = 'inserted_rows' and   ('$fqdn' = '' or  dnode_ep in (${fqdn:sqlstring})) and ('$username' = '' OR username in (${username:sqlstring})) and  ('$sql_result' = '' OR result in (${sql_result:sqlstring}))  and _ts > $from and _ts <= $to interval($interval) fill(null)"
+              "sql": "select _wstart as ts, avg(`count`) as `inserted_rows`  from $database.taosd_sql_req where sql_type = 'inserted_rows' and   ('$fqdn' = '' or  dnode_ep in (${fqdn:sqlstring})) and ('$username' = '' OR username in (${username:sqlstring})) and  ('$sql_result' = '' OR result in (${sql_result:sqlstring}))  and _ts > $from and _ts <= $to interval($interval) fill(null)"
             }
           ],
           "timeFrom": null,

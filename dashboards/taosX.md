@@ -70,9 +70,8 @@ This section includes the basic information of the currently selected taosX inst
 
 ![tdinsight-mnodes-overview](../assets/TDinsightV3-3-mnodes.png)
 
--  **Task Info**: Task information, including task id, name, execution time, number of rows written, total execution time, and total number of rows written.
--  **Inserted Rows Rate**: Insertion rate of rows.
--  **Inserted Points Rate**: Insertion rate of points.
+-  **Task Info**: Task information, including task id, name, execution time, total execution time.
+-  **VGroup Consumer Progress**：VGroup consumer progress，including update time, task id, topic name, vgroup, offset, and latest.
 -  **Write Raw Fails**: The number of times the writing of raw meta failed.
 
 ### OPC-UA
