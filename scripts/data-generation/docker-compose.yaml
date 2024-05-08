@@ -15,13 +15,13 @@ services:
       depends_on:
       - tdengine
     tdengine:
-        image: tdengine/tdengine:3.2.3.0
+        image: tdengine/tdengine:3.3.0.0
         volumes:
         - ./tdengine/taos.cfg:/etc/taos/taos.cfg
         ports:
         - "8041:6041"
     taoskeeper:
-        image: tdengine/tdengine:3.2.3.0
+        image: tdengine/tdengine:3.3.0.0
         depends_on:
         - tdengine
         environment:
@@ -33,8 +33,8 @@ services:
         entrypoint:
         - /bin/sh
         - -c
-        - "while true; do taoskeeper --tdengine.host tdengine --taosAdapter.address tdengine:6041; done"
+        - "while true; do taoskeeper --tdengine.host tdengine; done"
     simulator-taosx:
-        image: image.cloud.taosdata.com/tdinsight/simulator-taosx:1.0.0
+        image: image.cloud.taosdata.com/tdinsight/simulator-taosx:1.0.1
         depends_on:
         - tdengine
