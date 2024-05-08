@@ -1,4 +1,4 @@
-FROM tdengine/tdengine:3.2.3.0
+FROM tdengine/tdengine:3.3.0.0
 
 RUN apt update && apt install -y python3 python3-pip
 RUN pip3 install taospy
