@@ -298,7 +298,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": " select case when grants_expire_time > (50 * 365 * 24 * 3600) then 'unlimited' else grants_expire_time end from (select last(grants_expire_time) as grants_expire_time from $database.taosd_cluster_info where _ts >= $from and _ts <= $to)"
+          "sql": " select case when grants_expire_time > (50 * 365 * 24 * 3600) then cast ('unlimited' as binary(100)) else grants_expire_time end as grants_expire_time from (select last(grants_expire_time) as grants_expire_time from $database.taosd_cluster_info where _ts >= $from and _ts <= $to)"
         }
       ],
       "title": "Expire Time",
