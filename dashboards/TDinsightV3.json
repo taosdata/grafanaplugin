@@ -341,7 +341,7 @@
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "",
+          "fields": "/.*/",
           "values": false
         },
         "text": {},
@@ -355,7 +355,7 @@
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select last(grants_expire_time) from $database.taosd_cluster_info where _ts >= $from and _ts <= $to"
+          "sql": " select case when grants_expire_time > (50 * 365 * 24 * 3600) then 'unlimited' else grants_expire_time end from (select last(grants_expire_time) as grants_expire_time from $database.taosd_cluster_info where _ts >= $from and _ts <= $to)"
         }
       ],
       "title": "Expire Time",
@@ -817,7 +817,7 @@
       "fillGradient": 0,
       "gridPos": {
         "h": 6,
-        "w": 6,
+        "w": 8,
         "x": 0,
         "y": 12
       },
@@ -912,8 +912,8 @@
       "fillGradient": 0,
       "gridPos": {
         "h": 6,
-        "w": 6,
-        "x": 6,
+        "w": 8,
+        "x": 8,
         "y": 12
       },
       "hiddenSeries": false,
@@ -1007,8 +1007,8 @@
       "fillGradient": 0,
       "gridPos": {
         "h": 6,
-        "w": 6,
-        "x": 12,
+        "w": 8,
+        "x": 16,
         "y": 12
       },
       "hiddenSeries": false,
@@ -1102,9 +1102,9 @@
       "fillGradient": 0,
       "gridPos": {
         "h": 6,
-        "w": 6,
-        "x": 18,
-        "y": 12
+        "w": 12,
+        "x": 0,
+        "y": 18
       },
       "hiddenSeries": false,
       "id": 36,
@@ -1198,7 +1198,7 @@
       "gridPos": {
         "h": 6,
         "w": 12,
-        "x": 0,
+        "x": 12,
         "y": 18
       },
       "hiddenSeries": false,
@@ -1292,87 +1292,6 @@
         "align": false,
         "alignLevel": null
       }
-    },
-    {
-      "datasource": "${DS_TDENGINE}",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "none",
-            "hideFrom": {
-              "graph": false,
-              "legend": false,
-              "tooltip": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": true
-          },
-          "mappings": [],
-          "min": 86400,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 604800
-              }
-            ]
-          },
-          "unit": "s"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 12,
-        "x": 12,
-        "y": 18
-      },
-      "id": 40,
-      "options": {
-        "graph": {},
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
-        },
-        "tooltipOptions": {
-          "mode": "single"
-        }
-      },
-      "pluginVersion": "7.5.0",
-      "targets": [
-        {
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
-          "formatType": "Time series",
-          "queryType": "SQL",
-          "refId": "A",
-          "sql": "select _wstart as ts, last(grants_expire_time) as expire_time from $database.taosd_cluster_info where _ts >= $from and _ts <= $to interval($interval) fill(null)"
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Grants Expire Time",
-      "type": "timeseries"
     },
     {
       "collapsed": true,
