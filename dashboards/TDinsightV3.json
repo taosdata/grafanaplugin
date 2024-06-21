@@ -3644,7 +3644,1963 @@
       ],
       "title": "TaosAdapter",
       "type": "row"
-    }
+    },
+    {
+      "collapsed": true,
+      "datasource": "${DS_TDENGINE}",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 30
+      },
+      "id": 202,
+      "panels": [{
+          "alert": {
+            "alertRuleTags": {
+              "cluster_id": "${cluster_id}"
+            },
+            "conditions": [{
+              "evaluator": {
+                "params": [
+                  0
+                ],
+                "type": "lt"
+              },
+              "operator": {
+                "type": "and"
+              },
+              "query": {
+                "params": [
+                  "A",
+                  "5m",
+                  "now"
+                ]
+              },
+              "reducer": {
+                "params": [],
+                "type": "last"
+              },
+              "type": "query"
+            }],
+            "executionErrorState": "alerting",
+            "for": "0m",
+            "frequency": "10s",
+            "handler": 1,
+            "message": "There are nodes offline in the cluster",
+            "name": "DNodes offline alert",
+            "noDataState": "alerting",
+            "notifications": []
+          },
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_TDENGINE}",
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": []
+          },
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 6,
+            "w": 6,
+            "x": 0,
+            "y": 10
+          },
+          "hiddenSeries": false,
+          "id": 203,
+          "interval": "10s",
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "7.5.10",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [{
+            "alias": "",
+            "colNameFormatStr": "",
+            "colNameToGroup": "cluster_id",
+            "formatType": "Time series",
+            "queryType": "SQL",
+            "refId": "A",
+            "sql": "select _wstart as ts,  cluster_id, last(dnodes_total)  - last(dnodes_alive) as dnode_offline  from log.taosd_cluster_info where _ts >= $from and _ts <= $to partition by cluster_id interval(30s) fill(null)"
+          }],
+          "thresholds": [{
+            "colorMode": "critical",
+            "fill": true,
+            "line": true,
+            "op": "lt",
+            "value": 0,
+            "visible": true
+          }],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "DNodes Offline",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [{
+              "$$hashKey": "object:6594",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:6595",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "alert": {
+            "alertRuleTags": {},
+            "conditions": [{
+              "evaluator": {
+                "params": [
+                  0
+                ],
+                "type": "gt"
+              },
+              "operator": {
+                "type": "and"
+              },
+              "query": {
+                "params": [
+                  "A",
+                  "30s",
+                  "now"
+                ]
+              },
+              "reducer": {
+                "params": [],
+                "type": "last"
+              },
+              "type": "query"
+            }],
+            "executionErrorState": "alerting",
+            "for": "0m",
+            "frequency": "10s",
+            "handler": 1,
+            "message": "There are vnodes offline in the cluster",
+            "name": "VNodes Offline alert",
+            "noDataState": "ok",
+            "notifications": []
+          },
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_TDENGINE}",
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": []
+          },
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 6,
+            "w": 6,
+            "x": 6,
+            "y": 10
+          },
+          "hiddenSeries": false,
+          "id": 204,
+          "interval": "30s",
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "maxDataPoints": null,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "7.5.10",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [{
+            "colNameFormatStr": "",
+            "colNameToGroup": "cluster_id",
+            "formatType": "Time series",
+            "queryType": "SQL",
+            "refId": "A",
+            "sql": "select _wstart as ts,  cluster_id, last(vnodes_total)  - last(vnodes_alive) as vnode_offline  from log.taosd_cluster_info where _ts >= $from and _ts <= $to partition by cluster_id interval(30s) fill(null)"
+          }],
+          "thresholds": [{
+            "colorMode": "critical",
+            "fill": true,
+            "line": true,
+            "op": "gt",
+            "value": 0,
+            "visible": true
+          }],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "VNodes Offline",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [{
+              "$$hashKey": "object:6594",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:6595",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "alert": {
+            "alertRuleTags": {},
+            "conditions": [{
+              "evaluator": {
+                "params": [
+                  60
+                ],
+                "type": "lt"
+              },
+              "operator": {
+                "type": "and"
+              },
+              "query": {
+                "params": [
+                  "A",
+                  "5m",
+                  "now"
+                ]
+              },
+              "reducer": {
+                "params": [],
+                "type": "last"
+              },
+              "type": "query"
+            }],
+            "executionErrorState": "alerting",
+            "for": "0m",
+            "frequency": "24h",
+            "handler": 1,
+            "message": "Authorization is about to expire",
+            "name": "Expire Time Alert",
+            "noDataState": "alerting",
+            "notifications": []
+          },
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_TDENGINE}",
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": []
+          },
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 6,
+            "w": 6,
+            "x": 12,
+            "y": 10
+          },
+          "hiddenSeries": false,
+          "id": 210,
+          "interval": "24h",
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "7.5.10",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [{
+            "colNameFormatStr": "",
+            "colNameToGroup": "cluster_id",
+            "formatType": "Time series",
+            "queryType": "SQL",
+            "refId": "A",
+            "sql": "select _ts, cluster_id, last(grants_expire_time) / 86400 as expire_time from log.taosd_cluster_info where _ts >= $from and _ts <= $to partition by cluster_id  interval(12h) fill(null)",
+            "timeShiftPeriod": "1",
+            "timeShiftUnit": "days"
+          }],
+          "thresholds": [{
+            "colorMode": "critical",
+            "fill": true,
+            "line": true,
+            "op": "lt",
+            "value": 60,
+            "visible": true
+          }],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Expire Time Alert",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [{
+              "$$hashKey": "object:6594",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:6595",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "alert": {
+            "alertRuleTags": {},
+            "conditions": [{
+              "evaluator": {
+                "params": [
+                  80
+                ],
+                "type": "gt"
+              },
+              "operator": {
+                "type": "and"
+              },
+              "query": {
+                "params": [
+                  "A",
+                  "5m",
+                  "now"
+                ]
+              },
+              "reducer": {
+                "params": [],
+                "type": "avg"
+              },
+              "type": "query"
+            }],
+            "executionErrorState": "alerting",
+            "for": "0m",
+            "frequency": "5m",
+            "handler": 1,
+            "message": "Node CPU usage exceeds 80%",
+            "name": "CPU Usage alert",
+            "noDataState": "alerting",
+            "notifications": []
+          },
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_TDENGINE}",
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percent"
+            },
+            "overrides": []
+          },
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 6,
+            "w": 6,
+            "x": 18,
+            "y": 10
+          },
+          "hiddenSeries": false,
+          "id": 205,
+          "interval": "5m",
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "7.5.10",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [{
+            "colNameFormatStr": "",
+            "colNameToGroup": "dnode_ep",
+            "formatType": "Time series",
+            "queryType": "SQL",
+            "refId": "A",
+            "sql": "select _wstart as ts,  dnode_ep, avg(cpu_system) as `system` from log.taosd_dnodes_info where _ts >= $from and _ts <= $to partition by dnode_ep  interval(5m) fill(null)",
+            "timeShiftPeriod": ""
+          }],
+          "thresholds": [{
+            "colorMode": "critical",
+            "fill": true,
+            "line": true,
+            "op": "gt",
+            "value": 80,
+            "visible": true
+          }],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "CPU Usage",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [{
+              "$$hashKey": "object:719",
+              "format": "percent",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:720",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "alert": {
+            "alertRuleTags": {},
+            "conditions": [{
+              "evaluator": {
+                "params": [
+                  80
+                ],
+                "type": "gt"
+              },
+              "operator": {
+                "type": "and"
+              },
+              "query": {
+                "params": [
+                  "A",
+                  "5m",
+                  "now"
+                ]
+              },
+              "reducer": {
+                "params": [],
+                "type": "max"
+              },
+              "type": "query"
+            }],
+            "executionErrorState": "alerting",
+            "for": "0m",
+            "frequency": "5m",
+            "handler": 1,
+            "message": "Disk Used above 80%",
+            "name": "Disk Used Rate alert",
+            "noDataState": "no_data",
+            "notifications": []
+          },
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_TDENGINE}",
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percent"
+            },
+            "overrides": []
+          },
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 6,
+            "w": 6,
+            "x": 0,
+            "y": 16
+          },
+          "hiddenSeries": false,
+          "id": 208,
+          "interval": "5m",
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "7.5.10",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [{
+            "colNameFormatStr": "",
+            "colNameToGroup": "dnode_ep, data_dir_level, data_dir_name",
+            "formatType": "Time series",
+            "queryType": "SQL",
+            "refId": "A",
+            "sql": "select _wstart as ts, dnode_ep, data_dir_level, data_dir_name, last(used)  / last(total)  * 100 as used from log.taosd_dnodes_data_dirs where _ts >= $from and _ts <= $to partition by dnode_ep, data_dir_level, data_dir_name interval(5m) fill(null) ",
+            "timeShiftPeriod": "5",
+            "timeShiftUnit": "minutes"
+          }],
+          "thresholds": [{
+            "colorMode": "critical",
+            "fill": true,
+            "line": true,
+            "op": "gt",
+            "value": 80,
+            "visible": true
+          }],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Disk Used Rate",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [{
+              "$$hashKey": "object:719",
+              "format": "percent",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:720",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "alert": {
+            "alertRuleTags": {},
+            "conditions": [{
+              "evaluator": {
+                "params": [
+                  80
+                ],
+                "type": "gt"
+              },
+              "operator": {
+                "type": "and"
+              },
+              "query": {
+                "params": [
+                  "A",
+                  "5m",
+                  "now"
+                ]
+              },
+              "reducer": {
+                "params": [],
+                "type": "max"
+              },
+              "type": "query"
+            }],
+            "executionErrorState": "alerting",
+            "for": "0m",
+            "frequency": "5m",
+            "handler": 1,
+            "message": "Node RAM usage exceeds 80%",
+            "name": "RAM Usage alert",
+            "noDataState": "alerting",
+            "notifications": []
+          },
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_TDENGINE}",
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percent"
+            },
+            "overrides": []
+          },
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 6,
+            "w": 6,
+            "x": 6,
+            "y": 16
+          },
+          "hiddenSeries": false,
+          "id": 206,
+          "interval": "10s",
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "7.5.10",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [{
+            "colNameFormatStr": "",
+            "colNameToGroup": "dnode_ep",
+            "formatType": "Time series",
+            "queryType": "SQL",
+            "refId": "A",
+            "sql": "select _wstart as ts, dnode_ep, last(mem_engine) / last(mem_total)  * 100 as taosd from log.taosd_dnodes_info where _ts >= $from and _ts <= $to partition by dnode_ep interval(5m) fill(null)",
+            "timeShiftPeriod": "10",
+            "timeShiftUnit": "seconds"
+          }],
+          "thresholds": [{
+            "colorMode": "critical",
+            "fill": true,
+            "line": true,
+            "op": "gt",
+            "value": 80,
+            "visible": true
+          }],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "RAM Usage",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [{
+              "$$hashKey": "object:719",
+              "format": "percent",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:720",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "alert": {
+            "alertRuleTags": {},
+            "conditions": [{
+              "evaluator": {
+                "params": [
+                  80
+                ],
+                "type": "gt"
+              },
+              "operator": {
+                "type": "and"
+              },
+              "query": {
+                "params": [
+                  "A",
+                  "5m",
+                  "now"
+                ]
+              },
+              "reducer": {
+                "params": [],
+                "type": "last"
+              },
+              "type": "query"
+            }],
+            "executionErrorState": "alerting",
+            "for": "0m",
+            "frequency": "24h",
+            "handler": 1,
+            "message": "Used Measuring Points above 80%",
+            "name": "Used Measuring Points alert",
+            "noDataState": "no_data",
+            "notifications": []
+          },
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_TDENGINE}",
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percent"
+            },
+            "overrides": []
+          },
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 6,
+            "w": 6,
+            "x": 12,
+            "y": 16
+          },
+          "hiddenSeries": false,
+          "id": 209,
+          "interval": "24h",
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "7.5.10",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [{
+            "colNameFormatStr": "",
+            "colNameToGroup": "cluster_id",
+            "formatType": "Time series",
+            "queryType": "SQL",
+            "refId": "A",
+            "sql": " select  _wstart as ts, cluster_id,  CASE  WHEN max(grants_timeseries_total)  > 0 THEN max(grants_timeseries_used)  /max(grants_timeseries_total) * 100   ELSE 0    END AS result from log.taosd_cluster_info where _ts >= $from and _ts <= $to partition by cluster_id interval(30s)",
+            "timeShiftPeriod": "1",
+            "timeShiftUnit": "days"
+          }],
+          "thresholds": [{
+            "colorMode": "critical",
+            "fill": true,
+            "line": true,
+            "op": "gt",
+            "value": 80,
+            "visible": true
+          }],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Used Measuring Points",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [{
+              "$$hashKey": "object:719",
+              "format": "percent",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:720",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "alert": {
+            "alertRuleTags": {},
+            "conditions": [{
+              "evaluator": {
+                "params": [
+                  100
+                ],
+                "type": "gt"
+              },
+              "operator": {
+                "type": "and"
+              },
+              "query": {
+                "params": [
+                  "A",
+                  "30s",
+                  "now"
+                ]
+              },
+              "reducer": {
+                "params": [],
+                "type": "last"
+              },
+              "type": "query"
+            }],
+            "executionErrorState": "alerting",
+            "for": "0m",
+            "frequency": "1m",
+            "handler": 1,
+            "message": "The number of query requests exceeds 100 times within one minute",
+            "name": "Query Count Alert",
+            "noDataState": "ok",
+            "notifications": []
+          },
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_TDENGINE}",
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": []
+          },
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 6,
+            "w": 6,
+            "x": 18,
+            "y": 16
+          },
+          "hiddenSeries": false,
+          "id": 273,
+          "interval": "1m",
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "7.5.10",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [{
+            "colNameFormatStr": "",
+            "colNameToGroup": "",
+            "formatType": "Time series",
+            "queryType": "SQL",
+            "refId": "A",
+            "sql": "select _wstart as ts,  count(*) as `select_count`  from log.taos_sql_req where sql_type = 'select'  and _ts > $from and _ts <= $to interval(30s) fill(null)",
+            "timeShiftPeriod": "1",
+            "timeShiftUnit": "minutes"
+          }],
+          "thresholds": [{
+            "colorMode": "critical",
+            "fill": true,
+            "line": true,
+            "op": "gt",
+            "value": 100,
+            "visible": true
+          }],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Query Count Alert",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [{
+              "$$hashKey": "object:6594",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:6595",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "alert": {
+            "alertRuleTags": {},
+            "conditions": [{
+              "evaluator": {
+                "params": [
+                  300
+                ],
+                "type": "gt"
+              },
+              "operator": {
+                "type": "and"
+              },
+              "query": {
+                "params": [
+                  "A",
+                  "5m",
+                  "now"
+                ]
+              },
+              "reducer": {
+                "params": [],
+                "type": "max"
+              },
+              "type": "query"
+            }],
+            "executionErrorState": "alerting",
+            "for": "0m",
+            "frequency": "1m",
+            "handler": 1,
+            "message": "Query duration exceeds 300 seconds",
+            "name": "Slow Query Alert alert",
+            "noDataState": "ok",
+            "notifications": []
+          },
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_TDENGINE}",
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": []
+          },
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 6,
+            "w": 6,
+            "x": 0,
+            "y": 22
+          },
+          "hiddenSeries": false,
+          "id": 211,
+          "interval": "1m",
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "7.5.10",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [{
+            "colNameFormatStr": "",
+            "colNameToGroup": "",
+            "formatType": "Time series",
+            "queryType": "SQL",
+            "refId": "A",
+            "sql": "select create_time as ts, exec_usec/1000 as cost_ms from performance_schema.perf_queries order by create_time",
+            "timeShiftPeriod": "1",
+            "timeShiftUnit": "minutes"
+          }],
+          "thresholds": [{
+            "colorMode": "critical",
+            "fill": true,
+            "line": true,
+            "op": "gt",
+            "value": 300,
+            "visible": true
+          }],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Slow Query Alert",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [{
+              "$$hashKey": "object:6594",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:6595",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "alert": {
+            "alertRuleTags": {},
+            "conditions": [{
+              "evaluator": {
+                "params": [
+                  0
+                ],
+                "type": "gt"
+              },
+              "operator": {
+                "type": "and"
+              },
+              "query": {
+                "params": [
+                  "A",
+                  "60s",
+                  "now"
+                ]
+              },
+              "reducer": {
+                "params": [],
+                "type": "last"
+              },
+              "type": "query"
+            }],
+            "executionErrorState": "alerting",
+            "for": "0m",
+            "frequency": "10s",
+            "handler": 1,
+            "message": "Dnodes restart",
+            "name": "DNodes report  alert alert",
+            "noDataState": "alerting",
+            "notifications": []
+          },
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_TDENGINE}",
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": []
+          },
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 6,
+            "w": 6,
+            "x": 6,
+            "y": 22
+          },
+          "hiddenSeries": false,
+          "id": 215,
+          "interval": "150s",
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "7.5.10",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [{
+            "colNameFormatStr": "",
+            "colNameToGroup": "cluster_id",
+            "formatType": "Time series",
+            "queryType": "SQL",
+            "refId": "A",
+            "sql": "select _wstart as ts,  cluster_id, max(cluster_uptime) - last(cluster_uptime) as dnode_report  from log.taosd_cluster_info where _ts >= $from and _ts <= $to partition by cluster_id interval(60s) fill(null)",
+            "timeShiftPeriod": "150",
+            "timeShiftUnit": "seconds"
+          }],
+          "thresholds": [{
+            "colorMode": "critical",
+            "fill": true,
+            "line": true,
+            "op": "gt",
+            "value": 0,
+            "visible": true
+          }],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "DNodes report  alert",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [{
+              "$$hashKey": "object:6594",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:6595",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "alert": {
+            "alertRuleTags": {},
+            "conditions": [{
+              "evaluator": {
+                "params": [
+                  5
+                ],
+                "type": "gt"
+              },
+              "operator": {
+                "type": "and"
+              },
+              "query": {
+                "params": [
+                  "A",
+                  "5m",
+                  "now"
+                ]
+              },
+              "reducer": {
+                "params": [],
+                "type": "avg"
+              },
+              "type": "query"
+            }],
+            "executionErrorState": "alerting",
+            "for": "0m",
+            "frequency": "10s",
+            "handler": 1,
+            "message": "The adapter websocket interface has failed more than 5 times within 10 seconds",
+            "name": "Adapter RESTful Failed Alert",
+            "noDataState": "alerting",
+            "notifications": []
+          },
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_TDENGINE}",
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": []
+          },
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 6,
+            "w": 6,
+            "x": 12,
+            "y": 22
+          },
+          "hiddenSeries": false,
+          "id": 213,
+          "interval": "30s",
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "maxDataPoints": null,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "7.5.10",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [{
+            "colNameFormatStr": "",
+            "colNameToGroup": "",
+            "formatType": "Time series",
+            "queryType": "SQL",
+            "refId": "A",
+            "sql": "select _wstart as ts, sum(`fail`) as `Failed` from log.adapter_requests where req_type=1 and ts >= $from and ts <= $to interval(30s) fill(null)",
+            "timeShiftPeriod": "30",
+            "timeShiftUnit": "seconds"
+          }],
+          "thresholds": [{
+            "colorMode": "critical",
+            "fill": true,
+            "line": true,
+            "op": "gt",
+            "value": 5,
+            "visible": true
+          }],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Adapter Websocket Failed Alert",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [{
+              "$$hashKey": "object:6594",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:6595",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "alert": {
+            "alertRuleTags": {},
+            "conditions": [{
+              "evaluator": {
+                "params": [
+                  3
+                ],
+                "type": "lt"
+              },
+              "operator": {
+                "type": "and"
+              },
+              "query": {
+                "params": [
+                  "A",
+                  "180s",
+                  "now"
+                ]
+              },
+              "reducer": {
+                "params": [],
+                "type": "min"
+              },
+              "type": "query"
+            }],
+            "executionErrorState": "alerting",
+            "for": "0m",
+            "frequency": "200s",
+            "handler": 1,
+            "message": "DNodes Metrics reports less than 3 times within 150 seconds",
+            "name": "DNodes report  alert",
+            "noDataState": "alerting",
+            "notifications": []
+          },
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_TDENGINE}",
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": []
+          },
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 6,
+            "w": 6,
+            "x": 18,
+            "y": 22
+          },
+          "hiddenSeries": false,
+          "id": 214,
+          "interval": "180s",
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "7.5.10",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [{
+            "colNameFormatStr": "",
+            "colNameToGroup": "cluster_id",
+            "formatType": "Time series",
+            "queryType": "SQL",
+            "refId": "A",
+            "sql": "select _wstart as ts,  cluster_id, count(*) as dnode_report  from log.taosd_cluster_info where _ts >= $from and _ts <= $to partition by cluster_id interval(180s) fill(null)",
+            "timeShiftPeriod": "180",
+            "timeShiftUnit": "seconds"
+          }],
+          "thresholds": [{
+            "colorMode": "critical",
+            "fill": true,
+            "line": true,
+            "op": "lt",
+            "value": 3,
+            "visible": true
+          }],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "DNodes Metrics Report Count",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [{
+              "$$hashKey": "object:6594",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:6595",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "alert": {
+            "alertRuleTags": {},
+            "conditions": [{
+              "evaluator": {
+                "params": [
+                  5
+                ],
+                "type": "gt"
+              },
+              "operator": {
+                "type": "and"
+              },
+              "query": {
+                "params": [
+                  "A",
+                  "10s",
+                  "now"
+                ]
+              },
+              "reducer": {
+                "params": [],
+                "type": "sum"
+              },
+              "type": "query"
+            }],
+            "executionErrorState": "alerting",
+            "for": "0m",
+            "frequency": "10s",
+            "handler": 1,
+            "message": "The adapter restful interface has failed more than 5 times within 10 seconds",
+            "name": "Adapter RESTful Failed Alert alert",
+            "noDataState": "ok",
+            "notifications": []
+          },
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_TDENGINE}",
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": []
+          },
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 6,
+            "w": 6,
+            "x": 0,
+            "y": 28
+          },
+          "hiddenSeries": false,
+          "id": 244,
+          "interval": "30s",
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "maxDataPoints": null,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "7.5.10",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [{
+            "colNameFormatStr": "",
+            "colNameToGroup": "",
+            "formatType": "Time series",
+            "queryType": "SQL",
+            "refId": "A",
+            "sql": "select _wstart as ts, sum(`fail`) as `Failed` from log.adapter_requests where req_type=0 and ts >= $from and ts <= $to interval(30s) fill(null)",
+            "timeShiftPeriod": "30",
+            "timeShiftUnit": "seconds"
+          }],
+          "thresholds": [{
+            "colorMode": "critical",
+            "fill": true,
+            "line": true,
+            "op": "gt",
+            "value": 5,
+            "visible": true
+          }],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Adapter RESTful Failed Alert",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [{
+              "$$hashKey": "object:6594",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:6595",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "alert": {
+            "alertRuleTags": {},
+            "conditions": [{
+              "evaluator": {
+                "params": [
+                  5
+                ],
+                "type": "gt"
+              },
+              "operator": {
+                "type": "and"
+              },
+              "query": {
+                "params": [
+                  "A",
+                  "5m",
+                  "now"
+                ]
+              },
+              "reducer": {
+                "params": [],
+                "type": "max"
+              },
+              "type": "query"
+            }],
+            "executionErrorState": "alerting",
+            "for": "0m",
+            "frequency": "10s",
+            "handler": 1,
+            "message": "Received data deletion request within 10 seconds",
+            "name": "Delete Request Alert",
+            "noDataState": "ok",
+            "notifications": []
+          },
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_TDENGINE}",
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": []
+          },
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 6,
+            "w": 6,
+            "x": 6,
+            "y": 28
+          },
+          "hiddenSeries": false,
+          "id": 212,
+          "interval": "30s",
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "maxDataPoints": null,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "7.5.10",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [{
+            "colNameFormatStr": "",
+            "colNameToGroup": "",
+            "formatType": "Time series",
+            "queryType": "SQL",
+            "refId": "A",
+            "sql": "select  _wstart as ts,  count(`count`)  as `delete_count`  from log.taos_sql_req  where sql_type = 'delete' and _ts > $from and _ts <= $to interval(30s) fill(null)",
+            "timeShiftPeriod": "30",
+            "timeShiftUnit": "seconds"
+          }],
+          "thresholds": [{
+            "colorMode": "critical",
+            "fill": true,
+            "line": true,
+            "op": "gt",
+            "value": 5,
+            "visible": true
+          }],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Delete Request Alert",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [{
+              "$$hashKey": "object:6594",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:6595",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        }
+      ],
+      "title": "Alert Used Only",
+      "type": "row"
+    }    
   ],
   "refresh": "30s",
   "schemaVersion": 27,
