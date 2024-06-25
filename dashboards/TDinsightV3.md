@@ -7,6 +7,7 @@ TDinsight v3.x is a solution for monitoring TDengine using the builtin native mo
 ## Compatiable with TDengine version
 | TDengine grafana plugin version | TDengine version |
 | :-----------------------------: | :--------------: |
+|              3.5.2              | 3.3.0.0 or later |
 |              3.5.1              | 3.3.0.0 or later |
 |              3.5.0              | 3.2.3.0 or later |
 |              3.4.0              | 3.2.0.1 or later |
@@ -193,7 +194,6 @@ This section contains the current information and status of the cluster (from le
 
 - **First EP**: the firstEp setting in the current TDengine cluster.
 - **Version**: TDengine server version (leader mnode).
-- **Master Uptime**: The time elapsed since the current Leader MNode was elected as Leader.
 - **Expire Time**: Enterprise version expiration time.
 - **Used Measuring Points**: The number of measuring points used by the Enterprise Edition.
 - **Databases**: The number of databases.
@@ -203,8 +203,6 @@ This section contains the current information and status of the cluster (from le
 - **DNodes/MNodes/VGroups/VNodes Alive Percent**: The ratio of the number of alive/total for each resource.
 - **Measuring Points Used**: The number of measuring points(no data available in the community version, healthy by
   default).
-- **Grants Expire Time**: the expiration time of the enterprise version (no data available for the community version,
-  healthy by default).
 
 ### DNodes Status
 
