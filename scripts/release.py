@@ -2,22 +2,18 @@
 import os
 import sys
 import json
+import re
 import subprocess
 from datetime import datetime
 
-def update_nested_json(obj, key, new_value):
-    if key in obj:
-        obj[key] = new_value
-    for k, v in obj.items():
-        if isinstance(v, dict):
-            update_nested_json(v, key, new_value)
-
 def update_json(file, key, new_value):
     with open(file, 'r+') as f:
-        data = json.load(f)
-        update_nested_json(data, key, new_value)
+        content = f.read()
+        pattern = f'"{key}": ".*?"'
+        replacement = f'"{key}": "{new_value}"'
+        content = re.sub(pattern, replacement, content)
         f.seek(0)
-        json.dump(data, f, indent=4)
+        f.write(content)
         f.truncate()
 
 newv = sys.argv[1]
