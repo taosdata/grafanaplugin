@@ -5203,7 +5203,7 @@
               },
               "reducer": {
                 "params": [],
-                "type": "min"
+                "type": "sum"
               },
               "type": "query"
             }],
@@ -5212,7 +5212,7 @@
             "frequency": "200s",
             "handler": 1,
             "message": "DNodes Metrics reports less than 3 times within 150 seconds",
-            "name": "DNodes report  alert",
+            "name": "DNodes Metrics Report Count",
             "noDataState": "alerting",
             "notifications": []
           },
