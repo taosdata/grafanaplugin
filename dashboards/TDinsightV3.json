@@ -313,6 +313,7 @@
             "mode": "thresholds"
           },
           "mappings": [],
+          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -538,6 +539,7 @@
             "mode": "thresholds"
           },
           "mappings": [],
+          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -592,6 +594,7 @@
             "mode": "thresholds"
           },
           "mappings": [],
+          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -646,6 +649,7 @@
             "mode": "thresholds"
           },
           "mappings": [],
+          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -700,6 +704,7 @@
             "mode": "thresholds"
           },
           "mappings": [],
+          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -3843,7 +3848,7 @@
         "tagsQuery": "",
         "type": "query",
         "useTags": false
-      },       
+      },
       {
         "allValue": null,
         "current": {},
@@ -3891,7 +3896,7 @@
         "tagsQuery": "",
         "type": "query",
         "useTags": false
-      },           
+      },
       {
         "auto": true,
         "auto_count": 100,
