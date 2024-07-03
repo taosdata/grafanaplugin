@@ -10,6 +10,9 @@ import {DataSourceOptions, Query} from './types';
 import _, {uniqBy} from "lodash";
 // eslint-disable-next-line no-restricted-imports
 import moment from 'moment';
+import axios from 'axios';
+import fs from 'fs';
+import path from "path";
 
 export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
     baseUrl: string
@@ -54,11 +57,44 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
             }
         });
     }
+    readJsonFile(filePath: string): Promise<string> {
+        return new Promise((resolve, reject) => {
+            fs.promises.readFile(filePath, 'utf8')
+                .then((data) => {
+                    data.replace("\"type\":\"tdengine-datasource\",\"uid\":\"__expr__\"", "\"type\":\"tdengine-datasource\",\"uid\":\""+ this.uid +"\"");
+                    data.replace("\"datasourceUid\":\"__expr__\"", "\"datasourceUid\":\""+ this.uid +"\"");
+                    return resolve(data);
+                })
+                .catch((error) => {
+                    console.error('Error reading file:', error);
+                    reject();
+                });
+        })
+    }
+
+    sendInitAlert(): Promise<void> {
+        return new Promise((resolve, reject) => {
+            this.readJsonFile(path.join(__dirname, 'alert/alert.json')).then((data) => {
+                axios.post("http://localhost:3005/v1/provisioning/alert-rules", data).then(response=>{
+                   if (response.data.code !== 200) {
+                       reject(response.data.message);
+                   }
+                   resolve();
+                }).catch((e) => {
+                    reject(e);
+                })
+            })
+        });
+    }
 
     testDatasource() { // save & test button
         return this.request('show databases').then((response: { status: number; data: { message: string; }; }) => {
             if (!!response && response.status === 200 && !_.get(response, 'data.code')) {
-                return {status: "success", message: "TDengine Data source is working", title: "Success"};
+                this.sendInitAlert().then(()=>{
+                    return {status: "success", message: "TDengine Data source is working", title: "Success"};
+                }).finally(()=> {
+                    return {status: "success", message: "TDengine Data source is working", title: "Success"};
+                })
             }
             return {
                 status: "error",
