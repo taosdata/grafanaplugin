@@ -33,7 +33,7 @@ var (
 // NewDatasource creates a new datasource instance.
 func NewDatasource(settings backend.DataSourceInstanceSettings) (instancemgmt.Instance, error) {
 	ops, err := settings.HTTPClientOptions()
-	ops.TLS.InsecureSkipVerify = true
+
 	if err != nil {
 		return nil, fmt.Errorf("http client options: %w", err)
 	}
