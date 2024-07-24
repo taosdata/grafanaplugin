@@ -11,7 +11,6 @@ import _, {uniqBy} from "lodash";
 // eslint-disable-next-line no-restricted-imports
 import moment from 'moment';
 import axios from 'axios';
-import fs from 'fs';
 import path from "path";
 
 export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
@@ -57,18 +56,15 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
             }
         });
     }
-    readJsonFile(filePath: string): Promise<string> {
+
+    readJsonFile(filePath: string): Promise<any> {
         return new Promise((resolve, reject) => {
-            fs.promises.readFile(filePath, 'utf8')
-                .then((data) => {
-                    data.replace("\"type\":\"tdengine-datasource\",\"uid\":\"__expr__\"", "\"type\":\"tdengine-datasource\",\"uid\":\""+ this.uid +"\"");
-                    data.replace("\"datasourceUid\":\"__expr__\"", "\"datasourceUid\":\""+ this.uid +"\"");
-                    return resolve(data);
-                })
-                .catch((error) => {
-                    console.error('Error reading file:', error);
-                    reject();
-                });
+            fetch(filePath).then(response => {
+                        if (!response.ok) {
+                            reject(`Failed to load JSON file. Status code: ${response.status}`);
+                        }
+                        resolve (response.json());
+                    });
         })
     }
 

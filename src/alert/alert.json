@@ -1,1 +1,1574 @@
-{"apiVersion":1,"groups":[{"orgId":1,"name":"alert","folder":"taos_monitor","interval":"10s","rules":[{"uid":"cdojfesqmz7r4b","title":"grants_expire_time","condition":"C","data":[{"refId":"A","queryType":"SQL","relativeTimeRange":{"from":600,"to":0},"datasourceUid":"__expr__","model":{"colNameToGroup":"cluster_id","formatType":"Time series","intervalMs":1000,"maxDataPoints":43200,"queryType":"SQL","refId":"A","sql":"select _ts, cluster_id, last(grants_expire_time) from log.taosd_cluster_info where _ts \u003e= $from and _ts \u003c= $to partition by cluster_id","timeShiftPeriod":"10","timeShiftUnit":"seconds"}},{"refId":"C","relativeTimeRange":{"from":600,"to":0},"datasourceUid":"__expr__","model":{"conditions":[{"evaluator":{"params":[5],"type":"lt"},"operator":{"type":"and"},"query":{"params":["C"]},"reducer":{"params":[],"type":"last"},"type":"query"}],"datasource":{"type":"__expr__","uid":"__expr__"},"expression":"B","intervalMs":1000,"maxDataPoints":43200,"refId":"C","type":"threshold"}},{"refId":"B","relativeTimeRange":{"from":0,"to":0},"datasourceUid":"__expr__","model":{"conditions":[{"evaluator":{"params":[0,0],"type":"gt"},"operator":{"type":"and"},"query":{"params":[]},"reducer":{"params":[],"type":"avg"},"type":"query"}],"datasource":{"name":"Expression","type":"__expr__","uid":"__expr__"},"expression":"A","intervalMs":1000,"maxDataPoints":43200,"reducer":"last","refId":"B","type":"reduce"}}],"noDataState":"NoData","execErrState":"Error","for":"10s","annotations":{"description":"授权到期前告警","runbook_url":"","summary":"授权到期前告警"},"labels":{"":"","pod":"abnormal"},"isPaused":false,"notification_settings":{"receiver":"feishu"}},{"uid":"cdok2zppn71tse","title":"Disk Used Rate","condition":"C","data":[{"refId":"A","queryType":"SQL","relativeTimeRange":{"from":60,"to":0},"datasourceUid":"__expr__","model":{"alias":"","colNameToGroup":"dnode_ep, data_dir_level, data_dir_name","formatType":"Time series","intervalMs":1000,"maxDataPoints":43200,"queryType":"SQL","refId":"A","sql":"select _wstart as ts, dnode_ep, data_dir_level, data_dir_name, last(used)  / last(total)  as used from log.taosd_dnodes_data_dirs where _ts \u003e= $from and _ts \u003c= $to partition by dnode_ep, data_dir_level, data_dir_name interval($interval) fill(null) ","timeShiftPeriod":"10","timeShiftUnit":"seconds"}},{"refId":"B","relativeTimeRange":{"from":60,"to":0},"datasourceUid":"__expr__","model":{"conditions":[{"evaluator":{"params":[0,0],"type":"gt"},"operator":{"type":"and"},"query":{"params":[]},"reducer":{"params":[],"type":"avg"},"type":"query"}],"datasource":{"name":"Expression","type":"__expr__","uid":"__expr__"},"expression":"A","intervalMs":1000,"maxDataPoints":43200,"reducer":"max","refId":"B","type":"reduce"}},{"refId":"C","relativeTimeRange":{"from":60,"to":0},"datasourceUid":"__expr__","model":{"conditions":[{"evaluator":{"params":[0.8,0],"type":"gt"},"operator":{"type":"and"},"query":{"params":[]},"reducer":{"params":[],"type":"avg"},"type":"query"}],"datasource":{"name":"Expression","type":"__expr__","uid":"__expr__"},"expression":"B","intervalMs":1000,"maxDataPoints":43200,"refId":"C","type":"threshold"}}],"noDataState":"NoData","execErrState":"Error","for":"5m","annotations":{"description":"Disk Used above 80%","summary":"Disk Used above 80%"},"labels":{"pod":"abnormal"},"isPaused":false,"notification_settings":{"receiver":"feishu"}},{"uid":"adom1ca5fdeyoc","title":"Disk IO Alert","condition":"C","data":[{"refId":"A","queryType":"SQL","relativeTimeRange":{"from":60,"to":0},"datasourceUid":"__expr__","model":{"alias":"","colNameFormatStr":"","colNameToGroup":"dnode_ep","datasource":{"type":"tdengine-datasource","uid":"__expr__"},"formatType":"Time series","intervalMs":1000,"maxDataPoints":43200,"queryType":"SQL","refId":"A","sql":"select _wstart as ts, dnode_ep, (last(io_read_disk) + last(io_write_disk)) / 1024 as taosd_io from log.taosd_dnodes_info where _ts \u003e= $from and _ts \u003c= $to partition by dnode_ep interval($interval) fill(null)","timeShiftPeriod":"10","timeShiftUnit":"seconds"}},{"refId":"B","relativeTimeRange":{"from":60,"to":0},"datasourceUid":"__expr__","model":{"conditions":[{"evaluator":{"params":[],"type":"gt"},"operator":{"type":"and"},"query":{"params":["B"]},"reducer":{"params":[],"type":"last"},"type":"query"}],"datasource":{"type":"__expr__","uid":"__expr__"},"expression":"A","intervalMs":1000,"maxDataPoints":43200,"reducer":"last","refId":"B","type":"reduce"}},{"refId":"C","relativeTimeRange":{"from":60,"to":0},"datasourceUid":"__expr__","model":{"conditions":[{"evaluator":{"params":[20000],"type":"gt"},"operator":{"type":"and"},"query":{"params":["C"]},"reducer":{"params":[],"type":"last"},"type":"query"}],"datasource":{"type":"__expr__","uid":"__expr__"},"expression":"B","intervalMs":1000,"maxDataPoints":43200,"refId":"C","type":"threshold"}}],"dasboardUid":"cdoipxyurlekge","panelId":114,"noDataState":"NoData","execErrState":"Error","for":"5m","annotations":{"__dashboardUid__":"cdoipxyurlekge","__panelId__":"114","description":"Disk IO  above 200m/s","summary":"Disk IO  above 200m/s"},"labels":{"pod":"abnormal"},"isPaused":false,"notification_settings":{"receiver":"feishu"}},{"uid":"fdomrhh4yq29sb","title":"CPU Usage","condition":"C","data":[{"refId":"A","queryType":"SQL","relativeTimeRange":{"from":60,"to":0},"datasourceUid":"__expr__","model":{"alias":"","colNameFormatStr":"","colNameToGroup":"dnode_ep","datasource":{"type":"tdengine-datasource","uid":"__expr__"},"formatType":"Time series","intervalMs":1000,"maxDataPoints":43200,"queryType":"SQL","refId":"A","sql":"select _wstart as ts,  dnode_ep, last(cpu_engine) as taosd from log.taosd_dnodes_info where _ts \u003e= $from and _ts \u003c= $to partition by dnode_ep  interval($interval) fill(null)","timeShiftPeriod":"10","timeShiftUnit":"seconds"}},{"refId":"B","relativeTimeRange":{"from":60,"to":0},"datasourceUid":"__expr__","model":{"conditions":[{"evaluator":{"params":[],"type":"gt"},"operator":{"type":"and"},"query":{"params":["B"]},"reducer":{"params":[],"type":"last"},"type":"query"}],"datasource":{"type":"__expr__","uid":"__expr__"},"expression":"A","intervalMs":1000,"maxDataPoints":43200,"reducer":"max","refId":"B","type":"reduce"}},{"refId":"C","relativeTimeRange":{"from":60,"to":0},"datasourceUid":"__expr__","model":{"conditions":[{"evaluator":{"params":[80],"type":"gt"},"operator":{"type":"and"},"query":{"params":["C"]},"reducer":{"params":[],"type":"last"},"type":"query"}],"datasource":{"type":"__expr__","uid":"__expr__"},"expression":"B","intervalMs":1000,"maxDataPoints":43200,"refId":"C","type":"threshold"}}],"dasboardUid":"cdoipxyurlekge","panelId":108,"noDataState":"NoData","execErrState":"Error","for":"5m","annotations":{"__dashboardUid__":"cdoipxyurlekge","__panelId__":"108","description":"Dnode cpu usage is above 80%","summary":"Dnode cpu usage is above 80%"},"labels":{"pod":"abnormal"},"isPaused":false,"notification_settings":{"receiver":"feishu"}},{"uid":"cdomtbs0vaz9cd","title":"RAM Usage","condition":"C","data":[{"refId":"A","queryType":"SQL","relativeTimeRange":{"from":60,"to":0},"datasourceUid":"__expr__","model":{"colNameFormatStr":"","colNameToGroup":"dnode_ep","datasource":{"type":"tdengine-datasource","uid":"__expr__"},"formatType":"Time series","intervalMs":1000,"maxDataPoints":43200,"queryType":"SQL","refId":"A","sql":"select _wstart as ts, dnode_ep, last(mem_engine) / last(mem_total) as taosd from log.taosd_dnodes_info where _ts \u003e= $from and _ts \u003c= $to partition by dnode_ep interval($interval) fill(null)","timeShiftPeriod":"10","timeShiftUnit":"seconds"}},{"refId":"B","relativeTimeRange":{"from":60,"to":0},"datasourceUid":"__expr__","model":{"conditions":[{"evaluator":{"params":[],"type":"gt"},"operator":{"type":"and"},"query":{"params":["B"]},"reducer":{"params":[],"type":"last"},"type":"query"}],"datasource":{"type":"__expr__","uid":"__expr__"},"expression":"A","intervalMs":1000,"maxDataPoints":43200,"reducer":"max","refId":"B","type":"reduce"}},{"refId":"C","relativeTimeRange":{"from":60,"to":0},"datasourceUid":"__expr__","model":{"conditions":[{"evaluator":{"params":[80],"type":"gt"},"operator":{"type":"and"},"query":{"params":["C"]},"reducer":{"params":[],"type":"last"},"type":"query"}],"datasource":{"type":"__expr__","uid":"__expr__"},"expression":"B","intervalMs":1000,"maxDataPoints":43200,"refId":"C","type":"threshold"}}],"dasboardUid":"cdoipxyurlekge","panelId":110,"noDataState":"NoData","execErrState":"Error","for":"5m","annotations":{"__dashboardUid__":"cdoipxyurlekge","__panelId__":"110","description":"RAM usage above 80%","summary":"RAM usage above 80%"},"labels":{"pod":"abnormal"},"isPaused":false,"notification_settings":{"receiver":"feishu"}},{"uid":"fdonb127bpc00d","title":"Inserted Rows","condition":"C","data":[{"refId":"A","queryType":"SQL","relativeTimeRange":{"from":60,"to":0},"datasourceUid":"__expr__","model":{"colNameToGroup":"dnode_ep","datasource":{"type":"tdengine-datasource","uid":"__expr__"},"formatType":"Time series","intervalMs":1000,"maxDataPoints":43200,"queryType":"SQL","refId":"A","sql":"select _wstart as ts, dnode_ep, avg(`count`) as `inserted_rows`  from log.taosd_sql_req where sql_type = 'inserted_rows' and _ts \u003e $from and _ts \u003c= $to partition by dnode_ep interval($interval) fill(null)","timeShiftPeriod":"10","timeShiftUnit":"seconds"}},{"refId":"B","relativeTimeRange":{"from":60,"to":0},"datasourceUid":"__expr__","model":{"conditions":[{"evaluator":{"params":[],"type":"gt"},"operator":{"type":"and"},"query":{"params":["B"]},"reducer":{"params":[],"type":"last"},"type":"query"}],"datasource":{"type":"__expr__","uid":"__expr__"},"expression":"A","intervalMs":1000,"maxDataPoints":43200,"reducer":"last","refId":"B","type":"reduce"}},{"refId":"C","relativeTimeRange":{"from":60,"to":0},"datasourceUid":"__expr__","model":{"conditions":[{"evaluator":{"params":[10000],"type":"gt"},"operator":{"type":"and"},"query":{"params":["C"]},"reducer":{"params":[],"type":"last"},"type":"query"}],"datasource":{"type":"__expr__","uid":"__expr__"},"expression":"B","intervalMs":1000,"maxDataPoints":43200,"refId":"C","type":"threshold"}}],"dasboardUid":"cdoipxyurlekge","panelId":200,"noDataState":"NoData","execErrState":"Error","for":"5m","annotations":{"__dashboardUid__":"cdoipxyurlekge","__panelId__":"200","description":"Inserted Rows above 10000qps","summary":"Inserted Rows above 10000qps"},"labels":{"pod":"abnormal"},"isPaused":false,"notification_settings":{"receiver":"feishu"}},{"uid":"ddopj6ktwwt8gc","title":"Used Measuring Points","condition":"C","data":[{"refId":"A","queryType":"SQL","relativeTimeRange":{"from":600,"to":0},"datasourceUid":"__expr__","model":{"colNameToGroup":"cluster_id","formatType":"Time series","intervalMs":1000,"maxDataPoints":43200,"queryType":"SQL","refId":"A","sql":" select  _wstart as ts, cluster_id,  CASE  WHEN max(grants_timeseries_total)  \u003e 0 THEN max(grants_timeseries_used)  /max(grants_timeseries_total)    ELSE 0    END AS result from log.taosd_cluster_info where _ts \u003e= $from and _ts \u003c= $to partition by cluster_id interval($interval)"}},{"refId":"B","relativeTimeRange":{"from":600,"to":0},"datasourceUid":"__expr__","model":{"conditions":[{"evaluator":{"params":[],"type":"gt"},"operator":{"type":"and"},"query":{"params":["B"]},"reducer":{"params":[],"type":"last"},"type":"query"}],"datasource":{"type":"__expr__","uid":"__expr__"},"expression":"A","intervalMs":1000,"maxDataPoints":43200,"reducer":"last","refId":"B","type":"reduce"}},{"refId":"C","relativeTimeRange":{"from":600,"to":0},"datasourceUid":"__expr__","model":{"conditions":[{"evaluator":{"params":[0.8],"type":"gt"},"operator":{"type":"and"},"query":{"params":["C"]},"reducer":{"params":[],"type":"last"},"type":"query"}],"datasource":{"type":"__expr__","uid":"__expr__"},"expression":"B","intervalMs":1000,"maxDataPoints":43200,"refId":"C","type":"threshold"}}],"noDataState":"NoData","execErrState":"Error","for":"5m","annotations":{"description":"Used Measuring Points above 80%","summary":"Used Measuring Points above 80%"},"labels":{"pod":"abnormal"},"isPaused":false,"notification_settings":{"receiver":"feishu"}},{"uid":"cdopll2fqixhcf","title":"Select Request","condition":"C","data":[{"refId":"A","queryType":"SQL","relativeTimeRange":{"from":1800,"to":0},"datasourceUid":"__expr__","model":{"colNameFormatStr":"","colNameToGroup":"cluster_id","datasource":{"type":"tdengine-datasource","uid":"__expr__"},"formatType":"Time series","intervalMs":1000,"maxDataPoints":43200,"queryType":"SQL","refId":"A","sql":"select _wstart as ts, cluster_id,  avg(`count`) as `select_count`  from log.taos_sql_req where sql_type = 'select' and _ts \u003e= $from and _ts \u003c= $to partition by cluster_id interval(30s) fill(null)","timeShiftPeriod":"10","timeShiftUnit":"seconds"}},{"refId":"B","relativeTimeRange":{"from":1800,"to":0},"datasourceUid":"__expr__","model":{"conditions":[{"evaluator":{"params":[],"type":"gt"},"operator":{"type":"and"},"query":{"params":["B"]},"reducer":{"params":[],"type":"last"},"type":"query"}],"datasource":{"type":"__expr__","uid":"__expr__"},"expression":"A","intervalMs":1000,"maxDataPoints":43200,"reducer":"last","refId":"B","type":"reduce"}},{"refId":"C","relativeTimeRange":{"from":1800,"to":0},"datasourceUid":"__expr__","model":{"conditions":[{"evaluator":{"params":[1000],"type":"gt"},"operator":{"type":"and"},"query":{"params":["C"]},"reducer":{"params":[],"type":"last"},"type":"query"}],"datasource":{"type":"__expr__","uid":"__expr__"},"expression":"B","intervalMs":1000,"maxDataPoints":43200,"refId":"C","type":"threshold"}}],"dasboardUid":"cdoipxyurlekge","panelId":140,"noDataState":"NoData","execErrState":"Error","for":"5m","annotations":{"__dashboardUid__":"cdoipxyurlekge","__panelId__":"140","description":"Select Request above 1000/s","summary":"Select Request above 1000/s"},"labels":{"pod":"abnormal"},"isPaused":false,"notification_settings":{"receiver":"feishu"}},{"uid":"adoplu11cxssga","title":"Insert Request","condition":"C","data":[{"refId":"A","queryType":"SQL","relativeTimeRange":{"from":1800,"to":0},"datasourceUid":"__expr__","model":{"colNameFormatStr":"","colNameToGroup":"cluster_id","datasource":{"type":"tdengine-datasource","uid":"__expr__"},"formatType":"Time series","intervalMs":1000,"maxDataPoints":43200,"queryType":"SQL","refId":"A","sql":"select _wstart as ts, cluster_id,  avg(`count`) as `insert_count`  from log.taos_sql_req where sql_type = 'insert' and _ts \u003e= $from and _ts \u003c= $to partition by cluster_id interval(30s) fill(null)"}},{"refId":"B","relativeTimeRange":{"from":1800,"to":0},"datasourceUid":"__expr__","model":{"conditions":[{"evaluator":{"params":[],"type":"gt"},"operator":{"type":"and"},"query":{"params":["B"]},"reducer":{"params":[],"type":"last"},"type":"query"}],"datasource":{"type":"__expr__","uid":"__expr__"},"expression":"A","intervalMs":1000,"maxDataPoints":43200,"reducer":"last","refId":"B","type":"reduce"}},{"refId":"C","relativeTimeRange":{"from":1800,"to":0},"datasourceUid":"__expr__","model":{"conditions":[{"evaluator":{"params":[10000],"type":"gt"},"operator":{"type":"and"},"query":{"params":["C"]},"reducer":{"params":[],"type":"last"},"type":"query"}],"datasource":{"type":"__expr__","uid":"__expr__"},"expression":"B","intervalMs":1000,"maxDataPoints":43200,"refId":"C","type":"threshold"}}],"dasboardUid":"cdoipxyurlekge","panelId":156,"noDataState":"NoData","execErrState":"Error","for":"5m","annotations":{"__dashboardUid__":"cdoipxyurlekge","__panelId__":"156","description":"Insert Request above 10000/s","summary":"Insert Request above 10000/s"},"labels":{"pod":"abnormal"},"isPaused":false,"notification_settings":{"receiver":"feishu"}},{"uid":"adoqcbuv1ov0ge","title":"Net In","condition":"C","data":[{"refId":"A","queryType":"SQL","relativeTimeRange":{"from":60,"to":0},"datasourceUid":"__expr__","model":{"colNameFormatStr":"","colNameToGroup":"dnode_ep","datasource":{"type":"tdengine-datasource","uid":"__expr__"},"formatType":"Time series","intervalMs":1000,"maxDataPoints":43200,"queryType":"SQL","refId":"A","sql":"select _wstart as ts, dnode_ep, avg(system_net_in) as system_net_in from log.taosd_dnodes_info where _ts \u003e= $from and _ts \u003c= $to partition by dnode_ep  interval($interval) fill(null)","timeShiftPeriod":"10","timeShiftUnit":"seconds"}},{"refId":"B","relativeTimeRange":{"from":60,"to":0},"datasourceUid":"__expr__","model":{"conditions":[{"evaluator":{"params":[],"type":"gt"},"operator":{"type":"and"},"query":{"params":["B"]},"reducer":{"params":[],"type":"last"},"type":"query"}],"datasource":{"type":"__expr__","uid":"__expr__"},"expression":"A","intervalMs":1000,"maxDataPoints":43200,"reducer":"max","refId":"B","type":"reduce"}},{"refId":"C","relativeTimeRange":{"from":60,"to":0},"datasourceUid":"__expr__","model":{"conditions":[{"evaluator":{"params":[500000000],"type":"gt"},"operator":{"type":"and"},"query":{"params":["C"]},"reducer":{"params":[],"type":"last"},"type":"query"}],"datasource":{"type":"__expr__","uid":"__expr__"},"expression":"B","intervalMs":1000,"maxDataPoints":43200,"refId":"C","type":"threshold"}}],"dasboardUid":"cdoipxyurlekge","panelId":116,"noDataState":"NoData","execErrState":"Error","for":"5m","annotations":{"__dashboardUid__":"cdoipxyurlekge","__panelId__":"116","description":"Net In above 500M/s","summary":"Net In above 500M/s"},"labels":{"pod":"abnormal"},"isPaused":false,"notification_settings":{"receiver":"feishu"}},{"uid":"cdoqcq7jd3jswe","title":"Net  out","condition":"C","data":[{"refId":"A","queryType":"SQL","relativeTimeRange":{"from":60,"to":0},"datasourceUid":"__expr__","model":{"colNameFormatStr":"","colNameToGroup":"dnode_ep","datasource":{"type":"tdengine-datasource","uid":"__expr__"},"formatType":"Time series","intervalMs":1000,"maxDataPoints":43200,"queryType":"SQL","refId":"A","sql":"select _wstart as ts, dnode_ep, avg(system_net_out) as system_net_out from log.taosd_dnodes_info where _ts \u003e= $from and _ts \u003c= $to partition by dnode_ep interval($interval) fill(null)","timeShiftPeriod":"10","timeShiftUnit":"seconds"}},{"refId":"B","relativeTimeRange":{"from":60,"to":0},"datasourceUid":"__expr__","model":{"conditions":[{"evaluator":{"params":[],"type":"gt"},"operator":{"type":"and"},"query":{"params":["B"]},"reducer":{"params":[],"type":"last"},"type":"query"}],"datasource":{"type":"__expr__","uid":"__expr__"},"expression":"A","intervalMs":1000,"maxDataPoints":43200,"reducer":"max","refId":"B","type":"reduce"}},{"refId":"C","relativeTimeRange":{"from":60,"to":0},"datasourceUid":"__expr__","model":{"conditions":[{"evaluator":{"params":[500000000],"type":"gt"},"operator":{"type":"and"},"query":{"params":["C"]},"reducer":{"params":[],"type":"last"},"type":"query"}],"datasource":{"type":"__expr__","uid":"__expr__"},"expression":"B","intervalMs":1000,"maxDataPoints":43200,"refId":"C","type":"threshold"}}],"dasboardUid":"cdoipxyurlekge","panelId":116,"noDataState":"NoData","execErrState":"Error","for":"5m","annotations":{"__dashboardUid__":"cdoipxyurlekge","__panelId__":"116","description":"Net out above 500M/S","summary":"Net out above 500M/S"},"labels":{"pod":"abnormal"},"isPaused":false,"notification_settings":{"receiver":"feishu"}},{"uid":"fdoqekua0bzeof","title":"Show Query","condition":"C","data":[{"refId":"A","queryType":"SQL","relativeTimeRange":{"from":600,"to":0},"datasourceUid":"__expr__","model":{"formatType":"Time series","intervalMs":1000,"maxDataPoints":43200,"queryType":"SQL","refId":"A","sql":"select create_time as ts, exec_usec/1000 as cost_ms from performance_schema.perf_queries where create_time \u003e= $from and create_time \u003c= $to"}},{"refId":"B","relativeTimeRange":{"from":600,"to":0},"datasourceUid":"__expr__","model":{"conditions":[{"evaluator":{"params":[],"type":"gt"},"operator":{"type":"and"},"query":{"params":["B"]},"reducer":{"params":[],"type":"last"},"type":"query"}],"datasource":{"type":"__expr__","uid":"__expr__"},"expression":"A","intervalMs":1000,"maxDataPoints":43200,"reducer":"max","refId":"B","type":"reduce"}},{"refId":"C","relativeTimeRange":{"from":600,"to":0},"datasourceUid":"__expr__","model":{"conditions":[{"evaluator":{"params":[5000],"type":"gt"},"operator":{"type":"and"},"query":{"params":["C"]},"reducer":{"params":[],"type":"last"},"type":"query"}],"datasource":{"type":"__expr__","uid":"__expr__"},"expression":"B","intervalMs":1000,"maxDataPoints":43200,"refId":"C","type":"threshold"}}],"noDataState":"NoData","execErrState":"Error","for":"10m","annotations":{"description":"Show Query above 5s","summary":"Show Query above 5s"},"labels":{"pod":"abnormal"},"isPaused":false,"notification_settings":{"receiver":"feishu"}}]}]}
+{
+    "apiVersion": 1,
+    "groups": [
+        {
+            "orgId": 1,
+            "name": "alert",
+            "folder": "taos_monitor",
+            "interval": "10s",
+            "rules": [
+                {
+                    "uid": "cdojfesqmz7r4b",
+                    "title": "grants_expire_time",
+                    "condition": "C",
+                    "data": [
+                        {
+                            "refId": "A",
+                            "queryType": "SQL",
+                            "relativeTimeRange": {
+                                "from": 600,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "colNameToGroup": "cluster_id",
+                                "formatType": "Time series",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "queryType": "SQL",
+                                "refId": "A",
+                                "sql": "select _ts, cluster_id, last(grants_expire_time) from log.taosd_cluster_info where _ts \u003e= $from and _ts \u003c= $to partition by cluster_id",
+                                "timeShiftPeriod": "10",
+                                "timeShiftUnit": "seconds"
+                            }
+                        },
+                        {
+                            "refId": "C",
+                            "relativeTimeRange": {
+                                "from": 600,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [
+                                                5
+                                            ],
+                                            "type": "lt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": [
+                                                "C"
+                                            ]
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "last"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "B",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "refId": "C",
+                                "type": "threshold"
+                            }
+                        },
+                        {
+                            "refId": "B",
+                            "relativeTimeRange": {
+                                "from": 0,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [
+                                                0,
+                                                0
+                                            ],
+                                            "type": "gt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": []
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "avg"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "name": "Expression",
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "A",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "reducer": "last",
+                                "refId": "B",
+                                "type": "reduce"
+                            }
+                        }
+                    ],
+                    "noDataState": "NoData",
+                    "execErrState": "Error",
+                    "for": "10s",
+                    "annotations": {
+                        "description": "授权到期前告警",
+                        "runbook_url": "",
+                        "summary": "授权到期前告警"
+                    },
+                    "labels": {
+                        "": "",
+                        "pod": "abnormal"
+                    },
+                    "isPaused": false,
+                    "notification_settings": {
+                        "receiver": "feishu"
+                    }
+                },
+                {
+                    "uid": "cdok2zppn71tse",
+                    "title": "Disk Used Rate",
+                    "condition": "C",
+                    "data": [
+                        {
+                            "refId": "A",
+                            "queryType": "SQL",
+                            "relativeTimeRange": {
+                                "from": 60,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "alias": "",
+                                "colNameToGroup": "dnode_ep, data_dir_level, data_dir_name",
+                                "formatType": "Time series",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "queryType": "SQL",
+                                "refId": "A",
+                                "sql": "select _wstart as ts, dnode_ep, data_dir_level, data_dir_name, last(used)  / last(total)  as used from log.taosd_dnodes_data_dirs where _ts \u003e= $from and _ts \u003c= $to partition by dnode_ep, data_dir_level, data_dir_name interval($interval) fill(null) ",
+                                "timeShiftPeriod": "10",
+                                "timeShiftUnit": "seconds"
+                            }
+                        },
+                        {
+                            "refId": "B",
+                            "relativeTimeRange": {
+                                "from": 60,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [
+                                                0,
+                                                0
+                                            ],
+                                            "type": "gt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": []
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "avg"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "name": "Expression",
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "A",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "reducer": "max",
+                                "refId": "B",
+                                "type": "reduce"
+                            }
+                        },
+                        {
+                            "refId": "C",
+                            "relativeTimeRange": {
+                                "from": 60,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [
+                                                0.8,
+                                                0
+                                            ],
+                                            "type": "gt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": []
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "avg"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "name": "Expression",
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "B",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "refId": "C",
+                                "type": "threshold"
+                            }
+                        }
+                    ],
+                    "noDataState": "NoData",
+                    "execErrState": "Error",
+                    "for": "5m",
+                    "annotations": {
+                        "description": "Disk Used above 80%",
+                        "summary": "Disk Used above 80%"
+                    },
+                    "labels": {
+                        "pod": "abnormal"
+                    },
+                    "isPaused": false,
+                    "notification_settings": {
+                        "receiver": "feishu"
+                    }
+                },
+                {
+                    "uid": "adom1ca5fdeyoc",
+                    "title": "Disk IO Alert",
+                    "condition": "C",
+                    "data": [
+                        {
+                            "refId": "A",
+                            "queryType": "SQL",
+                            "relativeTimeRange": {
+                                "from": 60,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "alias": "",
+                                "colNameFormatStr": "",
+                                "colNameToGroup": "dnode_ep",
+                                "datasource": {
+                                    "type": "tdengine-datasource",
+                                    "uid": "__expr__"
+                                },
+                                "formatType": "Time series",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "queryType": "SQL",
+                                "refId": "A",
+                                "sql": "select _wstart as ts, dnode_ep, (last(io_read_disk) + last(io_write_disk)) / 1024 as taosd_io from log.taosd_dnodes_info where _ts \u003e= $from and _ts \u003c= $to partition by dnode_ep interval($interval) fill(null)",
+                                "timeShiftPeriod": "10",
+                                "timeShiftUnit": "seconds"
+                            }
+                        },
+                        {
+                            "refId": "B",
+                            "relativeTimeRange": {
+                                "from": 60,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [],
+                                            "type": "gt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": [
+                                                "B"
+                                            ]
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "last"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "A",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "reducer": "last",
+                                "refId": "B",
+                                "type": "reduce"
+                            }
+                        },
+                        {
+                            "refId": "C",
+                            "relativeTimeRange": {
+                                "from": 60,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [
+                                                20000
+                                            ],
+                                            "type": "gt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": [
+                                                "C"
+                                            ]
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "last"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "B",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "refId": "C",
+                                "type": "threshold"
+                            }
+                        }
+                    ],
+                    "dasboardUid": "cdoipxyurlekge",
+                    "panelId": 114,
+                    "noDataState": "NoData",
+                    "execErrState": "Error",
+                    "for": "5m",
+                    "annotations": {
+                        "__dashboardUid__": "cdoipxyurlekge",
+                        "__panelId__": "114",
+                        "description": "Disk IO  above 200m/s",
+                        "summary": "Disk IO  above 200m/s"
+                    },
+                    "labels": {
+                        "pod": "abnormal"
+                    },
+                    "isPaused": false,
+                    "notification_settings": {
+                        "receiver": "feishu"
+                    }
+                },
+                {
+                    "uid": "fdomrhh4yq29sb",
+                    "title": "CPU Usage",
+                    "condition": "C",
+                    "data": [
+                        {
+                            "refId": "A",
+                            "queryType": "SQL",
+                            "relativeTimeRange": {
+                                "from": 60,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "alias": "",
+                                "colNameFormatStr": "",
+                                "colNameToGroup": "dnode_ep",
+                                "datasource": {
+                                    "type": "tdengine-datasource",
+                                    "uid": "__expr__"
+                                },
+                                "formatType": "Time series",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "queryType": "SQL",
+                                "refId": "A",
+                                "sql": "select _wstart as ts,  dnode_ep, last(cpu_engine) as taosd from log.taosd_dnodes_info where _ts \u003e= $from and _ts \u003c= $to partition by dnode_ep  interval($interval) fill(null)",
+                                "timeShiftPeriod": "10",
+                                "timeShiftUnit": "seconds"
+                            }
+                        },
+                        {
+                            "refId": "B",
+                            "relativeTimeRange": {
+                                "from": 60,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [],
+                                            "type": "gt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": [
+                                                "B"
+                                            ]
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "last"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "A",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "reducer": "max",
+                                "refId": "B",
+                                "type": "reduce"
+                            }
+                        },
+                        {
+                            "refId": "C",
+                            "relativeTimeRange": {
+                                "from": 60,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [
+                                                80
+                                            ],
+                                            "type": "gt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": [
+                                                "C"
+                                            ]
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "last"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "B",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "refId": "C",
+                                "type": "threshold"
+                            }
+                        }
+                    ],
+                    "dasboardUid": "cdoipxyurlekge",
+                    "panelId": 108,
+                    "noDataState": "NoData",
+                    "execErrState": "Error",
+                    "for": "5m",
+                    "annotations": {
+                        "__dashboardUid__": "cdoipxyurlekge",
+                        "__panelId__": "108",
+                        "description": "Dnode cpu usage is above 80%",
+                        "summary": "Dnode cpu usage is above 80%"
+                    },
+                    "labels": {
+                        "pod": "abnormal"
+                    },
+                    "isPaused": false,
+                    "notification_settings": {
+                        "receiver": "feishu"
+                    }
+                },
+                {
+                    "uid": "cdomtbs0vaz9cd",
+                    "title": "RAM Usage",
+                    "condition": "C",
+                    "data": [
+                        {
+                            "refId": "A",
+                            "queryType": "SQL",
+                            "relativeTimeRange": {
+                                "from": 60,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "colNameFormatStr": "",
+                                "colNameToGroup": "dnode_ep",
+                                "datasource": {
+                                    "type": "tdengine-datasource",
+                                    "uid": "__expr__"
+                                },
+                                "formatType": "Time series",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "queryType": "SQL",
+                                "refId": "A",
+                                "sql": "select _wstart as ts, dnode_ep, last(mem_engine) / last(mem_total) as taosd from log.taosd_dnodes_info where _ts \u003e= $from and _ts \u003c= $to partition by dnode_ep interval($interval) fill(null)",
+                                "timeShiftPeriod": "10",
+                                "timeShiftUnit": "seconds"
+                            }
+                        },
+                        {
+                            "refId": "B",
+                            "relativeTimeRange": {
+                                "from": 60,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [],
+                                            "type": "gt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": [
+                                                "B"
+                                            ]
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "last"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "A",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "reducer": "max",
+                                "refId": "B",
+                                "type": "reduce"
+                            }
+                        },
+                        {
+                            "refId": "C",
+                            "relativeTimeRange": {
+                                "from": 60,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [
+                                                80
+                                            ],
+                                            "type": "gt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": [
+                                                "C"
+                                            ]
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "last"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "B",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "refId": "C",
+                                "type": "threshold"
+                            }
+                        }
+                    ],
+                    "dasboardUid": "cdoipxyurlekge",
+                    "panelId": 110,
+                    "noDataState": "NoData",
+                    "execErrState": "Error",
+                    "for": "5m",
+                    "annotations": {
+                        "__dashboardUid__": "cdoipxyurlekge",
+                        "__panelId__": "110",
+                        "description": "RAM usage above 80%",
+                        "summary": "RAM usage above 80%"
+                    },
+                    "labels": {
+                        "pod": "abnormal"
+                    },
+                    "isPaused": false,
+                    "notification_settings": {
+                        "receiver": "feishu"
+                    }
+                },
+                {
+                    "uid": "fdonb127bpc00d",
+                    "title": "Inserted Rows",
+                    "condition": "C",
+                    "data": [
+                        {
+                            "refId": "A",
+                            "queryType": "SQL",
+                            "relativeTimeRange": {
+                                "from": 60,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "colNameToGroup": "dnode_ep",
+                                "datasource": {
+                                    "type": "tdengine-datasource",
+                                    "uid": "__expr__"
+                                },
+                                "formatType": "Time series",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "queryType": "SQL",
+                                "refId": "A",
+                                "sql": "select _wstart as ts, dnode_ep, avg(`count`) as `inserted_rows`  from log.taosd_sql_req where sql_type = 'inserted_rows' and _ts \u003e $from and _ts \u003c= $to partition by dnode_ep interval($interval) fill(null)",
+                                "timeShiftPeriod": "10",
+                                "timeShiftUnit": "seconds"
+                            }
+                        },
+                        {
+                            "refId": "B",
+                            "relativeTimeRange": {
+                                "from": 60,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [],
+                                            "type": "gt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": [
+                                                "B"
+                                            ]
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "last"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "A",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "reducer": "last",
+                                "refId": "B",
+                                "type": "reduce"
+                            }
+                        },
+                        {
+                            "refId": "C",
+                            "relativeTimeRange": {
+                                "from": 60,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [
+                                                10000
+                                            ],
+                                            "type": "gt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": [
+                                                "C"
+                                            ]
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "last"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "B",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "refId": "C",
+                                "type": "threshold"
+                            }
+                        }
+                    ],
+                    "dasboardUid": "cdoipxyurlekge",
+                    "panelId": 200,
+                    "noDataState": "NoData",
+                    "execErrState": "Error",
+                    "for": "5m",
+                    "annotations": {
+                        "__dashboardUid__": "cdoipxyurlekge",
+                        "__panelId__": "200",
+                        "description": "Inserted Rows above 10000qps",
+                        "summary": "Inserted Rows above 10000qps"
+                    },
+                    "labels": {
+                        "pod": "abnormal"
+                    },
+                    "isPaused": false,
+                    "notification_settings": {
+                        "receiver": "feishu"
+                    }
+                },
+                {
+                    "uid": "ddopj6ktwwt8gc",
+                    "title": "Used Measuring Points",
+                    "condition": "C",
+                    "data": [
+                        {
+                            "refId": "A",
+                            "queryType": "SQL",
+                            "relativeTimeRange": {
+                                "from": 600,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "colNameToGroup": "cluster_id",
+                                "formatType": "Time series",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "queryType": "SQL",
+                                "refId": "A",
+                                "sql": " select  _wstart as ts, cluster_id,  CASE  WHEN max(grants_timeseries_total)  \u003e 0 THEN max(grants_timeseries_used)  /max(grants_timeseries_total)    ELSE 0    END AS result from log.taosd_cluster_info where _ts \u003e= $from and _ts \u003c= $to partition by cluster_id interval($interval)"
+                            }
+                        },
+                        {
+                            "refId": "B",
+                            "relativeTimeRange": {
+                                "from": 600,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [],
+                                            "type": "gt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": [
+                                                "B"
+                                            ]
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "last"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "A",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "reducer": "last",
+                                "refId": "B",
+                                "type": "reduce"
+                            }
+                        },
+                        {
+                            "refId": "C",
+                            "relativeTimeRange": {
+                                "from": 600,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [
+                                                0.8
+                                            ],
+                                            "type": "gt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": [
+                                                "C"
+                                            ]
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "last"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "B",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "refId": "C",
+                                "type": "threshold"
+                            }
+                        }
+                    ],
+                    "noDataState": "NoData",
+                    "execErrState": "Error",
+                    "for": "5m",
+                    "annotations": {
+                        "description": "Used Measuring Points above 80%",
+                        "summary": "Used Measuring Points above 80%"
+                    },
+                    "labels": {
+                        "pod": "abnormal"
+                    },
+                    "isPaused": false,
+                    "notification_settings": {
+                        "receiver": "feishu"
+                    }
+                },
+                {
+                    "uid": "cdopll2fqixhcf",
+                    "title": "Select Request",
+                    "condition": "C",
+                    "data": [
+                        {
+                            "refId": "A",
+                            "queryType": "SQL",
+                            "relativeTimeRange": {
+                                "from": 1800,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "colNameFormatStr": "",
+                                "colNameToGroup": "cluster_id",
+                                "datasource": {
+                                    "type": "tdengine-datasource",
+                                    "uid": "__expr__"
+                                },
+                                "formatType": "Time series",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "queryType": "SQL",
+                                "refId": "A",
+                                "sql": "select _wstart as ts, cluster_id,  avg(`count`) as `select_count`  from log.taos_sql_req where sql_type = 'select' and _ts \u003e= $from and _ts \u003c= $to partition by cluster_id interval(30s) fill(null)",
+                                "timeShiftPeriod": "10",
+                                "timeShiftUnit": "seconds"
+                            }
+                        },
+                        {
+                            "refId": "B",
+                            "relativeTimeRange": {
+                                "from": 1800,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [],
+                                            "type": "gt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": [
+                                                "B"
+                                            ]
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "last"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "A",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "reducer": "last",
+                                "refId": "B",
+                                "type": "reduce"
+                            }
+                        },
+                        {
+                            "refId": "C",
+                            "relativeTimeRange": {
+                                "from": 1800,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [
+                                                1000
+                                            ],
+                                            "type": "gt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": [
+                                                "C"
+                                            ]
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "last"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "B",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "refId": "C",
+                                "type": "threshold"
+                            }
+                        }
+                    ],
+                    "dasboardUid": "cdoipxyurlekge",
+                    "panelId": 140,
+                    "noDataState": "NoData",
+                    "execErrState": "Error",
+                    "for": "5m",
+                    "annotations": {
+                        "__dashboardUid__": "cdoipxyurlekge",
+                        "__panelId__": "140",
+                        "description": "Select Request above 1000/s",
+                        "summary": "Select Request above 1000/s"
+                    },
+                    "labels": {
+                        "pod": "abnormal"
+                    },
+                    "isPaused": false,
+                    "notification_settings": {
+                        "receiver": "feishu"
+                    }
+                },
+                {
+                    "uid": "adoplu11cxssga",
+                    "title": "Insert Request",
+                    "condition": "C",
+                    "data": [
+                        {
+                            "refId": "A",
+                            "queryType": "SQL",
+                            "relativeTimeRange": {
+                                "from": 1800,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "colNameFormatStr": "",
+                                "colNameToGroup": "cluster_id",
+                                "datasource": {
+                                    "type": "tdengine-datasource",
+                                    "uid": "__expr__"
+                                },
+                                "formatType": "Time series",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "queryType": "SQL",
+                                "refId": "A",
+                                "sql": "select _wstart as ts, cluster_id,  avg(`count`) as `insert_count`  from log.taos_sql_req where sql_type = 'insert' and _ts \u003e= $from and _ts \u003c= $to partition by cluster_id interval(30s) fill(null)"
+                            }
+                        },
+                        {
+                            "refId": "B",
+                            "relativeTimeRange": {
+                                "from": 1800,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [],
+                                            "type": "gt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": [
+                                                "B"
+                                            ]
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "last"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "A",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "reducer": "last",
+                                "refId": "B",
+                                "type": "reduce"
+                            }
+                        },
+                        {
+                            "refId": "C",
+                            "relativeTimeRange": {
+                                "from": 1800,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [
+                                                10000
+                                            ],
+                                            "type": "gt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": [
+                                                "C"
+                                            ]
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "last"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "B",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "refId": "C",
+                                "type": "threshold"
+                            }
+                        }
+                    ],
+                    "dasboardUid": "cdoipxyurlekge",
+                    "panelId": 156,
+                    "noDataState": "NoData",
+                    "execErrState": "Error",
+                    "for": "5m",
+                    "annotations": {
+                        "__dashboardUid__": "cdoipxyurlekge",
+                        "__panelId__": "156",
+                        "description": "Insert Request above 10000/s",
+                        "summary": "Insert Request above 10000/s"
+                    },
+                    "labels": {
+                        "pod": "abnormal"
+                    },
+                    "isPaused": false,
+                    "notification_settings": {
+                        "receiver": "feishu"
+                    }
+                },
+                {
+                    "uid": "adoqcbuv1ov0ge",
+                    "title": "Net In",
+                    "condition": "C",
+                    "data": [
+                        {
+                            "refId": "A",
+                            "queryType": "SQL",
+                            "relativeTimeRange": {
+                                "from": 60,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "colNameFormatStr": "",
+                                "colNameToGroup": "dnode_ep",
+                                "datasource": {
+                                    "type": "tdengine-datasource",
+                                    "uid": "__expr__"
+                                },
+                                "formatType": "Time series",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "queryType": "SQL",
+                                "refId": "A",
+                                "sql": "select _wstart as ts, dnode_ep, avg(system_net_in) as system_net_in from log.taosd_dnodes_info where _ts \u003e= $from and _ts \u003c= $to partition by dnode_ep  interval($interval) fill(null)",
+                                "timeShiftPeriod": "10",
+                                "timeShiftUnit": "seconds"
+                            }
+                        },
+                        {
+                            "refId": "B",
+                            "relativeTimeRange": {
+                                "from": 60,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [],
+                                            "type": "gt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": [
+                                                "B"
+                                            ]
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "last"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "A",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "reducer": "max",
+                                "refId": "B",
+                                "type": "reduce"
+                            }
+                        },
+                        {
+                            "refId": "C",
+                            "relativeTimeRange": {
+                                "from": 60,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [
+                                                500000000
+                                            ],
+                                            "type": "gt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": [
+                                                "C"
+                                            ]
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "last"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "B",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "refId": "C",
+                                "type": "threshold"
+                            }
+                        }
+                    ],
+                    "dasboardUid": "cdoipxyurlekge",
+                    "panelId": 116,
+                    "noDataState": "NoData",
+                    "execErrState": "Error",
+                    "for": "5m",
+                    "annotations": {
+                        "__dashboardUid__": "cdoipxyurlekge",
+                        "__panelId__": "116",
+                        "description": "Net In above 500M/s",
+                        "summary": "Net In above 500M/s"
+                    },
+                    "labels": {
+                        "pod": "abnormal"
+                    },
+                    "isPaused": false,
+                    "notification_settings": {
+                        "receiver": "feishu"
+                    }
+                },
+                {
+                    "uid": "cdoqcq7jd3jswe",
+                    "title": "Net  out",
+                    "condition": "C",
+                    "data": [
+                        {
+                            "refId": "A",
+                            "queryType": "SQL",
+                            "relativeTimeRange": {
+                                "from": 60,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "colNameFormatStr": "",
+                                "colNameToGroup": "dnode_ep",
+                                "datasource": {
+                                    "type": "tdengine-datasource",
+                                    "uid": "__expr__"
+                                },
+                                "formatType": "Time series",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "queryType": "SQL",
+                                "refId": "A",
+                                "sql": "select _wstart as ts, dnode_ep, avg(system_net_out) as system_net_out from log.taosd_dnodes_info where _ts \u003e= $from and _ts \u003c= $to partition by dnode_ep interval($interval) fill(null)",
+                                "timeShiftPeriod": "10",
+                                "timeShiftUnit": "seconds"
+                            }
+                        },
+                        {
+                            "refId": "B",
+                            "relativeTimeRange": {
+                                "from": 60,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [],
+                                            "type": "gt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": [
+                                                "B"
+                                            ]
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "last"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "A",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "reducer": "max",
+                                "refId": "B",
+                                "type": "reduce"
+                            }
+                        },
+                        {
+                            "refId": "C",
+                            "relativeTimeRange": {
+                                "from": 60,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [
+                                                500000000
+                                            ],
+                                            "type": "gt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": [
+                                                "C"
+                                            ]
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "last"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "B",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "refId": "C",
+                                "type": "threshold"
+                            }
+                        }
+                    ],
+                    "dasboardUid": "cdoipxyurlekge",
+                    "panelId": 116,
+                    "noDataState": "NoData",
+                    "execErrState": "Error",
+                    "for": "5m",
+                    "annotations": {
+                        "__dashboardUid__": "cdoipxyurlekge",
+                        "__panelId__": "116",
+                        "description": "Net out above 500M/S",
+                        "summary": "Net out above 500M/S"
+                    },
+                    "labels": {
+                        "pod": "abnormal"
+                    },
+                    "isPaused": false,
+                    "notification_settings": {
+                        "receiver": "feishu"
+                    }
+                },
+                {
+                    "uid": "fdoqekua0bzeof",
+                    "title": "Show Query",
+                    "condition": "C",
+                    "data": [
+                        {
+                            "refId": "A",
+                            "queryType": "SQL",
+                            "relativeTimeRange": {
+                                "from": 600,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "formatType": "Time series",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "queryType": "SQL",
+                                "refId": "A",
+                                "sql": "select create_time as ts, exec_usec/1000 as cost_ms from performance_schema.perf_queries where create_time \u003e= $from and create_time \u003c= $to"
+                            }
+                        },
+                        {
+                            "refId": "B",
+                            "relativeTimeRange": {
+                                "from": 600,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [],
+                                            "type": "gt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": [
+                                                "B"
+                                            ]
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "last"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "A",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "reducer": "max",
+                                "refId": "B",
+                                "type": "reduce"
+                            }
+                        },
+                        {
+                            "refId": "C",
+                            "relativeTimeRange": {
+                                "from": 600,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [
+                                                5000
+                                            ],
+                                            "type": "gt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": [
+                                                "C"
+                                            ]
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "last"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "B",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "refId": "C",
+                                "type": "threshold"
+                            }
+                        }
+                    ],
+                    "noDataState": "NoData",
+                    "execErrState": "Error",
+                    "for": "10m",
+                    "annotations": {
+                        "description": "Show Query above 5s",
+                        "summary": "Show Query above 5s"
+                    },
+                    "labels": {
+                        "pod": "abnormal"
+                    },
+                    "isPaused": false,
+                    "notification_settings": {
+                        "receiver": "feishu"
+                    }
+                }
+            ]
+        }
+    ]
+}
