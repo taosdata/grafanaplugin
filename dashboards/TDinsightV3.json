@@ -4565,7 +4565,7 @@
             "handler": 1,
             "message": "Used Measuring Points above 80%",
             "name": "Used Measuring Points alert",
-            "noDataState": "no_data",
+            "noDataState": "alerting",
             "notifications": []
           },
           "aliasColors": {},
