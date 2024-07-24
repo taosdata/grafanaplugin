@@ -3655,34 +3655,37 @@
         "y": 30
       },
       "id": 202,
-      "panels": [{
+      "panels": [
+        {
           "alert": {
             "alertRuleTags": {
               "cluster_id": "${cluster_id}"
             },
-            "conditions": [{
-              "evaluator": {
-                "params": [
-                  0
-                ],
-                "type": "lt"
-              },
-              "operator": {
-                "type": "and"
-              },
-              "query": {
-                "params": [
-                  "A",
-                  "5m",
-                  "now"
-                ]
-              },
-              "reducer": {
-                "params": [],
-                "type": "last"
-              },
-              "type": "query"
-            }],
+            "conditions": [
+              {
+                "evaluator": {
+                  "params": [
+                    0
+                  ],
+                  "type": "lt"
+                },
+                "operator": {
+                  "type": "and"
+                },
+                "query": {
+                  "params": [
+                    "A",
+                    "5m",
+                    "now"
+                  ]
+                },
+                "reducer": {
+                  "params": [],
+                  "type": "last"
+                },
+                "type": "query"
+              }
+            ],
             "executionErrorState": "alerting",
             "for": "0m",
             "frequency": "10s",
@@ -3736,23 +3739,27 @@
           "spaceLength": 10,
           "stack": false,
           "steppedLine": false,
-          "targets": [{
-            "alias": "",
-            "colNameFormatStr": "",
-            "colNameToGroup": "cluster_id",
-            "formatType": "Time series",
-            "queryType": "SQL",
-            "refId": "A",
-            "sql": "select _wstart as ts,  cluster_id, last(dnodes_total)  - last(dnodes_alive) as dnode_offline  from log.taosd_cluster_info where _ts >= $from and _ts <= $to partition by cluster_id interval(30s) fill(null)"
-          }],
-          "thresholds": [{
-            "colorMode": "critical",
-            "fill": true,
-            "line": true,
-            "op": "lt",
-            "value": 0,
-            "visible": true
-          }],
+          "targets": [
+            {
+              "alias": "",
+              "colNameFormatStr": "",
+              "colNameToGroup": "cluster_id",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select _wstart as ts,  cluster_id, last(dnodes_total)  - last(dnodes_alive) as dnode_offline  from log.taosd_cluster_info where _ts >= $from and _ts <= $to partition by cluster_id interval(30s) fill(null)"
+            }
+          ],
+          "thresholds": [
+            {
+              "colorMode": "critical",
+              "fill": true,
+              "line": true,
+              "op": "gt",
+              "value": 0,
+              "visible": true
+            }
+          ],
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
@@ -3770,7 +3777,8 @@
             "show": true,
             "values": []
           },
-          "yaxes": [{
+          "yaxes": [
+            {
               "$$hashKey": "object:6594",
               "format": "short",
               "label": null,
@@ -3797,29 +3805,31 @@
         {
           "alert": {
             "alertRuleTags": {},
-            "conditions": [{
-              "evaluator": {
-                "params": [
-                  0
-                ],
-                "type": "gt"
-              },
-              "operator": {
-                "type": "and"
-              },
-              "query": {
-                "params": [
-                  "A",
-                  "30s",
-                  "now"
-                ]
-              },
-              "reducer": {
-                "params": [],
-                "type": "last"
-              },
-              "type": "query"
-            }],
+            "conditions": [
+              {
+                "evaluator": {
+                  "params": [
+                    0
+                  ],
+                  "type": "gt"
+                },
+                "operator": {
+                  "type": "and"
+                },
+                "query": {
+                  "params": [
+                    "A",
+                    "30s",
+                    "now"
+                  ]
+                },
+                "reducer": {
+                  "params": [],
+                  "type": "last"
+                },
+                "type": "query"
+              }
+            ],
             "executionErrorState": "alerting",
             "for": "0m",
             "frequency": "10s",
@@ -3874,22 +3884,26 @@
           "spaceLength": 10,
           "stack": false,
           "steppedLine": false,
-          "targets": [{
-            "colNameFormatStr": "",
-            "colNameToGroup": "cluster_id",
-            "formatType": "Time series",
-            "queryType": "SQL",
-            "refId": "A",
-            "sql": "select _wstart as ts,  cluster_id, last(vnodes_total)  - last(vnodes_alive) as vnode_offline  from log.taosd_cluster_info where _ts >= $from and _ts <= $to partition by cluster_id interval(30s) fill(null)"
-          }],
-          "thresholds": [{
-            "colorMode": "critical",
-            "fill": true,
-            "line": true,
-            "op": "gt",
-            "value": 0,
-            "visible": true
-          }],
+          "targets": [
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "cluster_id",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select _wstart as ts,  cluster_id, last(vnodes_total)  - last(vnodes_alive) as vnode_offline  from log.taosd_cluster_info where _ts >= $from and _ts <= $to partition by cluster_id interval(30s) fill(null)"
+            }
+          ],
+          "thresholds": [
+            {
+              "colorMode": "critical",
+              "fill": true,
+              "line": true,
+              "op": "gt",
+              "value": 0,
+              "visible": true
+            }
+          ],
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
@@ -3907,7 +3921,8 @@
             "show": true,
             "values": []
           },
-          "yaxes": [{
+          "yaxes": [
+            {
               "$$hashKey": "object:6594",
               "format": "short",
               "label": null,
@@ -3934,29 +3949,31 @@
         {
           "alert": {
             "alertRuleTags": {},
-            "conditions": [{
-              "evaluator": {
-                "params": [
-                  60
-                ],
-                "type": "lt"
-              },
-              "operator": {
-                "type": "and"
-              },
-              "query": {
-                "params": [
-                  "A",
-                  "5m",
-                  "now"
-                ]
-              },
-              "reducer": {
-                "params": [],
-                "type": "last"
-              },
-              "type": "query"
-            }],
+            "conditions": [
+              {
+                "evaluator": {
+                  "params": [
+                    60
+                  ],
+                  "type": "lt"
+                },
+                "operator": {
+                  "type": "and"
+                },
+                "query": {
+                  "params": [
+                    "A",
+                    "5m",
+                    "now"
+                  ]
+                },
+                "reducer": {
+                  "params": [],
+                  "type": "last"
+                },
+                "type": "query"
+              }
+            ],
             "executionErrorState": "alerting",
             "for": "0m",
             "frequency": "24h",
@@ -4010,24 +4027,28 @@
           "spaceLength": 10,
           "stack": false,
           "steppedLine": false,
-          "targets": [{
-            "colNameFormatStr": "",
-            "colNameToGroup": "cluster_id",
-            "formatType": "Time series",
-            "queryType": "SQL",
-            "refId": "A",
-            "sql": "select _ts, cluster_id, last(grants_expire_time) / 86400 as expire_time from log.taosd_cluster_info where _ts >= $from and _ts <= $to partition by cluster_id  interval(12h) fill(null)",
-            "timeShiftPeriod": "1",
-            "timeShiftUnit": "days"
-          }],
-          "thresholds": [{
-            "colorMode": "critical",
-            "fill": true,
-            "line": true,
-            "op": "lt",
-            "value": 60,
-            "visible": true
-          }],
+          "targets": [
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "cluster_id",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select _ts, cluster_id, last(grants_expire_time) / 86400 as expire_time from log.taosd_cluster_info where _ts >= $from and _ts <= $to partition by cluster_id  interval(12h) fill(null)",
+              "timeShiftPeriod": "1",
+              "timeShiftUnit": "days"
+            }
+          ],
+          "thresholds": [
+            {
+              "colorMode": "critical",
+              "fill": true,
+              "line": true,
+              "op": "lt",
+              "value": 60,
+              "visible": true
+            }
+          ],
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
@@ -4045,7 +4066,8 @@
             "show": true,
             "values": []
           },
-          "yaxes": [{
+          "yaxes": [
+            {
               "$$hashKey": "object:6594",
               "format": "short",
               "label": null,
@@ -4072,29 +4094,31 @@
         {
           "alert": {
             "alertRuleTags": {},
-            "conditions": [{
-              "evaluator": {
-                "params": [
-                  80
-                ],
-                "type": "gt"
-              },
-              "operator": {
-                "type": "and"
-              },
-              "query": {
-                "params": [
-                  "A",
-                  "5m",
-                  "now"
-                ]
-              },
-              "reducer": {
-                "params": [],
-                "type": "avg"
-              },
-              "type": "query"
-            }],
+            "conditions": [
+              {
+                "evaluator": {
+                  "params": [
+                    80
+                  ],
+                  "type": "gt"
+                },
+                "operator": {
+                  "type": "and"
+                },
+                "query": {
+                  "params": [
+                    "A",
+                    "5m",
+                    "now"
+                  ]
+                },
+                "reducer": {
+                  "params": [],
+                  "type": "avg"
+                },
+                "type": "query"
+              }
+            ],
             "executionErrorState": "alerting",
             "for": "0m",
             "frequency": "5m",
@@ -4150,23 +4174,27 @@
           "spaceLength": 10,
           "stack": false,
           "steppedLine": false,
-          "targets": [{
-            "colNameFormatStr": "",
-            "colNameToGroup": "dnode_ep",
-            "formatType": "Time series",
-            "queryType": "SQL",
-            "refId": "A",
-            "sql": "select _wstart as ts,  dnode_ep, avg(cpu_system) as `system` from log.taosd_dnodes_info where _ts >= $from and _ts <= $to partition by dnode_ep  interval(5m) fill(null)",
-            "timeShiftPeriod": ""
-          }],
-          "thresholds": [{
-            "colorMode": "critical",
-            "fill": true,
-            "line": true,
-            "op": "gt",
-            "value": 80,
-            "visible": true
-          }],
+          "targets": [
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "dnode_ep",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select _wstart as ts,  dnode_ep, avg(cpu_system) as `system` from log.taosd_dnodes_info where _ts >= $from and _ts <= $to partition by dnode_ep  interval(5m) fill(null)",
+              "timeShiftPeriod": ""
+            }
+          ],
+          "thresholds": [
+            {
+              "colorMode": "critical",
+              "fill": true,
+              "line": true,
+              "op": "gt",
+              "value": 80,
+              "visible": true
+            }
+          ],
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
@@ -4184,7 +4212,8 @@
             "show": true,
             "values": []
           },
-          "yaxes": [{
+          "yaxes": [
+            {
               "$$hashKey": "object:719",
               "format": "percent",
               "label": null,
@@ -4211,29 +4240,31 @@
         {
           "alert": {
             "alertRuleTags": {},
-            "conditions": [{
-              "evaluator": {
-                "params": [
-                  80
-                ],
-                "type": "gt"
-              },
-              "operator": {
-                "type": "and"
-              },
-              "query": {
-                "params": [
-                  "A",
-                  "5m",
-                  "now"
-                ]
-              },
-              "reducer": {
-                "params": [],
-                "type": "max"
-              },
-              "type": "query"
-            }],
+            "conditions": [
+              {
+                "evaluator": {
+                  "params": [
+                    80
+                  ],
+                  "type": "gt"
+                },
+                "operator": {
+                  "type": "and"
+                },
+                "query": {
+                  "params": [
+                    "A",
+                    "5m",
+                    "now"
+                  ]
+                },
+                "reducer": {
+                  "params": [],
+                  "type": "max"
+                },
+                "type": "query"
+              }
+            ],
             "executionErrorState": "alerting",
             "for": "0m",
             "frequency": "5m",
@@ -4289,24 +4320,28 @@
           "spaceLength": 10,
           "stack": false,
           "steppedLine": false,
-          "targets": [{
-            "colNameFormatStr": "",
-            "colNameToGroup": "dnode_ep, data_dir_level, data_dir_name",
-            "formatType": "Time series",
-            "queryType": "SQL",
-            "refId": "A",
-            "sql": "select _wstart as ts, dnode_ep, data_dir_level, data_dir_name, last(used)  / last(total)  * 100 as used from log.taosd_dnodes_data_dirs where _ts >= $from and _ts <= $to partition by dnode_ep, data_dir_level, data_dir_name interval(5m) fill(null) ",
-            "timeShiftPeriod": "5",
-            "timeShiftUnit": "minutes"
-          }],
-          "thresholds": [{
-            "colorMode": "critical",
-            "fill": true,
-            "line": true,
-            "op": "gt",
-            "value": 80,
-            "visible": true
-          }],
+          "targets": [
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "dnode_ep, data_dir_level, data_dir_name",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select _wstart as ts, dnode_ep, data_dir_level, data_dir_name, last(used)  / last(total)  * 100 as used from log.taosd_dnodes_data_dirs where _ts >= $from and _ts <= $to partition by dnode_ep, data_dir_level, data_dir_name interval(5m) fill(null) ",
+              "timeShiftPeriod": "5",
+              "timeShiftUnit": "minutes"
+            }
+          ],
+          "thresholds": [
+            {
+              "colorMode": "critical",
+              "fill": true,
+              "line": true,
+              "op": "gt",
+              "value": 80,
+              "visible": true
+            }
+          ],
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
@@ -4324,7 +4359,8 @@
             "show": true,
             "values": []
           },
-          "yaxes": [{
+          "yaxes": [
+            {
               "$$hashKey": "object:719",
               "format": "percent",
               "label": null,
@@ -4351,29 +4387,31 @@
         {
           "alert": {
             "alertRuleTags": {},
-            "conditions": [{
-              "evaluator": {
-                "params": [
-                  80
-                ],
-                "type": "gt"
-              },
-              "operator": {
-                "type": "and"
-              },
-              "query": {
-                "params": [
-                  "A",
-                  "5m",
-                  "now"
-                ]
-              },
-              "reducer": {
-                "params": [],
-                "type": "max"
-              },
-              "type": "query"
-            }],
+            "conditions": [
+              {
+                "evaluator": {
+                  "params": [
+                    80
+                  ],
+                  "type": "gt"
+                },
+                "operator": {
+                  "type": "and"
+                },
+                "query": {
+                  "params": [
+                    "A",
+                    "5m",
+                    "now"
+                  ]
+                },
+                "reducer": {
+                  "params": [],
+                  "type": "max"
+                },
+                "type": "query"
+              }
+            ],
             "executionErrorState": "alerting",
             "for": "0m",
             "frequency": "5m",
@@ -4429,24 +4467,28 @@
           "spaceLength": 10,
           "stack": false,
           "steppedLine": false,
-          "targets": [{
-            "colNameFormatStr": "",
-            "colNameToGroup": "dnode_ep",
-            "formatType": "Time series",
-            "queryType": "SQL",
-            "refId": "A",
-            "sql": "select _wstart as ts, dnode_ep, last(mem_engine) / last(mem_total)  * 100 as taosd from log.taosd_dnodes_info where _ts >= $from and _ts <= $to partition by dnode_ep interval(5m) fill(null)",
-            "timeShiftPeriod": "10",
-            "timeShiftUnit": "seconds"
-          }],
-          "thresholds": [{
-            "colorMode": "critical",
-            "fill": true,
-            "line": true,
-            "op": "gt",
-            "value": 80,
-            "visible": true
-          }],
+          "targets": [
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "dnode_ep",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select _wstart as ts, dnode_ep, last(mem_engine) / last(mem_total)  * 100 as taosd from log.taosd_dnodes_info where _ts >= $from and _ts <= $to partition by dnode_ep interval(5m) fill(null)",
+              "timeShiftPeriod": "10",
+              "timeShiftUnit": "seconds"
+            }
+          ],
+          "thresholds": [
+            {
+              "colorMode": "critical",
+              "fill": true,
+              "line": true,
+              "op": "gt",
+              "value": 80,
+              "visible": true
+            }
+          ],
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
@@ -4464,7 +4506,8 @@
             "show": true,
             "values": []
           },
-          "yaxes": [{
+          "yaxes": [
+            {
               "$$hashKey": "object:719",
               "format": "percent",
               "label": null,
@@ -4491,29 +4534,31 @@
         {
           "alert": {
             "alertRuleTags": {},
-            "conditions": [{
-              "evaluator": {
-                "params": [
-                  80
-                ],
-                "type": "gt"
-              },
-              "operator": {
-                "type": "and"
-              },
-              "query": {
-                "params": [
-                  "A",
-                  "5m",
-                  "now"
-                ]
-              },
-              "reducer": {
-                "params": [],
-                "type": "last"
-              },
-              "type": "query"
-            }],
+            "conditions": [
+              {
+                "evaluator": {
+                  "params": [
+                    80
+                  ],
+                  "type": "gt"
+                },
+                "operator": {
+                  "type": "and"
+                },
+                "query": {
+                  "params": [
+                    "A",
+                    "5m",
+                    "now"
+                  ]
+                },
+                "reducer": {
+                  "params": [],
+                  "type": "last"
+                },
+                "type": "query"
+              }
+            ],
             "executionErrorState": "alerting",
             "for": "0m",
             "frequency": "24h",
@@ -4569,24 +4614,28 @@
           "spaceLength": 10,
           "stack": false,
           "steppedLine": false,
-          "targets": [{
-            "colNameFormatStr": "",
-            "colNameToGroup": "cluster_id",
-            "formatType": "Time series",
-            "queryType": "SQL",
-            "refId": "A",
-            "sql": " select  _wstart as ts, cluster_id,  CASE  WHEN max(grants_timeseries_total)  > 0 THEN max(grants_timeseries_used)  /max(grants_timeseries_total) * 100   ELSE 0    END AS result from log.taosd_cluster_info where _ts >= $from and _ts <= $to partition by cluster_id interval(30s)",
-            "timeShiftPeriod": "1",
-            "timeShiftUnit": "days"
-          }],
-          "thresholds": [{
-            "colorMode": "critical",
-            "fill": true,
-            "line": true,
-            "op": "gt",
-            "value": 80,
-            "visible": true
-          }],
+          "targets": [
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "cluster_id",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": " select  _wstart as ts, cluster_id,  CASE  WHEN max(grants_timeseries_total)  > 0 THEN max(grants_timeseries_used)  /max(grants_timeseries_total) * 100   ELSE 0    END AS result from log.taosd_cluster_info where _ts >= $from and _ts <= $to partition by cluster_id interval(30s)",
+              "timeShiftPeriod": "1",
+              "timeShiftUnit": "days"
+            }
+          ],
+          "thresholds": [
+            {
+              "colorMode": "critical",
+              "fill": true,
+              "line": true,
+              "op": "gt",
+              "value": 80,
+              "visible": true
+            }
+          ],
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
@@ -4604,7 +4653,8 @@
             "show": true,
             "values": []
           },
-          "yaxes": [{
+          "yaxes": [
+            {
               "$$hashKey": "object:719",
               "format": "percent",
               "label": null,
@@ -4631,29 +4681,31 @@
         {
           "alert": {
             "alertRuleTags": {},
-            "conditions": [{
-              "evaluator": {
-                "params": [
-                  100
-                ],
-                "type": "gt"
-              },
-              "operator": {
-                "type": "and"
-              },
-              "query": {
-                "params": [
-                  "A",
-                  "30s",
-                  "now"
-                ]
-              },
-              "reducer": {
-                "params": [],
-                "type": "last"
-              },
-              "type": "query"
-            }],
+            "conditions": [
+              {
+                "evaluator": {
+                  "params": [
+                    100
+                  ],
+                  "type": "gt"
+                },
+                "operator": {
+                  "type": "and"
+                },
+                "query": {
+                  "params": [
+                    "A",
+                    "30s",
+                    "now"
+                  ]
+                },
+                "reducer": {
+                  "params": [],
+                  "type": "last"
+                },
+                "type": "query"
+              }
+            ],
             "executionErrorState": "alerting",
             "for": "0m",
             "frequency": "1m",
@@ -4707,24 +4759,28 @@
           "spaceLength": 10,
           "stack": false,
           "steppedLine": false,
-          "targets": [{
-            "colNameFormatStr": "",
-            "colNameToGroup": "",
-            "formatType": "Time series",
-            "queryType": "SQL",
-            "refId": "A",
-            "sql": "select _wstart as ts,  count(*) as `select_count`  from log.taos_sql_req where sql_type = 'select'  and _ts > $from and _ts <= $to interval(30s) fill(null)",
-            "timeShiftPeriod": "1",
-            "timeShiftUnit": "minutes"
-          }],
-          "thresholds": [{
-            "colorMode": "critical",
-            "fill": true,
-            "line": true,
-            "op": "gt",
-            "value": 100,
-            "visible": true
-          }],
+          "targets": [
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select _wstart as ts,  count(*) as `select_count`  from log.taos_sql_req where sql_type = 'select'  and _ts > $from and _ts <= $to interval(30s) fill(null)",
+              "timeShiftPeriod": "1",
+              "timeShiftUnit": "minutes"
+            }
+          ],
+          "thresholds": [
+            {
+              "colorMode": "critical",
+              "fill": true,
+              "line": true,
+              "op": "gt",
+              "value": 100,
+              "visible": true
+            }
+          ],
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
@@ -4742,7 +4798,8 @@
             "show": true,
             "values": []
           },
-          "yaxes": [{
+          "yaxes": [
+            {
               "$$hashKey": "object:6594",
               "format": "short",
               "label": null,
@@ -4769,29 +4826,31 @@
         {
           "alert": {
             "alertRuleTags": {},
-            "conditions": [{
-              "evaluator": {
-                "params": [
-                  300
-                ],
-                "type": "gt"
-              },
-              "operator": {
-                "type": "and"
-              },
-              "query": {
-                "params": [
-                  "A",
-                  "5m",
-                  "now"
-                ]
-              },
-              "reducer": {
-                "params": [],
-                "type": "max"
-              },
-              "type": "query"
-            }],
+            "conditions": [
+              {
+                "evaluator": {
+                  "params": [
+                    300
+                  ],
+                  "type": "gt"
+                },
+                "operator": {
+                  "type": "and"
+                },
+                "query": {
+                  "params": [
+                    "A",
+                    "5m",
+                    "now"
+                  ]
+                },
+                "reducer": {
+                  "params": [],
+                  "type": "max"
+                },
+                "type": "query"
+              }
+            ],
             "executionErrorState": "alerting",
             "for": "0m",
             "frequency": "1m",
@@ -4845,24 +4904,28 @@
           "spaceLength": 10,
           "stack": false,
           "steppedLine": false,
-          "targets": [{
-            "colNameFormatStr": "",
-            "colNameToGroup": "",
-            "formatType": "Time series",
-            "queryType": "SQL",
-            "refId": "A",
-            "sql": "select create_time as ts, exec_usec/1000 as cost_ms from performance_schema.perf_queries order by create_time",
-            "timeShiftPeriod": "1",
-            "timeShiftUnit": "minutes"
-          }],
-          "thresholds": [{
-            "colorMode": "critical",
-            "fill": true,
-            "line": true,
-            "op": "gt",
-            "value": 300,
-            "visible": true
-          }],
+          "targets": [
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select create_time as ts, exec_usec/1000 as cost_ms from performance_schema.perf_queries order by create_time",
+              "timeShiftPeriod": "1",
+              "timeShiftUnit": "minutes"
+            }
+          ],
+          "thresholds": [
+            {
+              "colorMode": "critical",
+              "fill": true,
+              "line": true,
+              "op": "gt",
+              "value": 300,
+              "visible": true
+            }
+          ],
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
@@ -4880,7 +4943,8 @@
             "show": true,
             "values": []
           },
-          "yaxes": [{
+          "yaxes": [
+            {
               "$$hashKey": "object:6594",
               "format": "short",
               "label": null,
@@ -4907,29 +4971,31 @@
         {
           "alert": {
             "alertRuleTags": {},
-            "conditions": [{
-              "evaluator": {
-                "params": [
-                  0
-                ],
-                "type": "gt"
-              },
-              "operator": {
-                "type": "and"
-              },
-              "query": {
-                "params": [
-                  "A",
-                  "60s",
-                  "now"
-                ]
-              },
-              "reducer": {
-                "params": [],
-                "type": "last"
-              },
-              "type": "query"
-            }],
+            "conditions": [
+              {
+                "evaluator": {
+                  "params": [
+                    0
+                  ],
+                  "type": "gt"
+                },
+                "operator": {
+                  "type": "and"
+                },
+                "query": {
+                  "params": [
+                    "A",
+                    "60s",
+                    "now"
+                  ]
+                },
+                "reducer": {
+                  "params": [],
+                  "type": "last"
+                },
+                "type": "query"
+              }
+            ],
             "executionErrorState": "alerting",
             "for": "0m",
             "frequency": "10s",
@@ -4983,24 +5049,28 @@
           "spaceLength": 10,
           "stack": false,
           "steppedLine": false,
-          "targets": [{
-            "colNameFormatStr": "",
-            "colNameToGroup": "cluster_id",
-            "formatType": "Time series",
-            "queryType": "SQL",
-            "refId": "A",
-            "sql": "select _wstart as ts,  cluster_id, max(cluster_uptime) - last(cluster_uptime) as dnode_report  from log.taosd_cluster_info where _ts >= $from and _ts <= $to partition by cluster_id interval(60s) fill(null)",
-            "timeShiftPeriod": "150",
-            "timeShiftUnit": "seconds"
-          }],
-          "thresholds": [{
-            "colorMode": "critical",
-            "fill": true,
-            "line": true,
-            "op": "gt",
-            "value": 0,
-            "visible": true
-          }],
+          "targets": [
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "cluster_id",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select _wstart as ts,  cluster_id, max(cluster_uptime) - last(cluster_uptime) as dnode_report  from log.taosd_cluster_info where _ts >= $from and _ts <= $to partition by cluster_id interval(60s) fill(null)",
+              "timeShiftPeriod": "150",
+              "timeShiftUnit": "seconds"
+            }
+          ],
+          "thresholds": [
+            {
+              "colorMode": "critical",
+              "fill": true,
+              "line": true,
+              "op": "gt",
+              "value": 0,
+              "visible": true
+            }
+          ],
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
@@ -5018,7 +5088,8 @@
             "show": true,
             "values": []
           },
-          "yaxes": [{
+          "yaxes": [
+            {
               "$$hashKey": "object:6594",
               "format": "short",
               "label": null,
@@ -5045,29 +5116,31 @@
         {
           "alert": {
             "alertRuleTags": {},
-            "conditions": [{
-              "evaluator": {
-                "params": [
-                  5
-                ],
-                "type": "gt"
-              },
-              "operator": {
-                "type": "and"
-              },
-              "query": {
-                "params": [
-                  "A",
-                  "5m",
-                  "now"
-                ]
-              },
-              "reducer": {
-                "params": [],
-                "type": "avg"
-              },
-              "type": "query"
-            }],
+            "conditions": [
+              {
+                "evaluator": {
+                  "params": [
+                    5
+                  ],
+                  "type": "gt"
+                },
+                "operator": {
+                  "type": "and"
+                },
+                "query": {
+                  "params": [
+                    "A",
+                    "5m",
+                    "now"
+                  ]
+                },
+                "reducer": {
+                  "params": [],
+                  "type": "avg"
+                },
+                "type": "query"
+              }
+            ],
             "executionErrorState": "alerting",
             "for": "0m",
             "frequency": "10s",
@@ -5122,24 +5195,28 @@
           "spaceLength": 10,
           "stack": false,
           "steppedLine": false,
-          "targets": [{
-            "colNameFormatStr": "",
-            "colNameToGroup": "",
-            "formatType": "Time series",
-            "queryType": "SQL",
-            "refId": "A",
-            "sql": "select _wstart as ts, sum(`fail`) as `Failed` from log.adapter_requests where req_type=1 and ts >= $from and ts <= $to interval(30s) fill(null)",
-            "timeShiftPeriod": "30",
-            "timeShiftUnit": "seconds"
-          }],
-          "thresholds": [{
-            "colorMode": "critical",
-            "fill": true,
-            "line": true,
-            "op": "gt",
-            "value": 5,
-            "visible": true
-          }],
+          "targets": [
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select _wstart as ts, sum(`fail`) as `Failed` from log.adapter_requests where req_type=1 and ts >= $from and ts <= $to interval(30s) fill(null)",
+              "timeShiftPeriod": "30",
+              "timeShiftUnit": "seconds"
+            }
+          ],
+          "thresholds": [
+            {
+              "colorMode": "critical",
+              "fill": true,
+              "line": true,
+              "op": "gt",
+              "value": 5,
+              "visible": true
+            }
+          ],
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
@@ -5157,7 +5234,8 @@
             "show": true,
             "values": []
           },
-          "yaxes": [{
+          "yaxes": [
+            {
               "$$hashKey": "object:6594",
               "format": "short",
               "label": null,
@@ -5184,35 +5262,37 @@
         {
           "alert": {
             "alertRuleTags": {},
-            "conditions": [{
-              "evaluator": {
-                "params": [
-                  3
-                ],
-                "type": "lt"
-              },
-              "operator": {
-                "type": "and"
-              },
-              "query": {
-                "params": [
-                  "A",
-                  "180s",
-                  "now"
-                ]
-              },
-              "reducer": {
-                "params": [],
-                "type": "min"
-              },
-              "type": "query"
-            }],
+            "conditions": [
+              {
+                "evaluator": {
+                  "params": [
+                    3
+                  ],
+                  "type": "lt"
+                },
+                "operator": {
+                  "type": "and"
+                },
+                "query": {
+                  "params": [
+                    "A",
+                    "180s",
+                    "now"
+                  ]
+                },
+                "reducer": {
+                  "params": [],
+                  "type": "sum"
+                },
+                "type": "query"
+              }
+            ],
             "executionErrorState": "alerting",
             "for": "0m",
             "frequency": "200s",
             "handler": 1,
             "message": "DNodes Metrics reports less than 3 times within 150 seconds",
-            "name": "DNodes report  alert",
+            "name": "DNodes report alert",
             "noDataState": "alerting",
             "notifications": []
           },
@@ -5260,24 +5340,28 @@
           "spaceLength": 10,
           "stack": false,
           "steppedLine": false,
-          "targets": [{
-            "colNameFormatStr": "",
-            "colNameToGroup": "cluster_id",
-            "formatType": "Time series",
-            "queryType": "SQL",
-            "refId": "A",
-            "sql": "select _wstart as ts,  cluster_id, count(*) as dnode_report  from log.taosd_cluster_info where _ts >= $from and _ts <= $to partition by cluster_id interval(180s) fill(null)",
-            "timeShiftPeriod": "180",
-            "timeShiftUnit": "seconds"
-          }],
-          "thresholds": [{
-            "colorMode": "critical",
-            "fill": true,
-            "line": true,
-            "op": "lt",
-            "value": 3,
-            "visible": true
-          }],
+          "targets": [
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "cluster_id",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select _wstart as ts,  cluster_id, count(*) as dnode_report  from log.taosd_cluster_info where _ts >= $from and _ts <= $to partition by cluster_id interval(180s) fill(null)",
+              "timeShiftPeriod": "180",
+              "timeShiftUnit": "seconds"
+            }
+          ],
+          "thresholds": [
+            {
+              "colorMode": "critical",
+              "fill": true,
+              "line": true,
+              "op": "lt",
+              "value": 3,
+              "visible": true
+            }
+          ],
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
@@ -5295,7 +5379,8 @@
             "show": true,
             "values": []
           },
-          "yaxes": [{
+          "yaxes": [
+            {
               "$$hashKey": "object:6594",
               "format": "short",
               "label": null,
@@ -5322,29 +5407,31 @@
         {
           "alert": {
             "alertRuleTags": {},
-            "conditions": [{
-              "evaluator": {
-                "params": [
-                  5
-                ],
-                "type": "gt"
-              },
-              "operator": {
-                "type": "and"
-              },
-              "query": {
-                "params": [
-                  "A",
-                  "10s",
-                  "now"
-                ]
-              },
-              "reducer": {
-                "params": [],
-                "type": "sum"
-              },
-              "type": "query"
-            }],
+            "conditions": [
+              {
+                "evaluator": {
+                  "params": [
+                    5
+                  ],
+                  "type": "gt"
+                },
+                "operator": {
+                  "type": "and"
+                },
+                "query": {
+                  "params": [
+                    "A",
+                    "10s",
+                    "now"
+                  ]
+                },
+                "reducer": {
+                  "params": [],
+                  "type": "sum"
+                },
+                "type": "query"
+              }
+            ],
             "executionErrorState": "alerting",
             "for": "0m",
             "frequency": "10s",
@@ -5399,24 +5486,28 @@
           "spaceLength": 10,
           "stack": false,
           "steppedLine": false,
-          "targets": [{
-            "colNameFormatStr": "",
-            "colNameToGroup": "",
-            "formatType": "Time series",
-            "queryType": "SQL",
-            "refId": "A",
-            "sql": "select _wstart as ts, sum(`fail`) as `Failed` from log.adapter_requests where req_type=0 and ts >= $from and ts <= $to interval(30s) fill(null)",
-            "timeShiftPeriod": "30",
-            "timeShiftUnit": "seconds"
-          }],
-          "thresholds": [{
-            "colorMode": "critical",
-            "fill": true,
-            "line": true,
-            "op": "gt",
-            "value": 5,
-            "visible": true
-          }],
+          "targets": [
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select _wstart as ts, sum(`fail`) as `Failed` from log.adapter_requests where req_type=0 and ts >= $from and ts <= $to interval(30s) fill(null)",
+              "timeShiftPeriod": "30",
+              "timeShiftUnit": "seconds"
+            }
+          ],
+          "thresholds": [
+            {
+              "colorMode": "critical",
+              "fill": true,
+              "line": true,
+              "op": "gt",
+              "value": 5,
+              "visible": true
+            }
+          ],
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
@@ -5434,7 +5525,8 @@
             "show": true,
             "values": []
           },
-          "yaxes": [{
+          "yaxes": [
+            {
               "$$hashKey": "object:6594",
               "format": "short",
               "label": null,
@@ -5461,29 +5553,31 @@
         {
           "alert": {
             "alertRuleTags": {},
-            "conditions": [{
-              "evaluator": {
-                "params": [
-                  5
-                ],
-                "type": "gt"
-              },
-              "operator": {
-                "type": "and"
-              },
-              "query": {
-                "params": [
-                  "A",
-                  "5m",
-                  "now"
-                ]
-              },
-              "reducer": {
-                "params": [],
-                "type": "max"
-              },
-              "type": "query"
-            }],
+            "conditions": [
+              {
+                "evaluator": {
+                  "params": [
+                    5
+                  ],
+                  "type": "gt"
+                },
+                "operator": {
+                  "type": "and"
+                },
+                "query": {
+                  "params": [
+                    "A",
+                    "5m",
+                    "now"
+                  ]
+                },
+                "reducer": {
+                  "params": [],
+                  "type": "max"
+                },
+                "type": "query"
+              }
+            ],
             "executionErrorState": "alerting",
             "for": "0m",
             "frequency": "10s",
@@ -5538,24 +5632,28 @@
           "spaceLength": 10,
           "stack": false,
           "steppedLine": false,
-          "targets": [{
-            "colNameFormatStr": "",
-            "colNameToGroup": "",
-            "formatType": "Time series",
-            "queryType": "SQL",
-            "refId": "A",
-            "sql": "select  _wstart as ts,  count(`count`)  as `delete_count`  from log.taos_sql_req  where sql_type = 'delete' and _ts > $from and _ts <= $to interval(30s) fill(null)",
-            "timeShiftPeriod": "30",
-            "timeShiftUnit": "seconds"
-          }],
-          "thresholds": [{
-            "colorMode": "critical",
-            "fill": true,
-            "line": true,
-            "op": "gt",
-            "value": 5,
-            "visible": true
-          }],
+          "targets": [
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select  _wstart as ts,  count(`count`)  as `delete_count`  from log.taos_sql_req  where sql_type = 'delete' and _ts > $from and _ts <= $to interval(30s) fill(null)",
+              "timeShiftPeriod": "30",
+              "timeShiftUnit": "seconds"
+            }
+          ],
+          "thresholds": [
+            {
+              "colorMode": "critical",
+              "fill": true,
+              "line": true,
+              "op": "gt",
+              "value": 5,
+              "visible": true
+            }
+          ],
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
@@ -5573,7 +5671,8 @@
             "show": true,
             "values": []
           },
-          "yaxes": [{
+          "yaxes": [
+            {
               "$$hashKey": "object:6594",
               "format": "short",
               "label": null,
@@ -5600,7 +5699,7 @@
       ],
       "title": "Alert Used Only",
       "type": "row"
-    }    
+    }
   ],
   "refresh": "30s",
   "schemaVersion": 27,
@@ -5799,7 +5898,7 @@
         "tagsQuery": "",
         "type": "query",
         "useTags": false
-      },       
+      },
       {
         "allValue": null,
         "current": {},
@@ -5847,7 +5946,7 @@
         "tagsQuery": "",
         "type": "query",
         "useTags": false
-      },           
+      },
       {
         "auto": true,
         "auto_count": 100,
