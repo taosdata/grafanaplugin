@@ -3667,7 +3667,7 @@
                   "params": [
                     0
                   ],
-                  "type": "lt"
+                  "type": "gt"
                 },
                 "operator": {
                   "type": "and"
@@ -3675,7 +3675,7 @@
                 "query": {
                   "params": [
                     "A",
-                    "5m",
+                    "30s",
                     "now"
                   ]
                 },
@@ -3687,8 +3687,8 @@
               }
             ],
             "executionErrorState": "alerting",
-            "for": "0m",
-            "frequency": "10s",
+            "for": "30s",
+            "frequency": "30s",
             "handler": 1,
             "message": "There are nodes offline in the cluster",
             "name": "DNodes offline alert",
@@ -3831,12 +3831,12 @@
               }
             ],
             "executionErrorState": "alerting",
-            "for": "0m",
-            "frequency": "10s",
+            "for": "30s",
+            "frequency": "30s",
             "handler": 1,
             "message": "There are vnodes offline in the cluster",
             "name": "VNodes Offline alert",
-            "noDataState": "ok",
+            "noDataState": "alerting",
             "notifications": []
           },
           "aliasColors": {},
@@ -3975,7 +3975,7 @@
               }
             ],
             "executionErrorState": "alerting",
-            "for": "0m",
+            "for": "1h",
             "frequency": "24h",
             "handler": 1,
             "message": "Authorization is about to expire",
@@ -4120,7 +4120,7 @@
               }
             ],
             "executionErrorState": "alerting",
-            "for": "0m",
+            "for": "5m",
             "frequency": "5m",
             "handler": 1,
             "message": "Node CPU usage exceeds 80%",
@@ -4266,12 +4266,12 @@
               }
             ],
             "executionErrorState": "alerting",
-            "for": "0m",
+            "for": "5m",
             "frequency": "5m",
             "handler": 1,
             "message": "Disk Used above 80%",
             "name": "Disk Used Rate alert",
-            "noDataState": "no_data",
+            "noDataState": "alerting",
             "notifications": []
           },
           "aliasColors": {},
@@ -4413,7 +4413,7 @@
               }
             ],
             "executionErrorState": "alerting",
-            "for": "0m",
+            "for": "5m",
             "frequency": "5m",
             "handler": 1,
             "message": "Node RAM usage exceeds 80%",
@@ -4560,7 +4560,7 @@
               }
             ],
             "executionErrorState": "alerting",
-            "for": "0m",
+            "for": "1h",
             "frequency": "24h",
             "handler": 1,
             "message": "Used Measuring Points above 80%",
@@ -4695,7 +4695,7 @@
                 "query": {
                   "params": [
                     "A",
-                    "30s",
+                    "1m",
                     "now"
                   ]
                 },
@@ -4707,7 +4707,7 @@
               }
             ],
             "executionErrorState": "alerting",
-            "for": "0m",
+            "for": "1m",
             "frequency": "1m",
             "handler": 1,
             "message": "The number of query requests exceeds 100 times within one minute",
@@ -4830,7 +4830,7 @@
               {
                 "evaluator": {
                   "params": [
-                    300
+                    0
                   ],
                   "type": "gt"
                 },
@@ -4840,7 +4840,7 @@
                 "query": {
                   "params": [
                     "A",
-                    "5m",
+                    "1m",
                     "now"
                   ]
                 },
@@ -4852,7 +4852,7 @@
               }
             ],
             "executionErrorState": "alerting",
-            "for": "0m",
+            "for": "1m",
             "frequency": "1m",
             "handler": 1,
             "message": "Query duration exceeds 300 seconds",
@@ -4911,7 +4911,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select create_time as ts, exec_usec/1000 as cost_ms from performance_schema.perf_queries order by create_time",
+              "sql": "select now() as ts, count(*) from performance_schema.perf_queries where exec_usec>90000",
               "timeShiftPeriod": "1",
               "timeShiftUnit": "minutes"
             }
@@ -4922,7 +4922,7 @@
               "fill": true,
               "line": true,
               "op": "gt",
-              "value": 300,
+              "value": 0,
               "visible": true
             }
           ],
@@ -4985,7 +4985,7 @@
                 "query": {
                   "params": [
                     "A",
-                    "60s",
+                    "30s",
                     "now"
                   ]
                 },
@@ -4997,11 +4997,11 @@
               }
             ],
             "executionErrorState": "alerting",
-            "for": "0m",
-            "frequency": "10s",
+            "for": "30s",
+            "frequency": "30s",
             "handler": 1,
             "message": "Dnodes restart",
-            "name": "DNodes report  alert alert",
+            "name": "DNodes report alert",
             "noDataState": "alerting",
             "notifications": []
           },
@@ -5056,7 +5056,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts,  cluster_id, max(cluster_uptime) - last(cluster_uptime) as dnode_report  from log.taosd_cluster_info where _ts >= $from and _ts <= $to partition by cluster_id interval(60s) fill(null)",
+              "sql": "select _wstart as ts,  cluster_id, max(cluster_uptime) - last(cluster_uptime) as dnode_report  from log.taosd_cluster_info where _ts >= $from and _ts <= $to partition by cluster_id interval(30s) fill(null)",
               "timeShiftPeriod": "150",
               "timeShiftUnit": "seconds"
             }
@@ -5142,12 +5142,12 @@
               }
             ],
             "executionErrorState": "alerting",
-            "for": "0m",
-            "frequency": "10s",
+            "for": "30s",
+            "frequency": "30s",
             "handler": 1,
-            "message": "The adapter websocket interface has failed more than 5 times within 10 seconds",
-            "name": "Adapter RESTful Failed Alert",
-            "noDataState": "alerting",
+            "message": "The adapter websocket interface has failed more than 5 times within 30 seconds",
+            "name": "Adapter Websocket Failed Alert",
+            "noDataState": "ok",
             "notifications": []
           },
           "aliasColors": {},
@@ -5288,8 +5288,8 @@
               }
             ],
             "executionErrorState": "alerting",
-            "for": "0m",
-            "frequency": "200s",
+            "for": "180s",
+            "frequency": "180s",
             "handler": 1,
             "message": "DNodes Metrics reports less than 3 times within 150 seconds",
             "name": "DNodes report alert",
@@ -5421,7 +5421,7 @@
                 "query": {
                   "params": [
                     "A",
-                    "10s",
+                    "30s",
                     "now"
                   ]
                 },
@@ -5433,10 +5433,10 @@
               }
             ],
             "executionErrorState": "alerting",
-            "for": "0m",
-            "frequency": "10s",
+            "for": "30s",
+            "frequency": "30s",
             "handler": 1,
-            "message": "The adapter restful interface has failed more than 5 times within 10 seconds",
+            "message": "The adapter restful interface has failed more than 5 times within 30 seconds",
             "name": "Adapter RESTful Failed Alert alert",
             "noDataState": "ok",
             "notifications": []
@@ -5579,10 +5579,10 @@
               }
             ],
             "executionErrorState": "alerting",
-            "for": "0m",
-            "frequency": "10s",
+            "for": "30s",
+            "frequency": "30s",
             "handler": 1,
-            "message": "Received data deletion request within 10 seconds",
+            "message": "Received data deletion request within 30 seconds",
             "name": "Delete Request Alert",
             "noDataState": "ok",
             "notifications": []
