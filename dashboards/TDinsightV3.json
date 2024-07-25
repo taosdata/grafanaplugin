@@ -1399,7 +1399,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 25
+        "y": 31
       },
       "id": 52,
       "panels": [
@@ -1587,7 +1587,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 26
+        "y": 40
       },
       "id": 58,
       "panels": [
@@ -1637,7 +1637,7 @@
             "h": 9,
             "w": 12,
             "x": 0,
-            "y": 27
+            "y": 41
           },
           "id": 140,
           "options": {
@@ -1713,7 +1713,7 @@
             "h": 9,
             "w": 12,
             "x": 12,
-            "y": 27
+            "y": 41
           },
           "id": 157,
           "options": {
@@ -1789,7 +1789,7 @@
             "h": 9,
             "w": 12,
             "x": 0,
-            "y": 36
+            "y": 50
           },
           "id": 156,
           "options": {
@@ -1866,7 +1866,7 @@
             "h": 9,
             "w": 12,
             "x": 12,
-            "y": 36
+            "y": 50
           },
           "id": 200,
           "options": {
@@ -1941,7 +1941,7 @@
             "h": 9,
             "w": 24,
             "x": 0,
-            "y": 45
+            "y": 59
           },
           "id": 141,
           "options": {
@@ -1982,7 +1982,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 27
+        "y": 60
       },
       "id": 64,
       "panels": [
@@ -2010,7 +2010,7 @@
             "h": 3,
             "w": 3,
             "x": 0,
-            "y": 60
+            "y": 61
           },
           "id": 66,
           "options": {
@@ -2089,7 +2089,7 @@
             "h": 6,
             "w": 9,
             "x": 3,
-            "y": 60
+            "y": 61
           },
           "id": 70,
           "options": {
@@ -2165,7 +2165,7 @@
             "h": 6,
             "w": 12,
             "x": 12,
-            "y": 60
+            "y": 61
           },
           "id": 72,
           "options": {
@@ -2219,7 +2219,7 @@
             "h": 3,
             "w": 3,
             "x": 0,
-            "y": 63
+            "y": 64
           },
           "id": 68,
           "options": {
@@ -2263,7 +2263,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 28
+        "y": 67
       },
       "id": 76,
       "panels": [
@@ -2293,7 +2293,7 @@
             "h": 5,
             "w": 3,
             "x": 0,
-            "y": 29
+            "y": 68
           },
           "id": 92,
           "options": {
@@ -2367,7 +2367,7 @@
             "h": 5,
             "w": 3,
             "x": 3,
-            "y": 29
+            "y": 68
           },
           "id": 94,
           "options": {
@@ -2424,7 +2424,7 @@
             "h": 5,
             "w": 2,
             "x": 6,
-            "y": 29
+            "y": 68
           },
           "id": 96,
           "options": {
@@ -2480,7 +2480,7 @@
             "h": 5,
             "w": 2,
             "x": 8,
-            "y": 29
+            "y": 68
           },
           "id": 98,
           "options": {
@@ -2536,7 +2536,7 @@
             "h": 5,
             "w": 2,
             "x": 10,
-            "y": 29
+            "y": 68
           },
           "id": 100,
           "options": {
@@ -2603,7 +2603,7 @@
             "h": 5,
             "w": 4,
             "x": 12,
-            "y": 29
+            "y": 68
           },
           "id": 102,
           "options": {
@@ -2659,7 +2659,7 @@
             "h": 5,
             "w": 4,
             "x": 16,
-            "y": 29
+            "y": 68
           },
           "id": 104,
           "options": {
@@ -2728,7 +2728,7 @@
             "h": 5,
             "w": 4,
             "x": 20,
-            "y": 29
+            "y": 68
           },
           "id": 106,
           "options": {
@@ -2808,7 +2808,7 @@
             "h": 9,
             "w": 12,
             "x": 0,
-            "y": 34
+            "y": 73
           },
           "id": 108,
           "options": {
@@ -2891,7 +2891,7 @@
             "h": 9,
             "w": 12,
             "x": 12,
-            "y": 34
+            "y": 73
           },
           "id": 110,
           "options": {
@@ -2971,7 +2971,7 @@
             "h": 8,
             "w": 8,
             "x": 0,
-            "y": 43
+            "y": 82
           },
           "id": 112,
           "options": {
@@ -3056,7 +3056,7 @@
             "h": 8,
             "w": 8,
             "x": 8,
-            "y": 43
+            "y": 82
           },
           "id": 114,
           "options": {
@@ -3136,7 +3136,7 @@
             "h": 8,
             "w": 8,
             "x": 16,
-            "y": 43
+            "y": 82
           },
           "id": 116,
           "options": {
@@ -3183,7 +3183,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 29
+        "y": 83
       },
       "id": 78,
       "panels": [
@@ -3212,7 +3212,7 @@
             "h": 6,
             "w": 12,
             "x": 0,
-            "y": 7
+            "y": 84
           },
           "id": 134,
           "options": {
@@ -3289,7 +3289,7 @@
             "h": 6,
             "w": 12,
             "x": 12,
-            "y": 7
+            "y": 84
           },
           "id": 129,
           "options": {
@@ -3439,7 +3439,7 @@
             "h": 6,
             "w": 12,
             "x": 0,
-            "y": 13
+            "y": 90
           },
           "id": 135,
           "options": {
@@ -3516,7 +3516,7 @@
             "h": 6,
             "w": 12,
             "x": 12,
-            "y": 13
+            "y": 90
           },
           "id": 130,
           "options": {
@@ -3652,7 +3652,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 30
+        "y": 91
       },
       "id": 202,
       "panels": [
@@ -3710,7 +3710,7 @@
             "h": 6,
             "w": 6,
             "x": 0,
-            "y": 10
+            "y": 92
           },
           "hiddenSeries": false,
           "id": 203,
@@ -3779,7 +3779,6 @@
           },
           "yaxes": [
             {
-              "$$hashKey": "object:6594",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -3788,7 +3787,6 @@
               "show": true
             },
             {
-              "$$hashKey": "object:6595",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -3854,7 +3852,7 @@
             "h": 6,
             "w": 6,
             "x": 6,
-            "y": 10
+            "y": 92
           },
           "hiddenSeries": false,
           "id": 204,
@@ -3923,7 +3921,6 @@
           },
           "yaxes": [
             {
-              "$$hashKey": "object:6594",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -3932,7 +3929,6 @@
               "show": true
             },
             {
-              "$$hashKey": "object:6595",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -3998,7 +3994,7 @@
             "h": 6,
             "w": 6,
             "x": 12,
-            "y": 10
+            "y": 92
           },
           "hiddenSeries": false,
           "id": 210,
@@ -4068,7 +4064,6 @@
           },
           "yaxes": [
             {
-              "$$hashKey": "object:6594",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -4077,7 +4072,6 @@
               "show": true
             },
             {
-              "$$hashKey": "object:6595",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -4145,7 +4139,7 @@
             "h": 6,
             "w": 6,
             "x": 18,
-            "y": 10
+            "y": 92
           },
           "hiddenSeries": false,
           "id": 205,
@@ -4214,7 +4208,6 @@
           },
           "yaxes": [
             {
-              "$$hashKey": "object:719",
               "format": "percent",
               "label": null,
               "logBase": 1,
@@ -4223,7 +4216,6 @@
               "show": true
             },
             {
-              "$$hashKey": "object:720",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -4291,7 +4283,7 @@
             "h": 6,
             "w": 6,
             "x": 0,
-            "y": 16
+            "y": 98
           },
           "hiddenSeries": false,
           "id": 208,
@@ -4361,7 +4353,6 @@
           },
           "yaxes": [
             {
-              "$$hashKey": "object:719",
               "format": "percent",
               "label": null,
               "logBase": 1,
@@ -4370,7 +4361,6 @@
               "show": true
             },
             {
-              "$$hashKey": "object:720",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -4438,7 +4428,7 @@
             "h": 6,
             "w": 6,
             "x": 6,
-            "y": 16
+            "y": 98
           },
           "hiddenSeries": false,
           "id": 206,
@@ -4508,7 +4498,6 @@
           },
           "yaxes": [
             {
-              "$$hashKey": "object:719",
               "format": "percent",
               "label": null,
               "logBase": 1,
@@ -4517,7 +4506,6 @@
               "show": true
             },
             {
-              "$$hashKey": "object:720",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -4585,7 +4573,7 @@
             "h": 6,
             "w": 6,
             "x": 12,
-            "y": 16
+            "y": 98
           },
           "hiddenSeries": false,
           "id": 209,
@@ -4655,7 +4643,6 @@
           },
           "yaxes": [
             {
-              "$$hashKey": "object:719",
               "format": "percent",
               "label": null,
               "logBase": 1,
@@ -4664,7 +4651,6 @@
               "show": true
             },
             {
-              "$$hashKey": "object:720",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -4730,7 +4716,7 @@
             "h": 6,
             "w": 6,
             "x": 18,
-            "y": 16
+            "y": 98
           },
           "hiddenSeries": false,
           "id": 273,
@@ -4800,7 +4786,6 @@
           },
           "yaxes": [
             {
-              "$$hashKey": "object:6594",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -4809,7 +4794,6 @@
               "show": true
             },
             {
-              "$$hashKey": "object:6595",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -4875,7 +4859,7 @@
             "h": 6,
             "w": 6,
             "x": 0,
-            "y": 22
+            "y": 104
           },
           "hiddenSeries": false,
           "id": 211,
@@ -4945,7 +4929,6 @@
           },
           "yaxes": [
             {
-              "$$hashKey": "object:6594",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -4954,7 +4937,6 @@
               "show": true
             },
             {
-              "$$hashKey": "object:6595",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -5020,7 +5002,7 @@
             "h": 6,
             "w": 6,
             "x": 6,
-            "y": 22
+            "y": 104
           },
           "hiddenSeries": false,
           "id": 215,
@@ -5074,7 +5056,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "DNodes report  alert",
+          "title": "DNodes report alert",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -5090,7 +5072,6 @@
           },
           "yaxes": [
             {
-              "$$hashKey": "object:6594",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -5099,7 +5080,6 @@
               "show": true
             },
             {
-              "$$hashKey": "object:6595",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -5165,7 +5145,7 @@
             "h": 6,
             "w": 6,
             "x": 12,
-            "y": 22
+            "y": 104
           },
           "hiddenSeries": false,
           "id": 213,
@@ -5236,7 +5216,6 @@
           },
           "yaxes": [
             {
-              "$$hashKey": "object:6594",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -5245,7 +5224,6 @@
               "show": true
             },
             {
-              "$$hashKey": "object:6595",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -5311,7 +5289,7 @@
             "h": 6,
             "w": 6,
             "x": 18,
-            "y": 22
+            "y": 104
           },
           "hiddenSeries": false,
           "id": 214,
@@ -5381,7 +5359,6 @@
           },
           "yaxes": [
             {
-              "$$hashKey": "object:6594",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -5390,7 +5367,6 @@
               "show": true
             },
             {
-              "$$hashKey": "object:6595",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -5456,7 +5432,7 @@
             "h": 6,
             "w": 6,
             "x": 0,
-            "y": 28
+            "y": 110
           },
           "hiddenSeries": false,
           "id": 244,
@@ -5527,7 +5503,6 @@
           },
           "yaxes": [
             {
-              "$$hashKey": "object:6594",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -5536,7 +5511,6 @@
               "show": true
             },
             {
-              "$$hashKey": "object:6595",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -5602,7 +5576,7 @@
             "h": 6,
             "w": 6,
             "x": 6,
-            "y": 28
+            "y": 110
           },
           "hiddenSeries": false,
           "id": 212,
@@ -5673,7 +5647,6 @@
           },
           "yaxes": [
             {
-              "$$hashKey": "object:6594",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -5682,7 +5655,6 @@
               "show": true
             },
             {
-              "$$hashKey": "object:6595",
               "format": "short",
               "label": null,
               "logBase": 1,
