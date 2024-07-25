@@ -71,7 +71,7 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
     sendInitAlert(): Promise<void> {
         return new Promise((resolve, reject) => {
             this.readJsonFile(path.join(__dirname, 'alert/alert.json')).then((data) => {
-                axios.post("http://localhost:3005/v1/provisioning/alert-rules", data).then(response=>{
+                axios.post("/v1/provisioning/alert-rules", data).then(response=>{
                    if (response.data.code !== 200) {
                        reject(response.data.message);
                    }
