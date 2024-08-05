@@ -4381,7 +4381,7 @@
               {
                 "evaluator": {
                   "params": [
-                    80
+                    60
                   ],
                   "type": "gt"
                 },
@@ -4967,7 +4967,7 @@
                 "query": {
                   "params": [
                     "A",
-                    "30s",
+                    "90s",
                     "now"
                   ]
                 },
@@ -4979,11 +4979,11 @@
               }
             ],
             "executionErrorState": "alerting",
-            "for": "30s",
-            "frequency": "30s",
+            "for": "90s",
+            "frequency": "90s",
             "handler": 1,
             "message": "Dnodes restart",
-            "name": "DNodes report alert",
+            "name": "Dnodes reboot alert",
             "noDataState": "alerting",
             "notifications": []
           },
@@ -5260,7 +5260,7 @@
                 },
                 "reducer": {
                   "params": [],
-                  "type": "max"
+                  "type": "sum"
                 },
                 "type": "query"
               }
@@ -5531,7 +5531,7 @@
               {
                 "evaluator": {
                   "params": [
-                    5
+                    0
                   ],
                   "type": "gt"
                 },
@@ -5541,13 +5541,13 @@
                 "query": {
                   "params": [
                     "A",
-                    "5m",
+                    "30s",
                     "now"
                   ]
                 },
                 "reducer": {
                   "params": [],
-                  "type": "max"
+                  "type": "sum"
                 },
                 "type": "query"
               }
