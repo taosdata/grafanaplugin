@@ -4976,6 +4976,29 @@
                   "type": "max"
                 },
                 "type": "query"
+              },
+              {
+                "evaluator": {
+                  "params": [
+                    0
+                  ],
+                  "type": "lt"
+                },
+                "operator": {
+                  "type": "or"
+                },
+                "query": {
+                  "params": [
+                    "A",
+                    "30s",
+                    "now"
+                  ]
+                },
+                "reducer": {
+                  "params": [],
+                  "type": "min"
+                },
+                "type": "query"
               }
             ],
             "executionErrorState": "alerting",
@@ -5056,7 +5079,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "DNodes report alert",
+          "title": "Dnodes reboot alert",
           "tooltip": {
             "shared": true,
             "sort": 0,
