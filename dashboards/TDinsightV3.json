@@ -4967,7 +4967,7 @@
                 "query": {
                   "params": [
                     "A",
-                    "90s",
+                    "30s",
                     "now"
                   ]
                 },
@@ -4979,8 +4979,8 @@
               }
             ],
             "executionErrorState": "alerting",
-            "for": "90s",
-            "frequency": "90s",
+            "for": "30s",
+            "frequency": "30s",
             "handler": 1,
             "message": "Dnodes restart",
             "name": "Dnodes reboot alert",
@@ -5038,7 +5038,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts,  cluster_id, max(cluster_uptime) - last(cluster_uptime) as dnode_report  from log.taosd_cluster_info where _ts >= $from and _ts <= $to partition by cluster_id interval(30s) fill(null)",
+              "sql": "select _wstart as ts,  cluster_id, max(cluster_uptime) - last(cluster_uptime) as dnode_report  from log.taosd_cluster_info where _ts >= $from and _ts <= $to partition by cluster_id interval(30s) fill(VALUE, 1)",
               "timeShiftPeriod": "150",
               "timeShiftUnit": "seconds"
             }
