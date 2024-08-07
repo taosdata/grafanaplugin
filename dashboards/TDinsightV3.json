@@ -4175,7 +4175,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts,  dnode_ep, avg(cpu_system) as `system` from log.taosd_dnodes_info where _ts >= $from and _ts <= $to partition by dnode_ep  interval(5m) fill(null)",
+              "sql": "select first(_ts),  dnode_id, last(cpu_system) as cup_use from log.taosd_dnodes_info where _ts >= (now- 5m) and _ts < now partition by dnode_id ",
               "timeShiftPeriod": ""
             }
           ],
@@ -5613,7 +5613,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select  first(_ts),  count(`count`)  as `delete_count`  from log.taos_sql_req  where sql_type = 'delete' and _ts >= (now -30s) and _ts < now",
+              "sql": "select  _wstart as ts,  count(`count`)  as `delete_count`  from log.taos_sql_req  where sql_type = 'delete' and _ts > (now -30s) and _ts < now interval(30s) fill(null)",
               "timeShiftPeriod": "",
               "timeShiftUnit": "seconds"
             }
@@ -5624,7 +5624,7 @@
               "fill": true,
               "line": true,
               "op": "gt",
-              "value": 5,
+              "value": 0,
               "visible": true
             }
           ],
