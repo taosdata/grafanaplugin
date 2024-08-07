@@ -5430,7 +5430,7 @@
           "fillGradient": 0,
           "gridPos": {
             "h": 6,
-            "w": 6,
+            "w": 12,
             "x": 0,
             "y": 110
           },
@@ -5574,8 +5574,8 @@
           "fillGradient": 0,
           "gridPos": {
             "h": 6,
-            "w": 6,
-            "x": 6,
+            "w": 12,
+            "x": 13,
             "y": 110
           },
           "hiddenSeries": false,
