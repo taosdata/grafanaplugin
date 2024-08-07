@@ -3675,7 +3675,7 @@
                 "query": {
                   "params": [
                     "A",
-                    "30s",
+                    "150s",
                     "now"
                   ]
                 },
@@ -3687,7 +3687,7 @@
               }
             ],
             "executionErrorState": "alerting",
-            "for": "30s",
+            "for": "0m",
             "frequency": "30s",
             "handler": 1,
             "message": "There are nodes offline in the cluster",
@@ -3747,7 +3747,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts,  cluster_id, last(dnodes_total)  - last(dnodes_alive) as dnode_offline  from log.taosd_cluster_info where _ts >= $from and _ts <= $to partition by cluster_id interval(30s) fill(null)"
+              "sql": "select first(_ts),  cluster_id, last(dnodes_total)  - last(dnodes_alive) as dnode_offline  from log.taosd_cluster_info where _ts >= (now -30s) and _ts < now partition by cluster_id"
             }
           ],
           "thresholds": [
@@ -3817,7 +3817,7 @@
                 "query": {
                   "params": [
                     "A",
-                    "30s",
+                    "180s",
                     "now"
                   ]
                 },
@@ -3829,7 +3829,7 @@
               }
             ],
             "executionErrorState": "alerting",
-            "for": "30s",
+            "for": "0m",
             "frequency": "30s",
             "handler": 1,
             "message": "There are vnodes offline in the cluster",
@@ -3889,7 +3889,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts,  cluster_id, last(vnodes_total)  - last(vnodes_alive) as vnode_offline  from log.taosd_cluster_info where _ts >= $from and _ts <= $to partition by cluster_id interval(30s) fill(null)"
+              "sql": "select first(_ts),  cluster_id, last(vnodes_total)  - last(vnodes_alive) as vnode_offline  from log.taosd_cluster_info where _ts >= (now - 30s) and _ts < now partition by cluster_id"
             }
           ],
           "thresholds": [
@@ -3959,7 +3959,7 @@
                 "query": {
                   "params": [
                     "A",
-                    "5m",
+                    "48h",
                     "now"
                   ]
                 },
@@ -3971,7 +3971,7 @@
               }
             ],
             "executionErrorState": "alerting",
-            "for": "1h",
+            "for": "0m",
             "frequency": "24h",
             "handler": 1,
             "message": "Authorization is about to expire",
@@ -4030,8 +4030,8 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _ts, cluster_id, last(grants_expire_time) / 86400 as expire_time from log.taosd_cluster_info where _ts >= $from and _ts <= $to partition by cluster_id  interval(12h) fill(null)",
-              "timeShiftPeriod": "1",
+              "sql": "select first(_ts), cluster_id, last(grants_expire_time) / 86400 as expire_time from log.taosd_cluster_info where  _ts >= (now - 24h)  and _ts < now  partition by cluster_id",
+              "timeShiftPeriod": "",
               "timeShiftUnit": "days"
             }
           ],
@@ -4102,7 +4102,7 @@
                 "query": {
                   "params": [
                     "A",
-                    "5m",
+                    "15m",
                     "now"
                   ]
                 },
@@ -4114,7 +4114,7 @@
               }
             ],
             "executionErrorState": "alerting",
-            "for": "5m",
+            "for": "4m",
             "frequency": "5m",
             "handler": 1,
             "message": "Node CPU usage exceeds 80%",
@@ -4171,7 +4171,7 @@
           "targets": [
             {
               "colNameFormatStr": "",
-              "colNameToGroup": "dnode_ep",
+              "colNameToGroup": "dnode_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -4246,7 +4246,7 @@
                 "query": {
                   "params": [
                     "A",
-                    "5m",
+                    "15m",
                     "now"
                   ]
                 },
@@ -4258,7 +4258,7 @@
               }
             ],
             "executionErrorState": "alerting",
-            "for": "5m",
+            "for": "4m",
             "frequency": "5m",
             "handler": 1,
             "message": "Disk Used above 80%",
@@ -4315,12 +4315,12 @@
           "targets": [
             {
               "colNameFormatStr": "",
-              "colNameToGroup": "dnode_ep, data_dir_level, data_dir_name",
+              "colNameToGroup": "dnode_id, data_dir_level, data_dir_name",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, dnode_ep, data_dir_level, data_dir_name, last(used)  / last(total)  * 100 as used from log.taosd_dnodes_data_dirs where _ts >= $from and _ts <= $to partition by dnode_ep, data_dir_level, data_dir_name interval(5m) fill(null) ",
-              "timeShiftPeriod": "5",
+              "sql": "select first(_ts), dnode_id, data_dir_level, data_dir_name, last(used)  / last(total)  * 100 as used from log.taosd_dnodes_data_dirs where _ts >= (now - 5m) and _ts < now partition by dnode_id, data_dir_level, data_dir_name ",
+              "timeShiftPeriod": "0",
               "timeShiftUnit": "minutes"
             }
           ],
@@ -4391,7 +4391,7 @@
                 "query": {
                   "params": [
                     "A",
-                    "5m",
+                    "15m",
                     "now"
                   ]
                 },
@@ -4403,7 +4403,7 @@
               }
             ],
             "executionErrorState": "alerting",
-            "for": "5m",
+            "for": "4m",
             "frequency": "5m",
             "handler": 1,
             "message": "Node RAM usage exceeds 80%",
@@ -4460,12 +4460,12 @@
           "targets": [
             {
               "colNameFormatStr": "",
-              "colNameToGroup": "dnode_ep",
+              "colNameToGroup": "dnode_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, dnode_ep, last(mem_engine) / last(mem_total)  * 100 as taosd from log.taosd_dnodes_info where _ts >= $from and _ts <= $to partition by dnode_ep interval(5m) fill(null)",
-              "timeShiftPeriod": "10",
+              "sql": "select first(_ts), dnode_id, last(mem_engine) / last(mem_total)  * 100 as taosd from log.taosd_dnodes_info where _ts >= (now- 5m) and _ts <now partition by dnode_id",
+              "timeShiftPeriod": "",
               "timeShiftUnit": "seconds"
             }
           ],
@@ -4475,7 +4475,7 @@
               "fill": true,
               "line": true,
               "op": "gt",
-              "value": 80,
+              "value": 60,
               "visible": true
             }
           ],
@@ -4536,7 +4536,7 @@
                 "query": {
                   "params": [
                     "A",
-                    "5m",
+                    "48h",
                     "now"
                   ]
                 },
@@ -4548,7 +4548,7 @@
               }
             ],
             "executionErrorState": "alerting",
-            "for": "1h",
+            "for": "0m",
             "frequency": "24h",
             "handler": 1,
             "message": "Used Measuring Points above 80%",
@@ -4609,7 +4609,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": " select  _wstart as ts, cluster_id,  CASE  WHEN max(grants_timeseries_total)  > 0 THEN max(grants_timeseries_used)  /max(grants_timeseries_total) * 100   ELSE 0    END AS result from log.taosd_cluster_info where _ts >= $from and _ts <= $to partition by cluster_id interval(30s)",
+              "sql": " select  first(_ts), cluster_id,  CASE  WHEN max(grants_timeseries_total)  > 0 THEN max(grants_timeseries_used)  /max(grants_timeseries_total) * 100   ELSE 0    END AS result from log.taosd_cluster_info where _ts >= (now - 30s) and _ts < now partition by cluster_id",
               "timeShiftPeriod": "1",
               "timeShiftUnit": "days"
             }
@@ -4681,7 +4681,7 @@
                 "query": {
                   "params": [
                     "A",
-                    "1m",
+                    "5m",
                     "now"
                   ]
                 },
@@ -4693,7 +4693,7 @@
               }
             ],
             "executionErrorState": "alerting",
-            "for": "1m",
+            "for": "0m",
             "frequency": "1m",
             "handler": 1,
             "message": "The number of query requests exceeds 100 times within one minute",
@@ -4752,9 +4752,9 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts,  count(*) as `select_count`  from log.taos_sql_req where sql_type = 'select'  and _ts > $from and _ts <= $to interval(30s) fill(null)",
-              "timeShiftPeriod": "1",
-              "timeShiftUnit": "minutes"
+              "sql": "select first(_ts),  count(*) as `select_count`  from log.taos_sql_req where sql_type = 'select'  and _ts >= (now- 1m) and _ts <now ",
+              "timeShiftPeriod": "",
+              "timeShiftUnit": "seconds"
             }
           ],
           "thresholds": [
@@ -4824,7 +4824,7 @@
                 "query": {
                   "params": [
                     "A",
-                    "1m",
+                    "5m",
                     "now"
                   ]
                 },
@@ -4836,7 +4836,7 @@
               }
             ],
             "executionErrorState": "alerting",
-            "for": "1m",
+            "for": "0m",
             "frequency": "1m",
             "handler": 1,
             "message": "Query duration exceeds 300 seconds",
@@ -4895,8 +4895,8 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select now() as ts, count(*) from performance_schema.perf_queries where exec_usec>90000",
-              "timeShiftPeriod": "1",
+              "sql": "select now() as ts, count(*) as slow_count from performance_schema.perf_queries where exec_usec>300000000",
+              "timeShiftPeriod": "0",
               "timeShiftUnit": "minutes"
             }
           ],
@@ -4967,7 +4967,7 @@
                 "query": {
                   "params": [
                     "A",
-                    "30s",
+                    "180s",
                     "now"
                   ]
                 },
@@ -4976,34 +4976,11 @@
                   "type": "max"
                 },
                 "type": "query"
-              },
-              {
-                "evaluator": {
-                  "params": [
-                    0
-                  ],
-                  "type": "lt"
-                },
-                "operator": {
-                  "type": "or"
-                },
-                "query": {
-                  "params": [
-                    "A",
-                    "30s",
-                    "now"
-                  ]
-                },
-                "reducer": {
-                  "params": [],
-                  "type": "min"
-                },
-                "type": "query"
               }
             ],
             "executionErrorState": "alerting",
-            "for": "30s",
-            "frequency": "30s",
+            "for": "0s",
+            "frequency": "90s",
             "handler": 1,
             "message": "Dnodes restart",
             "name": "Dnodes reboot alert",
@@ -5057,12 +5034,12 @@
           "targets": [
             {
               "colNameFormatStr": "",
-              "colNameToGroup": "cluster_id",
+              "colNameToGroup": "dnode_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts,  cluster_id, max(cluster_uptime) - last(cluster_uptime) as dnode_report  from log.taosd_cluster_info where _ts >= $from and _ts <= $to partition by cluster_id interval(30s) fill(VALUE, 1)",
-              "timeShiftPeriod": "150",
+              "sql": "select first(_ts),  dnode_id,  max(uptime) - last(uptime) as dnode_report  from log.taosd_dnodes_info where _ts >= (now - 90s) and _ts < now  partition by dnode_id ",
+              "timeShiftPeriod": "",
               "timeShiftUnit": "seconds"
             }
           ],
@@ -5133,7 +5110,7 @@
                 "query": {
                   "params": [
                     "A",
-                    "5m",
+                    "15s",
                     "now"
                   ]
                 },
@@ -5145,7 +5122,7 @@
               }
             ],
             "executionErrorState": "alerting",
-            "for": "30s",
+            "for": "0m",
             "frequency": "30s",
             "handler": 1,
             "message": "The adapter websocket interface has failed more than 5 times within 30 seconds",
@@ -5205,8 +5182,8 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, sum(`fail`) as `Failed` from log.adapter_requests where req_type=1 and ts >= $from and ts <= $to interval(30s) fill(null)",
-              "timeShiftPeriod": "30",
+              "sql": "select first(ts), sum(`fail`) as `Failed` from log.adapter_requests where req_type=1 and ts >= (now -30s) and ts < now",
+              "timeShiftPeriod": "",
               "timeShiftUnit": "seconds"
             }
           ],
@@ -5277,7 +5254,7 @@
                 "query": {
                   "params": [
                     "A",
-                    "180s",
+                    "540s",
                     "now"
                   ]
                 },
@@ -5289,7 +5266,7 @@
               }
             ],
             "executionErrorState": "alerting",
-            "for": "180s",
+            "for": "",
             "frequency": "180s",
             "handler": 1,
             "message": "DNodes Metrics reports less than 3 times within 150 seconds",
@@ -5348,8 +5325,8 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts,  cluster_id, count(*) as dnode_report  from log.taosd_cluster_info where _ts >= $from and _ts <= $to partition by cluster_id interval(180s) fill(null)",
-              "timeShiftPeriod": "180",
+              "sql": "select first(_ts),  cluster_id, count(*) as dnode_report  from log.taosd_cluster_info where _ts >= (now -180s) and _ts < now partition by cluster_id ",
+              "timeShiftPeriod": "",
               "timeShiftUnit": "seconds"
             }
           ],
@@ -5420,7 +5397,7 @@
                 "query": {
                   "params": [
                     "A",
-                    "30s",
+                    "180s",
                     "now"
                   ]
                 },
@@ -5432,7 +5409,7 @@
               }
             ],
             "executionErrorState": "alerting",
-            "for": "30s",
+            "for": "",
             "frequency": "30s",
             "handler": 1,
             "message": "The adapter restful interface has failed more than 5 times within 30 seconds",
@@ -5492,8 +5469,8 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, sum(`fail`) as `Failed` from log.adapter_requests where req_type=0 and ts >= $from and ts <= $to interval(30s) fill(null)",
-              "timeShiftPeriod": "30",
+              "sql": "select first(ts), sum(`fail`) as `Failed` from log.adapter_requests where req_type=0 and ts >= (now -30s) and ts < now;",
+              "timeShiftPeriod": "0",
               "timeShiftUnit": "seconds"
             }
           ],
@@ -5636,8 +5613,8 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select  _wstart as ts,  count(`count`)  as `delete_count`  from log.taos_sql_req  where sql_type = 'delete' and _ts > $from and _ts <= $to interval(30s) fill(null)",
-              "timeShiftPeriod": "30",
+              "sql": "select  first(_ts),  count(`count`)  as `delete_count`  from log.taos_sql_req  where sql_type = 'delete' and _ts >= (now -30s) and _ts < now",
+              "timeShiftPeriod": "",
               "timeShiftUnit": "seconds"
             }
           ],
@@ -5958,7 +5935,7 @@
         "name": "interval",
         "options": [
           {
-            "selected": true,
+            "selected": false,
             "text": "auto",
             "value": "$__auto_interval_interval"
           },
@@ -5983,7 +5960,7 @@
             "value": "20s"
           },
           {
-            "selected": false,
+            "selected": true,
             "text": "30s",
             "value": "30s"
           },
