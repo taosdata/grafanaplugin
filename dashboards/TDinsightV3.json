@@ -2833,7 +2833,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, last(cpu_engine) as taosd, last(cpu_system) as `system` from $database.taosd_dnodes_info where dnode_ep = '$fqdn' and _ts >= $from and _ts <= $to interval($interval) fill(null)"
+              "sql": "select first(_ts),  dnode_id, last(cpu_system) as cup_use from log.taosd_dnodes_info where _ts >= (now- 5m) and _ts < now partition by dnode_id "
             }
           ],
           "timeFrom": null,
