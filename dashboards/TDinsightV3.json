@@ -4752,7 +4752,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select first(_ts),  sum(`count`) as `select_count`  from log.taos_sql_req where sql_type = 'select'  and _ts >= (now- 1m) and _ts <now",
+              "sql": "select  first(_ts), sum(`count`)  as `delete_count`  from log.taos_sql_req  where sql_type = 'delete' and _ts >= (now -30s) and _ts < now",
               "timeShiftPeriod": "",
               "timeShiftUnit": "seconds"
             }
