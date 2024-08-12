@@ -5110,7 +5110,7 @@
                 "query": {
                   "params": [
                     "A",
-                    "15s",
+                    "150s",
                     "now"
                   ]
                 },
@@ -5269,7 +5269,7 @@
             "for": "",
             "frequency": "180s",
             "handler": 1,
-            "message": "DNodes Metrics reports less than 3 times within 150 seconds",
+            "message": "DNodes Metrics reports less than 3 times within 180 seconds",
             "name": "DNodes report alert",
             "noDataState": "alerting",
             "notifications": []
