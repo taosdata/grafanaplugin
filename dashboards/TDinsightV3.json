@@ -5553,7 +5553,7 @@
               }
             ],
             "executionErrorState": "alerting",
-            "for": "30s",
+            "for": "",
             "frequency": "30s",
             "handler": 1,
             "message": "Received data deletion request within 30 seconds",
