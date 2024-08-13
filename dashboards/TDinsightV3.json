@@ -4406,7 +4406,7 @@
             "for": "4m",
             "frequency": "5m",
             "handler": 1,
-            "message": "Node RAM usage exceeds 80%",
+            "message": "Node RAM usage exceeds 60%",
             "name": "RAM Usage alert",
             "noDataState": "alerting",
             "notifications": []
