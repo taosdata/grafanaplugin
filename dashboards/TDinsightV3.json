@@ -4526,7 +4526,7 @@
               {
                 "evaluator": {
                   "params": [
-                    80
+                    90
                   ],
                   "type": "gt"
                 },
@@ -4551,7 +4551,7 @@
             "for": "0m",
             "frequency": "24h",
             "handler": 1,
-            "message": "Used Measuring Points above 80%",
+            "message": "Used Measuring Points above 90%",
             "name": "Used Measuring Points alert",
             "noDataState": "alerting",
             "notifications": []
