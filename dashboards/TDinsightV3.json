@@ -4138,7 +4138,7 @@
           "gridPos": {
             "h": 6,
             "w": 6,
-            "x": 12,
+            "x": 18,
             "y": 91
           },
           "hiddenSeries": false,
@@ -4715,7 +4715,7 @@
           "gridPos": {
             "h": 6,
             "w": 6,
-            "x": 12,
+            "x": 18,
             "y": 98
           },
           "hiddenSeries": false,
@@ -5288,7 +5288,7 @@
           "gridPos": {
             "h": 6,
             "w": 6,
-            "x": 12,
+            "x": 18,
             "y": 105
           },
           "hiddenSeries": false,
