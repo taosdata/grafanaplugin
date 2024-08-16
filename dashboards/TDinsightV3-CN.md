@@ -7,7 +7,8 @@ TDinsight v3.x 是使用 [TDengine 3.x] 监控数据库和 [Grafana] 对 TDengin
 TDinsight v3.x 和 TDengine 的版本对应关系如下：
 | TDinsight v3.x 版本 |  TDengine 版本 |
 | :---------------------: | :--------------: |
-|          3.5.1            |  3.3.3.0 及以上 |
+|          3.5.2            |  3.3.0.0 及以上 |
+|          3.5.1            |  3.3.0.0 及以上 |
 |          3.5.0            |  3.2.3.0 及以上 |
 |          3.4.0            |  3.2.0.1 及以上 |
 |          3.2.7            |  3.0.0.0 及以上 |
@@ -181,7 +182,6 @@ TDinsight 仪表盘旨在提供TDengine
 
 - **First EP**：当前TDengine集群中的`firstEp`设置。
 - **Version**：TDengine 服务器版本（master mnode）。
-- **Master Uptime**：当前Master MNode 被选举为 Master 后经过的时间。
 - **Expire Time**：企业版过期时间。
 - **Used Measuring Points**：企业版已使用的测点数。
 - **Databases**：数据库个数。
@@ -190,7 +190,6 @@ TDinsight 仪表盘旨在提供TDengine
 - **DNodes/MNodes/VGroups/VNodes**：每种资源的总数和存活数。
 - **DNodes/MNodes/VGroups/VNodes Alive Percent**：每种资源的存活数/总数的比例。
 - **Measuring Points Used**：测点数用量（社区版无数据，默认情况下是健康的）。
-- **Grants Expire Time**：企业版过期时间（社区版无数据，默认情况是健康的）。
 
 ### DNodes 状态
 
