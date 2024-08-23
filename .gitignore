@@ -31,6 +31,7 @@ conf/custom.ini
 fig.yml
 profile.cov
 .notouch
+package-lock.json
 
 # Test artifacts
 /dist/test/
@@ -38,3 +39,4 @@ dist
 .vscode
 tdengine-datasource*
 .DS_Store
+.history/

@@ -1,8 +1,10 @@
-import React, {ReactElement} from 'react'
-import {FieldSet, LegacyForms, Tab, TabContent, TabsBar} from '@grafana/ui'
+import React, {ReactElement, useEffect, useState} from 'react'
+import {FieldSet, LegacyForms, Switch, Tab, TabContent, TabsBar} from '@grafana/ui'
 import type {EditorProps} from './types'
 import {useChangeSecureOptions} from './useChangeSecureOptions'
 import {useResetSecureOptions} from './useResetSecureOptions'
+
+import './ConfigEditor.css'
 
 const {SecretFormField, FormField} = LegacyForms;
 
@@ -11,7 +13,6 @@ enum authType {Basic = 'basic', Token = 'token'}
 export function ConfigEditor(props: EditorProps): ReactElement {
     const {secureJsonData} = props.options;
     const {secureJsonFields} = props.options;
-
     const onChangeUrl = useChangeSecureOptions(props, 'url')
     const onResetUrl = useResetSecureOptions(props, 'url')
     const onChangeUser = useChangeSecureOptions(props, 'user')
@@ -20,12 +21,24 @@ export function ConfigEditor(props: EditorProps): ReactElement {
     const onResetPassword = useResetSecureOptions(props, 'password')
     const onChangeToken = useChangeSecureOptions(props, 'token')
     const onResetToken = useResetSecureOptions(props, 'token')
-
+    const onChangeAlert = useChangeSecureOptions(props, 'alert')
+    // const onResetAlert = useResetSecureOptions(props, 'alert')
+    
     // console.log("ConfigEditor:" + secureJsonData?.token)
     // console.log("secureJsonFields.token:" + secureJsonFields.token)
-
     const [active, setActive] = React.useState((secureJsonFields && secureJsonFields.token) ? authType.Token : authType.Basic )
-
+    const [alert, setAlert] = useState(props.options.alert === undefined ? true : props.options.alert);
+    const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const checked = event.target.checked;
+        setAlert(checked);
+        onChangeAlert(event);
+      }
+      ;
+      useEffect(() => {
+        // 当 alert 变化时，更新开关状态
+        setAlert(props.options.alert === undefined? true : props.options.alert);
+      }, [props.options.alert]);
+      
     return (
         <div className='gf-form-group'>
             <FieldSet label="TDengine Host">
@@ -109,8 +122,19 @@ export function ConfigEditor(props: EditorProps): ReactElement {
                     }
                 </TabContent>
             </FieldSet>
+            <FieldSet label="TDengine Alert">  
+                <FormField label="Load Tengine Alert" 
+                    labelWidth={8}
+                    className='align-center'
+                    inputEl= {           
+                        <Switch 
+                            onChange={handleSwitchChange}
+                            value={alert}
+                        />         
+                    } 
+                />
+            </FieldSet>
         </div>
     )
 }
-
 

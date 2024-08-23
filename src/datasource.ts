@@ -10,6 +10,7 @@ import {DataSourceOptions, Query} from './types';
 import _, {uniqBy} from "lodash";
 // eslint-disable-next-line no-restricted-imports
 import moment from 'moment';
+import axios from 'axios';
 
 export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
     baseUrl: string
@@ -22,6 +23,7 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
     constructor(instanceSettings: DataSourceInstanceSettings<DataSourceOptions>) {
         super(instanceSettings);
         this.baseUrl = instanceSettings.url!
+        console.log(instanceSettings.alert)
         this.backendSrv = getBackendSrv()
         this.template = getTemplateSrv()
     }
@@ -55,10 +57,82 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
         });
     }
 
+    checkVersion(): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            axios.get("/api/frontend/settings").then(response=>{
+                if (!!response && response.status=== 200 && !!response.data && !!response.data.buildInfo.version) {
+                    const version = '' + response.data.buildInfo.version;
+                    const versionParts = version.split(".");
+                    if (versionParts.length > 0) {
+                        const majorVersion = parseInt(versionParts[0], 10);
+                        if (majorVersion === 11) {
+                            console.log("11 版本"); 
+                            resolve(true);
+                        } else {
+                            resolve(false);
+                        }  
+                    }
+                } else {
+                    console.log("get grafana version fail!")
+                    reject()
+                }
+            })
+        });  
+    }
+
+    createAlertFolder(): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            let req = {uid: "tdengine_alert_1", title: "TDengine Alert"}
+
+            axios.post("/api/folders", req).then(response=>{
+                console.log(response.status)
+                if (!!response && (response.status === 200)) {
+                    resolve(true)
+                } else {
+                    console.log(response)
+                    reject()
+                }
+            }).catch((e: any) => {
+                if(e.response.status === 409) {
+                    resolve(true)
+                }
+                
+            })
+        });        
+    }
+
+    sendInitAlert(): Promise<void> {
+        return new Promise((resolve, reject) => {
+            return this.checkVersion().then(response=>{
+                if (response) {
+                     this.createAlertFolder().then(response=>{
+                        resolve();
+                    }).catch((e: any) =>{
+                        console.log(e)
+                        resolve();    
+                    })
+                }
+            }).catch((e: any) => {
+                console.log(e)
+                resolve();
+            })
+        });
+        
+    }
+
     testDatasource() { // save & test button
+        
         return this.request('show databases').then((response: { status: number; data: { message: string; }; }) => {
             if (!!response && response.status === 200 && !_.get(response, 'data.code')) {
-                return {status: "success", message: "TDengine Data source is working", title: "Success"};
+                return this.sendInitAlert().then(()=>{
+                    return {status: "success", message: "TDengine Data source is working", title: "Success"};
+                }).catch((e: any) => {
+                    console.log("xxdxdxdxd");
+                    return {status: "success", message: "TDengine Data source is working", title: "Success"};
+                });
+                
+                         
+                // return {status: "success", message: "TDengine Data source is working", title: "Success"};
             }
             return {
                 status: "error",

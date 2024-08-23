@@ -32,6 +32,10 @@ export function useChangeSecureOptions(props: EditorProps, propertyName: keyof S
             if (propertyName === 'token' && options.secureJsonData) {
                 options.secureJsonData.token = event.target.value
             }
+
+            if (propertyName === 'alert' && options.secureJsonData) {
+                options.secureJsonData.alert = event.target.checked
+            }
             
             onOptionsChange({
                 ...options,
