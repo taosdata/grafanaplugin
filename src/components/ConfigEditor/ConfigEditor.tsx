@@ -1,8 +1,11 @@
-import React, {ReactElement} from 'react'
-import {FieldSet, LegacyForms, Tab, TabContent, TabsBar} from '@grafana/ui'
+import React, {ReactElement,useState} from 'react'
+import {Button, FieldSet, LegacyForms, Switch, Tab, TabContent, TabsBar} from '@grafana/ui'
 import type {EditorProps} from './types'
 import {useChangeSecureOptions} from './useChangeSecureOptions'
 import {useResetSecureOptions} from './useResetSecureOptions'
+import {deleteAlerts} from '../../utils'
+
+import './ConfigEditor.css'
 
 const {SecretFormField, FormField} = LegacyForms;
 
@@ -11,7 +14,6 @@ enum authType {Basic = 'basic', Token = 'token'}
 export function ConfigEditor(props: EditorProps): ReactElement {
     const {secureJsonData} = props.options;
     const {secureJsonFields} = props.options;
-
     const onChangeUrl = useChangeSecureOptions(props, 'url')
     const onResetUrl = useResetSecureOptions(props, 'url')
     const onChangeUser = useChangeSecureOptions(props, 'user')
@@ -20,11 +22,39 @@ export function ConfigEditor(props: EditorProps): ReactElement {
     const onResetPassword = useResetSecureOptions(props, 'password')
     const onChangeToken = useChangeSecureOptions(props, 'token')
     const onResetToken = useResetSecureOptions(props, 'token')
-
+    
     // console.log("ConfigEditor:" + secureJsonData?.token)
     // console.log("secureJsonFields.token:" + secureJsonFields.token)
-
     const [active, setActive] = React.useState((secureJsonFields && secureJsonFields.token) ? authType.Token : authType.Basic )
+    let alertState = true
+    if (props.options.jsonData.isLoadAlerts === undefined) {
+        props.options.jsonData.isLoadAlerts = true;
+        alertState = props.options.jsonData.isLoadAlerts
+    }
+
+    const handleButtonClick = () => {
+        const confirmed = window.confirm('Are you sure you want to clear alerts?');
+        if (confirmed) {
+            console.log(props.options.name);
+            // deleteAlerts(props.options.name).then(()=>{
+            //     console.log("alert deleted!");
+            // });
+        }
+      };
+
+    const [alert, setAlert] = useState(alertState);
+    const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const checked = event.target.checked;
+        setAlert(checked);
+        const {onOptionsChange, options} = props;
+        props.options.jsonData.isLoadAlerts = checked
+        onOptionsChange({
+            ...options,
+            jsonData: {
+                ...options.jsonData,
+            },
+        })
+      };
 
     return (
         <div className='gf-form-group'>
@@ -109,8 +139,32 @@ export function ConfigEditor(props: EditorProps): ReactElement {
                     }
                 </TabContent>
             </FieldSet>
+            <FieldSet label="TDengine Alert">  
+                <FormField label="Load TDengine Alert" 
+                    labelWidth={10}
+                    className='align-center'
+                    inputEl= {           
+                        <Switch 
+                            onChange={handleSwitchChange}
+                            value={alert}
+                        />         
+                    } 
+                />
+
+                <FormField label="Clear TDengine Alert"
+                    labelWidth={10} 
+                    className='align-center'
+                    inputEl= {  
+                        <Button 
+                            variant="primary"
+                            className="custom-button"
+                            onClick={handleButtonClick}
+                            
+                        />
+                    }        
+                />
+            </FieldSet>
         </div>
     )
 }
-
 
