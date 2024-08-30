@@ -5,3 +5,18 @@
     border: 1px solid #f6f3f3;
     padding: 5px;
 }
+
+.custom-button {
+    background-color: #eb0637; /* 按钮背景颜色，可根据喜好修改 */
+    color: white; /* 文本颜色 */
+    border: none;
+    padding: 8px 16px; /* 内边距调整按钮大小 */
+    border-radius: 25px; /* 设置较大的圆角半径接近椭圆 */
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* 过渡效果使交互更平滑 */
+    font-size: 14px; /* 字体大小 */
+    text-transform: uppercase; /* 大写字母 */
+    letter-spacing: 1px; /* 字母间距 */
+    height: 15px; /* 设置按钮高度 */
+    width: 10px; /* 设置按钮宽度 */
+  }

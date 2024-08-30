@@ -1,8 +1,9 @@
-import React, {ReactElement, useEffect, useState} from 'react'
-import {FieldSet, LegacyForms, Switch, Tab, TabContent, TabsBar} from '@grafana/ui'
+import React, {ReactElement,useState} from 'react'
+import {Button, FieldSet, LegacyForms, Switch, Tab, TabContent, TabsBar} from '@grafana/ui'
 import type {EditorProps} from './types'
 import {useChangeSecureOptions} from './useChangeSecureOptions'
 import {useResetSecureOptions} from './useResetSecureOptions'
+import {deleteAlerts} from '../../utils'
 
 import './ConfigEditor.css'
 
@@ -21,24 +22,40 @@ export function ConfigEditor(props: EditorProps): ReactElement {
     const onResetPassword = useResetSecureOptions(props, 'password')
     const onChangeToken = useChangeSecureOptions(props, 'token')
     const onResetToken = useResetSecureOptions(props, 'token')
-    const onChangeAlert = useChangeSecureOptions(props, 'alert')
-    // const onResetAlert = useResetSecureOptions(props, 'alert')
     
     // console.log("ConfigEditor:" + secureJsonData?.token)
     // console.log("secureJsonFields.token:" + secureJsonFields.token)
     const [active, setActive] = React.useState((secureJsonFields && secureJsonFields.token) ? authType.Token : authType.Basic )
-    const [alert, setAlert] = useState(props.options.alert === undefined ? true : props.options.alert);
+    let alertState = true
+    if (props.options.jsonData.isLoadAlerts === undefined) {
+        props.options.jsonData.isLoadAlerts = true;
+        alertState = props.options.jsonData.isLoadAlerts
+    }
+
+    const handleButtonClick = () => {
+        const confirmed = window.confirm('Are you sure you want to clear alerts?');
+        if (confirmed) {
+            console.log(props.options.name);
+            // deleteAlerts(props.options.name).then(()=>{
+            //     console.log("alert deleted!");
+            // });
+        }
+      };
+
+    const [alert, setAlert] = useState(alertState);
     const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const checked = event.target.checked;
         setAlert(checked);
-        onChangeAlert(event);
-      }
-      ;
-      useEffect(() => {
-        // 当 alert 变化时，更新开关状态
-        setAlert(props.options.alert === undefined? true : props.options.alert);
-      }, [props.options.alert]);
-      
+        const {onOptionsChange, options} = props;
+        props.options.jsonData.isLoadAlerts = checked
+        onOptionsChange({
+            ...options,
+            jsonData: {
+                ...options.jsonData,
+            },
+        })
+      };
+
     return (
         <div className='gf-form-group'>
             <FieldSet label="TDengine Host">
@@ -123,8 +140,8 @@ export function ConfigEditor(props: EditorProps): ReactElement {
                 </TabContent>
             </FieldSet>
             <FieldSet label="TDengine Alert">  
-                <FormField label="Load Tengine Alert" 
-                    labelWidth={8}
+                <FormField label="Load TDengine Alert" 
+                    labelWidth={10}
                     className='align-center'
                     inputEl= {           
                         <Switch 
@@ -132,6 +149,19 @@ export function ConfigEditor(props: EditorProps): ReactElement {
                             value={alert}
                         />         
                     } 
+                />
+
+                <FormField label="Clear TDengine Alert"
+                    labelWidth={10} 
+                    className='align-center'
+                    inputEl= {  
+                        <Button 
+                            variant="primary"
+                            className="custom-button"
+                            onClick={handleButtonClick}
+                            
+                        />
+                    }        
                 />
             </FieldSet>
         </div>

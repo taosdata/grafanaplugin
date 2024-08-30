@@ -20,6 +20,7 @@ export const DEFAULT_QUERY: Partial<Query> = {
  * These are options configured for each DataSource instance
  */
 export interface DataSourceOptions extends DataSourceJsonData {
+    isLoadAlerts?: boolean;
 }
 
 /**
@@ -32,7 +33,6 @@ export interface SecureJsonData {
     token?: string
     basicAuth?: string
     basicAuthPassword?: string
-    alert?: boolean
 }
 
 export type ChangeOptions<T> = {

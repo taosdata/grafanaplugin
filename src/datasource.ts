@@ -11,7 +11,7 @@ import _, {uniqBy} from "lodash";
 // eslint-disable-next-line no-restricted-imports
 import moment from 'moment';
 import axios from 'axios';
-
+import data from './alert_rules.json'
 export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
     baseUrl: string
     backendSrv: BackendSrv
@@ -19,13 +19,14 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
     timezone = ''
     lastGeneratedSql = ''
     serverVersion = 0
+    isLoadAlerts?: boolean
 
     constructor(instanceSettings: DataSourceInstanceSettings<DataSourceOptions>) {
         super(instanceSettings);
         this.baseUrl = instanceSettings.url!
-        console.log(instanceSettings.alert)
         this.backendSrv = getBackendSrv()
         this.template = getTemplateSrv()
+        this.isLoadAlerts = instanceSettings.jsonData.isLoadAlerts;
     }
 
     // @ts-ignore
@@ -57,7 +58,7 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
         });
     }
 
-    checkVersion(): Promise<boolean> {
+    async checkVersion(): Promise<boolean> {
         return new Promise((resolve, reject) => {
             axios.get("/api/frontend/settings").then(response=>{
                 if (!!response && response.status=== 200 && !!response.data && !!response.data.buildInfo.version) {
@@ -82,8 +83,8 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
 
     createAlertFolder(): Promise<boolean> {
         return new Promise((resolve, reject) => {
-            let req = {uid: "tdengine_alert_1", title: "TDengine Alert"}
-
+            let req = {uid: this.name + '_alert', title: this.name + '-alert'}
+            console.log(req);
             axios.post("/api/folders", req).then(response=>{
                 console.log(response.status)
                 if (!!response && (response.status === 200)) {
@@ -101,38 +102,120 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
         });        
     }
 
-    sendInitAlert(): Promise<void> {
-        return new Promise((resolve, reject) => {
-            return this.checkVersion().then(response=>{
-                if (response) {
-                     this.createAlertFolder().then(response=>{
-                        resolve();
-                    }).catch((e: any) =>{
-                        console.log(e)
-                        resolve();    
-                    })
+    async getAlerts(ruleGroup: string): Promise<boolean>{
+        try{
+            let path1 = `/api/v1/provisioning/folder/${this.name}_alert/rule-groups/${ruleGroup}`;
+            let response = await axios.get(path1);
+            if (!!response && response.status=== 200 && !!response.data) {
+                if (response.data.rules.length > 0) {
+                    return true;
                 }
-            }).catch((e: any) => {
-                console.log(e)
+            }
+            console.log(response);   
+            return false;
+        }catch(e) {
+            console.log(e);                 
+            return false 
+        }  
+    }
+
+    async loadAlerts(ruleGroup: string, data: any): Promise<boolean>{
+        try{
+            let path = `/api/v1/provisioning/folder/${this.name}_alert/rule-groups/${ruleGroup}`;
+            let response = await axios.put(path, data, {
+                headers: {
+                    'X-Disable-Provenance': 'true'
+                }
+            });
+            if (!!response && response.status=== 200) {
+                console.log(`rule-groups-->${response}`);
+                return true;
+            }
+            console.log(response);   
+            return false;
+        }catch(e) {
+            console.log(e);                 
+            return false 
+        }  
+    }
+
+    modifyAlertDataSource(ruleGroup: any) {
+        ruleGroup.folderUid = this.name + '_alert';
+        let count = ruleGroup.rules.length;
+        for (let index = 0; index < count; index++) {
+            ruleGroup.rules[index].folderUID = this.name + '_alert';
+            ruleGroup.rules[index].data[0].datasourceUid = this.uid;
+            ruleGroup.rules[index].data[0].model.datasource.uid = this.uid;
+        }
+    }
+
+    sendInitAlert(): Promise<void> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let bSuport = await this.checkVersion();
+                if (bSuport) {
+                    let bOk = await this.createAlertFolder();
+                    if (bOk) {
+                        bOk = await this.getAlerts("alert_1m");
+                        if (!bOk) {
+                            this.modifyAlertDataSource(data.alert_1m);
+                            await this.loadAlerts("alert_1m", data.alert_1m);
+                        }
+
+                        bOk = await this.getAlerts("alert_5m");
+                        if (!bOk) {
+                            this.modifyAlertDataSource(data.alert_5m);
+                            await this.loadAlerts("alert_5m", data.alert_5m);
+                        }
+
+                        bOk = await this.getAlerts("alert_30s");
+                        if (!bOk) {
+                            this.modifyAlertDataSource(data.alert_30s);
+                            await this.loadAlerts("alert_30s", data.alert_30s);
+                        }
+
+                        bOk = await this.getAlerts("alert_90s");
+                        if (!bOk) {
+                            this.modifyAlertDataSource(data.alert_90s);
+                            await this.loadAlerts("alert_90s", data.alert_90s);
+                        }
+
+                        bOk = await this.getAlerts("alert_180s");
+                        if (!bOk) {
+                            this.modifyAlertDataSource(data.alert_180s);
+                            await this.loadAlerts("alert_180s", data.alert_180s);
+                        }
+
+                        bOk = await this.getAlerts("alert_24h");
+                        if (!bOk) {
+                            this.modifyAlertDataSource(data.alert_24h);
+                            await this.loadAlerts("alert_24h", data.alert_24h);
+                        }  
+                    }
+                }
                 resolve();
-            })
-        });
-        
+
+            } catch(e) {
+                console.log(e);                 
+                resolve(); 
+            }
+        })
     }
 
     testDatasource() { // save & test button
-        
         return this.request('show databases').then((response: { status: number; data: { message: string; }; }) => {
             if (!!response && response.status === 200 && !_.get(response, 'data.code')) {
-                return this.sendInitAlert().then(()=>{
+                if (this.isLoadAlerts === true) {
+                    return this.sendInitAlert().then(()=>{
+                        return {status: "success", message: "TDengine Data source is working", title: "Success"};
+                    }).catch((e: any) => {
+                        console.log("xxdxdxdxd");
+                        return {status: "success", message: "TDengine Data source is working", title: "Success"};
+                    });                    
+                } else {
                     return {status: "success", message: "TDengine Data source is working", title: "Success"};
-                }).catch((e: any) => {
-                    console.log("xxdxdxdxd");
-                    return {status: "success", message: "TDengine Data source is working", title: "Success"};
-                });
+                } 
                 
-                         
-                // return {status: "success", message: "TDengine Data source is working", title: "Success"};
             }
             return {
                 status: "error",
