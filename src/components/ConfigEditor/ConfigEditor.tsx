@@ -35,10 +35,10 @@ export function ConfigEditor(props: EditorProps): ReactElement {
     const handleButtonClick = () => {
         const confirmed = window.confirm('Are you sure you want to clear alerts?');
         if (confirmed) {
-            console.log(props.options.name);
-            // deleteAlerts(props.options.name).then(()=>{
-            //     console.log("alert deleted!");
-            // });
+            console.log(props.options.uid);
+            deleteAlerts(props.options.uid).then(()=>{
+                console.log("alert deleted!");
+            });
         }
       };
 

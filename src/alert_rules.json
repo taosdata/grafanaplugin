@@ -314,7 +314,7 @@
                                 {
                                     "evaluator": {
                                         "params": [
-                                            80,
+                                            60,
                                             0
                                         ],
                                         "type": "gt"
@@ -357,8 +357,6 @@
                 "isPaused": false
             },
             {
-                "id": 7,
-                "uid": "fdvz6fzr3pwjkb",
                 "orgID": 1,
                 "folderUID": "fdvz0sywic3r4c",
                 "ruleGroup": "alert_5m",
@@ -435,7 +433,6 @@
                         }
                     }
                 ],
-                "updated": "2024-08-26T17:05:45+08:00",
                 "noDataState": "Alerting",
                 "execErrState": "Alerting",
                 "for": "5m",

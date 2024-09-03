@@ -12,6 +12,7 @@ import _, {uniqBy} from "lodash";
 import moment from 'moment';
 import axios from 'axios';
 import data from './alert_rules.json'
+import { getFolderUid } from './utils'
 export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
     baseUrl: string
     backendSrv: BackendSrv
@@ -81,9 +82,29 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
         });  
     }
 
+    getAlertFolder(): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            let uid = getFolderUid(`${this.uid}`)
+            axios.get(`/api/folders/${uid}`).then(response=>{
+                console.log(response.status)
+                if (!!response && (response.status === 200)) {
+                    resolve(true)
+                } else {
+                    console.log(response)
+                    reject()
+                }
+            }).catch((e: any) => {
+                if(e.response.status === 404) {
+                    resolve(false)
+                }
+                
+            })
+        });        
+    }
+
     createAlertFolder(): Promise<boolean> {
         return new Promise((resolve, reject) => {
-            let req = {uid: this.name + '_alert', title: this.name + '-alert'}
+            let req = {uid: getFolderUid(`${this.uid}`), title: this.name + '-alert'}
             console.log(req);
             axios.post("/api/folders", req).then(response=>{
                 console.log(response.status)
@@ -104,8 +125,9 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
 
     async getAlerts(ruleGroup: string): Promise<boolean>{
         try{
-            let path1 = `/api/v1/provisioning/folder/${this.name}_alert/rule-groups/${ruleGroup}`;
-            let response = await axios.get(path1);
+            let uid = getFolderUid(`${this.uid}`)
+            let path = `/api/v1/provisioning/folder/${uid}/rule-groups/${ruleGroup}`;
+            let response = await axios.get(path);
             if (!!response && response.status=== 200 && !!response.data) {
                 if (response.data.rules.length > 0) {
                     return true;
@@ -121,7 +143,8 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
 
     async loadAlerts(ruleGroup: string, data: any): Promise<boolean>{
         try{
-            let path = `/api/v1/provisioning/folder/${this.name}_alert/rule-groups/${ruleGroup}`;
+            let uid = getFolderUid(`${this.uid}`)
+            let path = `/api/v1/provisioning/folder/${uid}/rule-groups/${ruleGroup}`;
             let response = await axios.put(path, data, {
                 headers: {
                     'X-Disable-Provenance': 'true'
@@ -140,10 +163,10 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
     }
 
     modifyAlertDataSource(ruleGroup: any) {
-        ruleGroup.folderUid = this.name + '_alert';
+        ruleGroup.folderUid = getFolderUid(`${this.uid}`);
         let count = ruleGroup.rules.length;
         for (let index = 0; index < count; index++) {
-            ruleGroup.rules[index].folderUID = this.name + '_alert';
+            ruleGroup.rules[index].folderUID = ruleGroup.folderUid;
             ruleGroup.rules[index].data[0].datasourceUid = this.uid;
             ruleGroup.rules[index].data[0].model.datasource.uid = this.uid;
         }
@@ -154,7 +177,11 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
             try {
                 let bSuport = await this.checkVersion();
                 if (bSuport) {
-                    let bOk = await this.createAlertFolder();
+                    let bOk = await this.getAlertFolder();
+                    if (!bOk) {
+                        bOk = await this.createAlertFolder();
+                    }
+
                     if (bOk) {
                         bOk = await this.getAlerts("alert_1m");
                         if (!bOk) {
