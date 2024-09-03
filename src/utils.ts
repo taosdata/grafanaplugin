@@ -51,7 +51,7 @@ async function deleteFolder(folderUid: string): Promise<boolean> {
 }
 
 export function getFolderUid(datasourceUid: string): string {
-    return `${datasourceUid}-alert`;
+    return `alert-${datasourceUid}`;
 }
 
 

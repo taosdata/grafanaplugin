@@ -11,12 +11,17 @@
     color: white; /* 文本颜色 */
     border: none;
     padding: 8px 16px; /* 内边距调整按钮大小 */
-    border-radius: 25px; /* 设置较大的圆角半径接近椭圆 */
+    border-radius: 2px; /* 设置较大的圆角半径接近椭圆 */
     cursor: pointer;
     transition: background-color 0.3s ease; /* 过渡效果使交互更平滑 */
     font-size: 14px; /* 字体大小 */
     text-transform: uppercase; /* 大写字母 */
     letter-spacing: 1px; /* 字母间距 */
-    height: 15px; /* 设置按钮高度 */
+    height: 20px; /* 设置按钮高度 */
     width: 10px; /* 设置按钮宽度 */
-  }
+}
+.custom-button:hover {
+    background-color: #eb0637; /* 悬停时背景保持不变 */
+    color: white; /* 悬停时文本颜色保持不变 */
+}
+
