@@ -1,9 +1,9 @@
-import React, {ReactElement,useState} from 'react'
+import React, {ReactElement,useEffect,useState} from 'react'
 import {Button, FieldSet, LegacyForms, Switch, Tab, TabContent, TabsBar} from '@grafana/ui'
 import type {EditorProps} from './types'
 import {useChangeSecureOptions} from './useChangeSecureOptions'
 import {useResetSecureOptions} from './useResetSecureOptions'
-import {deleteAlerts} from '../../utils'
+import {deleteAlerts, checkGrafanaVersion} from '../../utils'
 
 import './ConfigEditor.css'
 
@@ -31,6 +31,15 @@ export function ConfigEditor(props: EditorProps): ReactElement {
         props.options.jsonData.isLoadAlerts = true;
         alertState = props.options.jsonData.isLoadAlerts
     }
+
+    const [isVisible, setisVisible] = useState(false);
+    useEffect(() => {
+        const performVersionCheck = async () => {
+          const supported = await checkGrafanaVersion();
+          setisVisible(supported);
+        };
+        performVersionCheck();
+      }, []);
 
     const handleButtonClick = () => {
         const confirmed = window.confirm('Are you sure you want to clear alerts?');
@@ -139,34 +148,38 @@ export function ConfigEditor(props: EditorProps): ReactElement {
                     }
                 </TabContent>
             </FieldSet>
-            <FieldSet label="TDengine Alert">
-                <div className='gf-form max-width-20'>
-                    <FormField label="Load TDengine Alert"
-                        labelWidth={10}
-                        className='align-center'
-                        inputEl= {
-                            <Switch
-                               onChange={handleSwitchChange}
-                               value={alert}
+            <div>
+                {isVisible && (
+                    <FieldSet label="TDengine Alert">
+                        <div className='gf-form max-width-20'>
+                            <FormField label="Load TDengine Alert"
+                                labelWidth={10}
+                                className='align-center'
+                                inputEl= {
+                                    <Switch
+                                    onChange={handleSwitchChange}
+                                    value={alert}
+                                    />
+                                }
                             />
-                        }
-                    />
-                </div>
-                <div className='gf-form max-width-20'>
-                    <FormField label="Clear TDengine Alert"
-                        labelWidth={10}
-                        className='align-center'
-                        inputEl= {
-                            <Button
-                               variant="primary"
-                               className="custom-button"
-                               onClick={handleButtonClick}
-                               title="Clear the TDengine alerts"
+                        </div>
+                        <div className='gf-form max-width-20'>
+                            <FormField label="Clear TDengine Alert"
+                                labelWidth={10}
+                                className='align-center'
+                                inputEl= {
+                                    <Button
+                                    variant="primary"
+                                    className="custom-button"
+                                    onClick={handleButtonClick}
+                                    title="Clear the TDengine alerts"
+                                    />
+                                }
                             />
-                        }
-                    />
-                </div>
-            </FieldSet>
+                        </div>
+                    </FieldSet>
+                )}
+            </div>
         </div>
     )
 }
