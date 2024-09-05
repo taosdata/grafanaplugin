@@ -11,7 +11,6 @@ export async function deleteAlerts(datasourceName: string): Promise<void> {
         await deletGroupAlerts("alert_180s", folderUid);
         await deletGroupAlerts("alert_24h", folderUid);
         await deleteFolder(folderUid);
-        await getRules();
     } catch (error) {
         // 处理错误
         console.error('Error in async function:', error);
@@ -66,4 +65,25 @@ export async function getRules(): Promise<void> {
         console.log(e);                 
     }  
     
+}
+
+export async function checkGrafanaVersion(): Promise<boolean> {
+    try {
+        let response = await axios.get("/api/frontend/settings");
+        if (!!response && response.status=== 200 && !!response.data && !!response.data.buildInfo.version) {
+            const version = '' + response.data.buildInfo.version;
+            const versionParts = version.split(".");
+            if (versionParts.length > 0) {
+                const majorVersion = parseInt(versionParts[0], 10);
+                if (majorVersion === 11) {
+                    console.log("11 版本");
+                    return true; 
+                }
+            }
+        }
+        return false;
+    } catch(e) {
+        console.log(e); 
+        return false;                
+    }  
 }
