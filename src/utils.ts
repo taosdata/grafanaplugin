@@ -74,7 +74,7 @@ export async function checkGrafanaVersion(): Promise<boolean> {
             if (versionParts.length > 0) {
                 const majorVersion = parseInt(versionParts[0], 10);
                 if (majorVersion === 11) {
-                    console.log("11 版本");
+                    console.log("11 version");
                     return true; 
                 }
             }
