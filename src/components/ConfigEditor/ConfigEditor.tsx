@@ -166,7 +166,7 @@ export function ConfigEditor(props: EditorProps): ReactElement {
                         <div className='gf-form max-width-20'>
                             <FormField label="Clear TDengine Alert"
                                 labelWidth={10}
-
+                                className='align-center'
                                 inputEl= {
                                     <Button variant="destructive"
                                     onClick={handleButtonClick}
