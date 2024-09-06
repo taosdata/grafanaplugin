@@ -172,6 +172,7 @@ export function ConfigEditor(props: EditorProps): ReactElement {
                                     onClick={handleButtonClick}
                                     title="Clear the TDengine alerts"
                                     icon="trash-alt"
+                                    size="sm"
                                     ></Button>
                                 }
                             />
