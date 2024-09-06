@@ -236,7 +236,6 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
                     return this.sendInitAlert().then(()=>{
                         return {status: "success", message: "TDengine Data source is working", title: "Success"};
                     }).catch((e: any) => {
-                        console.log("xxdxdxdxd");
                         return {status: "success", message: "TDengine Data source is working", title: "Success"};
                     });                    
                 } else {

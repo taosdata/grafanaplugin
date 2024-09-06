@@ -7,21 +7,21 @@
 }
 
 .custom-button {
-    background-color: #eb0637; /* 按钮背景颜色，可根据喜好修改 */
-    color: white; /* 文本颜色 */
+    background-color: #eb0637; /* Button background color */
+    color: white; /* text color */
     border: none;
-    padding: 8px 16px; /* 内边距调整按钮大小 */
-    border-radius: 2px; /* 设置较大的圆角半径接近椭圆 */
+    padding: 8px 16px; /* Inner margin adjustment button size */
+    border-radius: 2px; /* Set a larger fillet radius close to an ellipse */
     cursor: pointer;
-    transition: background-color 0.3s ease; /* 过渡效果使交互更平滑 */
-    font-size: 14px; /* 字体大小 */
-    text-transform: uppercase; /* 大写字母 */
-    letter-spacing: 1px; /* 字母间距 */
-    height: 20px; /* 设置按钮高度 */
-    width: 10px; /* 设置按钮宽度 */
+    transition: background-color 0.3s ease; /* Transition effect makes interaction smoother */
+    font-size: 14px; /* font size */
+    text-transform: uppercase; /* capital letter */
+    letter-spacing: 1px; /* letter-spacing */
+    height: 20px; /* Set button height */
+    width: 10px; /* Set button width */
 }
 .custom-button:hover {
-    background-color: #eb0637; /* 悬停时背景保持不变 */
-    color: white; /* 悬停时文本颜色保持不变 */
+    background-color: #eb0637; /* Background color when hovering */
+    color: white; /* Text color when hovering */
 }
 

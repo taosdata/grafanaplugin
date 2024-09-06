@@ -3,7 +3,6 @@ import axios from 'axios';
 export async function deleteAlerts(datasourceName: string): Promise<void> {
     try {
         let folderUid = getFolderUid(datasourceName);
-        // 异步操作，例如等待一个异步调用
         await deletGroupAlerts("alert_1m", folderUid);
         await deletGroupAlerts("alert_5m", folderUid);
         await deletGroupAlerts("alert_30s", folderUid);
@@ -12,7 +11,6 @@ export async function deleteAlerts(datasourceName: string): Promise<void> {
         await deletGroupAlerts("alert_24h", folderUid);
         await deleteFolder(folderUid);
     } catch (error) {
-        // 处理错误
         console.error('Error in async function:', error);
         throw error;
     }
