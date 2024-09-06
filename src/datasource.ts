@@ -77,7 +77,12 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
                     }
                 } else {
                     console.log("get grafana version fail!")
-                    reject()
+                    let err = {
+                        status: "error",
+                        message: "Failed to get grafana version, reason: " + response.data.message,
+                        title: "Failed"
+                    };
+                    reject(err)
                 }
             })
         });  
@@ -92,13 +97,19 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
                     resolve(true)
                 } else {
                     console.log(response)
-                    reject()
+                    let err = {
+                        status: "error",
+                        message: "Failed to get alarm rule directory, reason: " + response.data.message,
+                        title: "Failed"
+                    };
+                    reject(err)
                 }
             }).catch((e: any) => {
                 if(e.response.status === 404) {
                     resolve(false)
+                }else {
+                    reject(e)
                 }
-                
             })
         });        
     }
@@ -113,11 +124,18 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
                     resolve(true)
                 } else {
                     console.log(response)
-                    reject()
+                    let err = {
+                        status: "error",
+                        message: "Failed to create alarm rule directory, reason: " + response.data.message,
+                        title: "Failed"
+                    };
+                    reject(err)
                 }
             }).catch((e: any) => {
                 if(e.response.status === 409) {
                     resolve(true)
+                }else{
+                    reject(e)
                 }
                 
             })
@@ -134,11 +152,10 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
                     return true;
                 }
             }
-            console.log(response);   
             return false;
         }catch(e) {
             console.log(e);                 
-            return false 
+            throw e;
         }  
     }
 
@@ -154,11 +171,16 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
             if (!!response && response.status=== 200) {
                 return true;
             }
-            console.log(response);   
-            return false;
+            console.log(response);
+            let err = {
+                status: "error",
+                message: "Failed to load alarm rule directory, reason: " + response.data.message,
+                title: "Failed"
+            };
+            throw err;
         }catch(e) {
             console.log(e);                 
-            return false 
+            throw e;
         }  
     }
 
@@ -220,10 +242,9 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
                     }
                 }
                 resolve();
-
             } catch(e) {
                 console.log(e);                 
-                resolve(); 
+                reject(e);
             }
         })
     }
@@ -235,7 +256,7 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
                     return this.sendInitAlert().then(()=>{
                         return {status: "success", message: "TDengine Data source is working", title: "Success"};
                     }).catch((e: any) => {
-                        return {status: "success", message: "TDengine Data source is working", title: "Success"};
+                        return {status: "error", message: "TDengine Data source is working, but alert rules load failed, reason:" + e.message, title: "Failed"};
                     });                    
                 } else {
                     return {status: "success", message: "TDengine Data source is working", title: "Success"};

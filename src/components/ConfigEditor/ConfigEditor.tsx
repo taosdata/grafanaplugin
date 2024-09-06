@@ -173,7 +173,8 @@ export function ConfigEditor(props: EditorProps): ReactElement {
                                     className="custom-button"
                                     onClick={handleButtonClick}
                                     title="Clear the TDengine alerts"
-                                    />
+                                    icon="trash-alt"
+                                    >delete</Button>
                                 }
                             />
                         </div>
