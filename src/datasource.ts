@@ -152,7 +152,6 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
                 }
             });
             if (!!response && response.status=== 200) {
-                console.log(`rule-groups-->${response}`);
                 return true;
             }
             console.log(response);   
