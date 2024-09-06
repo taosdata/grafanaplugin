@@ -153,7 +153,10 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
                 }
             }
             return false;
-        }catch(e) {
+        }catch(e: any) {
+            if(e.response.status === 404) {
+                return false;
+            }
             console.log(e);                 
             throw e;
         }  

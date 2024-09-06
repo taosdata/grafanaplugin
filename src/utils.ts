@@ -27,7 +27,7 @@ async function deletGroupAlerts(ruleGroup: string, datasourceName: string): Prom
         return false;
     } catch(e) {
         console.log(e);                 
-        return false 
+        throw e; 
     }  
 }
 
@@ -43,7 +43,7 @@ async function deleteFolder(folderUid: string): Promise<boolean> {
         return false;
     } catch(e) {
         console.log(e);                 
-        return false 
+        throw e;  
     }  
 }
 
@@ -60,7 +60,8 @@ export async function getRules(): Promise<void> {
         }
         console.log(response);   
     } catch(e) {
-        console.log(e);                 
+        console.log(e);
+        throw e;                  
     }  
     
 }
@@ -82,6 +83,6 @@ export async function checkGrafanaVersion(): Promise<boolean> {
         return false;
     } catch(e) {
         console.log(e); 
-        return false;                
+        throw e;                 
     }  
 }

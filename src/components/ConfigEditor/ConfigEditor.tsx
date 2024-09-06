@@ -47,11 +47,13 @@ export function ConfigEditor(props: EditorProps): ReactElement {
             console.log(props.options.uid);
             deleteAlerts(props.options.uid).then(()=>{
                 console.log("alert deleted!");
+            }).catch((e: any) => {
+               alert("Failed to delete alarm rules, reason: " + e.message)
             });
         }
     };
 
-    const [alert, setAlert] = useState(alertState);
+    const [alertRule, setAlert] = useState(alertState);
     const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const checked = event.target.checked;
         setAlert(checked);
@@ -158,7 +160,7 @@ export function ConfigEditor(props: EditorProps): ReactElement {
                                 inputEl= {
                                     <Switch
                                     onChange={handleSwitchChange}
-                                    value={alert}
+                                    value={alertRule}
                                     />
                                 }
                             />
