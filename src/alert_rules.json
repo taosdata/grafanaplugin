@@ -211,7 +211,7 @@
                             "maxDataPoints": 43200,
                             "queryType": "SQL",
                             "refId": "A",
-                            "sql": "select timetruncate(first(_ts), 1h),  dnode_ep, last(cpu_system) as cup_use from log.taosd_dnodes_info where _ts >= (now- 5m) and _ts < now partition by dnode_ep ",
+                            "sql": "select timetruncate(first(_ts), 1h),  dnode_ep, last(cpu_system) as cpu_use from log.taosd_dnodes_info where _ts >= (now- 5m) and _ts < now partition by dnode_ep ",
                             "timeShiftPeriod": ""
                         }
                     },
