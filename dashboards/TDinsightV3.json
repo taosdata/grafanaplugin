@@ -5330,7 +5330,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select timetruncate(first(_ts), 1h),  cluster_id, count(*) as dnode_report  from log.taosd_cluster_info where _ts >= (now -180s) and _ts < now partition by cluster_id timetruncate(first(_ts), 1h) > 0",
+              "sql": "select timetruncate(first(_ts), 1h),  cluster_id, count(*) as dnode_report  from log.taosd_cluster_info where _ts >= (now -180s) and _ts < now partition by cluster_id having timetruncate(first(_ts), 1h) > 0",
               "timeShiftPeriod": "",
               "timeShiftUnit": "seconds"
             }
