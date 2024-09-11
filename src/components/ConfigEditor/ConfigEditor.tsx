@@ -30,7 +30,10 @@ export function ConfigEditor(props: EditorProps): ReactElement {
     if (props.options.jsonData.isLoadAlerts === undefined) {
         props.options.jsonData.isLoadAlerts = true;
         alertState = props.options.jsonData.isLoadAlerts
+    } else {
+        alertState = props.options.jsonData.isLoadAlerts
     }
+}
 
     const [isVisible, setisVisible] = useState(false);
     useEffect(() => {
