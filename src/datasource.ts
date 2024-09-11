@@ -22,6 +22,7 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
     lastGeneratedSql = ''
     serverVersion = 0
     isLoadAlerts?: boolean
+    folderUidSuffix?: string;
 
     constructor(instanceSettings: DataSourceInstanceSettings<DataSourceOptions>) {
         super(instanceSettings);
@@ -29,6 +30,7 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
         this.backendSrv = getBackendSrv()
         this.template = getTemplateSrv()
         this.isLoadAlerts = instanceSettings.jsonData.isLoadAlerts;
+        this.folderUidSuffix = instanceSettings.jsonData.folderUidSuffix;
     }
 
     // @ts-ignore
@@ -73,7 +75,7 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
                             resolve(true);
                         } else {
                             resolve(false);
-                        }  
+                        }
                     }
                 } else {
                     console.log("get grafana version fail!")
@@ -85,7 +87,7 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
                     reject(err)
                 }
             })
-        });  
+        });
     }
 
     getAlertFolder(): Promise<boolean> {
@@ -111,12 +113,12 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
                     reject(e)
                 }
             })
-        });        
+        });
     }
 
     createAlertFolder(): Promise<boolean> {
         return new Promise((resolve, reject) => {
-            let req = {uid: getFolderUid(`${this.uid}`), title: this.name + '-alert'}
+            let req = {uid: getFolderUid(`${this.uid}`), title: this.name + '-alert-' + this.folderUidSuffix}
             console.log(req);
             axios.post("/api/folders", req).then(response=>{
                 console.log(response.status)
@@ -137,9 +139,9 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
                 }else{
                     reject(e)
                 }
-                
+
             })
-        });        
+        });
     }
 
     async getAlerts(ruleGroup: string): Promise<boolean>{
@@ -157,9 +159,9 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
             if(e.response.status === 404) {
                 return false;
             }
-            console.log(e);                 
+            console.log(e);
             throw e;
-        }  
+        }
     }
 
     async loadAlerts(ruleGroup: string, data: any): Promise<boolean>{
@@ -182,9 +184,9 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
             };
             throw err;
         }catch(e) {
-            console.log(e);                 
+            console.log(e);
             throw e;
-        }  
+        }
     }
 
     modifyAlertDataSource(ruleGroup: any) {
@@ -200,6 +202,7 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
     sendInitAlert(): Promise<void> {
         return new Promise(async (resolve, reject) => {
             try {
+                // await getRules();
                 let bSuport = await this.checkVersion();
                 if (bSuport) {
                     let bOk = await this.getAlertFolder();
@@ -241,12 +244,12 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
                         if (!bOk) {
                             this.modifyAlertDataSource(data.alert_24h);
                             await this.loadAlerts("alert_24h", data.alert_24h);
-                        }  
+                        }
                     }
                 }
                 resolve();
             } catch(e) {
-                console.log(e);                 
+                console.log(e);
                 reject(e);
             }
         })
@@ -256,15 +259,16 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
         return this.request('show databases').then((response: { status: number; data: { message: string; }; }) => {
             if (!!response && response.status === 200 && !_.get(response, 'data.code')) {
                 if (this.isLoadAlerts === true) {
+
                     return this.sendInitAlert().then(()=>{
                         return {status: "success", message: "TDengine Data source is working", title: "Success"};
                     }).catch((e: any) => {
                         return {status: "error", message: "TDengine Data source is working, but alert rules load failed, reason:" + e.message, title: "Failed"};
-                    });                    
+                    });
                 } else {
                     return {status: "success", message: "TDengine Data source is working", title: "Success"};
-                } 
-                
+                }
+
             }
             return {
                 status: "error",

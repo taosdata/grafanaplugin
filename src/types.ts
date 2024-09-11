@@ -21,6 +21,7 @@ export const DEFAULT_QUERY: Partial<Query> = {
  */
 export interface DataSourceOptions extends DataSourceJsonData {
     isLoadAlerts?: boolean;
+    folderUidSuffix?: string;
 }
 
 /**

@@ -23,32 +23,32 @@ async function deletGroupAlerts(ruleGroup: string, datasourceName: string): Prom
         if (!!response && response.status=== 204) {
             return true;
         }
-        console.log(response);   
+        console.log(response);
         return false;
     } catch(e) {
-        console.log(e);                 
-        throw e; 
-    }  
+        console.log(e);
+        throw e;
+    }
 }
 
 async function deleteFolder(folderUid: string): Promise<boolean> {
-    
+
     try {
         let response = await axios.delete(`/api/folders/${folderUid}`);
         if (!!response && response.status=== 200) {
             return true;
         }
 
-        console.log(response);   
+        console.log(response);
         return false;
     } catch(e) {
-        console.log(e);                 
-        throw e;  
-    }  
+        console.log(e);
+        throw e;
+    }
 }
 
 export function getFolderUid(datasourceUid: string): string {
-    return `alert-${datasourceUid}`;
+    return `alert-${datasourceUid}-`;
 }
 
 
@@ -58,12 +58,12 @@ export async function getRules(): Promise<void> {
         if (!!response && response.status=== 200) {
             console.log(response);
         }
-        console.log(response);   
+        console.log(response);
     } catch(e) {
         console.log(e);
-        throw e;                  
-    }  
-    
+        throw e;
+    }
+
 }
 
 export async function checkGrafanaVersion(): Promise<boolean> {
@@ -76,13 +76,25 @@ export async function checkGrafanaVersion(): Promise<boolean> {
                 const majorVersion = parseInt(versionParts[0], 10);
                 if (majorVersion === 11) {
                     console.log("11 version");
-                    return true; 
+                    return true;
                 }
             }
         }
         return false;
     } catch(e) {
-        console.log(e); 
-        throw e;                 
-    }  
+        console.log(e);
+        throw e;
+    }
 }
+
+export function getCurrentTime(): string {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+
