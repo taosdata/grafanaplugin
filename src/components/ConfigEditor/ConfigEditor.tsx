@@ -3,7 +3,7 @@ import {Button, FieldSet, LegacyForms, Switch, Tab, TabContent, TabsBar} from '@
 import type {EditorProps} from './types'
 import {useChangeSecureOptions} from './useChangeSecureOptions'
 import {useResetSecureOptions} from './useResetSecureOptions'
-import {deleteAlerts, checkGrafanaVersion} from '../../utils'
+import {deleteAlerts, checkGrafanaVersion, getCurrentTime} from '../../utils'
 
 import './ConfigEditor.css'
 
@@ -22,7 +22,7 @@ export function ConfigEditor(props: EditorProps): ReactElement {
     const onResetPassword = useResetSecureOptions(props, 'password')
     const onChangeToken = useChangeSecureOptions(props, 'token')
     const onResetToken = useResetSecureOptions(props, 'token')
-    
+
     // console.log("ConfigEditor:" + secureJsonData?.token)
     // console.log("secureJsonFields.token:" + secureJsonFields.token)
     const [active, setActive] = React.useState((secureJsonFields && secureJsonFields.token) ? authType.Token : authType.Basic )
@@ -30,16 +30,22 @@ export function ConfigEditor(props: EditorProps): ReactElement {
     if (props.options.jsonData.isLoadAlerts === undefined) {
         props.options.jsonData.isLoadAlerts = true;
         alertState = props.options.jsonData.isLoadAlerts
+    } else {
+        alertState = props.options.jsonData.isLoadAlerts
+    }
+
+    if (props.options.jsonData.folderUidSuffix === undefined) {
+        props.options.jsonData.folderUidSuffix= getCurrentTime();
     }
 
     const [isVisible, setisVisible] = useState(false);
     useEffect(() => {
         const performVersionCheck = async () => {
-          const supported = await checkGrafanaVersion();
-          setisVisible(supported);
+            const supported = await checkGrafanaVersion();
+            setisVisible(supported);
         };
         performVersionCheck();
-      }, []);
+    }, []);
 
     const handleButtonClick = () => {
         const confirmed = window.confirm('Are you sure you want to clear alerts?');
@@ -48,7 +54,7 @@ export function ConfigEditor(props: EditorProps): ReactElement {
             deleteAlerts(props.options.uid).then(()=>{
                 console.log("alert deleted!");
             }).catch((e: any) => {
-               alert("Failed to delete alarm rules, reason: " + e.message)
+                alert("Failed to delete alarm rules, reason: " + e.message)
             });
         }
     };
@@ -155,28 +161,28 @@ export function ConfigEditor(props: EditorProps): ReactElement {
                     <FieldSet label="TDengine Alert">
                         <div className='gf-form max-width-20'>
                             <FormField label="Load TDengine Alert"
-                                labelWidth={10}
-                                className='align-center'
-                                inputEl= {
-                                    <Switch
-                                    onChange={handleSwitchChange}
-                                    value={alertRule}
-                                    />
-                                }
+                                       labelWidth={10}
+                                       className='align-center'
+                                       inputEl= {
+                                           <Switch
+                                               onChange={handleSwitchChange}
+                                               value={alertRule}
+                                           />
+                                       }
                             />
                         </div>
                         <div className='gf-form max-width-20'>
                             <FormField label="Clear TDengine Alert"
-                                labelWidth={10}
-                                className='align-center'
-                                inputEl= {
-                                    <Button variant="destructive"
-                                    onClick={handleButtonClick}
-                                    title="Clear the TDengine alerts"
-                                    icon="trash-alt"
-                                    size="sm"
-                                    ></Button>
-                                }
+                                       labelWidth={10}
+                                       className='align-center'
+                                       inputEl= {
+                                           <Button variant="destructive"
+                                                   onClick={handleButtonClick}
+                                                   title="Clear the TDengine alerts"
+                                                   icon="trash-alt"
+                                                   size="sm"
+                                           ></Button>
+                                       }
                             />
                         </div>
                     </FieldSet>
