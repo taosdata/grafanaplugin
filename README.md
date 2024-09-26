@@ -38,6 +38,10 @@ Configure TDengine data source.
 
 ![data source configuration](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/howto-add-datasource.png)
 
+
+![data source configuration](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/howto-add-datasource-11v.png)
+
+
 Save and test it, it should say 'TDengine Data source is working'.
 
 ![data source test](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/howto-add-datasource-test.png)
