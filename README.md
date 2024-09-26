@@ -38,9 +38,8 @@ Configure TDengine data source.
 
 ![data source configuration](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/howto-add-datasource.png)
 
-
-![data source configuration](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/howto-add-datasource-11v.png)
-
+Configure TDengine data source for Grafana version 11.
+![data source configuration](https://raw.githubusercontent.com/taosdata/grafanaplugin/feat/TD-30670/assets/howto-add-datasource-11v.png)
 
 Save and test it, it should say 'TDengine Data source is working'.
 
@@ -63,6 +62,10 @@ After import:
 ![dashboard display](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/TDinsight-v3-full.png)
 
 ## Important changes
+
+### [v3.6.0](https://github.com/taosdata/grafanaplugin/releases/tag/v3.6.0)
+
+1. The TDengine data source plugin has added functionality for Grafana 7.5 and 11 versions, which can automatically import and clear alerts for basic metrics of the TDengine cluster (such as CPU, memory, dnode, vnode, etc.) when adding data sources.
 
 ### [v3.2.0](https://github.com/taosdata/grafanaplugin/releases/tag/v3.2.0)
 
