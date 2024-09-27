@@ -1,6 +1,6 @@
 {
   "name": "tdengine-datasource",
-  "version": "3.5.2",
+  "version": "3.6.0",
   "description": "Grafana datasource plugin for TDengine",
   "scripts": {
     "build": "webpack -c ./.config/webpack/webpack.config.ts --env development",
@@ -83,6 +83,7 @@
     "@grafana/data": "latest",
     "@grafana/runtime": "latest",
     "@grafana/ui": "latest",
+    "axios": "^1.7.2",
     "react": "17.0.2",
     "react-dom": "17.0.2"
   }

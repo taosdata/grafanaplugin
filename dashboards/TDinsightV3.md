@@ -6,7 +6,8 @@ TDinsight v3.x is a solution for monitoring TDengine using the builtin native mo
 
 ## Compatiable with TDengine version
 | TDengine grafana plugin version | TDengine version |
-| :-----------------------------: | :--------------: |
+|:-------------------------------:|:----------------:|
+|              3.6.0              | 3.3.0.0 or later |
 |              3.5.2              | 3.3.0.0 or later |
 |              3.5.1              | 3.3.0.0 or later |
 |              3.5.0              | 3.2.3.0 or later |
@@ -147,7 +148,14 @@ Search for and select **TDengine**.
 
 ![add datasource](../assets/howto-add-datasource-tdengine.png)
 
-Configure the TDengine datasource.
+**Configure TDengine data source for Grafana version 11.**
+
+![datasource config](../assets/howto-add-datasource-11v.png)
+**Note:**
+1. Close the `Load TDengine Alert` button to prevent automatic import of alert rules when adding data sources.
+2. When deleting a data source, you need to first click the delete button to clear the imported alarm rules.
+
+**Configure TDengine data source for Grafana with version lower than 11.**
 
 ![datasource config](../assets/howto-add-datasource.png)
 
@@ -271,6 +279,38 @@ Support monitoring taosAdapter rest and websocket request statistics. Including:
 6.  **Other**: number of total other requests.
 
 There is also line charts for detail dimensions.
+
+### TDengine Automatic imported alert rules
+
+**Alert rules imported in version 11**
+
+When adding a data source, select 'Load TDengine Alert' and click on the alert menu to display the loaded alarm alerts, as shown below:
+![Alert rules](../assets/alert-rule.png)
+
+**Alert rules imported in version 7.5**
+
+After adding the data source, clicking on the alert menu will display the loaded alert rules, as shown below:
+![Alert rules](../assets/alert7.5.png)
+
+**Import Alert Rule Description**
+
+| alert rules                               | description                                                                                                                                                                           |
+|:------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| CPU load of dnode                         | When the CPU load of a node in the cluster remains above 80% for 5 minutes, an alert will be triggered                                                                                |
+| Memory usage of dnode                     | When the memory usage of a node in the cluster remains above 60% for 5 minutes, an alert will be triggered                                                                            |
+| Disk capacity occupancy of dnode          | When the disk usage of a node in the cluster remains above 60% for 5 minutes, an alert will be triggered                                                                              |
+| Cluster authorization expires             | When the authorization time of the cluster is less than 60 days, an alert will be triggered                                                                                           |
+| Approaching authorized measurement points | When the user's measurement points exceed 90% of the total measurement points, an alert will be triggered                                                                             |
+| dnode offline                             | Check every 30 seconds. When a dnode goes offline in the cluster, an alert will be triggered                                                                                          |
+| vnode offline                             | Check every 30 seconds. When a vnode goes offline in the cluster, an alert will be triggered                                                                                          |
+| dnode restarted                           | Check every 30 seconds. When a dnode node in the cluster is restarted, an alert will be triggered                                                                                     |
+| dnode status                              | Check every 180 seconds. When the number of node status reports in the cluster is less than 3 times, an alert will be triggered                                                       |
+| Query the number of concurrent requests   | Check every 60 seconds. When the SQL query is executed more than 100 times, an alert will be triggered                                                                                |
+| Number of data deletion requests          | Check every 30 seconds, and an alert will be triggered when SQL is submitted to the database for execution to delete data                                                             |
+| Adapter Restful request failed            | Check every 30 seconds, the connector sends database operation instructions to the Adapter through Restful mode. If the execution fails more than 5 times, an alert will be triggered |
+| Adapter Websocket request failed          | Check every 30 seconds, the connector sends database operation instructions to the Adapter via Websocket. If the execution fails more than 5 times, an alert will be triggered        |
+| Slow query                                | Check every minute, and when a query is found to take more than 300 seconds, an alert will be triggered                                                                               |
+
 
 ## Upgrade
 

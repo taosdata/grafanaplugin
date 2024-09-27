@@ -20,6 +20,8 @@ export const DEFAULT_QUERY: Partial<Query> = {
  * These are options configured for each DataSource instance
  */
 export interface DataSourceOptions extends DataSourceJsonData {
+    isLoadAlerts?: boolean;
+    folderUidSuffix?: string;
 }
 
 /**
