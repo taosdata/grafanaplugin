@@ -155,9 +155,9 @@ Configure the TDengine datasource.
 Configure TDengine data source for Grafana version 11.
 
 ![datasource config](../assets/howto-add-datasource-11v.png)
-Note:
+**Note:
 1. Close the Load TDengine Alert button to prevent automatic import of alert rules when adding data sources.
-2. When deleting a data source, it is necessary to first clear the imported alarm rules
+2. When deleting a data source, you need to first click the delete button to clear the imported alarm rules.
 
 Save and test. It will report 'TDengine Data source is working' in normal circumstances.
 
@@ -281,7 +281,14 @@ Support monitoring taosAdapter rest and websocket request statistics. Including:
 There is also line charts for detail dimensions.
 
 ### TDengine Automatic imported alert rules
-![alert rules](../assets/alert-rule.png)
+
+**Alert rules imported in version 11**
+![告警规则](../assets/alert-rule.png)
+
+**Alert rules imported in version 7.5**
+![告警规则](../assets/alert7.5.png)
+
+**Import Rule Description**
 
 | alert rules                               | description                                                                                                                                                                           |
 |:------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
