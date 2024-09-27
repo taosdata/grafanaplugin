@@ -77,10 +77,9 @@ After import:
     （1）Close the Load TDengine Alert button to prevent automatic import of alert rules when adding data sources.
 
     （2）When deleting a data source, it is necessary to first clear the imported alarm rules.
-    
-    ![data source configuration](https://raw.githubusercontent.com/taosdata/grafanaplugin/feat/TD-30670/assets/alert-rule.png)
-    Note:After adding the data source, you will see the automatically imported alarm configuration in the alert management menu.
 
+    After adding the data source, you will see the automatically imported alarm configuration in the alert management menu.
+    ![data source configuration](https://raw.githubusercontent.com/taosdata/grafanaplugin/feat/TD-30670/assets/alert-rule.png)
 
 2. Grafana 7.5 versions
 
