@@ -136,17 +136,17 @@ sudo systemctl enable grafana-server
 
 ![添加数据源](../assets/howto-add-datasource-tdengine.png)
 
-配置TDengine数据源。
-
-![数据源配置](../assets/howto-add-datasource.png)
-
-为Grafana版本11配置TD引擎数据源。
+**为Grafana版本11配置TD引擎数据源。**
 
 TDengine数据源插件为Grafana 11版本添加了功能，可以在添加数据源时自动导入TDengine集群基本指标（如CPU、内存、dnode、vnode等）的警报。
 ![数据源配置](../assets/howto-add-datasource-11v.png)
 注意：
-1. 关闭 Load TDengine Alert 按钮，在添加数据源时就不会自动导入告警规则。
+1. 关闭 `Load TDengine Alert` 按钮，在添加数据源时就不会自动导入告警规则。
 2. 删除数据源时，需要先点击删除按钮，清除导入的告警规则。
+
+**配置版本低于 11 的 Grafana 的 TDengine 数据源。**
+
+![数据源配置](../assets/howto-add-datasource.png)
 
 保存并测试，正常情况下会报告 'TDengine Data source is working'。
 
@@ -270,12 +270,16 @@ TDinsight 仪表盘旨在提供TDengine
 
 ### TDengine 自动导入的告警规则
 **11 版本自动导入**
+
+数据源添加时选择加载告警规则后，点击告警菜单就能显示加载的告警规则，如下图：
 ![告警规则](../assets/alert-rule.png)
 
 **7.5 版本自动导入**
+
+数据源添加完成后，点击告警菜单就能显示加载的告警规则，如下图：
 ![告警规则](../assets/alert7.5.png)
 
-**导入规则说明**
+**导入告警规则说明**
 
 | 告警规则                   | 说明                                                               |
 |:-----------------------|:-----------------------------------------------------------------|

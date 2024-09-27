@@ -34,15 +34,16 @@ Search and choose **TDengine**.
 
 If TDengine is not in the list, please check the installation instructions for allowing loading unsigned plugins.
 
-Configure TDengine data source.
-
-![data source configuration](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/howto-add-datasource.png)
-
-Configure TDengine data source for Grafana version 11.
+**Configure TDengine data source for Grafana version 11.**
 ![data source configuration](https://raw.githubusercontent.com/taosdata/grafanaplugin/feat/TD-30670/assets/howto-add-datasource-11v.png)
 Note:
 1. Close the Load TDengine Alert button to prevent automatic import of alert rules when adding data sources.
 2. When deleting a data source, it is necessary to first clear the imported alert rules
+
+**Configure TDengine data source for Grafana with version lower than 11.**
+
+![data source configuration](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/howto-add-datasource.png)
+
 
 Save and test it, it should say 'TDengine Data source is working'.
 
@@ -84,14 +85,10 @@ After import:
 2. Grafana 7.5 versions
 
     The TDengine data source plugin has added functionality for Grafana 7.5 versions, which can automatically import and clear alerts for basic metrics of the TDengine cluster (such as CPU, memory, dnode, vnode, etc.) when adding data sources.
-    
+
+    To import the Dashboard, enter "TDinsight for 3.x Dashboard" and click save. Subsequently, the loaded alert rules will appear in the alert menu as shown below.
     ![Grafana 7.5](https://raw.githubusercontent.com/taosdata/grafanaplugin/feat/TD-30670/assets/alert7.5.png)
     
-   Note:
-
-    (1) Importing the Dashboard, enter the TDinsight for 3. x Dashboard and click save.
-
-    (2) The loaded alert rules will appear in the alert menu.
 
 
 ### [v3.2.0](https://github.com/taosdata/grafanaplugin/releases/tag/v3.2.0)

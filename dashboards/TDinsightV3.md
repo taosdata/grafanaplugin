@@ -148,16 +148,16 @@ Search for and select **TDengine**.
 
 ![add datasource](../assets/howto-add-datasource-tdengine.png)
 
-Configure the TDengine datasource.
-
-![datasource config](../assets/howto-add-datasource.png)
-
-Configure TDengine data source for Grafana version 11.
+**Configure TDengine data source for Grafana version 11.**
 
 ![datasource config](../assets/howto-add-datasource-11v.png)
-**Note:
-1. Close the Load TDengine Alert button to prevent automatic import of alert rules when adding data sources.
+**Note:**
+1. Close the `Load TDengine Alert` button to prevent automatic import of alert rules when adding data sources.
 2. When deleting a data source, you need to first click the delete button to clear the imported alarm rules.
+
+**Configure the TDengine datasource.**
+
+![datasource config](../assets/howto-add-datasource.png)
 
 Save and test. It will report 'TDengine Data source is working' in normal circumstances.
 
@@ -283,12 +283,16 @@ There is also line charts for detail dimensions.
 ### TDengine Automatic imported alert rules
 
 **Alert rules imported in version 11**
-![告警规则](../assets/alert-rule.png)
+
+When adding a data source, select 'Load TDengine Alert' and click on the alert menu to display the loaded alarm alerts, as shown below:
+![Alert rules](../assets/alert-rule.png)
 
 **Alert rules imported in version 7.5**
-![告警规则](../assets/alert7.5.png)
 
-**Import Rule Description**
+After adding the data source, clicking on the alert menu will display the loaded alert rules, as shown below:
+![Alert rules](../assets/alert7.5.png)
+
+**Import Alert Rule Description**
 
 | alert rules                               | description                                                                                                                                                                           |
 |:------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
