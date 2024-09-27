@@ -155,7 +155,7 @@ Search for and select **TDengine**.
 1. Close the `Load TDengine Alert` button to prevent automatic import of alert rules when adding data sources.
 2. When deleting a data source, you need to first click the delete button to clear the imported alarm rules.
 
-**Configure the TDengine datasource.**
+**Configure TDengine data source for Grafana with version lower than 11.**
 
 ![datasource config](../assets/howto-add-datasource.png)
 
