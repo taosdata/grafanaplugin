@@ -142,7 +142,7 @@ sudo systemctl enable grafana-server
 
 为Grafana版本11配置TD引擎数据源。
 
-![数据源配置](assets/howto-add-datasource-11v.png)
+![数据源配置](../assets/howto-add-datasource-11v.png)
 注意：
 1. 关闭 Load TDengine Alert 按钮，在添加数据源时就不会自动导入告警规则。
 2. 删除数据源时，需要先清除导入的告警规则
