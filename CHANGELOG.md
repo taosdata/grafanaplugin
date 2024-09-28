@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+
+## [3.6.0] - 2024-09-28
+
+### Features
+
+- support taosd alert configuration for grafana 11 and 7.5 version.
+
+
 ## [3.5.2] - 2024-06-25
 
 ### Features
