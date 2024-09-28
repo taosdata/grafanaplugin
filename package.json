@@ -50,7 +50,7 @@
     "css-loader": "^6.7.1",
     "eslint": "8.26.0",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-jsdoc": "^39.6.2",
+    "eslint-plugin-jsdoc": "^50.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.26.1",
     "eslint-plugin-react-hooks": "^4.2.0",
