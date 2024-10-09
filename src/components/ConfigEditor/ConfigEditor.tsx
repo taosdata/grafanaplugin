@@ -1,5 +1,5 @@
-import React, {ReactElement,useEffect,useState} from 'react'
-import {Button, FieldSet, LegacyForms, Switch, Tab, TabContent, TabsBar} from '@grafana/ui'
+import React, {ReactElement,useEffect} from 'react'
+import {Button, ConfirmModal, FieldSet, LegacyForms, Switch, Tab, TabContent, TabsBar} from '@grafana/ui'
 import type {EditorProps} from './types'
 import {useChangeSecureOptions} from './useChangeSecureOptions'
 import {useResetSecureOptions} from './useResetSecureOptions'
@@ -38,7 +38,7 @@ export function ConfigEditor(props: EditorProps): ReactElement {
         props.options.jsonData.folderUidSuffix= getCurrentTime();
     }
 
-    const [isVisible, setisVisible] = useState(false);
+    const [isVisible, setisVisible] = React.useState(false);
     useEffect(() => {
         const performVersionCheck = async () => {
             const supported = await checkGrafanaVersion();
@@ -47,21 +47,29 @@ export function ConfigEditor(props: EditorProps): ReactElement {
         performVersionCheck();
     }, []);
 
-    const handleButtonClick = () => {
-        const confirmed = window.confirm('Are you sure you want to clear alerts?');
-        if (confirmed) {
-            console.log(props.options.uid);
-            deleteAlerts(props.options.uid).then(()=>{
-                console.log("alert deleted!");
-            }).catch((e: any) => {
-                alert("Failed to delete alarm rules, reason: " + e.message)
-            });
-        }
+    const [openConfirm, setOpenConfirm] = React.useState(false);
+    /**
+     * Here is the cleaning of alarm rules.
+     * When executing the onConfirm method, the testDatasource() function will be called,making it difficult to distinguish whether to delete or add.
+     * Therefore, during the onDismiss event, a deletion operation will be performed, but the button names will be swapped
+     */
+    const clearAlertRules = () => {
+        updateLoadStatus(false);
+        setOpenConfirm(false);
+        deleteAlerts(props.options.uid, false).then(()=>{
+            console.info("alert deleted!");
+        }).catch((e: any) => {
+            alert("Failed to delete alarm rules, reason: " + e.message)
+        });
+        
     };
 
-    const [alertRule, setAlert] = useState(alertState);
+    const [alertRule, setAlert] = React.useState(alertState);
     const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const checked = event.target.checked;
+        updateLoadStatus(event.target.checked);
+    };
+
+    const updateLoadStatus = (checked: boolean) => {
         setAlert(checked);
         const {onOptionsChange, options} = props;
         props.options.jsonData.isLoadAlerts = checked
@@ -177,7 +185,7 @@ export function ConfigEditor(props: EditorProps): ReactElement {
                                        className='align-center'
                                        inputEl= {
                                            <Button variant="destructive"
-                                                   onClick={handleButtonClick}
+                                                   onClick={() => setOpenConfirm(true)}
                                                    title="Clear the TDengine alerts"
                                                    icon="trash-alt"
                                                    size="sm"
@@ -185,6 +193,16 @@ export function ConfigEditor(props: EditorProps): ReactElement {
                                        }
                             />
                         </div>
+                        <ConfirmModal
+                            isOpen={openConfirm}
+                            title="Clear TDengine Alerts"
+                            body="Are you sure you want to clear alerts?"
+                            confirmText="Cancel"
+                            dismissText="Confirm"
+                            icon="exclamation-triangle"
+                            onConfirm={() => setOpenConfirm(false)}
+                            onDismiss={() => clearAlertRules()}
+                        />
                     </FieldSet>
                 )}
             </div>

@@ -31,8 +31,8 @@ var (
 )
 
 // NewDatasource creates a new datasource instance.
-func NewDatasource(settings backend.DataSourceInstanceSettings) (instancemgmt.Instance, error) {
-	ops, err := settings.HTTPClientOptions()
+func NewDatasource(ctx context.Context, settings backend.DataSourceInstanceSettings) (instancemgmt.Instance, error) {
+	ops, err := settings.HTTPClientOptions(ctx)
 
 	if err != nil {
 		return nil, fmt.Errorf("http client options: %w", err)
