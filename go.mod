@@ -2,8 +2,6 @@ module github.com/taos-data/tdengine-datasource
 
 go 1.21
 
-toolchain go1.21.3
-
 require (
 	github.com/araddon/dateparse v0.0.0-20210429162001-6b43995a97de
 	github.com/grafana/grafana-plugin-sdk-go v0.251.0
