@@ -1,6 +1,6 @@
 import { config, getBackendSrv } from '@grafana/runtime';
 
-export async function deleteAlerts(datasourceName: string, isDeleteFolder: boolean): Promise<void> {
+export async function deleteAlerts(datasourceName: string): Promise<void> {
     try {
         
         let folderUid = getFolderUid(datasourceName);
@@ -10,9 +10,7 @@ export async function deleteAlerts(datasourceName: string, isDeleteFolder: boole
         await deletGroupAlerts("alert_90s", folderUid);
         await deletGroupAlerts("alert_180s", folderUid);
         await deletGroupAlerts("alert_24h", folderUid);
-        if (isDeleteFolder) {
-            await deleteFolder(folderUid);
-        }
+        await deleteFolder(folderUid);
         // updateDataSourceOptions(datasourceName);
     } catch (error) {
         console.error('Error in async function:', error);
