@@ -6,7 +6,8 @@ TDinsight v3.x is a solution for monitoring TDengine using the builtin native mo
 
 ## Compatiable with TDengine version
 | TDengine grafana plugin version | TDengine version |
-|:-------------------------------:|:----------------:|
+| :-----------------------------: | :--------------: |
+|              3.6.1              | 3.3.0.0 or later |
 |              3.6.0              | 3.3.0.0 or later |
 |              3.5.2              | 3.3.0.0 or later |
 |              3.5.1              | 3.3.0.0 or later |
@@ -295,7 +296,7 @@ After adding the data source, clicking on the alert menu will display the loaded
 **Import Alert Rule Description**
 
 | alert rules                               | description                                                                                                                                                                           |
-|:------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| :---------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | CPU load of dnode                         | When the CPU load of a node in the cluster remains above 80% for 5 minutes, an alert will be triggered                                                                                |
 | Memory usage of dnode                     | When the memory usage of a node in the cluster remains above 60% for 5 minutes, an alert will be triggered                                                                            |
 | Disk capacity occupancy of dnode          | When the disk usage of a node in the cluster remains above 60% for 5 minutes, an alert will be triggered                                                                              |
