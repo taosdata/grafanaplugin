@@ -21,7 +21,7 @@ func main() {
 	// ID). When datasource configuration changed Dispose method will be called and
 	// new datasource instance created using NewSampleDatasource factory.
 	var f datasource.InstanceFactoryFunc = func(ctx context.Context, settings backend.DataSourceInstanceSettings) (instancemgmt.Instance, error) {
-		return plugin.NewDatasource(settings)
+		return plugin.NewDatasource(ctx, settings)
 	}
 	if err := datasource.Manage("tdengine-datasource", f, datasource.ManageOpts{}); err != nil {
 		log.DefaultLogger.Error(err.Error())

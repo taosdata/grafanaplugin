@@ -10,9 +10,9 @@ import {DataSourceOptions, Query} from './types';
 import _, {uniqBy} from "lodash";
 // eslint-disable-next-line no-restricted-imports
 import moment from 'moment';
-import axios from 'axios';
+// import axios from 'axios';
 import data from './alert_rules.json'
-import { getFolderUid } from './utils'
+import { checkGrafanaVersion, getFolderUid } from './utils'
 
 export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
     baseUrl: string
@@ -22,7 +22,7 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
     lastGeneratedSql = ''
     serverVersion = 0
     isLoadAlerts?: boolean
-    folderUidSuffix?: string;
+    folderUidSuffix?: string
 
     constructor(instanceSettings: DataSourceInstanceSettings<DataSourceOptions>) {
         super(instanceSettings);
@@ -53,7 +53,7 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
             let result = this.arithmeticQueries(data, options).flat();
             return {data: result};
         }, (err) => {
-            console.log(err);
+            console.error(err);
             if (err.data && err.data.desc) {
                 throw new Error(err.data.desc);
             } else {
@@ -62,79 +62,32 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
         });
     }
 
-    async checkVersion(): Promise<boolean> {
-        return new Promise((resolve, reject) => {
-            axios.get("/api/frontend/settings").then(response=>{
-                if (!!response && response.status=== 200 && !!response.data && !!response.data.buildInfo.version) {
-                    const version = '' + response.data.buildInfo.version;
-                    const versionParts = version.split(".");
-                    if (versionParts.length > 0) {
-                        const majorVersion = parseInt(versionParts[0], 10);
-                        if (majorVersion === 11) {
-                            console.log("11 version");
-                            resolve(true);
-                        } else {
-                            resolve(false);
-                        }
-                    }
-                } else {
-                    console.log("get grafana version fail!")
-                    let err = {
-                        status: "error",
-                        message: "Failed to get grafana version, reason: " + response.data.message,
-                        title: "Failed"
-                    };
-                    reject(err)
-                }
-            })
-        });
-    }
-
     getAlertFolder(): Promise<boolean> {
         return new Promise((resolve, reject) => {
             let uid = getFolderUid(`${this.uid}`)
-            axios.get(`/api/folders/${uid}`).then(response=>{
-                console.log(response.status)
-                if (!!response && (response.status === 200)) {
-                    resolve(true)
-                } else {
-                    console.log(response)
-                    let err = {
-                        status: "error",
-                        message: "Failed to get alarm rule directory, reason: " + response.data.message,
-                        title: "Failed"
-                    };
-                    reject(err)
-                }
+            this.backendSrv.get(`/api/folders/${uid}`, {}, "", {showErrorAlert:false}).then((response) => {
+                resolve(true)
+               
             }).catch((e: any) => {
-                if(e.response.status === 404) {
+                console.error(e)
+                if(e.status === 404) {
                     resolve(false)
                 }else {
                     reject(e)
                 }
             })
-        });
+        })
     }
 
     createAlertFolder(): Promise<boolean> {
         return new Promise((resolve, reject) => {
             let req = {uid: getFolderUid(`${this.uid}`), title: this.name + '-alert-' + this.folderUidSuffix}
-            console.log(req);
-            axios.post("/api/folders", req).then(response=>{
-                console.log(response.status)
-                if (!!response && (response.status === 200)) {
-                    resolve(true)
-                } else {
-                    console.log(response)
-                    let err = {
-                        status: "error",
-                        message: "Failed to create alarm rule directory, reason: " + response.data.message,
-                        title: "Failed"
-                    };
-                    reject(err)
-                }
+            this.backendSrv.post("/api/folders", req).then(response=>{
+                console.info(response);
+                resolve(true)
             }).catch((e: any) => {
-                if(e.response.status === 409) {
+                console.error(e)
+                if(e.status === 409) {
                     resolve(true)
                 }else{
                     reject(e)
@@ -148,18 +101,16 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
         try{
             let uid = getFolderUid(`${this.uid}`)
             let path = `/api/v1/provisioning/folder/${uid}/rule-groups/${ruleGroup}`;
-            let response = await axios.get(path);
-            if (!!response && response.status=== 200 && !!response.data) {
-                if (response.data.rules.length > 0) {
-                    return true;
-                }
+            let response = await this.backendSrv.get(path, {}, "", {showErrorAlert:false});
+            if (!!response && response.rules.length > 0) {
+                return true;
             }
             return false;
         }catch(e: any) {
-            if(e.response.status === 404) {
+            if(e.status === 404) {
                 return false;
             }
-            console.log(e);
+            console.error(e);
             throw e;
         }
     }
@@ -168,24 +119,25 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
         try{
             let uid = getFolderUid(`${this.uid}`)
             let path = `/api/v1/provisioning/folder/${uid}/rule-groups/${ruleGroup}`;
-            let response = await axios.put(path, data, {
+            let response = await this.backendSrv.put(path, data, {
                 headers: {
                     'X-Disable-Provenance': 'true'
                 }
             });
-            if (!!response && response.status=== 200) {
+
+            if (!!response) {
                 return true;
             }
-            console.log(response);
+
+            return false;
+        }catch(e: any) {
+            console.error(e);
             let err = {
                 status: "error",
-                message: "Failed to load alarm rule directory, reason: " + response.data.message,
+                message: "Failed to load alarm rule directory, reason: " + e.message,
                 title: "Failed"
             };
             throw err;
-        }catch(e) {
-            console.log(e);
-            throw e;
         }
     }
 
@@ -202,13 +154,13 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
     sendInitAlert(): Promise<void> {
         return new Promise(async (resolve, reject) => {
             try {
-                // await getRules();
-                let bSuport = await this.checkVersion();
+                let bSuport = checkGrafanaVersion();
                 if (bSuport) {
                     let bOk = await this.getAlertFolder();
                     if (!bOk) {
                         bOk = await this.createAlertFolder();
                     }
+
                     if (bOk) {
                         bOk = await this.getAlerts("alert_1m");
                         if (!bOk) {
@@ -245,11 +197,12 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
                             this.modifyAlertDataSource(data.alert_24h);
                             await this.loadAlerts("alert_24h", data.alert_24h);
                         }
+                        
                     }
                 }
                 resolve();
             } catch(e) {
-                console.log(e);
+                console.error(e);
                 reject(e);
             }
         })
@@ -259,7 +212,6 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
         return this.request('show databases').then((response: { status: number; data: { message: string; }; }) => {
             if (!!response && response.status === 200 && !_.get(response, 'data.code')) {
                 if (this.isLoadAlerts === true) {
-
                     return this.sendInitAlert().then(()=>{
                         return {status: "success", message: "TDengine Data source is working", title: "Success"};
                     }).catch((e: any) => {
@@ -363,7 +315,7 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
             result.data = this.convertResult(result.data);
             return result;
         }).catch(err => {
-            console.log("catch error: ", err);
+            console.error("catch error: ", err);
         });
     }
 
