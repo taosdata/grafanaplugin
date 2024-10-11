@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.6.1] - 2024-10-11
+
+### Features
+
+- improve alert ui.
+
 
 ## [3.6.0] - 2024-09-28
 
