@@ -57,9 +57,10 @@ export function ConfigEditor(props: EditorProps): ReactElement {
         updateLoadStatus(false);
         setOpenConfirm(false);
         deleteAlerts(props.options.uid).then(()=>{
-            console.info("alert deleted!");
+            return;
         }).catch((e: any) => {
-            alert("Failed to delete alarm rules, reason: " + e.message)
+            console.error("Failed to delete alarm rules, reason: " + e.message);
+            throw e;
         });
         
     };
