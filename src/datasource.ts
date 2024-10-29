@@ -83,7 +83,6 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
         return new Promise((resolve, reject) => {
             let req = {uid: getFolderUid(`${this.uid}`), title: this.name + '-alert-' + this.folderUidSuffix}
             this.backendSrv.post("/api/folders", req).then(response=>{
-                console.info(response);
                 resolve(true)
             }).catch((e: any) => {
                 console.error(e)

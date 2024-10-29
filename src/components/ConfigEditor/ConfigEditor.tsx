@@ -1,5 +1,5 @@
 import React, {ReactElement,useEffect} from 'react'
-import {Button, ConfirmModal, FieldSet, LegacyForms, Switch, Tab, TabContent, TabsBar} from '@grafana/ui'
+import {Button, Modal, ConfirmModal, FieldSet, LegacyForms, Switch, Tab, TabContent, TabsBar, Icon} from '@grafana/ui'
 import type {EditorProps} from './types'
 import {useChangeSecureOptions} from './useChangeSecureOptions'
 import {useResetSecureOptions} from './useResetSecureOptions'
@@ -48,6 +48,10 @@ export function ConfigEditor(props: EditorProps): ReactElement {
     }, []);
 
     const [openConfirm, setOpenConfirm] = React.useState(false);
+
+    const [openAlert, setOpenAlert] = React.useState(false);
+
+    const [openAlertMessage, setOpenAlertMessage] = React.useState("");
     /**
      * Here is the cleaning of alarm rules.
      * When executing the onConfirm method, the testDatasource() function will be called,making it difficult to distinguish whether to delete or add.
@@ -57,9 +61,11 @@ export function ConfigEditor(props: EditorProps): ReactElement {
         updateLoadStatus(false);
         setOpenConfirm(false);
         deleteAlerts(props.options.uid).then(()=>{
-            console.info("alert deleted!");
+            return;
         }).catch((e: any) => {
-            alert("Failed to delete alarm rules, reason: " + e.message)
+            setOpenAlert(true);
+            setOpenAlertMessage("Failed to delete alarm rules, reason: " + e.message)
+            throw e;
         });
         
     };
@@ -203,6 +209,12 @@ export function ConfigEditor(props: EditorProps): ReactElement {
                             onConfirm={() => setOpenConfirm(false)}
                             onDismiss={() => clearAlertRules()}
                         />
+
+                        <Modal isOpen={openAlert} title={<div><Icon name='x' color='red' size='xxl' /> <label style={{ color: 'red', fontSize: '16px' }}>Failed to delete rules</label></div>} onDismiss={() => setOpenAlert(false)}>
+                            <p style={{ fontSize: '16px' }}>{openAlertMessage}</p>
+                        </Modal>
+
+
                     </FieldSet>
                 )}
             </div>
