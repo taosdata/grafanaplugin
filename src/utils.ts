@@ -55,18 +55,6 @@ export function getFolderUid(datasourceUid: string): string {
     return `alert-${datasourceUid}-`;
 }
 
-
-// export async function getRules(): Promise<void> {
-//     try {
-//         let response = await getBackendSrv().get(`/api/v1/provisioning/alert-rules`);
-//         console.info(response);
-//     } catch(e) {
-//         console.error(e);
-//         throw e;
-//     }
-
-// }
-
 export function checkGrafanaVersion(): boolean {
     const version = config.buildInfo.version;
     const versionParts = version.split(".");
