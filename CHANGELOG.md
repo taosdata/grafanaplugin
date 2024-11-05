@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.6.3] - 2024-11-05
+
+### Bug Fixes
+
+- fix TDinsight Request data issue.
+
 ## [3.6.2] - 2024-10-29
 
 ### Features
