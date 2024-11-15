@@ -4,8 +4,8 @@
   "name": "TDengine Datasource",
   "id": "tdengine-datasource",
   "metrics": true,
-  "backend": true,
-  "alerting": true,
+  "backend": false,
+  "alerting": false,
   "executable": "tdengine-datasource",
   "includes": [
     {
