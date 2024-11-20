@@ -163,7 +163,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./dashboards/TDinsightV2.json
+          asset_path: ./src/dashboards/TDinsightV2.json
           asset_name: TDinsightV2.json
           asset_content_type: text/plain
 
@@ -174,7 +174,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./dashboards/TDinsightV3.json
+          asset_path: ./src/dashboards/TDinsightV3.json
           asset_name: TDinsightV3.json
           asset_content_type: text/plain
 
@@ -185,6 +185,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./dashboards/TDinsight.sh
+          asset_path: ./src/dashboards/TDinsight.sh
           asset_name: TDinsight.sh
           asset_content_type: text/plain
