@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.7.0] - 2024-11-20
+
+### Features
+
+- migrate TDengine Grafana plugin from Angular to React
+  
 ## [3.6.3] - 2024-11-05
 
 ### Bug Fixes
