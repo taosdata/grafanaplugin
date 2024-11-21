@@ -5,6 +5,7 @@
     - [Add Data Source](#add-data-source)
     - [Import Dashboard](#import-dashboard)
   - [Important changes](#important-changes)
+    - [v3.6.0](#v360)
     - [v3.2.0](#v320)
   - [Monitor TDengine Database with TDengine Data Source Plugin](#monitor-tdengine-database-with-tdengine-data-source-plugin)
     - [TDinsight](#tdinsight)
@@ -140,7 +141,7 @@ See [How to Monitor TDengine Cluster with Grafana](https://github.com/taosdata/g
 
 ### TDinsight
 
-TDinsight is a simple monitoring solution for TDengine database. See [TDinsight README](https://github.com/taosdata/grafanaplugin/blob/master/dashboards/TDinsightV3.md) for the details.
+TDinsight is a simple monitoring solution for TDengine database. See [TDinsight README](https://github.com/taosdata/grafanaplugin/blob/master/src/dashboards/TDinsightV3.md) for the details.
 
 ## Docker Stack
 
