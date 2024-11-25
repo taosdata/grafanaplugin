@@ -4614,7 +4614,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": " select now(), cluster_id,  CASE  WHEN max(grants_timeseries_total)  > 0 THEN max(grants_timeseries_used)  /max(grants_timeseries_total) * 100   ELSE 0    END AS result from log.taosd_cluster_info where _ts >= (now - 30s) and _ts < now partition by cluster_id having timetruncate(first(_ts), 1m) > 0 ",
+              "sql": " select now(), cluster_id, CASE WHEN max(grants_timeseries_total) > 0.0 THEN max(grants_timeseries_used) / max(grants_timeseries_total) * 100.0 ELSE 0.0 END AS result from log.taosd_cluster_info where _ts >= (now - 30s) and _ts < now partition by cluster_id having timetruncate(first(_ts), 1m) > 0 ",
               "timeShiftPeriod": "1",
               "timeShiftUnit": "days"
             }
