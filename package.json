@@ -86,5 +86,8 @@
     "react-dom": "18.2.0",
     "tslib": "2.5.3"
   },
+  "resolutions": {
+    "@babel/traverse": "7.25.9"
+  },
   "packageManager": "yarn@1.22.4"
 }
