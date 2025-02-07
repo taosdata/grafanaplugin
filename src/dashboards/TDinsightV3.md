@@ -124,11 +124,11 @@ allow_loading_unsigned_plugins = tdengine-datasource
 
 Point to the **Configurations** -> **Plugins**(or "/plugins" url), and search "TDengine".
 
-![install datasource plugin](../assets/howto-add-plugin.png)
+![install datasource plugin](../../assets/howto-add-plugin.png)
 
 Click "TDengine Datasource", and click "install".
 
-![install datasource plugin](../assets/howto-add-plugin-install.png)
+![install datasource plugin](../../assets/howto-add-plugin-install.png)
 
 ### Start the Grafana service
 
@@ -146,26 +146,26 @@ Grafana will require a password change after the first login.
 
 Point to the **Configurations** -> **Data Sources** menu, and click the **Add data source** button.
 
-![add datasource](../assets/howto-add-datasource-button.png)
+![add datasource](../../assets/howto-add-datasource-button.png)
 
 Search for and select **TDengine**.
 
-![add datasource](../assets/howto-add-datasource-tdengine.png)
+![add datasource](../../assets/howto-add-datasource-tdengine.png)
 
 **Configure TDengine data source for Grafana version 11.**
 
-![datasource config](../assets/howto-add-datasource-11v.png)
+![datasource config](../../assets/howto-add-datasource-11v.png)
 **Note:**
 1. Close the `Load TDengine Alert` button to prevent automatic import of alert rules when adding data sources.
 2. When deleting a data source, you need to first click the delete button to clear the imported alarm rules.
 
 **Configure TDengine data source for Grafana with version lower than 11.**
 
-![datasource config](../assets/howto-add-datasource.png)
+![datasource config](../../assets/howto-add-datasource.png)
 
 Save and test. It will report 'TDengine Data source is working' in normal circumstances.
 
-![datasource testing](../assets/howto-add-datasource-test.png)
+![datasource testing](../../assets/howto-add-datasource-test.png)
 
 ### Importing dashboard
 
@@ -173,7 +173,7 @@ Save and test. It will report 'TDengine Data source is working' in normal circum
 
 Click **Dashboard** tab in TDengine datasource confining page.
 
-![import dashboard and config](../assets/import_dashboard-on-datasource.png)
+![import dashboard and config](../../assets/import_dashboard-on-datasource.png)
 
 Click the "import" button of "TDinsight for 3.x", and import the dashboard.
 
@@ -181,15 +181,15 @@ Click the "import" button of "TDinsight for 3.x", and import the dashboard.
 
 Point to **+** / **Create** - **import** (or `/dashboard/import` url).
 
-![import dashboard and config](../assets/import_dashboard.png)
+![import dashboard and config](../../assets/import_dashboard.png)
 
 Input dashboard id `18180` in **Import via grafana.com** and click **Load**.
 
-![import by grafana.com](../assets/import-dashboard-18180.png)
+![import by grafana.com](../../assets/import-dashboard-18180.png)
 
 After importing, TDinsight v3.x dashboard as follows.
 
-![dashboard](../assets/TDinsight-v3-full.png)
+![dashboard](../../assets/TDinsight-v3-full.png)
 
 ## TDinsight v3.x Dashboard details
 
@@ -200,7 +200,7 @@ The details of the metrics are as follows.
 
 ### Cluster Status
 
-![tdinsight-mnodes-overview](../assets/TDinsightV3-1-cluster-status.png)
+![tdinsight-mnodes-overview](../../assets/TDinsightV3-1-cluster-status.png)
 
 This section contains the current information and status of the cluster (from left to right, top to bottom).
 
@@ -218,21 +218,21 @@ This section contains the current information and status of the cluster (from le
 
 ### DNodes Status
 
-![tdinsight-dnodes-overview](../assets/TDinsightV3-2-dnodes.png)
+![tdinsight-dnodes-overview](../../assets/TDinsightV3-2-dnodes.png)
 
 - **DNodes Status**: simple table view of `show dnodes`.
 - **DNodes Number**: the trends in the number of DNodes.
 
 ### MNode Overview
 
-![tdinsight-mnodes-overview](../assets/TDinsightV3-3-mnodes.png)
+![tdinsight-mnodes-overview](../../assets/TDinsightV3-3-mnodes.png)
 
 1. **MNodes Status**: a simple table view of `show mnodes`.
 2. **MNodes Number**: similar to `DNodes Number`, the trends in the number of MNodes.
 
 ### Request
 
-![tdinsight-requests](../assets/TDinsightV3-4-requests.png)
+![tdinsight-requests](../../assets/TDinsightV3-4-requests.png)
 
 1. **Select Request**: select request in timeseries.
 2. **Delete Request**: delete request in timeseries.
@@ -242,7 +242,7 @@ This section contains the current information and status of the cluster (from le
 
 ### Tables Summary
 
-![tdinsight-Tables-Summary](../assets/TDinsightV3-5-database.png)
+![tdinsight-Tables-Summary](../../assets/TDinsightV3-5-database.png)
 
 1. **STables**: number of super tables.
 2. **Tables**: number of all tables.
@@ -251,7 +251,7 @@ This section contains the current information and status of the cluster (from le
 
 ### DNode Resource Usage
 
-![dnode-usage](../assets/TDinsightV3-6-dnode-usage.png)
+![dnode-usage](../../assets/TDinsightV3-6-dnode-usage.png)
 
 Data node resource usage display with repeated multiple rows for the variable `$fqdn`, one rows per dnode.
 
@@ -271,7 +271,7 @@ Data node resource usage display with repeated multiple rows for the variable `$
 
 ### taosAdapter
 
-![taosadapter](../assets/TDinsightV3-8-taosadaper.png)
+![taosadapter](../../assets/TDinsightV3-8-taosadaper.png)
 
 Support monitoring taosAdapter rest and websocket request statistics. Including:
 
@@ -289,12 +289,12 @@ There is also line charts for detail dimensions.
 **Alert rules imported in version 11**
 
 When adding a data source, select 'Load TDengine Alert' and click on the alert menu to display the loaded alarm alerts, as shown below:
-![Alert rules](../assets/alert-rule.png)
+![Alert rules](../../assets/alert-rule.png)
 
 **Alert rules imported in version 7.5**
 
 After adding the data source, clicking on the alert menu will display the loaded alert rules, as shown below:
-![Alert rules](../assets/alert7.5.png)
+![Alert rules](../../assets/alert7.5.png)
 
 **Import Alert Rule Description**
 

@@ -112,11 +112,11 @@ allow_loading_unsigned_plugins = tdengine-datasource
 
 点击 **Configurations** -> **Plugins**（或 "/plugins" url），搜索 "TDengine"。
 
-![安装数据源插件](../assets/howto-add-plugin.png)
+![安装数据源插件](../../assets/howto-add-plugin.png)
 
 点击 "TDengine Datasource" 插件，并点击 "install"。
 
-![安装数据源插件](../assets/howto-add-plugin-install.png)
+![安装数据源插件](../../assets/howto-add-plugin-install.png)
 
 ### 启动 Grafana 服务
 
@@ -134,27 +134,27 @@ sudo systemctl enable grafana-server
 
 指向 **Configurations** -> **Data Sources** 菜单，然后点击 **Add data source** 按钮。
 
-![添加数据源按钮](../assets/howto-add-datasource-button.png)
+![添加数据源按钮](../../assets/howto-add-datasource-button.png)
 
 搜索并选择**TDengine**。
 
-![添加数据源](../assets/howto-add-datasource-tdengine.png)
+![添加数据源](../../assets/howto-add-datasource-tdengine.png)
 
 **为Grafana版本11配置TD引擎数据源。**
 
 TDengine数据源插件为Grafana 11版本添加了功能，可以在添加数据源时自动导入TDengine集群基本指标（如CPU、内存、dnode、vnode等）的警报。
-![数据源配置](../assets/howto-add-datasource-11v.png)
+![数据源配置](../../assets/howto-add-datasource-11v.png)
 注意：
 1. 关闭 `Load TDengine Alert` 按钮，在添加数据源时就不会自动导入告警规则。
 2. 删除数据源时，需要先点击删除按钮，清除导入的告警规则。
 
 **配置版本低于 11 的 Grafana 的 TDengine 数据源。**
 
-![数据源配置](../assets/howto-add-datasource.png)
+![数据源配置](../../assets/howto-add-datasource.png)
 
 保存并测试，正常情况下会报告 'TDengine Data source is working'。
 
-![数据源测试](../assets/howto-add-datasource-test.png)
+![数据源测试](../../assets/howto-add-datasource-test.png)
 
 ### 导入仪表盘
 
@@ -162,7 +162,7 @@ TDengine数据源插件为Grafana 11版本添加了功能，可以在添加数�
 
 在添加 TDengine 数据源页面点击 **Dashboard** tab
 
-![导入仪表盘和配置](../assets/import_dashboard-on-datasource.png)
+![导入仪表盘和配置](../../assets/import_dashboard-on-datasource.png)
 
 点击 TDinsight for 3.x 的 "import" 按钮，导入面板。
 
@@ -170,15 +170,15 @@ TDengine数据源插件为Grafana 11版本添加了功能，可以在添加数�
 
 指向 **+** / **Create** - **import**（或 `/dashboard/import` url）。
 
-![导入仪表盘和配置](../assets/import_dashboard.png)
+![导入仪表盘和配置](../../assets/import_dashboard.png)
 
 在 **Import via grafana.com** 位置键入仪表盘 ID `18180` 并 **Load**。
 
-![通过 grafana.com 导入](../assets/import-dashboard-18180.png)
+![通过 grafana.com 导入](../../assets/import-dashboard-18180.png)
 
 导入完成后，TDinsight 的完整页面视图如下所示。
 
-![显示](../assets/TDinsight-v3-full.png)
+![显示](../../assets/TDinsight-v3-full.png)
 
 ## TDinsight v3.x 仪表盘详细信息
 
@@ -189,7 +189,7 @@ TDinsight 仪表盘旨在提供TDengine
 
 ### 集群状态
 
-![tdinsight-mnodes-overview](../assets/TDinsightV3-1-cluster-status.png)
+![tdinsight-mnodes-overview](../../assets/TDinsightV3-1-cluster-status.png)
 
 这部分包括集群当前信息和状态（从左到右，从上到下）。
 
@@ -206,21 +206,21 @@ TDinsight 仪表盘旨在提供TDengine
 
 ### DNodes 状态
 
-![tdinsight-mnodes-overview](../assets/TDinsightV3-2-dnodes.png)
+![tdinsight-mnodes-overview](../../assets/TDinsightV3-2-dnodes.png)
 
 - **DNodes Status**：`show dnodes` 的简单表格视图。
 - **DNodes Number**：DNodes 数量变化。
 
 ### MNode 概述
 
-![tdinsight-mnodes-overview](../assets/TDinsightV3-3-mnodes.png)
+![tdinsight-mnodes-overview](../../assets/TDinsightV3-3-mnodes.png)
 
 1. **MNodes Status**：`show mnodes` 的简单表格视图。
 2. **MNodes Number**：类似于`DNodes Number`，MNodes 数量变化。
 
 ### 请求数
 
-![tdinsight-requests](../assets/TDinsightV3-4-requests.png)
+![tdinsight-requests](../../assets/TDinsightV3-4-requests.png)
 
 1. **Select Request**：select 请求数.
 2. **Delete Request**：delete 请求数.
@@ -230,7 +230,7 @@ TDinsight 仪表盘旨在提供TDengine
 
 ### 数据库
 
-![tdinsight-database](../assets/TDinsightV3-5-database.png)
+![tdinsight-database](../../assets/TDinsightV3-5-database.png)
 
 1. **STables**：超级表数量。
 2. **Tables**：所有表数量。
@@ -239,7 +239,7 @@ TDinsight 仪表盘旨在提供TDengine
 
 ### DNode 资源使用情况
 
-![dnode-usage](../assets/TDinsightV3-6-dnode-usage.png)
+![dnode-usage](../../assets/TDinsightV3-6-dnode-usage.png)
 
 数据节点资源使用情况展示，对变量 `$fqdn` 即每个数据节点进行重复多行展示。包括：
 
@@ -259,7 +259,7 @@ TDinsight 仪表盘旨在提供TDengine
 
 ### taosAdapter
 
-![taosadapter](../assets/TDinsightV3-8-taosadaper.png)
+![taosadapter](../../assets/TDinsightV3-8-taosadaper.png)
 
 包含 taosAdapter rest和websocket的请求统计详情。包括：
 
@@ -276,12 +276,12 @@ TDinsight 仪表盘旨在提供TDengine
 **11 版本自动导入**
 
 数据源添加时选择加载告警规则后，点击告警菜单就能显示加载的告警规则，如下图：
-![告警规则](../assets/alert-rule.png)
+![告警规则](../../assets/alert-rule.png)
 
 **7.5 版本自动导入**
 
 数据源添加完成后，点击告警菜单就能显示加载的告警规则，如下图：
-![告警规则](../assets/alert7.5.png)
+![告警规则](../../assets/alert7.5.png)
 
 **导入告警规则说明**
 

@@ -189,35 +189,35 @@ Grafana would ask you to change the password after first login.
 
 Point to **Configurations** -> **Data Sources** menu and then **Add data source** button.
 
-![add data source button](../assets/howto-add-datasource-button.png)
+![add data source button](../../assets/howto-add-datasource-button.png)
 
 Search and choose **TDengine**.
 
-![add data source](../assets/howto-add-datasource-tdengine.png)
+![add data source](../../assets/howto-add-datasource-tdengine.png)
 
 Configure TDengine data source.
 
-![data source configuration](../assets/howto-add-datasource.png)
+![data source configuration](../../assets/howto-add-datasource.png)
 
 Save and test it, it should say 'TDengine Data source is working'.
 
-![data source test](../assets/howto-add-datasource-test.png)
+![data source test](../../assets/howto-add-datasource-test.png)
 
 ### Import TDengine Dashboard
 
 Point to **+** / **Create** - **import** (or `/dashboard/import` url).
 
-![import dashboard and config](../assets/import_dashboard.png)
+![import dashboard and config](../../assets/import_dashboard.png)
 
 Use the dashboard id `15167` via grafana.com.
 
-![import via grafana.com](../assets/import-dashboard-15167.png)
+![import via grafana.com](../../assets/import-dashboard-15167.png)
 
 Then it's all done.
 
 The full page view for TDengine will like below.
 
-![display](../assets/TDinsight-full.png)
+![display](../../assets/TDinsight-full.png)
 
 ## TDinsight v2.x Dashboard Details
 
@@ -225,7 +225,7 @@ The TDinsight dashboard aims to provide TDengine cluster resources usage and sta
 
 ### Cluster Status
 
-![tdinsight-mnodes-overview](../assets/TDinsight-1-cluster-status.png)
+![tdinsight-mnodes-overview](../../assets/TDinsight-1-cluster-status.png)
 
 Include cluster current information and status (left-right, top-down).
 
@@ -245,7 +245,7 @@ Include cluster current information and status (left-right, top-down).
 
 ### DNodes Status
 
-![tdinsight-mnodes-overview](../assets/TDinsight-2-dnodes.png)
+![tdinsight-mnodes-overview](../../assets/TDinsight-2-dnodes.png)
 
 - **DNodes Status**: Simple table view for `show dnodes`.
 - **DNodes Lifetime**: The time elapsed from dnode created.
@@ -254,14 +254,14 @@ Include cluster current information and status (left-right, top-down).
 
 ### MNodes Overview
 
-![tdinsight-mnodes-overview](../assets/TDinsight-3-mnodes.png)
+![tdinsight-mnodes-overview](../../assets/TDinsight-3-mnodes.png)
 
 1. **MNodes Status**: Simple table view for `show mnodes`.
 2. **MNodes Number**: like `DNodes Number`, but for mnodes.
 
 ### Requests
 
-![tdinsight-requests](../assets/TDinsight-4-requests.png)
+![tdinsight-requests](../../assets/TDinsight-4-requests.png)
 
 1. **Requests Rate(Inserts per Second)**: Insert count per second rate.
 2. **Requests (Selects)**: Select requests count and rate.
@@ -269,7 +269,7 @@ Include cluster current information and status (left-right, top-down).
 
 ### Database for each `$database`
 
-![tdinsight-database](../assets/TDinsight-5-database.png)
+![tdinsight-database](../../assets/TDinsight-5-database.png)
 
 1. **STables**: Number of stables.
 2. **Total Tables**: Number of all tables.
@@ -279,7 +279,7 @@ Include cluster current information and status (left-right, top-down).
 
 ### DNode Usage for each `$fqdn`
 
-![dnode-usage](../assets/TDinsight-6-dnode-usage.png)
+![dnode-usage](../../assets/TDinsight-6-dnode-usage.png)
 
 DNode resources details for specific node with grafana query type variable `$fqdn` (from `select tbname from log.dn`), including:
 
@@ -311,13 +311,13 @@ Here's the metrics list:
 
 ### Login History
 
-![login-history](../assets/TDinsight-7-login-history.png)
+![login-history](../../assets/TDinsight-7-login-history.png)
 
 Currently only report login count per minute.
 
 ### TaosAdapter
 
-![taosadapter](../assets/TDinsight-8-taosadaper.png)
+![taosadapter](../../assets/TDinsight-8-taosadaper.png)
 
 Includes taosAdapter http request statistics and status information
 
