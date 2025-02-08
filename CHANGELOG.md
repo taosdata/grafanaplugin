@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.7.1] - 2025-02-10
+
+### Features
+
+- Supports multi-line SQL editor.
+- Added the 'Classified Connection Counts' table to the TDinsightV3 dashboard.
+
 ## [3.7.0] - 2024-11-20
 
 ### Features

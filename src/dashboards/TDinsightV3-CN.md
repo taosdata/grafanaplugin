@@ -7,6 +7,7 @@ TDinsight v3.x 是使用 [TDengine 3.x] 监控数据库和 [Grafana] 对 TDengin
 TDinsight v3.x 和 TDengine 的版本对应关系如下：
 | TDinsight v3.x 版本 | TDengine 版本  |
 | :-----------------: | :------------: |
+|        3.7.1        | 3.3.0.0 及以上 |
 |        3.7.0        | 3.3.0.0 及以上 |
 |        3.6.3        | 3.3.0.0 及以上 |
 |        3.6.2        | 3.3.0.0 及以上 |
@@ -201,6 +202,7 @@ TDinsight 仪表盘旨在提供TDengine
 - **STables & Tables**：超级表和表总数。
 - **Connections**：当前连接个数。
 - **DNodes/MNodes/VGroups/VNodes**：每种资源的总数和存活数。
+- **Classified Connection Counts**：当前活跃连接数，按用户、应用和 ip 分类。
 - **DNodes/MNodes/VGroups/VNodes Alive Percent**：每种资源的存活数/总数的比例。
 - **Measuring Points Used**：测点数用量（社区版无数据，默认情况下是健康的）。
 
