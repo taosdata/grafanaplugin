@@ -1,6 +1,6 @@
 # TDsmeters - TDengine DBMark dmeters database show data
 
-![TDsmeters-overview](../assets/TDsmeters-full.jpeg)
+![TDsmeters-overview](../../assets/TDsmeters-full.jpeg)
 
 **Grafana version 10.0 or above is required**
 

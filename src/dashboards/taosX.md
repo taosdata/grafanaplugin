@@ -7,19 +7,19 @@ TDinsight for taosX is a real-time display plugin used to monitor various compon
 
 Point to the **Configurations** -> **Data Sources** menu, and click the **Add data source** button.
 
-![add datasource](../assets/howto-add-datasource-button.png)
+![add datasource](../../assets/howto-add-datasource-button.png)
 
 Search for and select **TDengine**.
 
-![add datasource](../assets/howto-add-datasource-tdengine.png)
+![add datasource](../../assets/howto-add-datasource-tdengine.png)
 
 Configure the TDengine datasource.
 
-![datasource config](../assets/howto-add-datasource.png)
+![datasource config](../../assets/howto-add-datasource.png)
 
 Save and test. It will report 'TDengine Data source is working' in normal circumstances.
 
-![datasource testing](../assets/howto-add-datasource-test.png)
+![datasource testing](../../assets/howto-add-datasource-test.png)
 
 ### Importing dashboard
 
@@ -27,19 +27,19 @@ Save and test. It will report 'TDengine Data source is working' in normal circum
 
 Click **Dashboard** tab in TDengine datasource confining page.
 
-![import dashboard and config](../assets/taosX-import.png)
+![import dashboard and config](../../assets/taosX-import.png)
 
 Click the "import" button of `TDinsight for taoX` to import the panel. 
 After the import is complete, the full page view of `TDinsight for taoX` is as shown below.
 
-![dashboard](../assets/TDinsight-taosX-full.png)
+![dashboard](../../assets/TDinsight-taosX-full.png)
 
 
 ## TDinsight for taosX Dashbord Detail
 
 ### taosX
 
-![taosx-overview](../assets/taosX-main.png)
+![taosx-overview](../../assets/taosX-main.png)
 
 This section includes the basic information of the currently selected taosX instance (from left to right, from top to bottom).
 
@@ -57,7 +57,7 @@ This section includes the basic information of the currently selected taosX inst
 
 ### Agent
 
-![taosx-agent](../assets/taosX-Agent.png)
+![taosx-agent](../../assets/taosX-Agent.png)
 
 - **CPU Cores**: The number of CPU cores of the machine where the Agent is located.
 - **Total Memory**: The system memory of the machine where the Agent is located.
@@ -68,7 +68,7 @@ This section includes the basic information of the currently selected taosX inst
 
 ### TDengine3
 
-![tdinsight-mnodes-overview](../assets/TDinsightV3-3-mnodes.png)
+![tdinsight-mnodes-overview](../../assets/TDinsightV3-3-mnodes.png)
 
 -  **Task Info**: Task information, including task id, name, execution time, total execution time.
 -  **VGroup Consumer Progress**：VGroup consumer progress，including update time, task id, topic name, vgroup, offset, and latest.
@@ -76,7 +76,7 @@ This section includes the basic information of the currently selected taosX inst
 
 ### OPC-UA
 
-![tdinsight-mnodes-overview](../assets/taosX-opcua.png)
+![tdinsight-mnodes-overview](../../assets/taosX-opcua.png)
 
 - **Task Info**: Task information, including id, name, execution time, number of rows written, total execution time, and total number of rows written.
 - **Inserted Rows Rate**: Insertion rate of rows.

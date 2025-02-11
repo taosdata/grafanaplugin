@@ -1,12 +1,12 @@
-import React, {ReactElement, useState} from 'react'
-import {Collapse, InlineField, InlineFieldRow, Input, Select} from '@grafana/ui'
-import {useSelectableValue} from './useSelectableValue'
-import {useChangeSelectableValue} from './useChangeSelectableValue'
-import type {EditorProps} from './types'
-import {useChangeOptions} from './useChangeString'
+import React, { ReactElement, useState } from 'react'
+import { Collapse, InlineField, InlineFieldRow, Input, Select, TextArea } from '@grafana/ui'
+import { useSelectableValue } from './useSelectableValue'
+import { useChangeSelectableValue } from './useChangeSelectableValue'
+import type { EditorProps } from './types'
+import { useChangeOptions, useChangeOptionsArea } from './useChangeString'
 
 export function QueryEditor(props: EditorProps): ReactElement {
-    const {query} = props;
+    const { query } = props;
     if (!query.queryType) {
         query.queryType = "SQL"
     }
@@ -14,18 +14,18 @@ export function QueryEditor(props: EditorProps): ReactElement {
         query.formatType = "Time series"
     }
 
-    const onChangeQueryType = useChangeSelectableValue(props, {propertyName: 'queryType', runQuery: true})
-    const onChangeAlias = useChangeOptions(props, {propertyName: 'alias', runQuery: false})
-    const onblurAlias = useChangeOptions(props, {propertyName: 'alias', runQuery: true})
-    const onChangeSql = useChangeOptions(props, {propertyName: 'sql', runQuery: false})
-    const onblurSql = useChangeOptions(props, {propertyName: 'sql', runQuery: true})
-    const onchangeTimeShiftPeriod = useChangeOptions(props, {propertyName: 'timeShiftPeriod', runQuery: false})
-    const onchangeTimeShiftUnit = useChangeSelectableValue(props, {propertyName: 'timeShiftUnit', runQuery: false})
-    const onChangeFormatType = useChangeSelectableValue(props, {propertyName: 'formatType', runQuery: true})
-    const onchangeGroupColumns = useChangeOptions(props, {propertyName: 'colNameToGroup', runQuery: false})
-    const onblurGroupColumns = useChangeOptions(props, {propertyName: 'colNameToGroup', runQuery: true})
-    const onchangeFormatStr = useChangeOptions(props, {propertyName: 'colNameFormatStr', runQuery: false})
-    const onblurFormatStr = useChangeOptions(props, {propertyName: 'colNameFormatStr', runQuery: true})
+    const onChangeQueryType = useChangeSelectableValue(props, { propertyName: 'queryType', runQuery: true })
+    const onChangeAlias = useChangeOptions(props, { propertyName: 'alias', runQuery: false })
+    const onblurAlias = useChangeOptions(props, { propertyName: 'alias', runQuery: true })
+    const onChangeSql = useChangeOptionsArea(props, { propertyName: 'sql', runQuery: false })
+    const onblurSql = useChangeOptionsArea(props, { propertyName: 'sql', runQuery: true })
+    const onchangeTimeShiftPeriod = useChangeOptions(props, { propertyName: 'timeShiftPeriod', runQuery: false })
+    const onchangeTimeShiftUnit = useChangeSelectableValue(props, { propertyName: 'timeShiftUnit', runQuery: false })
+    const onChangeFormatType = useChangeSelectableValue(props, { propertyName: 'formatType', runQuery: true })
+    const onchangeGroupColumns = useChangeOptions(props, { propertyName: 'colNameToGroup', runQuery: false })
+    const onblurGroupColumns = useChangeOptions(props, { propertyName: 'colNameToGroup', runQuery: true })
+    const onchangeFormatStr = useChangeOptions(props, { propertyName: 'colNameFormatStr', runQuery: false })
+    const onblurFormatStr = useChangeOptions(props, { propertyName: 'colNameFormatStr', runQuery: true })
 
     const ShowGeneratedSql = () => {
         const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -68,26 +68,26 @@ export function QueryEditor(props: EditorProps): ReactElement {
                     setIsOpen(!isOpen)
                 }
             >
-                <p dangerouslySetInnerHTML={{__html: help}}></p>
+                <p dangerouslySetInnerHTML={{ __html: help }}></p>
             </Collapse>
         )
     }
 
     const queryTypeOptions = [
-        {label: 'SQL', value: 'SQL'},
-        {label: 'Arithmetic', value: 'Arithmetic'}
+        { label: 'SQL', value: 'SQL' },
+        { label: 'Arithmetic', value: 'Arithmetic' }
     ]
     const formatTypeOptions = [
-        {label: 'Time series', value: 'Time series'},
-        {label: 'Table', value: 'Table'}
+        { label: 'Time series', value: 'Time series' },
+        { label: 'Table', value: 'Table' }
     ]
     const timeShiftUnit = [
-        {label: 'seconds', value: 'seconds'},
-        {label: 'minutes', value: 'minutes'},
-        {label: 'hours', value: 'hours'},
-        {label: 'days', value: 'days'},
-        {label: 'weeks', value: 'weeks'},
-        {label: 'months', value: 'months'}
+        { label: 'seconds', value: 'seconds' },
+        { label: 'minutes', value: 'minutes' },
+        { label: 'hours', value: 'hours' },
+        { label: 'days', value: 'days' },
+        { label: 'weeks', value: 'weeks' },
+        { label: 'months', value: 'months' }
     ]
 
     return (
@@ -119,9 +119,9 @@ export function QueryEditor(props: EditorProps): ReactElement {
 
             <InlineFieldRow>
                 <InlineField label='Input Sql' labelWidth={20} tooltip='' grow>
-                    <Input
-                        style={{"width": "100%; min-width: 800px;"}}
-                        width={100}
+                    <TextArea
+                        style={{ width: "100%", minWidth: "800px" }}
+                        rows={5} // 设置行数
                         className={'min-width-30 max-width-100 gf-form--grow'}
                         placeholder={'select _wstart as ts, avg(mem_free), dnode_ep from log.taosd_dnodes_info where _ts>=$from and _ts<=$to partition by dnode_ep interval($interval)'}
                         onChange={onChangeSql}
@@ -132,8 +132,8 @@ export function QueryEditor(props: EditorProps): ReactElement {
             </InlineFieldRow>
 
             <InlineFieldRow>
-                <ShowGeneratedSql/>
-                <ShowHelpCollapse/>
+                <ShowGeneratedSql />
+                <ShowHelpCollapse />
                 <InlineField id="formatType" label='Format new col' labelWidth={20}>
                     <Select
                         inputId={"formatType"}

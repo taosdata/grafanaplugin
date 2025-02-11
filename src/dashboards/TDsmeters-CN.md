@@ -1,6 +1,6 @@
 # TDsmeters - TDengine 数据集市智能电表演示
 
-![TDsmeters-overview](../assets/TDsmeters-full.jpeg)
+![TDsmeters-overview](../../assets/TDsmeters-full.jpeg)
 
 **需要Grafana版本10.0以上**
 
