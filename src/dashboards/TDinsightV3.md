@@ -213,7 +213,7 @@ This section contains the current information and status of the cluster (from le
 - **Stables & Tables**: The total number of stable and table.
 - **Connections**: The number of current connections.
 - **DNodes/MNodes/VGroups/VNodes**: Total number of each resource and the number of survivors.
-- **Classified Connection Counts**: The current number of active connections, classified by user, application, and IP.
+- **Classified Connection Counts**: The current number of active connections, classified by user, application, and IP. 
 - **DNodes/MNodes/VGroups/VNodes Alive Percent**: The ratio of the number of alive/total for each resource.
 - **Measuring Points Used**: The number of measuring points(no data available in the community version, healthy by
   default).
