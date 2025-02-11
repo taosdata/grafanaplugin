@@ -20,12 +20,19 @@ for instructions on how to add a data source to Grafana. Note that, only users w
 data sources.
 
 ## Compatiable with TDengine version
-| TDengine grafana plugin version |     major changes     | TDengine version |
-| :-----------------------------: | :-------------------: | :--------------: |
-|              3.5.1              | update taosd and taosX dashboard | 3.3.0.0 or later |
-|              3.5.0              | new taosd and taosX dashboard | 3.2.3.0 or later |
-|              3.4.0              | new adapter dashboard | 3.2.0.1 or later |
-|              3.2.7              | support TDengine 3.0  | 3.0.0.0 or later |
+| TDengine grafana plugin version | major changes                                                                                                            | TDengine version |
+| :-----------------------------: | ------------------------------------------------------------------------------------------------------------------------ | :--------------: |
+|              3.7.1              | 1. Supports multi-line SQL editor. </br> 2. Added the 'Classified Connection Counts' table to the TDinsightV3 dashboard. | 3.3.0.0 or later |
+|              3.7.0              | migrate TDengine Grafana plugin from Angular to React                                                                    | 3.3.0.0 or later |
+|              3.6.3              | fix TDinsight Request data issue                                                                                         | 3.3.0.0 or later |
+|              3.6.2              | improve alert ui                                                                                                         | 3.3.0.0 or later |
+|              3.6.1              | improve alert ui                                                                                                         | 3.3.0.0 or later |
+|              3.6.0              | support taosd alert configuration for grafana 11 and 7.5 version                                                         | 3.3.0.0 or later |
+|              3.5.2              | update taosd dashboard                                                                                                   | 3.3.0.0 or later |
+|              3.5.1              | update taosd and taosX dashboard                                                                                         | 3.3.0.0 or later |
+|              3.5.0              | new taosd and taosX dashboard                                                                                            | 3.2.3.0 or later |
+|              3.4.0              | new adapter dashboard                                                                                                    | 3.2.0.1 or later |
+|              3.2.7              | support TDengine 3.0                                                                                                     | 3.0.0.0 or later |
 
 
 ## One-line installer
