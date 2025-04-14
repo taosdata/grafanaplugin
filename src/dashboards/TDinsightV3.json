@@ -3463,7 +3463,7 @@
           "timeFrom": null,
           "timeShift": null,
           "title": "request by rest",
-          "type": "timeseries"
+          "type": "graph"
         },
         {
           "datasource": "${DS_TDENGINE}",
@@ -3690,7 +3690,209 @@
           "timeFrom": null,
           "timeShift": null,
           "title": "request by ws",
-          "type": "timeseries"
+          "type": "graph"
+        },
+        {
+          "datasource": "${DS_TDENGINE}",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "graph": false,
+                  "legend": false,
+                  "tooltip": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": true
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 12,
+            "x": 0,
+            "y": 102
+          },
+          "id": 131,
+          "options": {
+            "graph": {},
+            "legend": {
+              "calcs": [
+                "lastNotNull",
+                "min",
+                "max",
+                "mean"
+              ],
+              "displayMode": "table",
+              "placement": "right"
+            },
+            "tooltipOptions": {
+              "mode": "single"
+            }
+          },
+          "pluginVersion": "7.5.0",
+          "targets": [
+            {
+              "colNameFormatStr": "{{label}}",
+              "colNameToGroup": "label",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select _wstart as ts, concat(endpoint, '_', `user`, '_', 'total') as label, max(conn_pool_total) as total from $database.adapter_conn_pool where _ts >= $from and _ts <= $to and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint, `user` interval($interval) fill(null)"
+            },
+            {
+              "colNameFormatStr": "{{label}}",
+              "colNameToGroup": "label",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "B",
+              "sql": "select _wstart as ts, concat(endpoint, '_', `user`, '_', 'in_use') as label, max(conn_pool_in_use) as in_use from $database.adapter_conn_pool where _ts >= $from and _ts <= $to and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint, `user` interval($interval) fill(null)"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Connection Pool",
+          "type": "graph"
+        },
+        {
+          "datasource": "${DS_TDENGINE}",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "graph": false,
+                  "legend": false,
+                  "tooltip": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": true
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 12,
+            "x": 12,
+            "y": 102
+          },
+          "id": 132,
+          "options": {
+            "graph": {},
+            "legend": {
+              "calcs": [
+                "lastNotNull",
+                "min",
+                "max",
+                "mean"
+              ],
+              "displayMode": "table",
+              "placement": "right"
+            },
+            "tooltipOptions": {
+              "mode": "single"
+            }
+          },
+          "pluginVersion": "7.5.0",
+          "targets": [
+            {
+              "colNameFormatStr": "{{label}}",
+              "colNameToGroup": "label",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select _wstart as ts, concat(endpoint, '_', 'ws_query_conn') as label, max(ws_query_conn) from $database.adapter_status where _ts >= $from and _ts <= $to and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
+            },
+            {
+              "colNameFormatStr": "{{label}}",
+              "colNameToGroup": "label",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "B",
+              "sql": "select _wstart as ts, concat(endpoint, '_', 'ws_stmt_conn') as label, max(ws_stmt_conn) from $database.adapter_status where _ts >= $from and _ts <= $to and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
+            },
+            {
+              "colNameFormatStr": "{{label}}",
+              "colNameToGroup": "label",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "C",
+              "sql": "select _wstart as ts, concat(endpoint, '_', 'ws_sml_conn') as label, max(ws_sml_conn) from $database.adapter_status where _ts >= $from and _ts <= $to and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
+            },
+            {
+              "colNameFormatStr": "{{label}}",
+              "colNameToGroup": "label",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "D",
+              "sql": "select _wstart as ts, concat(endpoint, '_', 'ws_ws_conn') as label, max(ws_ws_conn) from $database.adapter_status where _ts >= $from and _ts <= $to and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
+            },
+            {
+              "colNameFormatStr": "{{label}}",
+              "colNameToGroup": "label",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "E",
+              "sql": "select _wstart as ts, concat(endpoint, '_', 'ws_tmq_conn') as label, max(ws_tmq_conn) from $database.adapter_status where _ts >= $from and _ts <= $to and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "WebSocket Connections",
+          "type": "graph"
         }
       ],
       "title": "TaosAdapter",
@@ -3703,7 +3905,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 97
+        "y": 197
       },
       "id": 79,
       "panels": [
@@ -3761,7 +3963,7 @@
             "h": 6,
             "w": 6,
             "x": 0,
-            "y": 98
+            "y": 198
           },
           "hiddenSeries": false,
           "id": 203,
@@ -3903,7 +4105,7 @@
             "h": 6,
             "w": 6,
             "x": 6,
-            "y": 98
+            "y": 198
           },
           "hiddenSeries": false,
           "id": 204,
@@ -4045,7 +4247,7 @@
             "h": 6,
             "w": 6,
             "x": 12,
-            "y": 98
+            "y": 198
           },
           "hiddenSeries": false,
           "id": 210,
@@ -4190,7 +4392,7 @@
             "h": 6,
             "w": 6,
             "x": 18,
-            "y": 98
+            "y": 198
           },
           "hiddenSeries": false,
           "id": 205,
@@ -4334,7 +4536,7 @@
             "h": 6,
             "w": 6,
             "x": 0,
-            "y": 104
+            "y": 204
           },
           "hiddenSeries": false,
           "id": 208,
@@ -4479,7 +4681,7 @@
             "h": 6,
             "w": 6,
             "x": 6,
-            "y": 104
+            "y": 204
           },
           "hiddenSeries": false,
           "id": 206,
@@ -4624,7 +4826,7 @@
             "h": 6,
             "w": 6,
             "x": 12,
-            "y": 104
+            "y": 204
           },
           "hiddenSeries": false,
           "id": 209,
@@ -4767,7 +4969,7 @@
             "h": 6,
             "w": 6,
             "x": 18,
-            "y": 104
+            "y": 204
           },
           "hiddenSeries": false,
           "id": 273,
@@ -4910,7 +5112,7 @@
             "h": 6,
             "w": 6,
             "x": 0,
-            "y": 110
+            "y": 210
           },
           "hiddenSeries": false,
           "id": 211,
@@ -5053,7 +5255,7 @@
             "h": 6,
             "w": 6,
             "x": 6,
-            "y": 110
+            "y": 210
           },
           "hiddenSeries": false,
           "id": 215,
@@ -5196,7 +5398,7 @@
             "h": 6,
             "w": 6,
             "x": 12,
-            "y": 110
+            "y": 210
           },
           "hiddenSeries": false,
           "id": 213,
@@ -5340,7 +5542,7 @@
             "h": 6,
             "w": 6,
             "x": 18,
-            "y": 110
+            "y": 210
           },
           "hiddenSeries": false,
           "id": 214,
@@ -5483,7 +5685,7 @@
             "h": 6,
             "w": 12,
             "x": 0,
-            "y": 200
+            "y": 300
           },
           "hiddenSeries": false,
           "id": 244,
@@ -5627,7 +5829,7 @@
             "h": 6,
             "w": 12,
             "x": 12,
-            "y": 200
+            "y": 300
           },
           "hiddenSeries": false,
           "id": 212,
