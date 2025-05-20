@@ -22,6 +22,7 @@ data sources.
 ## Compatiable with TDengine version
 | TDengine grafana plugin version | major changes                                                                                                            | TDengine version |
 | :-----------------------------: | ------------------------------------------------------------------------------------------------------------------------ | :--------------: |
+|              3.7.2              | Updated the taosX dashboard.                                                                                             | 3.3.0.0 or later |
 |              3.7.1              | 1. Supports multi-line SQL editor. </br> 2. Added the 'Classified Connection Counts' table to the TDinsightV3 dashboard. | 3.3.0.0 or later |
 |              3.7.0              | migrate TDengine Grafana plugin from Angular to React                                                                    | 3.3.0.0 or later |
 |              3.6.3              | fix TDinsight Request data issue                                                                                         | 3.3.0.0 or later |
