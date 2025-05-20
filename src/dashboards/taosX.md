@@ -66,17 +66,18 @@ This section includes the basic information of the currently selected taosX inst
 - **CPU Usage**: The percentage of CPU usage by the Agent process, in time series form.
 - **Memory Usage**: The percentage of memory usage by the Agent process, in time series form.
 
-### TDengine3
+### TDengine Data Subscription
 
-![tdinsight-mnodes-overview](../../assets/TDinsightV3-3-mnodes.png)
+![taosX TDengine Data Subscription](../../assets/taosX-tdengine-subscription.png)
 
 -  **Task Info**: Task information, including task id, name, execution time, total execution time.
 -  **VGroup Consumer Progress**：VGroup consumer progress，including update time, task id, topic name, vgroup, offset, and latest.
+-  **Messages Number/Bytes per Second**: The messages number per second on the left Y-axis, and the throughput (bytes per second) on the right Y-axis.
 -  **Write Raw Fails**: The number of times the writing of raw meta failed.
 
 ### OPC-UA
 
-![tdinsight-mnodes-overview](../../assets/taosX-opcua.png)
+![taosX OPC-UA](../../assets/taosX-opcua.png)
 
 - **Task Info**: Task information, including id, name, execution time, number of rows written, total execution time, and total number of rows written.
 - **Inserted Rows Rate**: Insertion rate of rows.
@@ -88,4 +89,14 @@ This section includes the basic information of the currently selected taosX inst
 - **Connector Disk Read Rate**: The disk read speed of the Connector process.
 - **Connector Disk Write Rate**: The disk write speed of the Connector process.
 
-The monitoring information of other types of data sources such as MQTT, CSV, Kafka, etc., is similar to OPC-UA.
+The monitoring information of other types of data sources such as CSV, Kafka, etc., is similar to OPC-UA.
+
+### MQTT
+
+![taosX MQTT](../../assets/taosX-MQTT.png)
+
+- **Task Info**: Task information, including id, name, execution time, number of rows written, total execution time, total number of rows written, fetched messages and processed messages.
+- **MQTT Written/Fetch Rate**: The ratio of messages written to TDengine and the rate of messages fetched from the MQTT broker, it's usually 1:1.
+- **MQTT Consuming Rate**: The rate of messages consumed from the MQTT broker in messages per second and bytes per second.
+- **Processed/Received Batches**: The number of batches processed & the number of data batches received from source.
+- **Inserted Rate**: The rate of messages inserted into TDengine in rows per second and number of points(calculated by columns x rows) per second.
