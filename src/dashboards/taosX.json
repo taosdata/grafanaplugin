@@ -6784,9 +6784,7 @@
           "dashes": false,
           "datasource": "${DS_TDENGINE}",
           "fieldConfig": {
-            "defaults": {
-              "unit": "percentunit"
-            },
+            "defaults": {},
             "overrides": []
           },
           "fill": 1,
@@ -6874,11 +6872,19 @@
           "yaxes": [
             {
               "decimals": 2,
-              "format": "percent",
+              "format": "percentunit",
               "label": null,
               "logBase": 1,
               "max": null,
               "min": "0",
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             }
           ],
