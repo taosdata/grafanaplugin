@@ -1663,6 +1663,117 @@
           "dashes": false,
           "datasource": "${DS_TDENGINE}",
           "fieldConfig": {
+            "defaults": {},
+            "overrides": []
+          },
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 0,
+            "y": 26
+          },
+          "hiddenSeries": false,
+          "id": 340,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "rightSide": true,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "7.5.10",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [
+            {
+              "alias": "/bps.*/",
+              "yaxis": 2
+            }
+          ],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "id,name",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select _rowts as ts, task_id as id, task_name as name, derivative(messages, 1s, 1) as mps from $database.taosx_task_tdengine3 where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'TDengine3' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id order by task_id, task_name"
+            },
+            {
+              "colNameToGroup": "id,name",
+              "formatType": "Time series",
+              "hide": false,
+              "queryType": "SQL",
+              "refId": "B",
+              "sql": "select _rowts as ts, task_id as id, task_name as name, derivative(messages_bytes, 1s, 1) as bps from $database.taosx_task_tdengine3 where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'TDengine3' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id order by task_id, task_name"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Messages Number/Bytes per Second",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "decimals": 0,
+              "format": "msg/s",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            },
+            {
+              "decimals": 0,
+              "format": "Bps",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_TDENGINE}",
+          "fieldConfig": {
             "defaults": {
               "unit": "none"
             },
@@ -1672,12 +1783,12 @@
           "fillGradient": 0,
           "gridPos": {
             "h": 10,
-            "w": 24,
-            "x": 0,
+            "w": 12,
+            "x": 13,
             "y": 26
           },
           "hiddenSeries": false,
-          "id": 340,
+          "id": 341,
           "legend": {
             "avg": false,
             "current": false,
@@ -1756,7 +1867,7 @@
           }
         }
       ],
-      "title": "TDengine3",
+      "title": "TDengine Data Subscription",
       "type": "row"
     },
     {
@@ -2054,7 +2165,7 @@
           }
         }
       ],
-      "title": "TDengine2",
+      "title": "TDengine Query",
       "type": "row"
     },
     {
@@ -6673,9 +6784,7 @@
           "dashes": false,
           "datasource": "${DS_TDENGINE}",
           "fieldConfig": {
-            "defaults": {
-              "unit": "cps"
-            },
+            "defaults": {},
             "overrides": []
           },
           "fill": 1,
@@ -6693,7 +6802,7 @@
             "current": false,
             "max": false,
             "min": false,
-            "rightSide": true,
+            "rightSide": false,
             "show": true,
             "total": false,
             "values": false
@@ -6718,16 +6827,35 @@
               "colNameFormatStr": "{{task_id}}",
               "colNameToGroup": "task_id",
               "formatType": "Time series",
+              "hide": true,
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id,  (max(total_written_rows) - min(total_written_rows)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as rows_per_second from $database.taosx_task_mqtt where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'MQTT' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
+              "sql": "select timetruncate(_rowts, 1s) as ts, derivative(processed_messages, $interval, 1) as mps, concat('processed ', task_id, '-',  task_name) as task_id from $database.taosx_task_mqtt where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task') and  _ts >= $from and _ts <= $to  partition by task_id, task_name"
+            },
+            {
+              "alias": "",
+              "colNameFormatStr": "{{task_id}}",
+              "colNameToGroup": "task_id",
+              "formatType": "Time series",
+              "hide": true,
+              "queryType": "SQL",
+              "refId": "B",
+              "sql": "select timetruncate(_rowts, 1s) as ts, derivative(mqtt_fetched_messages, $interval, 1) as mps, concat('fetched ', task_id, '-',  task_name) as task_id from $database.taosx_task_mqtt where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task') and  _ts >= $from and _ts <= $to  partition by task_id, task_name"
+            },
+            {
+              "colNameToGroup": "id,name",
+              "formatType": "Time series",
+              "hide": false,
+              "queryType": "SQL",
+              "refId": "C",
+              "sql": "select _wend, round((last(processed_messages) - min(processed_messages)) / (last(mqtt_fetched_messages) - min(mqtt_fetched_messages)), 2) as written_fetched_rate, task_id as id, task_name as name from $database.taosx_task_mqtt where  taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task') and  _ts >= $from and _ts <= $to   partition by task_id, task_name interval($interval)"
             }
           ],
           "thresholds": [],
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Inserted rows Rate",
+          "title": "MQTT Written/Fetched Rate",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -6744,7 +6872,7 @@
           "yaxes": [
             {
               "decimals": 2,
-              "format": "cps",
+              "format": "percentunit",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -6772,9 +6900,7 @@
           "dashes": false,
           "datasource": "${DS_TDENGINE}",
           "fieldConfig": {
-            "defaults": {
-              "unit": "cps"
-            },
+            "defaults": {},
             "overrides": []
           },
           "fill": 1,
@@ -6792,7 +6918,7 @@
             "current": false,
             "max": false,
             "min": false,
-            "rightSide": true,
+            "rightSide": false,
             "show": true,
             "total": false,
             "values": false
@@ -6808,7 +6934,12 @@
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
-          "seriesOverrides": [],
+          "seriesOverrides": [
+            {
+              "alias": "/bps.*/",
+              "yaxis": 2
+            }
+          ],
           "spaceLength": 10,
           "stack": false,
           "steppedLine": false,
@@ -6819,14 +6950,24 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id,  (max(total_written_points) - min(total_written_points)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as points_per_second from $database.taosx_task_mqtt where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'MQTT' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
+              "sql": "select timetruncate(_rowts, 1s) as ts, derivative(mqtt_fetched_messages, 1s, 1) as mps, concat('mps: ', task_id, '-',  task_name) as task_id from $database.taosx_task_mqtt where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task') and  _ts >= $from and _ts <= $to  partition by task_id, task_name"
+            },
+            {
+              "colNameFormatStr": "{{task_id}}",
+              "colNameToGroup": "task_id",
+              "formatType": "Time series",
+              "hide": false,
+              "queryType": "SQL",
+              "refId": "B",
+              "sql": "select timetruncate(_rowts, 1s) as ts, derivative(mqtt_received_bytes, 1s, 1) as rate, concat('bps: ', task_id, '-',  task_name) as task_id from $database.taosx_task_mqtt where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task') and  _ts >= $from and _ts <= $to  partition by task_id, task_name",
+              "timeShiftPeriod": ""
             }
           ],
           "thresholds": [],
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Inserted Points Rate",
+          "title": "MQTT Consuming Rate(Messages per Second)",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -6851,11 +6992,11 @@
               "show": true
             },
             {
-              "format": "short",
+              "format": "Bps",
               "label": null,
               "logBase": 1,
               "max": null,
-              "min": null,
+              "min": "0",
               "show": true
             }
           ],
@@ -6891,7 +7032,7 @@
             "current": false,
             "max": false,
             "min": false,
-            "rightSide": true,
+            "rightSide": false,
             "show": true,
             "total": false,
             "values": false
@@ -6913,7 +7054,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}_processed_batches",
+              "colNameFormatStr": "",
               "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
@@ -6921,7 +7062,7 @@
               "sql": "select _wstart as ts, task_id,  (last(total_processed_batches) - first(total_processed_batches)) as processed_batches from $database.taosx_task_mqtt where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'MQTT' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             },
             {
-              "colNameFormatStr": "{{task_id}}_received_batches",
+              "colNameFormatStr": "",
               "colNameToGroup": "task_id",
               "formatType": "Time series",
               "hide": false,
@@ -6979,9 +7120,7 @@
           "dashes": false,
           "datasource": "${DS_TDENGINE}",
           "fieldConfig": {
-            "defaults": {
-              "unit": "none"
-            },
+            "defaults": {},
             "overrides": []
           },
           "fill": 1,
@@ -6999,7 +7138,7 @@
             "current": false,
             "max": false,
             "min": false,
-            "rightSide": true,
+            "rightSide": false,
             "show": true,
             "total": false,
             "values": false
@@ -7015,25 +7154,38 @@
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
-          "seriesOverrides": [],
+          "seriesOverrides": [
+            {
+              "alias": "/points.*/",
+              "yaxis": 2
+            }
+          ],
           "spaceLength": 10,
           "stack": false,
           "steppedLine": false,
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
+              "colNameFormatStr": "",
               "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select _wstart as ts, task_id, (last(total_failed_sqls) - first(total_failed_sqls)) as failed_sqls from $database.taosx_task_mqtt where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'MQTT' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
+              "sql": "select _wstart as ts, task_id,  (max(total_written_rows) - min(total_written_rows)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as rows_per_second from $database.taosx_task_mqtt where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'MQTT' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
+            },
+            {
+              "colNameToGroup": "task_id",
+              "formatType": "Time series",
+              "hide": false,
+              "queryType": "SQL",
+              "refId": "B",
+              "sql": "select _wstart as ts, task_id,  (max(total_written_points) - min(total_written_points)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as points_per_second from $database.taosx_task_mqtt where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'MQTT' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             }
           ],
           "thresholds": [],
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Failed Sqls",
+          "title": "Inserted Rate",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -7050,7 +7202,7 @@
           "yaxes": [
             {
               "decimals": 0,
-              "format": "none",
+              "format": "r/s",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -7058,11 +7210,11 @@
               "show": true
             },
             {
-              "format": "short",
+              "format": "p/s",
               "label": null,
               "logBase": 1,
               "max": null,
-              "min": null,
+              "min": "0",
               "show": true
             }
           ],
@@ -10024,7 +10176,7 @@
           "selected": false,
           "text": "auto",
           "value": "$__auto_interval_interval"
-       },
+        },
         "description": null,
         "error": null,
         "hide": 0,
