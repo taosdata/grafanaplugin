@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.7.2] - 2025-05-20
+
+### Features
+
+- Updated the taosX dashboard.
+
 ## [3.7.1] - 2025-02-10
 
 ### Features

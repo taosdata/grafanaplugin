@@ -95,8 +95,8 @@
         "path": "img/howto-add-datasource.jpg"
       }
     ],
-    "version": "3.7.1",
-    "updated": "2025-02-10"
+    "version": "3.7.2",
+    "updated": "2025-05-20"
   },
   "dependencies": {
     "grafanaDependency": ">=7.5.0",
