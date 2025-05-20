@@ -6874,19 +6874,11 @@
           "yaxes": [
             {
               "decimals": 2,
-              "format": "cps",
+              "format": "percent",
               "label": null,
               "logBase": 1,
               "max": null,
               "min": "0",
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
               "show": true
             }
           ],
