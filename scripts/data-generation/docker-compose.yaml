@@ -9,19 +9,19 @@ services:
       environment:
         GF_AUTH_ANONYMOUS_ENABLED: 1
         GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
-        GF_INSTALL_PLUGINS: https://github.com/taosdata/grafanaplugin/releases/download/v3.5.1/tdengine-datasource-3.5.1.zip;tdengine-datasource,marcusolsson-static-datasource,marcusolsson-dynamictext-panel
+        GF_INSTALL_PLUGINS: https://github.com/taosdata/grafanaplugin/releases/download/v3.7.2/tdengine-datasource-3.7.2.zip;tdengine-datasource,marcusolsson-static-datasource,marcusolsson-dynamictext-panel
       # volumes:
       # - ./provisioning:/etc/grafana/provisioning
       depends_on:
       - tdengine
     tdengine:
-        image: tdengine/tdengine:3.3.0.0
+        image: tdengine/tdengine:3.3.6.6
         volumes:
         - ./tdengine/taos.cfg:/etc/taos/taos.cfg
         ports:
         - "8041:6041"
     taoskeeper:
-        image: tdengine/tdengine:3.3.0.0
+        image: tdengine/tdengine:3.3.6.6
         depends_on:
         - tdengine
         environment:
@@ -35,6 +35,6 @@ services:
         - -c
         - "while true; do taoskeeper --tdengine.host tdengine; done"
     simulator-taosx:
-        image: image.cloud.taosdata.com/tdinsight/simulator-taosx:1.0.1
+        image: image.cloud.taosdata.com/tdinsight/simulator-taosx:1.0.2
         depends_on:
         - tdengine
