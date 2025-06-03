@@ -9,7 +9,7 @@ jobs:
   release:
     runs-on:
       group: CI
-      labels: [self-hosted, ubuntu-24.04, X64]
+      labels: [self-hosted, Linux, X64, testing]
 
     steps:
       - uses: actions/checkout@v2
