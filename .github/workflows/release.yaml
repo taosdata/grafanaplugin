@@ -7,9 +7,7 @@ on:
 
 jobs:
   release:
-    runs-on:
-      group: CI
-      labels: [self-hosted, Linux, X64, testing]
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
@@ -190,20 +188,3 @@ jobs:
           asset_path: ./src/dashboards/TDinsight.sh
           asset_name: TDinsight.sh
           asset_content_type: text/plain
-
-      - name: Upload Grafana Plugin (CN)
-        uses: appleboy/scp-action@v1
-        with:
-          host: ${{ secrets.OFFICIAL_CN_HOST }}
-          username: ${{ secrets.OFFICIAL_CN_USERNAME }}
-          password: ${{ secrets.OFFICIAL_CN_PASSWORD }}
-          source: ./${{ steps.metadata.outputs.archive }}
-          target: ${{ secrets.GRAFANA_PLUGIN_PATH }}/tdengine-datasource.zip
-      - name: Upload Grafana Plugin (EN)
-        uses: appleboy/scp-action@v1
-        with:
-          host: ${{ secrets.OFFICIAL_EN_HOST }}
-          username: ${{ secrets.OFFICIAL_EN_USERNAME }}
-          password: ${{ secrets.OFFICIAL_EN_PASSWORD }}
-          source: ./${{ steps.metadata.outputs.archive }}
-          target: ${{ secrets.GRAFANA_PLUGIN_PATH }}/tdengine-datasource.zip
