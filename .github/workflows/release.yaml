@@ -29,7 +29,7 @@ jobs:
 
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
-        run: echo "name=dir::$(yarn cache dir)"  >> $GITHUB_OUTPUT
+        run: echo "dir=$(yarn cache dir)"  >> $GITHUB_OUTPUT
 
       - name: Cache yarn cache
         uses: actions/cache@v3
@@ -63,7 +63,7 @@ jobs:
         run: |
           if [ -f "Magefile.go" ]
           then
-            echo "name=has-backend::true" >> $GITHUB_OUTPUT
+            echo "has-backend=true" >> $GITHUB_OUTPUT
           fi
 
       - name: Test backend
@@ -102,13 +102,13 @@ jobs:
           echo "archive=${GRAFANA_PLUGIN_ARTIFACT}" >> $GITHUB_OUTPUT
           echo "archive-checksum=${GRAFANA_PLUGIN_ARTIFACT_CHECKSUM}" >> $GITHUB_OUTPUT
 
-          echo "name=github-tag::${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+          echo "github-tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
 
       - name: Read changelog
         id: changelog
         run: |
           awk '/^## / {s++} s == 1 {print}' CHANGELOG.md > release_notes.md
-          echo "name=path::release_notes.md"  >> $GITHUB_OUTPUT
+          echo "path=release_notes.md"  >> $GITHUB_OUTPUT
 
       - name: Check package version
         run: if [[ "${{ steps.metadata.outputs.github-tag }}" != "v${{ steps.metadata.outputs.plugin-version }}"* ]]; then printf "\033[0;31mPlugin version doesn't match tag name\033[0m\n"; exit 1; fi
