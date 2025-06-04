@@ -204,7 +204,7 @@ jobs:
     steps:
       - name: Download artifact
         run: |
-          wget "https://github.com/taosdata/grafanaplugin/releases/download/${{ needs.release.outputs.plugin-version }}/${{ needs.release.outputs.archive }}"
+          wget "https://github.com/taosdata/grafanaplugin/releases/download/v${{ needs.release.outputs.plugin-version }}/${{ needs.release.outputs.archive }}"
             
       - name: Upload Grafana Plugin (CN)
         uses: appleboy/scp-action@v1
