@@ -8,6 +8,11 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    outputs:
+      archive: ${{ steps.metadata.outputs.archive }}
+      archive-checksum: ${{ steps.metadata.outputs.archive-checksum }}
+      plugin-id: ${{ steps.metadata.outputs.plugin-id }}
+      plugin-version: ${{ steps.metadata.outputs.plugin-version }}
 
     steps:
       - uses: actions/checkout@v2
@@ -91,11 +96,11 @@ jobs:
           export GRAFANA_PLUGIN_ARTIFACT=${GRAFANA_PLUGIN_ID}-${GRAFANA_PLUGIN_VERSION}.zip
           export GRAFANA_PLUGIN_ARTIFACT_CHECKSUM=${GRAFANA_PLUGIN_ARTIFACT}.md5
 
-          echo "::set-output name=plugin-id::${GRAFANA_PLUGIN_ID}"
-          echo "::set-output name=plugin-version::${GRAFANA_PLUGIN_VERSION}"
-          echo "::set-output name=plugin-type::${GRAFANA_PLUGIN_TYPE}"
-          echo "::set-output name=archive::${GRAFANA_PLUGIN_ARTIFACT}"
-          echo "::set-output name=archive-checksum::${GRAFANA_PLUGIN_ARTIFACT_CHECKSUM}"
+          echo "plugin-id=${GRAFANA_PLUGIN_ID}" >> $GITHUB_OUTPUT
+          echo "plugin-version=${GRAFANA_PLUGIN_VERSION}" >> $GITHUB_OUTPUT
+          echo "plugin-type=${GRAFANA_PLUGIN_TYPE}" >> $GITHUB_OUTPUT
+          echo "archive=${GRAFANA_PLUGIN_ARTIFACT}" >> $GITHUB_OUTPUT
+          echo "archive-checksum=${GRAFANA_PLUGIN_ARTIFACT_CHECKSUM}" >> $GITHUB_OUTPUT
 
           echo ::set-output name=github-tag::${GITHUB_REF#refs/*/}
 
@@ -188,3 +193,32 @@ jobs:
           asset_path: ./src/dashboards/TDinsight.sh
           asset_name: TDinsight.sh
           asset_content_type: text/plain
+  upload-to-offical-site:
+    runs-on:
+      group: CI
+      labels: [self-hosted, Linux, X64, testing]
+
+    needs: release
+    if: success()
+
+    steps:
+      - name: Download artifact
+        run: |
+          wget "https://github.com/taosdata/grafanaplugin/releases/download/${{ needs.release.outputs.plugin-version }}/${{ needs.release.outputs.archive }}"
+            
+      - name: Upload Grafana Plugin (CN)
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.OFFICIAL_CN_HOST }}
+          username: ${{ secrets.OFFICIAL_CN_USERNAME }}
+          password: ${{ secrets.OFFICIAL_CN_PASSWORD }}
+          source: ./${{ needs.release.outputs.archive }}
+          target: ${{ secrets.GRAFANA_PLUGIN_PATH }}/tdengine-datasource.zip
+      - name: Upload Grafana Plugin (EN)
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.OFFICIAL_EN_HOST }}
+          username: ${{ secrets.OFFICIAL_EN_USERNAME }}
+          password: ${{ secrets.OFFICIAL_EN_PASSWORD }}
+          source: ./${{ needs.release.outputs.archive }}
+          target: ${{ secrets.GRAFANA_PLUGIN_PATH }}/tdengine-datasource.zip      

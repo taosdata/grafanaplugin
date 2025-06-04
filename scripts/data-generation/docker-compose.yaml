@@ -15,13 +15,13 @@ services:
       depends_on:
       - tdengine
     tdengine:
-        image: tdengine/tdengine:3.3.6.6
+        image: tdengine/tdengine:latest
         volumes:
         - ./tdengine/taos.cfg:/etc/taos/taos.cfg
         ports:
         - "8041:6041"
     taoskeeper:
-        image: tdengine/tdengine:3.3.6.6
+        image: tdengine/tdengine:latest
         depends_on:
         - tdengine
         environment:
