@@ -205,20 +205,23 @@ jobs:
       - name: Download artifact
         run: |
           wget "https://github.com/taosdata/grafanaplugin/releases/download/v${{ needs.release.outputs.plugin-version }}/${{ needs.release.outputs.archive }}"
-            
+      - name: Copy and rename file
+        run: |
+          cp ${{ needs.release.outputs.archive }} tdengine-datasource.zip
+        shell: bash
       - name: Upload Grafana Plugin (CN)
         uses: appleboy/scp-action@v1
         with:
           host: ${{ secrets.OFFICIAL_CN_HOST }}
           username: ${{ secrets.OFFICIAL_CN_USERNAME }}
           password: ${{ secrets.OFFICIAL_CN_PASSWORD }}
-          source: ./${{ needs.release.outputs.archive }}
-          target: ${{ secrets.GRAFANA_PLUGIN_PATH }}/tdengine-datasource.zip
+          source: ./tdengine-datasource.zip
+          target: ${{ secrets.GRAFANA_PLUGIN_PATH }}
       - name: Upload Grafana Plugin (EN)
         uses: appleboy/scp-action@v1
         with:
           host: ${{ secrets.OFFICIAL_EN_HOST }}
           username: ${{ secrets.OFFICIAL_EN_USERNAME }}
           password: ${{ secrets.OFFICIAL_EN_PASSWORD }}
-          source: ./${{ needs.release.outputs.archive }}
-          target: ${{ secrets.GRAFANA_PLUGIN_PATH }}/tdengine-datasource.zip      
+          source: ./tdengine-datasource.zip
+          target: ${{ secrets.GRAFANA_PLUGIN_PATH }} 
