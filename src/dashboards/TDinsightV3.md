@@ -7,6 +7,7 @@ TDinsight v3.x is a solution for monitoring TDengine using the builtin native mo
 ## Compatiable with TDengine version
 | TDengine grafana plugin version | TDengine version |
 | :-----------------------------: | :--------------: |
+|              3.7.3              | 3.3.7.0 or later |
 |              3.7.2              | 3.3.0.0 or later |
 |              3.7.1              | 3.3.0.0 or later |
 |              3.7.0              | 3.3.0.0 or later |
@@ -271,7 +272,20 @@ Data node resource usage display with repeated multiple rows for the variable `$
 11. **Disk Used**: Disks used at each level of multi-level storage (default is level0).
 12. **Disk IO**: Disk IO rate.
 13. **Net**: Network IO, the aggregate network IO rate in addition to the local network.
+14. **Dnode Memory Usage Metrics**: dnode RPC and apply queue memory usage statistics.
+    
+### Write Metrics
 
+![write-metrics](../../assets/TDinsightV3-9-wirte-metrics.png)
+
+The relevant write-related metrics statistics, including:
+
+1. **Total Rows and Wal Write Time**：The number of rows written processed by the vnode and the time taken by the vnode to write to the WAL.
+2. **Commit Count and Time**：The number of commit requests processed by the vnode and the time taken for these commits.
+3. **Blocked Commit Count and Time**：The number of times vnode commits were blocked and the total time spent blocked.
+4. **Merge Count and Time**：The number of merge requests processed by the vnode and the time taken for these merges.
+5. **Last Cache Commit Count and Time**：The number of times the vnode processed flushing the last cache to disk and the time taken for these operations.
+    
 ### taosAdapter
 
 ![taosadapter](../../assets/TDinsightV3-8-taosadaper.png)

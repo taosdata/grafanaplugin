@@ -2856,8 +2856,8 @@
             "overrides": []
           },
           "gridPos": {
-            "h": 9,
-            "w": 12,
+            "h": 6,
+            "w": 8,
             "x": 0,
             "y": 79
           },
@@ -2884,7 +2884,7 @@
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select timetruncate(first(_ts), 1h),  dnode_id, last(cpu_system) as cpu_use from log.taosd_dnodes_info where _ts >= (now- 5m) and _ts < now partition by dnode_id "
+              "sql": "select _wstart as ts, max(cpu_engine) as taosd, max(cpu_system) as `system` from $database.taosd_dnodes_info where dnode_ep = '$fqdn' and _ts >= $from and _ts <= $to interval($interval) fill(null)"
             }
           ],
           "timeFrom": null,
@@ -2939,9 +2939,9 @@
             "overrides": []
           },
           "gridPos": {
-            "h": 9,
-            "w": 12,
-            "x": 12,
+            "h": 6,
+            "w": 8,
+            "x": 8,
             "y": 79
           },
           "id": 110,
@@ -3019,10 +3019,10 @@
             "overrides": []
           },
           "gridPos": {
-            "h": 8,
+            "h": 6,
             "w": 8,
-            "x": 0,
-            "y": 88
+            "x": 16,
+            "y": 79
           },
           "id": 112,
           "options": {
@@ -3090,6 +3090,7 @@
                 "spanNulls": true
               },
               "mappings": [],
+              "min": 0,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
@@ -3104,10 +3105,10 @@
             "overrides": []
           },
           "gridPos": {
-            "h": 8,
+            "h": 6,
             "w": 8,
-            "x": 8,
-            "y": 88
+            "x": 0,
+            "y": 85
           },
           "id": 114,
           "options": {
@@ -3170,6 +3171,7 @@
                 "spanNulls": true
               },
               "mappings": [],
+              "min": 0,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
@@ -3184,10 +3186,10 @@
             "overrides": []
           },
           "gridPos": {
-            "h": 8,
+            "h": 6,
             "w": 8,
-            "x": 16,
-            "y": 88
+            "x": 8,
+            "y": 85
           },
           "id": 116,
           "options": {
@@ -3221,6 +3223,89 @@
           "timeShift": null,
           "title": "Net",
           "type": "timeseries"
+        },
+        {
+          "datasource": "${DS_TDENGINE}",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "axisSoftMin": -1,
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "graph": false,
+                  "legend": false,
+                  "tooltip": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": true
+              },
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "bytes"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 8,
+            "x": 16,
+            "y": 85
+          },
+          "id": 117,
+          "options": {
+            "graph": {},
+            "legend": {
+              "calcs": [
+                "mean",
+                "lastNotNull",
+                "max",
+                "min"
+              ],
+              "displayMode": "table",
+              "placement": "right"
+            },
+            "tooltipOptions": {
+              "mode": "single"
+            }
+          },
+          "pluginVersion": "7.5.0",
+          "targets": [
+            {
+              "colNameFormatStr": "",
+              "colNameToGroup": "",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select _wstart as ts, max(rpc_queue_memory_allowed) as rpc_queue_memory_allowed, max(rpc_queue_memory_used) as rpc_queue_memory_used, max(apply_memory_allowed) as apply_memory_allowed, max(apply_memory_used) as apply_memory_used from $database.taosd_dnodes_metrics where dnode_ep = '$fqdn' and _ts >= $from and _ts <= $to interval($interval) fill(null)"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Dnode Memory Usage Metrics",
+          "type": "timeseries"
         }
       ],
       "repeat": "fqdn",
@@ -3234,7 +3319,582 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 89
+        "y": 90
+      },
+      "id": 77,
+      "panels": [
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_TDENGINE}",
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": []
+          },
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 6,
+            "w": 8,
+            "x": 0,
+            "y": 92
+          },
+          "hiddenSeries": false,
+          "id": 340,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "rightSide": true,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "7.5.10",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [
+            {
+              "alias": "/wal_write_time.*/",
+              "yaxis": 2
+            }
+          ],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "colNameFormatStr": "total_rows_{{database_name}}_{{vgroup_id}}",
+              "colNameToGroup": "database_name,vgroup_id",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select _wstart as ts, database_name, vgroup_id, avg(total_rows) as total_rows from $database.taosd_write_metrics where ('$databaseName' = '' or (database_name in (${databaseName:sqlstring}) and ('$vgroupId' = '' or vgroup_id in (${vgroupId:sqlstring})))) and _ts >= $from and _ts <= $to  partition by database_name, vgroup_id interval($interval) fill(null) order by database_name, vgroup_id"
+            },
+            {
+              "colNameFormatStr": "wal_write_time_{{database_name}}_{{vgroup_id}}",
+              "colNameToGroup": "database_name,vgroup_id",
+              "formatType": "Time series",
+              "hide": false,
+              "queryType": "SQL",
+              "refId": "B",
+              "sql": "select _wstart as ts, database_name, vgroup_id, avg(wal_write_time) as wal_write_time from $database.taosd_write_metrics where ('$databaseName' = '' or (database_name in (${databaseName:sqlstring}) and ('$vgroupId' = '' or vgroup_id in (${vgroupId:sqlstring})))) and _ts >= $from and _ts <= $to  partition by database_name, vgroup_id interval($interval) fill(null) order by database_name, vgroup_id"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Total Rows and Wal Write Time",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "decimals": 0,
+              "format": "c/s",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            },
+            {
+              "decimals": 0,
+              "format": "ms",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_TDENGINE}",
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": []
+          },
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 6,
+            "w": 8,
+            "x": 8,
+            "y": 92
+          },
+          "hiddenSeries": false,
+          "id": 341,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "rightSide": true,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "7.5.10",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [
+            {
+              "alias": "/commit_time.*/",
+              "yaxis": 2
+            }
+          ],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "colNameFormatStr": "commit_count_{{database_name}}_{{vgroup_id}}",
+              "colNameToGroup": "database_name,vgroup_id",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select _wstart as ts, database_name, vgroup_id, avg(commit_count) as commit_count from $database.taosd_write_metrics where ('$databaseName' = '' or (database_name in (${databaseName:sqlstring}) and ('$vgroupId' = '' or vgroup_id in (${vgroupId:sqlstring})))) and _ts >= $from and _ts <= $to  partition by database_name, vgroup_id interval($interval) fill(null) order by database_name, vgroup_id"
+            },
+            {
+              "colNameFormatStr": "commit_time_{{database_name}}_{{vgroup_id}}",
+              "colNameToGroup": "database_name,vgroup_id",
+              "formatType": "Time series",
+              "hide": false,
+              "queryType": "SQL",
+              "refId": "B",
+              "sql": "select _wstart as ts, database_name, vgroup_id, avg(commit_time) as commit_time from $database.taosd_write_metrics where ('$databaseName' = '' or (database_name in (${databaseName:sqlstring}) and ('$vgroupId' = '' or vgroup_id in (${vgroupId:sqlstring})))) and _ts >= $from and _ts <= $to  partition by database_name, vgroup_id interval($interval) fill(null) order by database_name, vgroup_id"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Commit Count and Time",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "decimals": 0,
+              "format": "c/s",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            },
+            {
+              "decimals": 0,
+              "format": "ms",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_TDENGINE}",
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": []
+          },
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 6,
+            "w": 8,
+            "x": 16,
+            "y": 92
+          },
+          "hiddenSeries": false,
+          "id": 342,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "rightSide": true,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "7.5.10",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [
+            {
+              "alias": "/commit_time.*/",
+              "yaxis": 2
+            }
+          ],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "colNameFormatStr": "blocked_commit_count_{{database_name}}_{{vgroup_id}}",
+              "colNameToGroup": "database_name,vgroup_id",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select _wstart as ts, database_name, vgroup_id, avg(blocked_commit_count) as blocked_commit_count from $database.taosd_write_metrics where ('$databaseName' = '' or (database_name in (${databaseName:sqlstring}) and ('$vgroupId' = '' or vgroup_id in (${vgroupId:sqlstring})))) and _ts >= $from and _ts <= $to  partition by database_name, vgroup_id interval($interval) fill(null) order by database_name, vgroup_id"
+            },
+            {
+              "colNameFormatStr": "blocked_commit_time_{{database_name}}_{{vgroup_id}}",
+              "colNameToGroup": "database_name,vgroup_id",
+              "formatType": "Time series",
+              "hide": false,
+              "queryType": "SQL",
+              "refId": "B",
+              "sql": "select _wstart as ts, database_name, vgroup_id, avg(blocked_commit_time) as blocked_commit_time from $database.taosd_write_metrics where ('$databaseName' = '' or (database_name in (${databaseName:sqlstring}) and ('$vgroupId' = '' or vgroup_id in (${vgroupId:sqlstring})))) and _ts >= $from and _ts <= $to  partition by database_name, vgroup_id interval($interval) fill(null) order by database_name, vgroup_id"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Blocked Commit Count and Time",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "decimals": 0,
+              "format": "c/s",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            },
+            {
+              "decimals": 0,
+              "format": "ms",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_TDENGINE}",
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": []
+          },
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 6,
+            "w": 12,
+            "x": 0,
+            "y": 100
+          },
+          "hiddenSeries": false,
+          "id": 343,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "rightSide": true,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "7.5.10",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [
+            {
+              "alias": "/merge_time.*/",
+              "yaxis": 2
+            }
+          ],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "colNameFormatStr": "merge_count_{{database_name}}_{{vgroup_id}}",
+              "colNameToGroup": "database_name,vgroup_id",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select _wstart as ts, database_name, vgroup_id, avg(merge_count) as merge_count from $database.taosd_write_metrics where ('$databaseName' = '' or (database_name in (${databaseName:sqlstring}) and ('$vgroupId' = '' or vgroup_id in (${vgroupId:sqlstring})))) and _ts >= $from and _ts <= $to  partition by database_name, vgroup_id interval($interval) fill(null) order by database_name, vgroup_id"
+            },
+            {
+              "colNameFormatStr": "merge_time_{{database_name}}_{{vgroup_id}}",
+              "colNameToGroup": "database_name,vgroup_id",
+              "formatType": "Time series",
+              "hide": false,
+              "queryType": "SQL",
+              "refId": "B",
+              "sql": "select _wstart as ts, database_name, vgroup_id, avg(merge_time) as merge_time from $database.taosd_write_metrics where ('$databaseName' = '' or (database_name in (${databaseName:sqlstring}) and ('$vgroupId' = '' or vgroup_id in (${vgroupId:sqlstring})))) and _ts >= $from and _ts <= $to  partition by database_name, vgroup_id interval($interval) fill(null) order by database_name, vgroup_id"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Merge Count and Time",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "decimals": 0,
+              "format": "c/s",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            },
+            {
+              "decimals": 0,
+              "format": "ms",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_TDENGINE}",
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": []
+          },
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 6,
+            "w": 12,
+            "x": 12,
+            "y": 100
+          },
+          "hiddenSeries": false,
+          "id": 344,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "rightSide": true,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "7.5.10",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [
+            {
+              "alias": "/last_cache_commit_time.*/",
+              "yaxis": 2
+            }
+          ],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "colNameFormatStr": "last_cache_commit_count_{{database_name}}_{{vgroup_id}}",
+              "colNameToGroup": "database_name,vgroup_id",
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select _wstart as ts, database_name, vgroup_id, avg(last_cache_commit_count) as last_cache_commit_count from $database.taosd_write_metrics where ('$databaseName' = '' or (database_name in (${databaseName:sqlstring}) and ('$vgroupId' = '' or vgroup_id in (${vgroupId:sqlstring})))) and _ts >= $from and _ts <= $to  partition by database_name, vgroup_id interval($interval) fill(null) order by database_name, vgroup_id"
+            },
+            {
+              "colNameFormatStr": "last_cache_commit_time_{{database_name}}_{{vgroup_id}}",
+              "colNameToGroup": "database_name,vgroup_id",
+              "formatType": "Time series",
+              "hide": false,
+              "queryType": "SQL",
+              "refId": "B",
+              "sql": "select _wstart as ts, database_name, vgroup_id, avg(last_cache_commit_time) as last_cache_commit_time from $database.taosd_write_metrics where ('$databaseName' = '' or (database_name in (${databaseName:sqlstring}) and ('$vgroupId' = '' or vgroup_id in (${vgroupId:sqlstring})))) and _ts >= $from and _ts <= $to  partition by database_name, vgroup_id interval($interval) fill(null) order by database_name, vgroup_id"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Last Cache Commit Count and Time",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "decimals": 0,
+              "format": "c/s",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            },
+            {
+              "decimals": 0,
+              "format": "ms",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        }
+      ],
+      "title": "Write Metrics",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "datasource": "${DS_TDENGINE}",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 107
       },
       "id": 78,
       "panels": [
@@ -3263,7 +3923,7 @@
             "h": 6,
             "w": 12,
             "x": 0,
-            "y": 90
+            "y": 110
           },
           "id": 134,
           "options": {
@@ -3340,7 +4000,7 @@
             "h": 6,
             "w": 12,
             "x": 12,
-            "y": 90
+            "y": 110
           },
           "id": 129,
           "options": {
@@ -3490,7 +4150,7 @@
             "h": 6,
             "w": 12,
             "x": 0,
-            "y": 96
+            "y": 116
           },
           "id": 135,
           "options": {
@@ -3567,7 +4227,7 @@
             "h": 6,
             "w": 12,
             "x": 12,
-            "y": 96
+            "y": 116
           },
           "id": 130,
           "options": {
@@ -3738,7 +4398,7 @@
             "h": 6,
             "w": 12,
             "x": 0,
-            "y": 102
+            "y": 122
           },
           "id": 131,
           "options": {
@@ -3827,7 +4487,7 @@
             "h": 6,
             "w": 12,
             "x": 12,
-            "y": 102
+            "y": 122
           },
           "id": 132,
           "options": {
@@ -3905,7 +4565,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 197
+        "y": 217
       },
       "id": 79,
       "panels": [
@@ -3963,7 +4623,7 @@
             "h": 6,
             "w": 6,
             "x": 0,
-            "y": 198
+            "y": 218
           },
           "hiddenSeries": false,
           "id": 203,
@@ -4105,7 +4765,7 @@
             "h": 6,
             "w": 6,
             "x": 6,
-            "y": 198
+            "y": 218
           },
           "hiddenSeries": false,
           "id": 204,
@@ -4247,7 +4907,7 @@
             "h": 6,
             "w": 6,
             "x": 12,
-            "y": 198
+            "y": 218
           },
           "hiddenSeries": false,
           "id": 210,
@@ -4392,7 +5052,7 @@
             "h": 6,
             "w": 6,
             "x": 18,
-            "y": 198
+            "y": 218
           },
           "hiddenSeries": false,
           "id": 205,
@@ -4536,7 +5196,7 @@
             "h": 6,
             "w": 6,
             "x": 0,
-            "y": 204
+            "y": 224
           },
           "hiddenSeries": false,
           "id": 208,
@@ -4681,7 +5341,7 @@
             "h": 6,
             "w": 6,
             "x": 6,
-            "y": 204
+            "y": 224
           },
           "hiddenSeries": false,
           "id": 206,
@@ -4826,7 +5486,7 @@
             "h": 6,
             "w": 6,
             "x": 12,
-            "y": 204
+            "y": 224
           },
           "hiddenSeries": false,
           "id": 209,
@@ -4969,7 +5629,7 @@
             "h": 6,
             "w": 6,
             "x": 18,
-            "y": 204
+            "y": 224
           },
           "hiddenSeries": false,
           "id": 273,
@@ -5112,7 +5772,7 @@
             "h": 6,
             "w": 6,
             "x": 0,
-            "y": 210
+            "y": 230
           },
           "hiddenSeries": false,
           "id": 211,
@@ -5255,7 +5915,7 @@
             "h": 6,
             "w": 6,
             "x": 6,
-            "y": 210
+            "y": 230
           },
           "hiddenSeries": false,
           "id": 215,
@@ -5398,7 +6058,7 @@
             "h": 6,
             "w": 6,
             "x": 12,
-            "y": 210
+            "y": 230
           },
           "hiddenSeries": false,
           "id": 213,
@@ -5542,7 +6202,7 @@
             "h": 6,
             "w": 6,
             "x": 18,
-            "y": 210
+            "y": 230
           },
           "hiddenSeries": false,
           "id": 214,
@@ -6114,6 +6774,54 @@
         "name": "adapter_endpoint",
         "options": [],
         "query": "select  distinct endpoint  from $database.adapter_requests where ts >= $from and ts <= $to order by endpoint",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {},
+        "datasource": "${DS_TDENGINE}",
+        "definition": "select distinct database_name from $database.taosd_write_metrics where _ts >= $from and _ts <= $to",
+        "description": "TDengine Database Name",
+        "error": null,
+        "hide": 0,
+        "includeAll": true,
+        "label": null,
+        "multi": true,
+        "name": "databaseName",
+        "options": [],
+        "query": "select distinct database_name from $database.taosd_write_metrics where _ts >= $from and _ts <= $to",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {},
+        "datasource": "${DS_TDENGINE}",
+        "definition": "select distinct vgroup_id from $database.taosd_write_metrics where database_name in (${databaseName:sqlstring}) and _ts >= $from and _ts <= $to",
+        "description": "TDengine Vgroup Id",
+        "error": null,
+        "hide": 0,
+        "includeAll": true,
+        "label": null,
+        "multi": true,
+        "name": "vgroupId",
+        "options": [],
+        "query": "select distinct vgroup_id from $database.taosd_write_metrics where database_name in (${databaseName:sqlstring}) and _ts >= $from and _ts <= $to",
         "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
