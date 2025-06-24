@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.7.3] - 2025-06-24
+
+### Features
+
+- Updated the TDinsightV3 dashboard.
+  
 ## [3.7.2] - 2025-05-20
 
 ### Features

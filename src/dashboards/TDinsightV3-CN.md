@@ -7,6 +7,8 @@ TDinsight v3.x 是使用 [TDengine 3.x] 监控数据库和 [Grafana] 对 TDengin
 TDinsight v3.x 和 TDengine 的版本对应关系如下：
 | TDinsight v3.x 版本 | TDengine 版本  |
 | :-----------------: | :------------: |
+|        3.7.3        | 3.3.7.0 及以上 |
+|        3.7.2        | 3.3.0.0 及以上 |
 |        3.7.1        | 3.3.0.0 及以上 |
 |        3.7.0        | 3.3.0.0 及以上 |
 |        3.6.3        | 3.3.0.0 及以上 |
@@ -258,6 +260,19 @@ TDinsight 仪表盘旨在提供TDengine
 11. **Disk Used**：多级存储下每个级别使用的磁盘（默认为 level0 级）。
 12. **Disk IO**：磁盘IO速率。
 13. **Net**：网络IO，除本机网络之外的总合网络IO速率。
+14. **Dnode Memory Usage Metrics**：dnode rpc 和 apply 队列内存使用信息。
+
+### 写入统计指标
+
+![write-metrics](../../assets/TDinsightV3-9-wirte-metrics.png)
+
+写入相关指标统计。包括：
+
+1. **Total Rows and Wal Write Time**：vnode 处理的写入行数和vnode 写入 wal 耗时。
+2. **Commit Count and Time**：vnode 处理 commit 请求的次数和耗时。
+3. **Blocked Commit Count and Time**：vnode commit 被阻塞的次数和耗时。
+4. **Merge Count and Time**：vnode 处理 merge 请求的数量和耗时。
+5. **Last Cache Commit Count and Time**：vnode处理last落盘次数和耗时。
 
 ### taosAdapter
 

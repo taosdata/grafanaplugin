@@ -9,7 +9,7 @@ services:
       environment:
         GF_AUTH_ANONYMOUS_ENABLED: 1
         GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
-        GF_INSTALL_PLUGINS: https://github.com/taosdata/grafanaplugin/releases/download/v3.7.2/tdengine-datasource-3.7.2.zip;tdengine-datasource,marcusolsson-static-datasource,marcusolsson-dynamictext-panel
+        GF_INSTALL_PLUGINS: https://www.tdengine.com/assets-download/grafana-plugin/tdengine-datasource.zip;tdengine-datasource,marcusolsson-static-datasource,marcusolsson-dynamictext-panel
       # volumes:
       # - ./provisioning:/etc/grafana/provisioning
       depends_on:
