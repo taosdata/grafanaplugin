@@ -26,16 +26,16 @@ data sources.
 |              3.7.3              | Updated the TDinsightV3 dashboard.                                                                                       | 3.3.7.0 or later |
 |              3.7.2              | Updated the taosX dashboard.                                                                                             | 3.3.0.0 or later |
 |              3.7.1              | 1. Supports multi-line SQL editor. </br> 2. Added the 'Classified Connection Counts' table to the TDinsightV3 dashboard. | 3.3.0.0 or later |
-|              3.7.0              | migrate TDengine Grafana plugin from Angular to React.                                                                   | 3.3.0.0 or later |
-|              3.6.3              | fix TDinsight Request data issue.                                                                                        | 3.3.0.0 or later |
-|              3.6.2              | improve alert ui.                                                                                                        | 3.3.0.0 or later |
-|              3.6.1              | improve alert ui.                                                                                                        | 3.3.0.0 or later |
-|              3.6.0              | support taosd alert configuration for grafana 11 and 7.5 version.                                                        | 3.3.0.0 or later |
-|              3.5.2              | update TDinsightV3 dashboard.                                                                                            | 3.3.0.0 or later |
-|              3.5.1              | update TDinsightV3 and taosX dashboard.                                                                                  | 3.3.0.0 or later |
-|              3.5.0              | new TDinsightV3 and taosX dashboard.                                                                                     | 3.2.3.0 or later |
-|              3.4.0              | new adapter dashboard.                                                                                                   | 3.2.0.1 or later |
-|              3.2.7              | support TDengine 3.0.                                                                                                    | 3.0.0.0 or later |
+|              3.7.0              | Migrate TDengine Grafana plugin from Angular to React.                                                                   | 3.3.0.0 or later |
+|              3.6.3              | Fix TDinsight Request data issue.                                                                                        | 3.3.0.0 or later |
+|              3.6.2              | Improve alert ui.                                                                                                        | 3.3.0.0 or later |
+|              3.6.1              | Improve alert ui.                                                                                                        | 3.3.0.0 or later |
+|              3.6.0              | Support taosd alert configuration for grafana 11 and 7.5 version.                                                        | 3.3.0.0 or later |
+|              3.5.2              | Update TDinsightV3 dashboard.                                                                                            | 3.3.0.0 or later |
+|              3.5.1              | Update TDinsightV3 and taosX dashboard.                                                                                  | 3.3.0.0 or later |
+|              3.5.0              | New TDinsightV3 and taosX dashboard.                                                                                     | 3.2.3.0 or later |
+|              3.4.0              | New adapter dashboard.                                                                                                   | 3.2.0.1 or later |
+|              3.2.7              | Support TDengine 3.0.                                                                                                    | 3.0.0.0 or later |
 
 
 ## One-line installer
