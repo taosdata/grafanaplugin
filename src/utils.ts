@@ -60,7 +60,7 @@ export function checkGrafanaVersion(): boolean {
     const versionParts = version.split(".");
     if (versionParts.length > 0) {
         const majorVersion = parseInt(versionParts[0], 10);
-        if (majorVersion === 11) {
+        if (majorVersion >= 11) {
             return true;
         }
     }
