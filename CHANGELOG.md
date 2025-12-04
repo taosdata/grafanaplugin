@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Bug Fixes
 
-- fix alert configuration issue in Grafana 12.
+- Fix alert configuration issue in Grafana 12.
 
 ## [3.7.3] - 2025-06-24
 
