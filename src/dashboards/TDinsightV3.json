@@ -1545,7 +1545,7 @@
               "formatType": "Table",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select mnode_ep, last(role) as role from $database.taosd_mnodes_info where _ts = '$last_mnodes_ts' group by mnode_ep order by mnode_ep"
+              "sql": "select mnode_ep, last(`role`) as `role` from $database.taosd_mnodes_info where _ts = '$last_mnodes_ts' group by mnode_ep order by mnode_ep"
             }
           ],
           "title": "MNodes Status",

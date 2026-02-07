@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.7.5] - 2026-02-03
+
+### Enhancements
+
+- Resolve dependency library security issues. 
+
 ## [3.7.4] - 2025-12-04
 
 ### Bug Fixes
