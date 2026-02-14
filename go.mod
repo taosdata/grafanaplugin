@@ -100,4 +100,4 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-replace golang.org/x/oauth2 v0.23.0 => golang.org/x/oauth2 v0.27.0
+replace golang.org/x/oauth2 => golang.org/x/oauth2 v0.27.0
