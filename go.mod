@@ -101,3 +101,5 @@ require (
 )
 
 replace golang.org/x/oauth2 => golang.org/x/oauth2 v0.27.0
+
+replace github.com/golang/glog => github.com/golang/glog v1.2.4
