@@ -208,7 +208,7 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
     }
 
     testDatasource() { // save & test button
-        return this.request('show databases').then((response: { status: number; data: { message: string; }; }) => {
+        return this.request('show databases').then((response: any) => {
             if (!!response && response.status === 200 && !_.get(response, 'data.code')) {
                 if (this.isLoadAlerts === true) {
                     return this.sendInitAlert().then(()=>{
@@ -221,9 +221,10 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
                 }
 
             }
+            // TDengine error response format: {code: 855, desc: "Authentication failure"}
             return {
                 status: "error",
-                message: "TDengine Data source is not working, reason: " + response.data.message,
+                message: "TDengine Data source is not working, reason: " + (response.data?.desc || response.data?.message || 'Unknown error'),
                 title: "Failed"
             };
         });
@@ -288,6 +289,14 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
                 data: "select server_version()",
                 method: 'POST',
             }).then((res) => {
+                // Check if response contains error
+                if (res.data?.code !== 0) {
+                    return res;  // Return error response as-is
+                }
+                // Check if response has data
+                if (!res.data?.data || !res.data.data[0]) {
+                    return res;
+                }
                 if (res.data.data[0][0].startsWith("3")) {
                     this.serverVersion = 3;
                     return this.querySql(sql);
@@ -315,6 +324,7 @@ export class DataSource extends DataSourceApi<Query, DataSourceOptions> {
             return result;
         }).catch(err => {
             console.error("catch error: ", err);
+            return err;  // Return the error so it can be handled by testDatasource
         });
     }
 
