@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.7.6] - 2026-03-03
+
+### Bug Fixes
+
+- Fix password changes not updating authentication credentials.
+
 ## [3.7.5] - 2026-02-03
 
 ### Enhancements
