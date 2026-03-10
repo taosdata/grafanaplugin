@@ -21,10 +21,16 @@ jobs:
 
       - name: Extract version
         id: extract-version
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
         run: |
-          version=$(echo "${{ github.event.pull_request.title }}" | grep -o -P '(\d+\.\d+\.\d+)(-\S+)?')
+          version=$(echo "$PR_TITLE" | grep -o -P '(\d+\.\d+\.\d+)(-\S+)?' | head -n 1)
+          if [ -z "$version" ]; then
+            echo "Error: No version found in PR title"
+            exit 1
+          fi
           echo $version
-          echo ::set-output name=version::$version
+          echo "version=$version" >> $GITHUB_OUTPUT
       - name: Version bump
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
