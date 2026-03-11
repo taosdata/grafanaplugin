@@ -7,8 +7,7 @@
   - [Important changes](#important-changes)
     - [v3.6.0](#v360)
     - [v3.2.0](#v320)
-  - [Monitor TDengine Database with TDengine Data Source Plugin](#monitor-tdengine-database-with-tdengine-data-source-plugin)
-    - [TDinsight](#tdinsight)
+  - [Monitor TDengine Database with TDinsight Dashboard](#monitor-tdengine-database-with-tdinsight-dashboard)
   - [Docker Stack](#docker-stack)
   - [Dashboards](#dashboards)
 
@@ -82,12 +81,12 @@ After import:
     After adding the data source, you will see the automatically imported alert configuration in the alert management menu.
     ![data source configuration](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/alert-rule.png)
 
-2. Grafana 7.5 versions
+2. Grafana 8.0 versions
 
-    The TDengine data source plugin has added functionality for Grafana 7.5 versions, which can automatically import and clear alerts for basic metrics of the TDengine cluster (such as CPU, memory, dnode, vnode, etc.) when adding data sources.
+    The TDengine data source plugin has added functionality for Grafana 8.0 versions, which can automatically import and clear alerts for basic metrics of the TDengine cluster (such as CPU, memory, dnode, vnode, etc.) when adding data sources.
 
     To import the Dashboard, enter "TDinsight for 3.x Dashboard" and click save. Subsequently, the loaded alert rules will appear in the alert menu as shown below.
-    ![Grafana 7.5](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/alert7.5.png)
+    ![Grafana 8.0](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/alert8.png)
     
 
 
@@ -135,11 +134,7 @@ After import:
 
     ![import-tdinsight-from-tdengine-ds](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/import_dashboard-on-datasource.png)
 
-## Monitor TDengine Database with TDengine Data Source Plugin
-
-See [How to Monitor TDengine Cluster with Grafana](https://github.com/taosdata/grafanaplugin/blob/master/HOWTO.md) for the details.
-
-### TDinsight
+## Monitor TDengine Database with TDinsight Dashboard
 
 TDinsight is a simple monitoring solution for TDengine database. See [TDinsight README](https://github.com/taosdata/grafanaplugin/blob/master/src/dashboards/TDinsightV3.md) for the details.
 

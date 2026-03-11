@@ -26,13 +26,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "7.5.0"
-    },
-    {
-      "type": "panel",
-      "id": "graph",
-      "name": "Graph",
-      "version": ""
+      "version": "8.0.0"
     },
     {
       "type": "panel",
@@ -50,7 +44,7 @@
       "type": "datasource",
       "id": "tdengine-datasource",
       "name": "TDengine Datasource",
-      "version": "3.5.1"
+      "version": "4.0.0"
     },
     {
       "type": "panel",
@@ -83,7 +77,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1697619638432,
+  "iteration": 1773133605814,
   "links": [],
   "panels": [
     {
@@ -102,10 +96,6 @@
     },
     {
       "datasource": "${DS_TDENGINE}",
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
       "gridPos": {
         "h": 3,
         "w": 24,
@@ -117,7 +107,7 @@
         "content": "<h1><center>TDengine Cluster Dashboard (First EP: ${firstEp}, Version: ${version})</center></h1>",
         "mode": "markdown"
       },
-      "pluginVersion": "7.5.0",
+      "pluginVersion": "8.0.0",
       "targets": [
         {
           "colNameFormatStr": "",
@@ -174,7 +164,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.0",
+      "pluginVersion": "8.0.0",
       "targets": [
         {
           "colNameFormatStr": "",
@@ -232,7 +222,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.0",
+      "pluginVersion": "8.0.0",
       "targets": [
         {
           "colNameFormatStr": "",
@@ -290,7 +280,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.0",
+      "pluginVersion": "8.0.0",
       "targets": [
         {
           "colNameFormatStr": "",
@@ -347,7 +337,7 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "7.5.0",
+      "pluginVersion": "8.0.0",
       "targets": [
         {
           "colNameFormatStr": "",
@@ -404,7 +394,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.0",
+      "pluginVersion": "8.0.0",
       "targets": [
         {
           "colNameFormatStr": "",
@@ -461,7 +451,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.0",
+      "pluginVersion": "8.0.0",
       "targets": [
         {
           "colNameFormatStr": "",
@@ -517,7 +507,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.0",
+      "pluginVersion": "8.0.0",
       "targets": [
         {
           "colNameFormatStr": "",
@@ -572,7 +562,7 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "7.5.0",
+      "pluginVersion": "8.0.0",
       "targets": [
         {
           "colNameFormatStr": "",
@@ -627,7 +617,7 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "7.5.0",
+      "pluginVersion": "8.0.0",
       "targets": [
         {
           "colNameFormatStr": "",
@@ -682,7 +672,7 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "7.5.0",
+      "pluginVersion": "8.0.0",
       "targets": [
         {
           "colNameFormatStr": "",
@@ -737,7 +727,7 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "7.5.0",
+      "pluginVersion": "8.0.0",
       "targets": [
         {
           "colNameFormatStr": "",
@@ -760,9 +750,23 @@
           },
           "custom": {
             "align": "auto",
+            "displayMode": "auto",
             "filterable": false
           },
-          "mappings": []
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
         },
         "overrides": []
       },
@@ -785,7 +789,7 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "8.0.0",
       "targets": [
         {
           "formatType": "Table",
@@ -798,17 +802,60 @@
       "type": "table"
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
       "datasource": "${DS_TDENGINE}",
       "fieldConfig": {
-        "defaults": {},
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "max": 1,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
         "overrides": []
       },
-      "fill": 1,
-      "fillGradient": 0,
       "gridPos": {
         "h": 6,
         "w": 12,
@@ -817,30 +864,18 @@
       },
       "hiddenSeries": false,
       "id": 30,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
+        "graph": {},
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "all"
+        }
       },
-      "percentage": false,
-      "pluginVersion": "7.5.0",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      "pluginVersion": "8.0.0",
       "targets": [
         {
           "colNameFormatStr": "",
@@ -851,91 +886,84 @@
           "sql": "select _wstart as ts, avg(dnodes_alive)/avg(dnodes_total) from $database.taosd_cluster_info where _ts >= $from and _ts <= $to interval($interval) fill(null)"
         }
       ],
-      "thresholds": [],
       "timeFrom": null,
-      "timeRegions": [],
       "timeShift": null,
       "title": "DNodes Alive Percent",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "percentunit",
-          "label": null,
-          "logBase": 1,
-          "max": "1",
-          "min": "0",
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
+      "type": "timeseries"
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
       "datasource": "${DS_TDENGINE}",
       "fieldConfig": {
-        "defaults": {},
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "max": 1,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
         "overrides": []
       },
-      "fill": 1,
-      "fillGradient": 0,
       "gridPos": {
         "h": 6,
         "w": 12,
         "x": 0,
         "y": 18
       },
-      "hiddenSeries": false,
       "id": 32,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
       },
-      "percentage": false,
-      "pluginVersion": "7.5.0",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      "pluginVersion": "8.0.0",
       "targets": [
         {
           "colNameFormatStr": "",
@@ -946,91 +974,84 @@
           "sql": "select _wstart as ts, avg(mnodes_alive)/avg(mnodes_total) from $database.taosd_cluster_info where _ts >= $from and _ts <= $to interval($interval) fill(null)"
         }
       ],
-      "thresholds": [],
       "timeFrom": null,
-      "timeRegions": [],
       "timeShift": null,
       "title": "MNodes Alive Percent",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "percentunit",
-          "label": null,
-          "logBase": 1,
-          "max": "1",
-          "min": "0",
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
+      "type": "timeseries"
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
       "datasource": "${DS_TDENGINE}",
       "fieldConfig": {
-        "defaults": {},
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "max": 1,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
         "overrides": []
       },
-      "fill": 1,
-      "fillGradient": 0,
       "gridPos": {
         "h": 6,
         "w": 12,
         "x": 12,
         "y": 18
       },
-      "hiddenSeries": false,
       "id": 34,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
       },
-      "percentage": false,
-      "pluginVersion": "7.5.0",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      "pluginVersion": "8.0.0",
       "targets": [
         {
           "colNameFormatStr": "",
@@ -1041,91 +1062,84 @@
           "sql": "select _wstart as ts, avg(vgroups_alive)/avg(vgroups_total) from $database.taosd_cluster_info where _ts >= $from and _ts <= $to interval($interval) fill(null)"
         }
       ],
-      "thresholds": [],
       "timeFrom": null,
-      "timeRegions": [],
       "timeShift": null,
       "title": "VGroups Alive Percent",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "percentunit",
-          "label": null,
-          "logBase": 1,
-          "max": "1",
-          "min": "0",
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
+      "type": "timeseries"
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
       "datasource": "${DS_TDENGINE}",
       "fieldConfig": {
-        "defaults": {},
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "max": 1,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
         "overrides": []
       },
-      "fill": 1,
-      "fillGradient": 0,
       "gridPos": {
         "h": 6,
         "w": 12,
         "x": 0,
         "y": 24
       },
-      "hiddenSeries": false,
       "id": 36,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
       },
-      "percentage": false,
-      "pluginVersion": "7.5.0",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      "pluginVersion": "8.0.0",
       "targets": [
         {
           "colNameFormatStr": "",
@@ -1136,96 +1150,103 @@
           "sql": "select _wstart as ts, avg(vnodes_alive)/avg(vnodes_total) from $database.taosd_cluster_info where _ts >= $from and _ts <= $to interval($interval) fill(null)"
         }
       ],
-      "thresholds": [],
       "timeFrom": null,
-      "timeRegions": [],
       "timeShift": null,
       "title": "VNodes Alive Percent",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "percentunit",
-          "label": null,
-          "logBase": 1,
-          "max": "1",
-          "min": "0",
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
+      "type": "timeseries"
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
       "datasource": "${DS_TDENGINE}",
       "fieldConfig": {
-        "defaults": {},
-        "overrides": []
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "percent"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percentunit"
+              },
+              {
+                "id": "min",
+                "value": 0
+              },
+              {
+                "id": "max",
+                "value": 1
+              }
+            ]
+          }
+        ]
       },
-      "fill": 1,
-      "fillGradient": 0,
       "gridPos": {
         "h": 6,
         "w": 12,
         "x": 12,
         "y": 24
       },
-      "hiddenSeries": false,
       "id": 38,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "7.5.0",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "percent",
-          "yaxis": 2
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
         }
-      ],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      },
+      "pluginVersion": "8.0.0",
       "targets": [
         {
           "colNameFormatStr": "",
@@ -1234,7 +1255,7 @@
           "hide": false,
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select _wstart as ts, avg(grants_timeseries_used)/avg(grants_timeseries_total) as percent from $database.taosd_cluster_info where _ts >= $from and _ts <= $to interval($interval) fill(null)"
+          "sql": "select _wstart as ts, avg(grants_timeseries_used) as used , avg(grants_timeseries_total) as total from $database.taosd_cluster_info where _ts >= $from and _ts <= $to interval($interval) fill(null)"
         },
         {
           "colNameFormatStr": "",
@@ -1243,49 +1264,13 @@
           "hide": false,
           "queryType": "SQL",
           "refId": "B",
-          "sql": "select _wstart as ts, avg(grants_timeseries_used) as used , avg(grants_timeseries_total) as total from $database.taosd_cluster_info where _ts >= $from and _ts <= $to interval($interval) fill(null)"
+          "sql": "select _wstart as ts, avg(grants_timeseries_used)/avg(grants_timeseries_total) as percent from $database.taosd_cluster_info where _ts >= $from and _ts <= $to interval($interval) fill(null)"
         }
       ],
-      "thresholds": [],
       "timeFrom": null,
-      "timeRegions": [],
       "timeShift": null,
       "title": "Measuring Points Used",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "none",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "percentunit",
-          "label": null,
-          "logBase": 1,
-          "max": "1",
-          "min": "0",
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
+      "type": "timeseries"
     },
     {
       "collapsed": true,
@@ -1307,24 +1292,20 @@
               },
               "custom": {
                 "align": "center",
+                "displayMode": "auto",
                 "filterable": false
               },
               "mappings": [
                 {
-                  "from": "",
-                  "id": 1,
-                  "text": "ready",
-                  "to": "",
-                  "type": 1,
-                  "value": "1"
-                },
-                {
-                  "from": "",
-                  "id": 2,
-                  "text": "offline",
-                  "to": "",
-                  "type": 1,
-                  "value": "0"
+                  "options": {
+                    "0": {
+                      "text": "offline"
+                    },
+                    "1": {
+                      "text": "ready"
+                    }
+                  },
+                  "type": "value"
                 }
               ],
               "thresholds": {
@@ -1349,7 +1330,7 @@
           "options": {
             "showHeader": true
           },
-          "pluginVersion": "7.5.0",
+          "pluginVersion": "8.0.0",
           "targets": [
             {
               "colNameFormatStr": "",
@@ -1380,7 +1361,8 @@
                 "hideFrom": {
                   "graph": false,
                   "legend": false,
-                  "tooltip": false
+                  "tooltip": false,
+                  "viz": false
                 },
                 "lineInterpolation": "linear",
                 "lineWidth": 1,
@@ -1389,7 +1371,14 @@
                   "type": "linear"
                 },
                 "showPoints": "never",
-                "spanNulls": true
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
               },
               "mappings": [],
               "thresholds": {
@@ -1419,11 +1408,11 @@
               "displayMode": "list",
               "placement": "bottom"
             },
-            "tooltipOptions": {
+            "tooltip": {
               "mode": "single"
             }
           },
-          "pluginVersion": "7.5.0",
+          "pluginVersion": "8.0.0",
           "targets": [
             {
               "colNameFormatStr": "",
@@ -1450,7 +1439,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 37
+        "y": 31
       },
       "id": 52,
       "panels": [
@@ -1463,56 +1452,32 @@
               },
               "custom": {
                 "align": "center",
+                "displayMode": "auto",
                 "filterable": false
               },
               "mappings": [
                 {
-                  "from": "",
-                  "id": 1,
-                  "text": "offline",
-                  "to": "",
-                  "type": 1,
-                  "value": "0"
-                },
-                {
-                  "from": "",
-                  "id": 2,
-                  "text": "follower",
-                  "to": "",
-                  "type": 1,
-                  "value": "100"
-                },
-                {
-                  "from": "",
-                  "id": 3,
-                  "text": "candidate",
-                  "to": "",
-                  "type": 1,
-                  "value": "101"
-                },
-                {
-                  "from": "",
-                  "id": 4,
-                  "text": "leader",
-                  "to": "",
-                  "type": 1,
-                  "value": "102"
-                },
-                {
-                  "from": "",
-                  "id": 5,
-                  "text": "error",
-                  "to": "",
-                  "type": 1,
-                  "value": "103"
-                },
-                {
-                  "from": "",
-                  "id": 6,
-                  "text": "learner",
-                  "to": "",
-                  "type": 1,
-                  "value": "104"
+                  "options": {
+                    "0": {
+                      "text": "offline"
+                    },
+                    "100": {
+                      "text": "follower"
+                    },
+                    "101": {
+                      "text": "candidate"
+                    },
+                    "102": {
+                      "text": "leader"
+                    },
+                    "103": {
+                      "text": "error"
+                    },
+                    "104": {
+                      "text": "learner"
+                    }
+                  },
+                  "type": "value"
                 }
               ],
               "thresholds": {
@@ -1531,13 +1496,13 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 38
+            "y": 32
           },
           "id": 54,
           "options": {
             "showHeader": true
           },
-          "pluginVersion": "7.5.0",
+          "pluginVersion": "8.0.0",
           "targets": [
             {
               "colNameFormatStr": "",
@@ -1568,7 +1533,8 @@
                 "hideFrom": {
                   "graph": false,
                   "legend": false,
-                  "tooltip": false
+                  "tooltip": false,
+                  "viz": false
                 },
                 "lineInterpolation": "linear",
                 "lineWidth": 1,
@@ -1577,7 +1543,14 @@
                   "type": "linear"
                 },
                 "showPoints": "never",
-                "spanNulls": true
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
               },
               "mappings": [],
               "thresholds": {
@@ -1597,7 +1570,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 38
+            "y": 32
           },
           "id": 56,
           "options": {
@@ -1607,11 +1580,11 @@
               "displayMode": "list",
               "placement": "bottom"
             },
-            "tooltipOptions": {
+            "tooltip": {
               "mode": "single"
             }
           },
-          "pluginVersion": "7.5.0",
+          "pluginVersion": "8.0.0",
           "targets": [
             {
               "colNameFormatStr": "",
@@ -1638,7 +1611,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 46
+        "y": 32
       },
       "id": 58,
       "panels": [
@@ -1659,7 +1632,8 @@
                 "hideFrom": {
                   "graph": false,
                   "legend": false,
-                  "tooltip": false
+                  "tooltip": false,
+                  "viz": false
                 },
                 "lineInterpolation": "linear",
                 "lineWidth": 1,
@@ -1668,7 +1642,14 @@
                   "type": "linear"
                 },
                 "showPoints": "never",
-                "spanNulls": true
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
               },
               "mappings": [],
               "thresholds": {
@@ -1688,7 +1669,7 @@
             "h": 9,
             "w": 12,
             "x": 0,
-            "y": 47
+            "y": 33
           },
           "id": 140,
           "options": {
@@ -1698,11 +1679,11 @@
               "displayMode": "list",
               "placement": "bottom"
             },
-            "tooltipOptions": {
+            "tooltip": {
               "mode": "single"
             }
           },
-          "pluginVersion": "7.5.0",
+          "pluginVersion": "8.0.0",
           "targets": [
             {
               "colNameFormatStr": "",
@@ -1735,7 +1716,8 @@
                 "hideFrom": {
                   "graph": false,
                   "legend": false,
-                  "tooltip": false
+                  "tooltip": false,
+                  "viz": false
                 },
                 "lineInterpolation": "linear",
                 "lineWidth": 1,
@@ -1744,7 +1726,14 @@
                   "type": "linear"
                 },
                 "showPoints": "never",
-                "spanNulls": true
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
               },
               "mappings": [],
               "thresholds": {
@@ -1764,7 +1753,7 @@
             "h": 9,
             "w": 12,
             "x": 12,
-            "y": 47
+            "y": 33
           },
           "id": 157,
           "options": {
@@ -1774,11 +1763,11 @@
               "displayMode": "list",
               "placement": "bottom"
             },
-            "tooltipOptions": {
+            "tooltip": {
               "mode": "single"
             }
           },
-          "pluginVersion": "7.5.0",
+          "pluginVersion": "8.0.0",
           "targets": [
             {
               "colNameFormatStr": "",
@@ -1811,7 +1800,8 @@
                 "hideFrom": {
                   "graph": false,
                   "legend": false,
-                  "tooltip": false
+                  "tooltip": false,
+                  "viz": false
                 },
                 "lineInterpolation": "linear",
                 "lineWidth": 1,
@@ -1820,7 +1810,14 @@
                   "type": "linear"
                 },
                 "showPoints": "never",
-                "spanNulls": true
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
               },
               "mappings": [],
               "thresholds": {
@@ -1840,7 +1837,7 @@
             "h": 9,
             "w": 12,
             "x": 0,
-            "y": 56
+            "y": 42
           },
           "id": 156,
           "options": {
@@ -1850,11 +1847,11 @@
               "displayMode": "list",
               "placement": "bottom"
             },
-            "tooltipOptions": {
+            "tooltip": {
               "mode": "single"
             }
           },
-          "pluginVersion": "7.5.0",
+          "pluginVersion": "8.0.0",
           "targets": [
             {
               "colNameFormatStr": "",
@@ -1888,7 +1885,8 @@
                 "hideFrom": {
                   "graph": false,
                   "legend": false,
-                  "tooltip": false
+                  "tooltip": false,
+                  "viz": false
                 },
                 "lineInterpolation": "linear",
                 "lineWidth": 1,
@@ -1897,7 +1895,14 @@
                   "type": "linear"
                 },
                 "showPoints": "never",
-                "spanNulls": true
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
               },
               "mappings": [],
               "thresholds": {
@@ -1917,7 +1922,7 @@
             "h": 9,
             "w": 12,
             "x": 12,
-            "y": 56
+            "y": 42
           },
           "id": 200,
           "options": {
@@ -1927,11 +1932,11 @@
               "displayMode": "list",
               "placement": "bottom"
             },
-            "tooltipOptions": {
+            "tooltip": {
               "mode": "single"
             }
           },
-          "pluginVersion": "7.5.0",
+          "pluginVersion": "8.0.0",
           "targets": [
             {
               "formatType": "Time series",
@@ -1963,7 +1968,8 @@
                 "hideFrom": {
                   "graph": false,
                   "legend": false,
-                  "tooltip": false
+                  "tooltip": false,
+                  "viz": false
                 },
                 "lineInterpolation": "linear",
                 "lineWidth": 1,
@@ -1972,7 +1978,14 @@
                   "type": "linear"
                 },
                 "showPoints": "never",
-                "spanNulls": true
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
               },
               "mappings": [],
               "thresholds": {
@@ -1992,7 +2005,7 @@
             "h": 9,
             "w": 24,
             "x": 0,
-            "y": 65
+            "y": 51
           },
           "id": 141,
           "options": {
@@ -2002,11 +2015,11 @@
               "displayMode": "list",
               "placement": "bottom"
             },
-            "tooltipOptions": {
+            "tooltip": {
               "mode": "single"
             }
           },
-          "pluginVersion": "7.5.0",
+          "pluginVersion": "8.0.0",
           "targets": [
             {
               "colNameFormatStr": "",
@@ -2033,7 +2046,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 66
+        "y": 33
       },
       "id": 64,
       "panels": [
@@ -2061,7 +2074,7 @@
             "h": 3,
             "w": 3,
             "x": 0,
-            "y": 67
+            "y": 75
           },
           "id": 66,
           "options": {
@@ -2079,7 +2092,7 @@
             "text": {},
             "textMode": "auto"
           },
-          "pluginVersion": "7.5.0",
+          "pluginVersion": "8.0.0",
           "targets": [
             {
               "alias": "dnodes",
@@ -2111,7 +2124,8 @@
                 "hideFrom": {
                   "graph": false,
                   "legend": false,
-                  "tooltip": false
+                  "tooltip": false,
+                  "viz": false
                 },
                 "lineInterpolation": "linear",
                 "lineWidth": 1,
@@ -2120,7 +2134,14 @@
                   "type": "linear"
                 },
                 "showPoints": "never",
-                "spanNulls": true
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
               },
               "mappings": [],
               "thresholds": {
@@ -2140,7 +2161,7 @@
             "h": 6,
             "w": 9,
             "x": 3,
-            "y": 67
+            "y": 75
           },
           "id": 70,
           "options": {
@@ -2150,11 +2171,11 @@
               "displayMode": "list",
               "placement": "bottom"
             },
-            "tooltipOptions": {
+            "tooltip": {
               "mode": "single"
             }
           },
-          "pluginVersion": "7.5.0",
+          "pluginVersion": "8.0.0",
           "targets": [
             {
               "colNameFormatStr": "",
@@ -2187,7 +2208,8 @@
                 "hideFrom": {
                   "graph": false,
                   "legend": false,
-                  "tooltip": false
+                  "tooltip": false,
+                  "viz": false
                 },
                 "lineInterpolation": "linear",
                 "lineWidth": 1,
@@ -2196,7 +2218,14 @@
                   "type": "linear"
                 },
                 "showPoints": "never",
-                "spanNulls": true
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
               },
               "mappings": [],
               "thresholds": {
@@ -2216,7 +2245,7 @@
             "h": 6,
             "w": 12,
             "x": 12,
-            "y": 67
+            "y": 75
           },
           "id": 72,
           "options": {
@@ -2226,11 +2255,11 @@
               "displayMode": "list",
               "placement": "bottom"
             },
-            "tooltipOptions": {
+            "tooltip": {
               "mode": "single"
             }
           },
-          "pluginVersion": "7.5.0",
+          "pluginVersion": "8.0.0",
           "targets": [
             {
               "colNameFormatStr": "vgroup_{{vgroup_id}}",
@@ -2270,7 +2299,7 @@
             "h": 3,
             "w": 3,
             "x": 0,
-            "y": 70
+            "y": 78
           },
           "id": 68,
           "options": {
@@ -2288,7 +2317,7 @@
             "text": {},
             "textMode": "auto"
           },
-          "pluginVersion": "7.5.0",
+          "pluginVersion": "8.0.0",
           "targets": [
             {
               "alias": "dnodes",
@@ -2314,7 +2343,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 73
+        "y": 34
       },
       "id": 76,
       "panels": [
@@ -2344,7 +2373,7 @@
             "h": 5,
             "w": 3,
             "x": 0,
-            "y": 74
+            "y": 35
           },
           "id": 92,
           "options": {
@@ -2362,7 +2391,7 @@
             "text": {},
             "textMode": "auto"
           },
-          "pluginVersion": "7.5.0",
+          "pluginVersion": "8.0.0",
           "targets": [
             {
               "colNameFormatStr": "",
@@ -2385,20 +2414,15 @@
               },
               "mappings": [
                 {
-                  "from": "",
-                  "id": 1,
-                  "text": "Yes",
-                  "to": "",
-                  "type": 1,
-                  "value": "1"
-                },
-                {
-                  "from": "",
-                  "id": 2,
-                  "text": "No",
-                  "to": "",
-                  "type": 1,
-                  "value": "0"
+                  "options": {
+                    "0": {
+                      "text": "No"
+                    },
+                    "1": {
+                      "text": "Yes"
+                    }
+                  },
+                  "type": "value"
                 }
               ],
               "thresholds": {
@@ -2418,7 +2442,7 @@
             "h": 5,
             "w": 3,
             "x": 3,
-            "y": 74
+            "y": 35
           },
           "id": 94,
           "options": {
@@ -2436,7 +2460,7 @@
             "text": {},
             "textMode": "auto"
           },
-          "pluginVersion": "7.5.0",
+          "pluginVersion": "8.0.0",
           "targets": [
             {
               "colNameFormatStr": "",
@@ -2475,7 +2499,7 @@
             "h": 5,
             "w": 2,
             "x": 6,
-            "y": 74
+            "y": 35
           },
           "id": 96,
           "options": {
@@ -2493,7 +2517,7 @@
             "text": {},
             "textMode": "auto"
           },
-          "pluginVersion": "7.5.0",
+          "pluginVersion": "8.0.0",
           "targets": [
             {
               "colNameFormatStr": "",
@@ -2531,7 +2555,7 @@
             "h": 5,
             "w": 2,
             "x": 8,
-            "y": 74
+            "y": 35
           },
           "id": 98,
           "options": {
@@ -2549,7 +2573,7 @@
             "text": {},
             "textMode": "auto"
           },
-          "pluginVersion": "7.5.0",
+          "pluginVersion": "8.0.0",
           "targets": [
             {
               "colNameFormatStr": "",
@@ -2587,7 +2611,7 @@
             "h": 5,
             "w": 2,
             "x": 10,
-            "y": 74
+            "y": 35
           },
           "id": 100,
           "options": {
@@ -2605,7 +2629,7 @@
             "text": {},
             "textMode": "auto"
           },
-          "pluginVersion": "7.5.0",
+          "pluginVersion": "8.0.0",
           "targets": [
             {
               "colNameFormatStr": "",
@@ -2654,7 +2678,7 @@
             "h": 5,
             "w": 4,
             "x": 12,
-            "y": 74
+            "y": 35
           },
           "id": 102,
           "options": {
@@ -2669,7 +2693,7 @@
             "showThresholdMarkers": true,
             "text": {}
           },
-          "pluginVersion": "7.5.0",
+          "pluginVersion": "8.0.0",
           "targets": [
             {
               "alias": "cpu_taosd",
@@ -2710,7 +2734,7 @@
             "h": 5,
             "w": 4,
             "x": 16,
-            "y": 74
+            "y": 35
           },
           "id": 104,
           "options": {
@@ -2725,7 +2749,7 @@
             "showThresholdMarkers": true,
             "text": {}
           },
-          "pluginVersion": "7.5.0",
+          "pluginVersion": "8.0.0",
           "targets": [
             {
               "alias": "mem_taosd",
@@ -2779,7 +2803,7 @@
             "h": 5,
             "w": 4,
             "x": 20,
-            "y": 74
+            "y": 35
           },
           "id": 106,
           "options": {
@@ -2794,7 +2818,7 @@
             "showThresholdMarkers": true,
             "text": {}
           },
-          "pluginVersion": "7.5.0",
+          "pluginVersion": "8.0.0",
           "targets": [
             {
               "alias": "disk_taosd",
@@ -2826,7 +2850,8 @@
                 "hideFrom": {
                   "graph": false,
                   "legend": false,
-                  "tooltip": false
+                  "tooltip": false,
+                  "viz": false
                 },
                 "lineInterpolation": "linear",
                 "lineWidth": 1,
@@ -2835,7 +2860,14 @@
                   "type": "linear"
                 },
                 "showPoints": "never",
-                "spanNulls": true
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
               },
               "mappings": [],
               "thresholds": {
@@ -2859,7 +2891,7 @@
             "h": 6,
             "w": 8,
             "x": 0,
-            "y": 79
+            "y": 40
           },
           "id": 108,
           "options": {
@@ -2872,11 +2904,11 @@
               "displayMode": "table",
               "placement": "right"
             },
-            "tooltipOptions": {
+            "tooltip": {
               "mode": "single"
             }
           },
-          "pluginVersion": "7.5.0",
+          "pluginVersion": "8.0.0",
           "targets": [
             {
               "colNameFormatStr": "",
@@ -2909,7 +2941,8 @@
                 "hideFrom": {
                   "graph": false,
                   "legend": false,
-                  "tooltip": false
+                  "tooltip": false,
+                  "viz": false
                 },
                 "lineInterpolation": "linear",
                 "lineWidth": 1,
@@ -2918,7 +2951,14 @@
                   "type": "linear"
                 },
                 "showPoints": "never",
-                "spanNulls": true
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
               },
               "mappings": [],
               "thresholds": {
@@ -2942,7 +2982,7 @@
             "h": 6,
             "w": 8,
             "x": 8,
-            "y": 79
+            "y": 40
           },
           "id": 110,
           "options": {
@@ -2955,11 +2995,11 @@
               "displayMode": "table",
               "placement": "right"
             },
-            "tooltipOptions": {
+            "tooltip": {
               "mode": "single"
             }
           },
-          "pluginVersion": "7.5.0",
+          "pluginVersion": "8.0.0",
           "targets": [
             {
               "colNameFormatStr": "",
@@ -2992,7 +3032,8 @@
                 "hideFrom": {
                   "graph": false,
                   "legend": false,
-                  "tooltip": false
+                  "tooltip": false,
+                  "viz": false
                 },
                 "lineInterpolation": "linear",
                 "lineWidth": 1,
@@ -3002,7 +3043,14 @@
                   "type": "log"
                 },
                 "showPoints": "never",
-                "spanNulls": true
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
               },
               "mappings": [],
               "thresholds": {
@@ -3022,7 +3070,7 @@
             "h": 6,
             "w": 8,
             "x": 16,
-            "y": 79
+            "y": 40
           },
           "id": 112,
           "options": {
@@ -3032,11 +3080,11 @@
               "displayMode": "table",
               "placement": "right"
             },
-            "tooltipOptions": {
+            "tooltip": {
               "mode": "single"
             }
           },
-          "pluginVersion": "7.5.0",
+          "pluginVersion": "8.0.0",
           "targets": [
             {
               "colNameFormatStr": "L{{data_dir_level}}-{{data_dir_name}}-used",
@@ -3078,7 +3126,8 @@
                 "hideFrom": {
                   "graph": false,
                   "legend": false,
-                  "tooltip": false
+                  "tooltip": false,
+                  "viz": false
                 },
                 "lineInterpolation": "linear",
                 "lineWidth": 1,
@@ -3087,7 +3136,14 @@
                   "type": "linear"
                 },
                 "showPoints": "never",
-                "spanNulls": true
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
               },
               "mappings": [],
               "min": 0,
@@ -3108,7 +3164,7 @@
             "h": 6,
             "w": 8,
             "x": 0,
-            "y": 85
+            "y": 46
           },
           "id": 114,
           "options": {
@@ -3121,11 +3177,11 @@
               "displayMode": "table",
               "placement": "right"
             },
-            "tooltipOptions": {
+            "tooltip": {
               "mode": "single"
             }
           },
-          "pluginVersion": "7.5.0",
+          "pluginVersion": "8.0.0",
           "targets": [
             {
               "colNameFormatStr": "",
@@ -3159,7 +3215,8 @@
                 "hideFrom": {
                   "graph": false,
                   "legend": false,
-                  "tooltip": false
+                  "tooltip": false,
+                  "viz": false
                 },
                 "lineInterpolation": "linear",
                 "lineWidth": 1,
@@ -3168,7 +3225,14 @@
                   "type": "linear"
                 },
                 "showPoints": "never",
-                "spanNulls": true
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
               },
               "mappings": [],
               "min": 0,
@@ -3189,7 +3253,7 @@
             "h": 6,
             "w": 8,
             "x": 8,
-            "y": 85
+            "y": 46
           },
           "id": 116,
           "options": {
@@ -3197,18 +3261,18 @@
             "legend": {
               "calcs": [
                 "mean",
-                "lastNotNull",
+                "last",
                 "max",
                 "min"
               ],
               "displayMode": "table",
               "placement": "right"
             },
-            "tooltipOptions": {
+            "tooltip": {
               "mode": "single"
             }
           },
-          "pluginVersion": "7.5.0",
+          "pluginVersion": "8.0.0",
           "targets": [
             {
               "colNameFormatStr": "",
@@ -3242,7 +3306,8 @@
                 "hideFrom": {
                   "graph": false,
                   "legend": false,
-                  "tooltip": false
+                  "tooltip": false,
+                  "viz": false
                 },
                 "lineInterpolation": "linear",
                 "lineWidth": 1,
@@ -3251,7 +3316,14 @@
                   "type": "linear"
                 },
                 "showPoints": "never",
-                "spanNulls": true
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
               },
               "mappings": [],
               "min": 0,
@@ -3272,7 +3344,7 @@
             "h": 6,
             "w": 8,
             "x": 16,
-            "y": 85
+            "y": 46
           },
           "id": 117,
           "options": {
@@ -3280,18 +3352,18 @@
             "legend": {
               "calcs": [
                 "mean",
-                "lastNotNull",
+                "last",
                 "max",
                 "min"
               ],
               "displayMode": "table",
               "placement": "right"
             },
-            "tooltipOptions": {
+            "tooltip": {
               "mode": "single"
             }
           },
-          "pluginVersion": "7.5.0",
+          "pluginVersion": "8.0.0",
           "targets": [
             {
               "colNameFormatStr": "",
@@ -3319,60 +3391,96 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 90
+        "y": 35
       },
       "id": 77,
       "panels": [
         {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
           "datasource": "${DS_TDENGINE}",
           "fieldConfig": {
-            "defaults": {},
-            "overrides": []
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "decimals": 0,
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "c/s"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "/wal_write_time.*/"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "ms"
+                  }
+                ]
+              }
+            ]
           },
-          "fill": 1,
-          "fillGradient": 0,
           "gridPos": {
             "h": 6,
             "w": 8,
             "x": 0,
-            "y": 92
+            "y": 36
           },
-          "hiddenSeries": false,
           "id": 340,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "rightSide": true,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
           "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.5.10",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [
-            {
-              "alias": "/wal_write_time.*/",
-              "yaxis": 2
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "right"
+            },
+            "tooltip": {
+              "mode": "single"
             }
-          ],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
+          },
+          "pluginVersion": "8.0.0",
           "targets": [
             {
               "colNameFormatStr": "total_rows_{{database_name}}_{{vgroup_id}}",
@@ -3392,99 +3500,97 @@
               "sql": "select _wstart as ts, database_name, vgroup_id, avg(wal_write_time) as wal_write_time from $database.taosd_write_metrics where ('$databaseName' = '' or (database_name in (${databaseName:sqlstring}) and ('$vgroupId' = '' or vgroup_id in (${vgroupId:sqlstring})))) and _ts >= $from and _ts <= $to  partition by database_name, vgroup_id interval($interval) fill(null) order by database_name, vgroup_id"
             }
           ],
-          "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Total Rows and Wal Write Time",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "decimals": 0,
-              "format": "c/s",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": "0",
-              "show": true
-            },
-            {
-              "decimals": 0,
-              "format": "ms",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": "0",
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          "type": "timeseries"
         },
         {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
           "datasource": "${DS_TDENGINE}",
           "fieldConfig": {
-            "defaults": {},
-            "overrides": []
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "decimals": 0,
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "c/s"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "/commit_time.*/"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "ms"
+                  }
+                ]
+              }
+            ]
           },
-          "fill": 1,
-          "fillGradient": 0,
           "gridPos": {
             "h": 6,
             "w": 8,
             "x": 8,
-            "y": 92
+            "y": 36
           },
-          "hiddenSeries": false,
           "id": 341,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "rightSide": true,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
           "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.5.10",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [
-            {
-              "alias": "/commit_time.*/",
-              "yaxis": 2
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "right"
+            },
+            "tooltip": {
+              "mode": "single"
             }
-          ],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
+          },
+          "pluginVersion": "8.0.0",
           "targets": [
             {
               "colNameFormatStr": "commit_count_{{database_name}}_{{vgroup_id}}",
@@ -3504,99 +3610,97 @@
               "sql": "select _wstart as ts, database_name, vgroup_id, avg(commit_time) as commit_time from $database.taosd_write_metrics where ('$databaseName' = '' or (database_name in (${databaseName:sqlstring}) and ('$vgroupId' = '' or vgroup_id in (${vgroupId:sqlstring})))) and _ts >= $from and _ts <= $to  partition by database_name, vgroup_id interval($interval) fill(null) order by database_name, vgroup_id"
             }
           ],
-          "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Commit Count and Time",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "decimals": 0,
-              "format": "c/s",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": "0",
-              "show": true
-            },
-            {
-              "decimals": 0,
-              "format": "ms",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": "0",
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          "type": "timeseries"
         },
         {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
           "datasource": "${DS_TDENGINE}",
           "fieldConfig": {
-            "defaults": {},
-            "overrides": []
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "decimals": 0,
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "c/s"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "/commit_time.*/"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "ms"
+                  }
+                ]
+              }
+            ]
           },
-          "fill": 1,
-          "fillGradient": 0,
           "gridPos": {
             "h": 6,
             "w": 8,
             "x": 16,
-            "y": 92
+            "y": 36
           },
-          "hiddenSeries": false,
           "id": 342,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "rightSide": true,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
           "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.5.10",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [
-            {
-              "alias": "/commit_time.*/",
-              "yaxis": 2
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "right"
+            },
+            "tooltip": {
+              "mode": "single"
             }
-          ],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
+          },
+          "pluginVersion": "8.0.0",
           "targets": [
             {
               "colNameFormatStr": "blocked_commit_count_{{database_name}}_{{vgroup_id}}",
@@ -3616,99 +3720,97 @@
               "sql": "select _wstart as ts, database_name, vgroup_id, avg(blocked_commit_time) as blocked_commit_time from $database.taosd_write_metrics where ('$databaseName' = '' or (database_name in (${databaseName:sqlstring}) and ('$vgroupId' = '' or vgroup_id in (${vgroupId:sqlstring})))) and _ts >= $from and _ts <= $to  partition by database_name, vgroup_id interval($interval) fill(null) order by database_name, vgroup_id"
             }
           ],
-          "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Blocked Commit Count and Time",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "decimals": 0,
-              "format": "c/s",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": "0",
-              "show": true
-            },
-            {
-              "decimals": 0,
-              "format": "ms",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": "0",
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          "type": "timeseries"
         },
         {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
           "datasource": "${DS_TDENGINE}",
           "fieldConfig": {
-            "defaults": {},
-            "overrides": []
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "decimals": 0,
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "c/s"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "/merge_time.*/"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "ms"
+                  }
+                ]
+              }
+            ]
           },
-          "fill": 1,
-          "fillGradient": 0,
           "gridPos": {
             "h": 6,
             "w": 12,
             "x": 0,
-            "y": 100
+            "y": 42
           },
-          "hiddenSeries": false,
           "id": 343,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "rightSide": true,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
           "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.5.10",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [
-            {
-              "alias": "/merge_time.*/",
-              "yaxis": 2
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "right"
+            },
+            "tooltip": {
+              "mode": "single"
             }
-          ],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
+          },
+          "pluginVersion": "8.0.0",
           "targets": [
             {
               "colNameFormatStr": "merge_count_{{database_name}}_{{vgroup_id}}",
@@ -3728,99 +3830,97 @@
               "sql": "select _wstart as ts, database_name, vgroup_id, avg(merge_time) as merge_time from $database.taosd_write_metrics where ('$databaseName' = '' or (database_name in (${databaseName:sqlstring}) and ('$vgroupId' = '' or vgroup_id in (${vgroupId:sqlstring})))) and _ts >= $from and _ts <= $to  partition by database_name, vgroup_id interval($interval) fill(null) order by database_name, vgroup_id"
             }
           ],
-          "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Merge Count and Time",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "decimals": 0,
-              "format": "c/s",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": "0",
-              "show": true
-            },
-            {
-              "decimals": 0,
-              "format": "ms",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": "0",
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          "type": "timeseries"
         },
         {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
           "datasource": "${DS_TDENGINE}",
           "fieldConfig": {
-            "defaults": {},
-            "overrides": []
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "decimals": 0,
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "c/s"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "/last_cache_commit_time.*/"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "ms"
+                  }
+                ]
+              }
+            ]
           },
-          "fill": 1,
-          "fillGradient": 0,
           "gridPos": {
             "h": 6,
             "w": 12,
             "x": 12,
-            "y": 100
+            "y": 42
           },
-          "hiddenSeries": false,
           "id": 344,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "rightSide": true,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
           "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.5.10",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [
-            {
-              "alias": "/last_cache_commit_time.*/",
-              "yaxis": 2
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "right"
+            },
+            "tooltip": {
+              "mode": "single"
             }
-          ],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
+          },
+          "pluginVersion": "8.0.0",
           "targets": [
             {
               "colNameFormatStr": "last_cache_commit_count_{{database_name}}_{{vgroup_id}}",
@@ -3840,48 +3940,10 @@
               "sql": "select _wstart as ts, database_name, vgroup_id, avg(last_cache_commit_time) as last_cache_commit_time from $database.taosd_write_metrics where ('$databaseName' = '' or (database_name in (${databaseName:sqlstring}) and ('$vgroupId' = '' or vgroup_id in (${vgroupId:sqlstring})))) and _ts >= $from and _ts <= $to  partition by database_name, vgroup_id interval($interval) fill(null) order by database_name, vgroup_id"
             }
           ],
-          "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Last Cache Commit Count and Time",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "decimals": 0,
-              "format": "c/s",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": "0",
-              "show": true
-            },
-            {
-              "decimals": 0,
-              "format": "ms",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": "0",
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          "type": "timeseries"
         }
       ],
       "title": "Write Metrics",
@@ -3894,7 +3956,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 107
+        "y": 36
       },
       "id": 78,
       "panels": [
@@ -3923,7 +3985,7 @@
             "h": 6,
             "w": 12,
             "x": 0,
-            "y": 110
+            "y": 37
           },
           "id": 134,
           "options": {
@@ -3939,7 +4001,7 @@
             "showUnfilled": true,
             "text": {}
           },
-          "pluginVersion": "7.5.0",
+          "pluginVersion": "8.0.0",
           "targets": [
             {
               "formatType": "Time series",
@@ -3969,9 +4031,9 @@
                 "fillOpacity": 10,
                 "gradientMode": "none",
                 "hideFrom": {
-                  "graph": false,
                   "legend": false,
-                  "tooltip": false
+                  "tooltip": false,
+                  "viz": false
                 },
                 "lineInterpolation": "linear",
                 "lineWidth": 1,
@@ -3980,7 +4042,14 @@
                   "type": "linear"
                 },
                 "showPoints": "never",
-                "spanNulls": true
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
               },
               "mappings": [],
               "thresholds": {
@@ -4000,26 +4069,20 @@
             "h": 6,
             "w": 12,
             "x": 12,
-            "y": 110
+            "y": 37
           },
           "id": 129,
           "options": {
-            "graph": {},
             "legend": {
-              "calcs": [
-                "lastNotNull",
-                "min",
-                "max",
-                "mean"
-              ],
-              "displayMode": "table",
-              "placement": "right"
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
             },
-            "tooltipOptions": {
+            "tooltip": {
               "mode": "single"
             }
           },
-          "pluginVersion": "7.5.0",
+          "pluginVersion": "8.0.0",
           "targets": [
             {
               "colNameFormatStr": "{{endpoint}}_queries",
@@ -4123,7 +4186,7 @@
           "timeFrom": null,
           "timeShift": null,
           "title": "request by rest",
-          "type": "graph"
+          "type": "timeseries"
         },
         {
           "datasource": "${DS_TDENGINE}",
@@ -4150,7 +4213,7 @@
             "h": 6,
             "w": 12,
             "x": 0,
-            "y": 116
+            "y": 43
           },
           "id": 135,
           "options": {
@@ -4166,7 +4229,7 @@
             "showUnfilled": true,
             "text": {}
           },
-          "pluginVersion": "7.5.0",
+          "pluginVersion": "8.0.0",
           "targets": [
             {
               "formatType": "Time series",
@@ -4196,9 +4259,9 @@
                 "fillOpacity": 10,
                 "gradientMode": "none",
                 "hideFrom": {
-                  "graph": false,
                   "legend": false,
-                  "tooltip": false
+                  "tooltip": false,
+                  "viz": false
                 },
                 "lineInterpolation": "linear",
                 "lineWidth": 1,
@@ -4207,7 +4270,14 @@
                   "type": "linear"
                 },
                 "showPoints": "never",
-                "spanNulls": true
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
               },
               "mappings": [],
               "thresholds": {
@@ -4227,26 +4297,20 @@
             "h": 6,
             "w": 12,
             "x": 12,
-            "y": 116
+            "y": 43
           },
           "id": 130,
           "options": {
-            "graph": {},
             "legend": {
-              "calcs": [
-                "lastNotNull",
-                "min",
-                "max",
-                "mean"
-              ],
-              "displayMode": "table",
-              "placement": "right"
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
             },
-            "tooltipOptions": {
+            "tooltip": {
               "mode": "single"
             }
           },
-          "pluginVersion": "7.5.0",
+          "pluginVersion": "8.0.0",
           "targets": [
             {
               "colNameFormatStr": "{{endpoint}}_queries",
@@ -4350,7 +4414,7 @@
           "timeFrom": null,
           "timeShift": null,
           "title": "request by ws",
-          "type": "graph"
+          "type": "timeseries"
         },
         {
           "datasource": "${DS_TDENGINE}",
@@ -4367,9 +4431,9 @@
                 "fillOpacity": 10,
                 "gradientMode": "none",
                 "hideFrom": {
-                  "graph": false,
                   "legend": false,
-                  "tooltip": false
+                  "tooltip": false,
+                  "viz": false
                 },
                 "lineInterpolation": "linear",
                 "lineWidth": 1,
@@ -4378,7 +4442,14 @@
                   "type": "linear"
                 },
                 "showPoints": "never",
-                "spanNulls": true
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
               },
               "mappings": [],
               "thresholds": {
@@ -4387,6 +4458,10 @@
                   {
                     "color": "green",
                     "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
                   }
                 ]
               },
@@ -4398,26 +4473,20 @@
             "h": 6,
             "w": 12,
             "x": 0,
-            "y": 122
+            "y": 49
           },
           "id": 131,
           "options": {
-            "graph": {},
             "legend": {
-              "calcs": [
-                "lastNotNull",
-                "min",
-                "max",
-                "mean"
-              ],
-              "displayMode": "table",
-              "placement": "right"
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
             },
-            "tooltipOptions": {
+            "tooltip": {
               "mode": "single"
             }
           },
-          "pluginVersion": "7.5.0",
+          "pluginVersion": "8.0.0",
           "targets": [
             {
               "colNameFormatStr": "{{label}}",
@@ -4439,7 +4508,7 @@
           "timeFrom": null,
           "timeShift": null,
           "title": "Connection Pool",
-          "type": "graph"
+          "type": "timeseries"
         },
         {
           "datasource": "${DS_TDENGINE}",
@@ -4456,9 +4525,9 @@
                 "fillOpacity": 10,
                 "gradientMode": "none",
                 "hideFrom": {
-                  "graph": false,
                   "legend": false,
-                  "tooltip": false
+                  "tooltip": false,
+                  "viz": false
                 },
                 "lineInterpolation": "linear",
                 "lineWidth": 1,
@@ -4467,7 +4536,14 @@
                   "type": "linear"
                 },
                 "showPoints": "never",
-                "spanNulls": true
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
               },
               "mappings": [],
               "thresholds": {
@@ -4476,6 +4552,10 @@
                   {
                     "color": "green",
                     "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
                   }
                 ]
               },
@@ -4487,26 +4567,20 @@
             "h": 6,
             "w": 12,
             "x": 12,
-            "y": 122
+            "y": 49
           },
           "id": 132,
           "options": {
-            "graph": {},
             "legend": {
-              "calcs": [
-                "lastNotNull",
-                "min",
-                "max",
-                "mean"
-              ],
-              "displayMode": "table",
-              "placement": "right"
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
             },
-            "tooltipOptions": {
+            "tooltip": {
               "mode": "single"
             }
           },
-          "pluginVersion": "7.5.0",
+          "pluginVersion": "8.0.0",
           "targets": [
             {
               "colNameFormatStr": "{{label}}",
@@ -4552,2042 +4626,15 @@
           "timeFrom": null,
           "timeShift": null,
           "title": "WebSocket Connections",
-          "type": "graph"
+          "type": "timeseries"
         }
       ],
       "title": "TaosAdapter",
       "type": "row"
-    },
-    {
-      "collapsed": true,
-      "datasource": "${DS_TDENGINE}",
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 217
-      },
-      "id": 79,
-      "panels": [
-        {
-          "alert": {
-            "alertRuleTags": {
-              "cluster_id": "${cluster_id}"
-            },
-            "conditions": [
-              {
-                "evaluator": {
-                  "params": [
-                    0
-                  ],
-                  "type": "gt"
-                },
-                "operator": {
-                  "type": "and"
-                },
-                "query": {
-                  "params": [
-                    "A",
-                    "150s",
-                    "now"
-                  ]
-                },
-                "reducer": {
-                  "params": [],
-                  "type": "max"
-                },
-                "type": "query"
-              }
-            ],
-            "executionErrorState": "alerting",
-            "for": "0m",
-            "frequency": "30s",
-            "handler": 1,
-            "message": "There are nodes offline in the cluster",
-            "name": "DNodes offline alert",
-            "noDataState": "alerting",
-            "notifications": []
-          },
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${DS_TDENGINE}",
-          "fieldConfig": {
-            "defaults": {},
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 6,
-            "w": 6,
-            "x": 0,
-            "y": 218
-          },
-          "hiddenSeries": false,
-          "id": 203,
-          "interval": "10s",
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.5.10",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "alias": "",
-              "colNameFormatStr": "",
-              "colNameToGroup": "cluster_id",
-              "formatType": "Time series",
-              "queryType": "SQL",
-              "refId": "A",
-              "sql": "select now(),  cluster_id, last(dnodes_total)  - last(dnodes_alive) as dnode_offline  from log.taosd_cluster_info where _ts >= (now -30s) and _ts < now partition by cluster_id having first(_ts) > 0"
-            }
-          ],
-          "thresholds": [
-            {
-              "colorMode": "critical",
-              "fill": true,
-              "line": true,
-              "op": "gt",
-              "value": 0,
-              "visible": true
-            }
-          ],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "DNodes Offline",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "alert": {
-            "alertRuleTags": {},
-            "conditions": [
-              {
-                "evaluator": {
-                  "params": [
-                    0
-                  ],
-                  "type": "gt"
-                },
-                "operator": {
-                  "type": "and"
-                },
-                "query": {
-                  "params": [
-                    "A",
-                    "180s",
-                    "now"
-                  ]
-                },
-                "reducer": {
-                  "params": [],
-                  "type": "max"
-                },
-                "type": "query"
-              }
-            ],
-            "executionErrorState": "alerting",
-            "for": "0m",
-            "frequency": "30s",
-            "handler": 1,
-            "message": "There are vnodes offline in the cluster",
-            "name": "VNodes Offline alert",
-            "noDataState": "alerting",
-            "notifications": []
-          },
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${DS_TDENGINE}",
-          "fieldConfig": {
-            "defaults": {},
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 6,
-            "w": 6,
-            "x": 6,
-            "y": 218
-          },
-          "hiddenSeries": false,
-          "id": 204,
-          "interval": "30s",
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "maxDataPoints": null,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.5.10",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "colNameFormatStr": "",
-              "colNameToGroup": "cluster_id",
-              "formatType": "Time series",
-              "queryType": "SQL",
-              "refId": "A",
-              "sql": "select now(), cluster_id, last(vnodes_total)  - last(vnodes_alive) as vnode_offline  from log.taosd_cluster_info where _ts >= (now - 30s) and _ts < now partition by cluster_id having first(_ts) > 0"
-            }
-          ],
-          "thresholds": [
-            {
-              "colorMode": "critical",
-              "fill": true,
-              "line": true,
-              "op": "gt",
-              "value": 0,
-              "visible": true
-            }
-          ],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "VNodes Offline",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "alert": {
-            "alertRuleTags": {},
-            "conditions": [
-              {
-                "evaluator": {
-                  "params": [
-                    60
-                  ],
-                  "type": "lt"
-                },
-                "operator": {
-                  "type": "and"
-                },
-                "query": {
-                  "params": [
-                    "A",
-                    "48h",
-                    "now"
-                  ]
-                },
-                "reducer": {
-                  "params": [],
-                  "type": "max"
-                },
-                "type": "query"
-              }
-            ],
-            "executionErrorState": "alerting",
-            "for": "0m",
-            "frequency": "24h",
-            "handler": 1,
-            "message": "Authorization is about to expire",
-            "name": "Expire Time Alert",
-            "noDataState": "alerting",
-            "notifications": []
-          },
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${DS_TDENGINE}",
-          "fieldConfig": {
-            "defaults": {},
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 6,
-            "w": 6,
-            "x": 12,
-            "y": 218
-          },
-          "hiddenSeries": false,
-          "id": 210,
-          "interval": "24h",
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.5.10",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "colNameFormatStr": "",
-              "colNameToGroup": "cluster_id",
-              "formatType": "Time series",
-              "queryType": "SQL",
-              "refId": "A",
-              "sql": "select now(), cluster_id, last(grants_expire_time) / 86400 as expire_time from log.taosd_cluster_info where  _ts >= (now - 24h)  and _ts < now  partition by cluster_id having first(_ts) > 0 ",
-              "timeShiftPeriod": "",
-              "timeShiftUnit": "days"
-            }
-          ],
-          "thresholds": [
-            {
-              "colorMode": "critical",
-              "fill": true,
-              "line": true,
-              "op": "lt",
-              "value": 60,
-              "visible": true
-            }
-          ],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Expire Time Alert",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "alert": {
-            "alertRuleTags": {},
-            "conditions": [
-              {
-                "evaluator": {
-                  "params": [
-                    80
-                  ],
-                  "type": "gt"
-                },
-                "operator": {
-                  "type": "and"
-                },
-                "query": {
-                  "params": [
-                    "A",
-                    "15m",
-                    "now"
-                  ]
-                },
-                "reducer": {
-                  "params": [],
-                  "type": "max"
-                },
-                "type": "query"
-              }
-            ],
-            "executionErrorState": "alerting",
-            "for": "4m",
-            "frequency": "5m",
-            "handler": 1,
-            "message": "Node CPU usage exceeds 80%",
-            "name": "CPU Usage alert",
-            "noDataState": "alerting",
-            "notifications": []
-          },
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${DS_TDENGINE}",
-          "fieldConfig": {
-            "defaults": {
-              "unit": "percent"
-            },
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 6,
-            "w": 6,
-            "x": 18,
-            "y": 218
-          },
-          "hiddenSeries": false,
-          "id": 205,
-          "interval": "5m",
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.5.10",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "colNameFormatStr": "",
-              "colNameToGroup": "dnode_id",
-              "formatType": "Time series",
-              "queryType": "SQL",
-              "refId": "A",
-              "sql": "select now(), dnode_id, last(cpu_system) as cpu_use from log.taosd_dnodes_info where _ts >= (now- 5m) and _ts < now partition by dnode_id ",
-              "timeShiftPeriod": ""
-            }
-          ],
-          "thresholds": [
-            {
-              "colorMode": "critical",
-              "fill": true,
-              "line": true,
-              "op": "gt",
-              "value": 80,
-              "visible": true
-            }
-          ],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "CPU Usage",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "percent",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "alert": {
-            "alertRuleTags": {},
-            "conditions": [
-              {
-                "evaluator": {
-                  "params": [
-                    80
-                  ],
-                  "type": "gt"
-                },
-                "operator": {
-                  "type": "and"
-                },
-                "query": {
-                  "params": [
-                    "A",
-                    "15m",
-                    "now"
-                  ]
-                },
-                "reducer": {
-                  "params": [],
-                  "type": "max"
-                },
-                "type": "query"
-              }
-            ],
-            "executionErrorState": "alerting",
-            "for": "4m",
-            "frequency": "5m",
-            "handler": 1,
-            "message": "Disk Used above 80%",
-            "name": "Disk Used Rate alert",
-            "noDataState": "alerting",
-            "notifications": []
-          },
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${DS_TDENGINE}",
-          "fieldConfig": {
-            "defaults": {
-              "unit": "percent"
-            },
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 6,
-            "w": 6,
-            "x": 0,
-            "y": 224
-          },
-          "hiddenSeries": false,
-          "id": 208,
-          "interval": "5m",
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.5.10",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "colNameFormatStr": "",
-              "colNameToGroup": "dnode_id, data_dir_level, data_dir_name",
-              "formatType": "Time series",
-              "queryType": "SQL",
-              "refId": "A",
-              "sql": "select now(), dnode_id, data_dir_level, data_dir_name, last(used)  / last(total)  * 100 as used from log.taosd_dnodes_data_dirs where _ts >= (now - 5m) and _ts < now partition by dnode_id, data_dir_level, data_dir_name ",
-              "timeShiftPeriod": "0",
-              "timeShiftUnit": "minutes"
-            }
-          ],
-          "thresholds": [
-            {
-              "colorMode": "critical",
-              "fill": true,
-              "line": true,
-              "op": "gt",
-              "value": 80,
-              "visible": true
-            }
-          ],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Disk Used Rate",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "percent",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "alert": {
-            "alertRuleTags": {},
-            "conditions": [
-              {
-                "evaluator": {
-                  "params": [
-                    60
-                  ],
-                  "type": "gt"
-                },
-                "operator": {
-                  "type": "and"
-                },
-                "query": {
-                  "params": [
-                    "A",
-                    "15m",
-                    "now"
-                  ]
-                },
-                "reducer": {
-                  "params": [],
-                  "type": "max"
-                },
-                "type": "query"
-              }
-            ],
-            "executionErrorState": "alerting",
-            "for": "4m",
-            "frequency": "5m",
-            "handler": 1,
-            "message": "Node RAM usage exceeds 60%",
-            "name": "RAM Usage alert",
-            "noDataState": "alerting",
-            "notifications": []
-          },
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${DS_TDENGINE}",
-          "fieldConfig": {
-            "defaults": {
-              "unit": "percent"
-            },
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 6,
-            "w": 6,
-            "x": 6,
-            "y": 224
-          },
-          "hiddenSeries": false,
-          "id": 206,
-          "interval": "10s",
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.5.10",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "colNameFormatStr": "",
-              "colNameToGroup": "dnode_id",
-              "formatType": "Time series",
-              "queryType": "SQL",
-              "refId": "A",
-              "sql": "select now(), dnode_id, last(mem_engine) / last(mem_total)  * 100 as taosd from log.taosd_dnodes_info where _ts >= (now- 5m) and _ts <now partition by dnode_id",
-              "timeShiftPeriod": "",
-              "timeShiftUnit": "seconds"
-            }
-          ],
-          "thresholds": [
-            {
-              "colorMode": "critical",
-              "fill": true,
-              "line": true,
-              "op": "gt",
-              "value": 60,
-              "visible": true
-            }
-          ],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "RAM Usage",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "percent",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "alert": {
-            "alertRuleTags": {},
-            "conditions": [
-              {
-                "evaluator": {
-                  "params": [
-                    90
-                  ],
-                  "type": "gt"
-                },
-                "operator": {
-                  "type": "and"
-                },
-                "query": {
-                  "params": [
-                    "A",
-                    "48h",
-                    "now"
-                  ]
-                },
-                "reducer": {
-                  "params": [],
-                  "type": "max"
-                },
-                "type": "query"
-              }
-            ],
-            "executionErrorState": "alerting",
-            "for": "0m",
-            "frequency": "24h",
-            "handler": 1,
-            "message": "Used Measuring Points above 90%",
-            "name": "Used Measuring Points alert",
-            "noDataState": "alerting",
-            "notifications": []
-          },
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${DS_TDENGINE}",
-          "fieldConfig": {
-            "defaults": {
-              "unit": "percent"
-            },
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 6,
-            "w": 6,
-            "x": 12,
-            "y": 224
-          },
-          "hiddenSeries": false,
-          "id": 209,
-          "interval": "24h",
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.5.10",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "colNameFormatStr": "",
-              "colNameToGroup": "cluster_id",
-              "formatType": "Time series",
-              "queryType": "SQL",
-              "refId": "A",
-              "sql": " select now(), cluster_id, CASE WHEN max(grants_timeseries_total) > 0.0 THEN max(grants_timeseries_used) / max(grants_timeseries_total) * 100.0 ELSE 0.0 END AS result from log.taosd_cluster_info where _ts >= (now - 30s) and _ts < now partition by cluster_id having timetruncate(first(_ts), 1m) > 0 ",
-              "timeShiftPeriod": "1",
-              "timeShiftUnit": "days"
-            }
-          ],
-          "thresholds": [
-            {
-              "colorMode": "critical",
-              "fill": true,
-              "line": true,
-              "op": "gt",
-              "value": 80,
-              "visible": true
-            }
-          ],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Used Measuring Points",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "percent",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "alert": {
-            "alertRuleTags": {},
-            "conditions": [
-              {
-                "evaluator": {
-                  "params": [
-                    100
-                  ],
-                  "type": "gt"
-                },
-                "operator": {
-                  "type": "and"
-                },
-                "query": {
-                  "params": [
-                    "A",
-                    "5m",
-                    "now"
-                  ]
-                },
-                "reducer": {
-                  "params": [],
-                  "type": "max"
-                },
-                "type": "query"
-              }
-            ],
-            "executionErrorState": "alerting",
-            "for": "0m",
-            "frequency": "1m",
-            "handler": 1,
-            "message": "The number of query requests exceeds 100 times within one minute",
-            "name": "Query Count Alert",
-            "noDataState": "ok",
-            "notifications": []
-          },
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${DS_TDENGINE}",
-          "fieldConfig": {
-            "defaults": {},
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 6,
-            "w": 6,
-            "x": 18,
-            "y": 224
-          },
-          "hiddenSeries": false,
-          "id": 273,
-          "interval": "1m",
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.5.10",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
-              "formatType": "Time series",
-              "queryType": "SQL",
-              "refId": "A",
-              "sql": "select now() as ts, count(*) as slow_count from performance_schema.perf_queries",
-              "timeShiftPeriod": "",
-              "timeShiftUnit": "seconds"
-            }
-          ],
-          "thresholds": [
-            {
-              "colorMode": "critical",
-              "fill": true,
-              "line": true,
-              "op": "gt",
-              "value": 100,
-              "visible": true
-            }
-          ],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Query Count Alert",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "alert": {
-            "alertRuleTags": {},
-            "conditions": [
-              {
-                "evaluator": {
-                  "params": [
-                    0
-                  ],
-                  "type": "gt"
-                },
-                "operator": {
-                  "type": "and"
-                },
-                "query": {
-                  "params": [
-                    "A",
-                    "5m",
-                    "now"
-                  ]
-                },
-                "reducer": {
-                  "params": [],
-                  "type": "max"
-                },
-                "type": "query"
-              }
-            ],
-            "executionErrorState": "alerting",
-            "for": "0m",
-            "frequency": "1m",
-            "handler": 1,
-            "message": "Query duration exceeds 300 seconds",
-            "name": "Slow Query Alert alert",
-            "noDataState": "ok",
-            "notifications": []
-          },
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${DS_TDENGINE}",
-          "fieldConfig": {
-            "defaults": {},
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 6,
-            "w": 6,
-            "x": 0,
-            "y": 230
-          },
-          "hiddenSeries": false,
-          "id": 211,
-          "interval": "1m",
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.5.10",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
-              "formatType": "Time series",
-              "queryType": "SQL",
-              "refId": "A",
-              "sql": "select now() as ts, count(*) as slow_count from performance_schema.perf_queries where exec_usec>300000000",
-              "timeShiftPeriod": "0",
-              "timeShiftUnit": "minutes"
-            }
-          ],
-          "thresholds": [
-            {
-              "colorMode": "critical",
-              "fill": true,
-              "line": true,
-              "op": "gt",
-              "value": 0,
-              "visible": true
-            }
-          ],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Slow Query Alert",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "alert": {
-            "alertRuleTags": {},
-            "conditions": [
-              {
-                "evaluator": {
-                  "params": [
-                    0
-                  ],
-                  "type": "gt"
-                },
-                "operator": {
-                  "type": "and"
-                },
-                "query": {
-                  "params": [
-                    "A",
-                    "180s",
-                    "now"
-                  ]
-                },
-                "reducer": {
-                  "params": [],
-                  "type": "max"
-                },
-                "type": "query"
-              }
-            ],
-            "executionErrorState": "alerting",
-            "for": "0s",
-            "frequency": "90s",
-            "handler": 1,
-            "message": "Dnodes restart",
-            "name": "Dnodes reboot alert",
-            "noDataState": "alerting",
-            "notifications": []
-          },
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${DS_TDENGINE}",
-          "fieldConfig": {
-            "defaults": {},
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 6,
-            "w": 6,
-            "x": 6,
-            "y": 230
-          },
-          "hiddenSeries": false,
-          "id": 215,
-          "interval": "150s",
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.5.10",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "colNameFormatStr": "",
-              "colNameToGroup": "dnode_id",
-              "formatType": "Time series",
-              "queryType": "SQL",
-              "refId": "A",
-              "sql": "select now(), dnode_id,  max(uptime) - last(uptime) as dnode_report  from log.taosd_dnodes_info where _ts >= (now - 90s) and _ts < now  partition by dnode_id ",
-              "timeShiftPeriod": "",
-              "timeShiftUnit": "seconds"
-            }
-          ],
-          "thresholds": [
-            {
-              "colorMode": "critical",
-              "fill": true,
-              "line": true,
-              "op": "gt",
-              "value": 0,
-              "visible": true
-            }
-          ],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Dnodes reboot alert",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "alert": {
-            "alertRuleTags": {},
-            "conditions": [
-              {
-                "evaluator": {
-                  "params": [
-                    5
-                  ],
-                  "type": "gt"
-                },
-                "operator": {
-                  "type": "and"
-                },
-                "query": {
-                  "params": [
-                    "A",
-                    "150s",
-                    "now"
-                  ]
-                },
-                "reducer": {
-                  "params": [],
-                  "type": "max"
-                },
-                "type": "query"
-              }
-            ],
-            "executionErrorState": "alerting",
-            "for": "0m",
-            "frequency": "30s",
-            "handler": 1,
-            "message": "The adapter websocket interface has failed more than 5 times within 30 seconds",
-            "name": "Adapter Websocket Failed Alert",
-            "noDataState": "ok",
-            "notifications": []
-          },
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${DS_TDENGINE}",
-          "fieldConfig": {
-            "defaults": {},
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 6,
-            "w": 6,
-            "x": 12,
-            "y": 230
-          },
-          "hiddenSeries": false,
-          "id": 213,
-          "interval": "30s",
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "maxDataPoints": null,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.5.10",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
-              "formatType": "Time series",
-              "queryType": "SQL",
-              "refId": "A",
-              "sql": "select now(), sum(`fail`) as `Failed` from log.adapter_requests where req_type=1 and ts >= (now -30s) and ts < now",
-              "timeShiftPeriod": "",
-              "timeShiftUnit": "seconds"
-            }
-          ],
-          "thresholds": [
-            {
-              "colorMode": "critical",
-              "fill": true,
-              "line": true,
-              "op": "gt",
-              "value": 5,
-              "visible": true
-            }
-          ],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Adapter Websocket Failed Alert",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "alert": {
-            "alertRuleTags": {},
-            "conditions": [
-              {
-                "evaluator": {
-                  "params": [
-                    3
-                  ],
-                  "type": "lt"
-                },
-                "operator": {
-                  "type": "and"
-                },
-                "query": {
-                  "params": [
-                    "A",
-                    "540s",
-                    "now"
-                  ]
-                },
-                "reducer": {
-                  "params": [],
-                  "type": "min"
-                },
-                "type": "query"
-              }
-            ],
-            "executionErrorState": "alerting",
-            "for": "",
-            "frequency": "180s",
-            "handler": 1,
-            "message": "DNodes Metrics reports less than 3 times within 180 seconds",
-            "name": "DNodes report alert",
-            "noDataState": "alerting",
-            "notifications": []
-          },
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${DS_TDENGINE}",
-          "fieldConfig": {
-            "defaults": {},
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 6,
-            "w": 6,
-            "x": 18,
-            "y": 230
-          },
-          "hiddenSeries": false,
-          "id": 214,
-          "interval": "180s",
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.5.10",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "colNameFormatStr": "",
-              "colNameToGroup": "cluster_id",
-              "formatType": "Time series",
-              "queryType": "SQL",
-              "refId": "A",
-              "sql": "select now(), cluster_id, count(*) as dnode_report  from log.taosd_cluster_info where _ts >= (now -180s) and _ts < now partition by cluster_id having timetruncate(first(_ts), 1h) > 0",
-              "timeShiftPeriod": "",
-              "timeShiftUnit": "seconds"
-            }
-          ],
-          "thresholds": [
-            {
-              "colorMode": "critical",
-              "fill": true,
-              "line": true,
-              "op": "lt",
-              "value": 3,
-              "visible": true
-            }
-          ],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "DNodes Metrics Report Count",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "alert": {
-            "alertRuleTags": {},
-            "conditions": [
-              {
-                "evaluator": {
-                  "params": [
-                    5
-                  ],
-                  "type": "gt"
-                },
-                "operator": {
-                  "type": "and"
-                },
-                "query": {
-                  "params": [
-                    "A",
-                    "180s",
-                    "now"
-                  ]
-                },
-                "reducer": {
-                  "params": [],
-                  "type": "max"
-                },
-                "type": "query"
-              }
-            ],
-            "executionErrorState": "alerting",
-            "for": "",
-            "frequency": "30s",
-            "handler": 1,
-            "message": "The adapter restful interface has failed more than 5 times within 30 seconds",
-            "name": "Adapter RESTful Failed Alert alert",
-            "noDataState": "ok",
-            "notifications": []
-          },
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${DS_TDENGINE}",
-          "fieldConfig": {
-            "defaults": {},
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 6,
-            "w": 12,
-            "x": 0,
-            "y": 300
-          },
-          "hiddenSeries": false,
-          "id": 244,
-          "interval": "30s",
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "maxDataPoints": null,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.5.10",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
-              "formatType": "Time series",
-              "queryType": "SQL",
-              "refId": "A",
-              "sql": "select now(), sum(`fail`) as `Failed` from log.adapter_requests where req_type=0 and ts >= (now -30s) and ts < now;",
-              "timeShiftPeriod": "0",
-              "timeShiftUnit": "seconds"
-            }
-          ],
-          "thresholds": [
-            {
-              "colorMode": "critical",
-              "fill": true,
-              "line": true,
-              "op": "gt",
-              "value": 5,
-              "visible": true
-            }
-          ],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Adapter RESTful Failed Alert",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "alert": {
-            "alertRuleTags": {},
-            "conditions": [
-              {
-                "evaluator": {
-                  "params": [
-                    0
-                  ],
-                  "type": "gt"
-                },
-                "operator": {
-                  "type": "and"
-                },
-                "query": {
-                  "params": [
-                    "A",
-                    "30s",
-                    "now"
-                  ]
-                },
-                "reducer": {
-                  "params": [],
-                  "type": "max"
-                },
-                "type": "query"
-              }
-            ],
-            "executionErrorState": "alerting",
-            "for": "",
-            "frequency": "30s",
-            "handler": 1,
-            "message": "Received data deletion request within 30 seconds",
-            "name": "Delete Request Alert",
-            "noDataState": "ok",
-            "notifications": []
-          },
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${DS_TDENGINE}",
-          "fieldConfig": {
-            "defaults": {},
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 6,
-            "w": 12,
-            "x": 12,
-            "y": 300
-          },
-          "hiddenSeries": false,
-          "id": 212,
-          "interval": "30s",
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "maxDataPoints": null,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.5.10",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
-              "formatType": "Time series",
-              "queryType": "SQL",
-              "refId": "A",
-              "sql": "select now(), sum(`count`)  as `delete_count`  from log.taos_sql_req  where sql_type = 'delete' and _ts >= (now -30s) and _ts < now",
-              "timeShiftPeriod": "",
-              "timeShiftUnit": "seconds"
-            }
-          ],
-          "thresholds": [
-            {
-              "colorMode": "critical",
-              "fill": true,
-              "line": true,
-              "op": "gt",
-              "value": 0,
-              "visible": true
-            }
-          ],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Delete Request Alert",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        }
-      ],
-      "title": "Alert Used Only",
-      "type": "row"
     }
   ],
-  "refresh": "30s",
-  "schemaVersion": 27,
+  "refresh": "",
+  "schemaVersion": 30,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -6611,7 +4658,6 @@
         "skipUrlSync": false,
         "sort": 0,
         "tagValuesQuery": "",
-        "tags": [],
         "tagsQuery": "",
         "type": "query",
         "useTags": false
@@ -6635,7 +4681,6 @@
         "skipUrlSync": false,
         "sort": 0,
         "tagValuesQuery": "",
-        "tags": [],
         "tagsQuery": "",
         "type": "query",
         "useTags": false
@@ -6659,7 +4704,6 @@
         "skipUrlSync": false,
         "sort": 0,
         "tagValuesQuery": "",
-        "tags": [],
         "tagsQuery": "",
         "type": "query",
         "useTags": false
@@ -6683,7 +4727,6 @@
         "skipUrlSync": false,
         "sort": 0,
         "tagValuesQuery": "",
-        "tags": [],
         "tagsQuery": "",
         "type": "query",
         "useTags": false
@@ -6707,7 +4750,6 @@
         "skipUrlSync": false,
         "sort": 0,
         "tagValuesQuery": "",
-        "tags": [],
         "tagsQuery": "",
         "type": "query",
         "useTags": false
@@ -6731,7 +4773,6 @@
         "skipUrlSync": false,
         "sort": 0,
         "tagValuesQuery": "",
-        "tags": [],
         "tagsQuery": "",
         "type": "query",
         "useTags": false
@@ -6755,7 +4796,6 @@
         "skipUrlSync": false,
         "sort": 0,
         "tagValuesQuery": "",
-        "tags": [],
         "tagsQuery": "",
         "type": "query",
         "useTags": false
@@ -6779,7 +4819,6 @@
         "skipUrlSync": false,
         "sort": 0,
         "tagValuesQuery": "",
-        "tags": [],
         "tagsQuery": "",
         "type": "query",
         "useTags": false
@@ -6803,7 +4842,6 @@
         "skipUrlSync": false,
         "sort": 0,
         "tagValuesQuery": "",
-        "tags": [],
         "tagsQuery": "",
         "type": "query",
         "useTags": false
@@ -6827,7 +4865,6 @@
         "skipUrlSync": false,
         "sort": 0,
         "tagValuesQuery": "",
-        "tags": [],
         "tagsQuery": "",
         "type": "query",
         "useTags": false
@@ -6851,7 +4888,6 @@
         "skipUrlSync": false,
         "sort": 0,
         "tagValuesQuery": "",
-        "tags": [],
         "tagsQuery": "",
         "type": "query",
         "useTags": false
@@ -6875,7 +4911,6 @@
         "skipUrlSync": false,
         "sort": 0,
         "tagValuesQuery": "",
-        "tags": [],
         "tagsQuery": "",
         "type": "query",
         "useTags": false
@@ -6980,11 +5015,11 @@
     ]
   },
   "time": {
-    "from": "now-30m",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "TDinsight for 3.x",
-  "version": 39
+  "version": 8
 }

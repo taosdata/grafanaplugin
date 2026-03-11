@@ -51,11 +51,11 @@ sudo yum install grafana
 Or install with RPM:
 
 ```bash
-wget https://dl.grafana.com/oss/release/grafana-7.5.11-1.x86_64.rpm
-sudo yum install grafana-7.5.11-1.x86_64.rpm
+wget https://dl.grafana.com/oss/release/grafana-8.0.0-1.x86_64.rpm
+sudo yum install grafana-8.0.0-1.x86_64.rpm
 # it's ok to use in one line
 sudo yum install \
-  https://dl.grafana.com/oss/release/grafana-7.5.11-1.x86_64.rpm
+  https://dl.grafana.com/oss/release/grafana-8.0.0-1.x86_64.rpm
 ```
 
 ## Setup TDinsight v2.x Automatically
@@ -360,7 +360,7 @@ version: "3.7"
 
 services:
   grafana:
-    image: grafana/grafana:7.5.10
+    image: grafana/grafana:8.0.0
     volumes:
       - ./dist:/var/lib/grafana/plugins/tdengine-datasource
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini

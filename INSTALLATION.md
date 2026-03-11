@@ -1,7 +1,7 @@
 # Install the Grafana Plugin for TDengine
 
 - [Install the Grafana Plugin for TDengine](#install-the-grafana-plugin-for-tdengine)
-  - [Compatiable with TDengine version](#compatiable-with-tdengine-version)
+  - [Compatible with TDengine version](#compatible-with-tdengine-version)
   - [One-line installer](#one-line-installer)
   - [Install with GUI](#install-with-gui)
   - [Install Manually](#install-manually)
@@ -19,10 +19,11 @@ At first, please refer to [Add a data source](https://grafana.com/docs/grafana/l
 for instructions on how to add a data source to Grafana. Note that, only users with the organization admin role can add
 data sources.
 
-## Compatiable with TDengine version
+## Compatible with TDengine version
 | TDengine grafana plugin version | major changes                                                                                                            | TDengine version |
 | :-----------------------------: | ------------------------------------------------------------------------------------------------------------------------ | :--------------: |
-|              3.7.6              | Fix password changes not updating authentication credentials.                                                                                          | 3.3.7.0 or later |
+|              4.0.0              | Compatible Grafana version changed from 7.5 to 8.0.                                                                      | 3.3.7.0 or later |
+|              3.7.6              | Fix password changes not updating authentication credentials.                                                            | 3.3.7.0 or later |
 |              3.7.5              | Resolve dependency library security issues.                                                                              | 3.3.7.0 or later |
 |              3.7.4              | Fix alert configuration issue in Grafana 12.                                                                             | 3.3.7.0 or later |
 |              3.7.3              | Updated the TDinsightV3 dashboard.                                                                                       | 3.3.7.0 or later |

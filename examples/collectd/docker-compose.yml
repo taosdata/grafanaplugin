@@ -9,7 +9,7 @@ services:
       - /proc:/mnt/proc:ro
       - ./collectd.conf:/etc/collectd/collectd.conf
   grafana:
-    image: grafana/grafana:7.5.10
+    image: grafana/grafana:8.0.0
     env_file: tdengine.env
     environment:
       - GF_SECURITY_ADMIN_USER=admin
