@@ -50,7 +50,7 @@
         "content": "<h1><center>TDengine Cluster Dashboard</center></h1>>\n",
         "mode": "markdown"
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "8.0.0",
       "repeatDirection": "h",
       "targets": [
         {
@@ -133,7 +133,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "8.0.0",
       "repeatDirection": "h",
       "targets": [
         {
@@ -226,7 +226,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "8.0.0",
       "repeatDirection": "h",
       "targets": [
         {
@@ -324,7 +324,7 @@
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "8.0.0",
       "repeatDirection": "h",
       "targets": [
         {
@@ -422,7 +422,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "8.0.0",
       "repeatDirection": "h",
       "targets": [
         {
@@ -490,7 +490,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "8.0.0",
       "repeatDirection": "h",
       "targets": [
         {
@@ -558,7 +558,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "8.0.0",
       "repeatDirection": "h",
       "targets": [
         {
@@ -665,7 +665,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "8.0.0",
       "repeatDirection": "h",
       "targets": [
         {
@@ -754,7 +754,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "8.0.0",
       "repeatDirection": "h",
       "targets": [
         {
@@ -854,7 +854,7 @@
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "8.0.0",
       "targets": [
         {
           "formatType": "Table",
@@ -946,7 +946,7 @@
         "text": {},
         "textMode": "value"
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "8.0.0",
       "targets": [
         {
           "formatType": "Time series",
@@ -1030,7 +1030,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "8.0.0",
       "repeatDirection": "h",
       "targets": [
         {
@@ -1119,7 +1119,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "8.0.0",
       "repeatDirection": "h",
       "targets": [
         {
@@ -1208,7 +1208,7 @@
         "text": {},
         "textMode": "value"
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "8.0.0",
       "targets": [
         {
           "formatType": "Time series",
@@ -1343,7 +1343,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "8.0.0",
       "targets": [
         {
           "formatType": "Table",
@@ -1411,7 +1411,7 @@
           "titleSize": 6
         }
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "8.0.0",
       "targets": [
         {
           "formatType": "Table",
@@ -1531,7 +1531,7 @@
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "8.0.0",
       "targets": [
         {
           "formatType": "Table",
@@ -1610,7 +1610,7 @@
         "showThresholdMarkers": true,
         "text": {}
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "8.0.0",
       "scopedVars": {
         "fqdn": {
           "selected": true,
@@ -1710,7 +1710,7 @@
         "showThresholdMarkers": true,
         "text": {}
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "8.0.0",
       "scopedVars": {
         "fqdn": {
           "selected": true,
@@ -1786,7 +1786,7 @@
         "showThresholdMarkers": true,
         "text": {}
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "8.0.0",
       "scopedVars": {
         "fqdn": {
           "selected": true,
@@ -1862,7 +1862,7 @@
         "showThresholdMarkers": true,
         "text": {}
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "8.0.0",
       "scopedVars": {
         "fqdn": {
           "selected": true,
@@ -1942,7 +1942,7 @@
         "showThresholdMarkers": true,
         "text": {}
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "8.0.0",
       "scopedVars": {
         "fqdn": {
           "selected": true,
@@ -2044,7 +2044,7 @@
         "showThresholdMarkers": true,
         "text": {}
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "8.0.0",
       "scopedVars": {
         "fqdn": {
           "selected": true,
@@ -2120,7 +2120,7 @@
         "showThresholdMarkers": true,
         "text": {}
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "8.0.0",
       "scopedVars": {
         "fqdn": {
           "selected": true,
@@ -2196,7 +2196,7 @@
         "showThresholdMarkers": true,
         "text": {}
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "8.0.0",
       "scopedVars": {
         "fqdn": {
           "selected": true,
@@ -2272,7 +2272,7 @@
         "showThresholdMarkers": true,
         "text": {}
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "8.0.0",
       "scopedVars": {
         "fqdn": {
           "selected": true,
@@ -2348,7 +2348,7 @@
         "showThresholdMarkers": true,
         "text": {}
       },
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "8.0.0",
       "scopedVars": {
         "fqdn": {
           "selected": true,
@@ -2469,7 +2469,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "8.0.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -2601,7 +2601,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "8.0.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -2768,7 +2768,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "8.0.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -2922,7 +2922,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "8.0.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -3067,7 +3067,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "8.0.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -3202,7 +3202,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "8.0.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -3364,7 +3364,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.10",
+      "pluginVersion": "8.0.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",

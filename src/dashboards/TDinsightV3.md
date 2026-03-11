@@ -4,7 +4,7 @@ Languages: _English_ _[简体中文](https://www.taosdata.com/cn/documentation/t
 
 TDinsight v3.x is a solution for monitoring TDengine using the builtin native monitoring database and Grafana.
 
-## Compatiable with TDengine version
+## Compatible with TDengine version
 | TDengine grafana plugin version | TDengine version |
 | :-----------------------------: | :--------------: |
 |              4.0.0              | 3.3.7.0 or later |
@@ -94,11 +94,11 @@ sudo yum install grafana
 Or install it with RPM package.
 
 ```bash
-wget https://dl.grafana.com/oss/release/grafana-7.5.11-1.x86_64.rpm
-sudo yum install grafana-7.5.11-1.x86_64.rpm
+wget https://dl.grafana.com/oss/release/grafana-8.0.0-1.x86_64.rpm
+sudo yum install grafana-8.0.0-1.x86_64.rpm
 # or
 sudo yum install \
-  https://dl.grafana.com/oss/release/grafana-7.5.11-1.x86_64.rpm
+  https://dl.grafana.com/oss/release/grafana-8.0.0-1.x86_64.rpm
 ```
 
 ## set up TDinsight v3.x
@@ -311,11 +311,6 @@ There is also line charts for detail dimensions.
 
 When adding a data source, select 'Load TDengine Alert' and click on the alert menu to display the loaded alarm alerts, as shown below:
 ![Alert rules](../../assets/alert-rule.png)
-
-**Alert rules imported in version 7.5**
-
-After adding the data source, clicking on the alert menu will display the loaded alert rules, as shown below:
-![Alert rules](../../assets/alert7.5.png)
 
 **Import Alert Rule Description**
 
