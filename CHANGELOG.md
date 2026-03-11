@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.0.0] - 2026-03-11
+
+### Features
+
+- Compatible Grafana version changed from 7.5 to 8.0.
+  
 ## [3.7.6] - 2026-03-03
 
 ### Bug Fixes
