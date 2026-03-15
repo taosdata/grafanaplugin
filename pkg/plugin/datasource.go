@@ -75,7 +75,7 @@ func (d *Datasource) Dispose() {
 type dataResponse struct {
 	refId string
 	data  backend.DataResponse
-} 
+}
 
 // QueryData handles multiple queries and returns multiple responses.
 // req contains the queries []DataQuery (where each query contains RefID as a unique identifier).
