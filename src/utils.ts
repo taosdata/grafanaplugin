@@ -67,15 +67,6 @@ export function checkGrafanaVersion(): boolean {
     return false;
 }
 
-export function getGrafanaVersion(): { major: number; minor: number } {
-    const version = config.buildInfo.version || "9.0.0";
-    const parts = version.split(".");
-    return {
-        major: parseInt(parts[0], 10),
-        minor: parseInt(parts[1], 10)
-    };
-}
-
 export function getCurrentTime(): string {
     const now = new Date();
     const year = now.getFullYear();

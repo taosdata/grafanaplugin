@@ -413,9 +413,18 @@ export class DataSource extends DataSourceWithBackend<Query, DataSourceOptions> 
     private applyTemplateReplacement(sql: string, scopedVars?: ScopedVars): string {
         let interpolatedSql = this.template.replace(sql, scopedVars, 'csv').replace(/^\s+|\s+$/gm, '');
         const allVariables = this.template.getVariables()
+
+        // Helper function to escape special regex characters in variable names
+        const escapeRegex = (str: string): string =>
+            str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
         for (const variable of allVariables) {
             if ("current" in variable && variable.current && variable.current.value) {
-                interpolatedSql = interpolatedSql.replace("$" + variable.name, String(variable.current.value))
+                const value = String(variable.current.value);
+                // Use regex with negative lookahead to ensure word boundary
+                // This prevents replacing $database when we mean to replace $database
+                const pattern = new RegExp(`\\$${escapeRegex(variable.name)}(?![0-9A-Za-z_])`, 'g');
+                interpolatedSql = interpolatedSql.replace(pattern, value);
             }
         }
 

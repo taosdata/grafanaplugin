@@ -297,7 +297,7 @@ func toBool(v interface{}) (bool, error) {
 		}
 		return parsed, nil
 	default:
-		return false, fmt.Errorf("unknown type %t", v)
+		return false, fmt.Errorf("unknown type %T", v)
 	}
 }
 

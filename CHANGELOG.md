@@ -21,8 +21,8 @@ All notable changes to this project will be documented in this file.
 ### Features
 
 - **Enhanced SQL macro support**: Added comprehensive support for Grafana time macros:
-  - `$__timeFrom`: Replaced with millisecond timestamp of range start
-  - `$__timeTo`: Replaced with millisecond timestamp of range end
+  - `$__timeFrom`: Replaced with quoted RFC3339 timestamp of range start (same format as `$from`)
+  - `$__timeTo`: Replaced with quoted RFC3339 timestamp of range end (same format as `$to`)
   - `$__timeFilter(column)`: Generates time range SQL condition for specified column
 - **Improved query test coverage**: Added comprehensive unit tests for SQL macro replacement and query model logic
 - **Simplified backend data processing**: Aligned with Grafana SDK's DataFrame best practices (LongToWide conversion)

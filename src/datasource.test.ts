@@ -184,6 +184,151 @@ describe('DataSource backend query path', () => {
     expect(result).toContain("ts > '2024-01-01T00:00:00.000Z'");
   });
 
+  describe('template variable replacement edge cases', () => {
+    beforeEach(() => {
+      templateReplaceMock.mockImplementation((value: string) => value);
+    });
+
+    it('replaces all occurrences of a variable (global replacement)', () => {
+      const ds = new DataSource({ url: 'http://localhost', jsonData: {} } as any);
+      templateVariablesMock.mockReturnValue([
+        { name: 'host', current: { value: 'server-a' } },
+      ] as any);
+
+      const result = ds.generateSql(
+        'select * from t where host = $host or secondary_host = $host',
+        {
+          range: { from: new Date('2024-01-01T00:00:00Z'), to: new Date('2024-01-01T01:00:00Z') },
+          scopedVars: {},
+          intervalMs: 15000,
+        } as any
+      );
+
+      expect(result).toMatch(/host = server-a/);
+      expect(result).toMatch(/secondary_host = server-a/);
+    });
+
+    it('respects word boundaries when replacing variables', () => {
+      const ds = new DataSource({ url: 'http://localhost', jsonData: {} } as any);
+      templateVariablesMock.mockReturnValue([
+        { name: 'db', current: { value: 'mydb' } },
+        { name: 'dbname', current: { value: 'mydbname' } },
+      ] as any);
+
+      const result = ds.generateSql('select * from $db where dbname = $dbname', {
+        range: { from: new Date('2024-01-01T00:00:00Z'), to: new Date('2024-01-01T01:00:00Z') },
+        scopedVars: {},
+        intervalMs: 15000,
+      } as any);
+
+      // $db should be replaced to mydb
+      expect(result).toContain('from mydb');
+      // $dbname should be replaced to mydbname
+      expect(result).toContain('dbname = mydbname');
+      // SQL column name "dbname" should NOT be affected (it's not a variable)
+      expect(result).toMatch(/where \w+ = mydbname/);
+    });
+
+    it('handles variable names with special regex characters', () => {
+      const ds = new DataSource({ url: 'http://localhost', jsonData: {} } as any);
+      templateVariablesMock.mockReturnValue([
+        { name: 'db.name', current: { value: 'testdb' } },
+      ] as any);
+
+      const result = ds.generateSql('select * from `$db.name` where ts > $from', {
+        range: { from: new Date('2024-01-01T00:00:00Z'), to: new Date('2024-01-01T01:00:00Z') },
+        scopedVars: {},
+        intervalMs: 15000,
+      } as any);
+
+      expect(result).toContain('select * from `testdb`');
+    });
+
+    it('replaces multiple variables with overlapping names correctly', () => {
+      const ds = new DataSource({ url: 'http://localhost', jsonData: {} } as any);
+      templateVariablesMock.mockReturnValue([
+        { name: 'env', current: { value: 'prod' } },
+        { name: 'env_type', current: { value: 'production' } },
+      ] as any);
+
+      const result = ds.generateSql('select * from $env where env_type = $env_type', {
+        range: { from: new Date('2024-01-01T00:00:00Z'), to: new Date('2024-01-01T01:00:00Z') },
+        scopedVars: {},
+        intervalMs: 15000,
+      } as any);
+
+      expect(result).toContain('select * from prod');
+      expect(result).toContain('env_type = production');
+    });
+
+    it('does not replace variables that are part of larger identifier', () => {
+      const ds = new DataSource({ url: 'http://localhost', jsonData: {} } as any);
+      templateVariablesMock.mockReturnValue([
+        { name: 'table', current: { value: 'metrics' } },
+      ] as any);
+
+      const result = ds.generateSql('select table_name, count(*) from $table group by table_name', {
+        range: { from: new Date('2024-01-01T00:00:00Z'), to: new Date('2024-01-01T01:00:00Z') },
+        scopedVars: {},
+        intervalMs: 15000,
+      } as any);
+
+      // $table should be replaced
+      expect(result).toContain('from metrics');
+      // table_name should NOT be affected
+      expect(result).toContain('table_name');
+    });
+
+    it('handles variables with underscore in name', () => {
+      const ds = new DataSource({ url: 'http://localhost', jsonData: {} } as any);
+      templateVariablesMock.mockReturnValue([
+        { name: 'my_table', current: { value: 'test_table' } },
+      ] as any);
+
+      const result = ds.generateSql('select * from $my_table where id > 0', {
+        range: { from: new Date('2024-01-01T00:00:00Z'), to: new Date('2024-01-01T01:00:00Z') },
+        scopedVars: {},
+        intervalMs: 15000,
+      } as any);
+
+      expect(result).toContain('select * from test_table');
+    });
+
+    it('handles variables ending with numbers', () => {
+      const ds = new DataSource({ url: 'http://localhost', jsonData: {} } as any);
+      templateVariablesMock.mockReturnValue([
+        { name: 'db2', current: { value: 'database2' } },
+      ] as any);
+
+      const result = ds.generateSql('select * from $db2', {
+        range: { from: new Date('2024-01-01T00:00:00Z'), to: new Date('2024-01-01T01:00:00Z') },
+        scopedVars: {},
+        intervalMs: 15000,
+      } as any);
+
+      expect(result).toContain('select * from database2');
+    });
+
+    it('skips variables without current property', () => {
+      const ds = new DataSource({ url: 'http://localhost', jsonData: {} } as any);
+      templateVariablesMock.mockReturnValue([
+        { name: 'database', current: { value: 'testdb' } },
+        { name: 'table' }, // No current property
+        { name: 'host', current: null }, // Current is null
+      ] as any);
+
+      const result = ds.generateSql('select * from $database where $table = $host', {
+        range: { from: new Date('2024-01-01T00:00:00Z'), to: new Date('2024-01-01T01:00:00Z') },
+        scopedVars: {},
+        intervalMs: 15000,
+      } as any);
+
+      expect(result).toContain('from testdb');
+      expect(result).toContain('$table'); // Should not be replaced
+      expect(result).toContain('$host'); // Should not be replaced
+    });
+  });
+
   it('handles empty SQL query gracefully', () => {
     const ds = new DataSource({ url: 'http://localhost', jsonData: {} } as any);
     const result = ds.generateSql('', {
