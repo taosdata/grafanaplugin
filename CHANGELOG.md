@@ -2,6 +2,52 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.0.0] - 2026-03-26
+
+### Breaking Changes
+
+- **Removed deprecated query fields**: The following deprecated fields have been removed from the Query interface:
+  - `alias`: Use SQL `AS` clause or Grafana's field display name instead
+  - `colNameFormatStr`: Use Grafana's field display name feature
+  - `colNameToGroup`: Use SQL `GROUP BY` with proper column aliases
+  - `timeShift`, `timeShiftPeriod`, `timeShiftUnit`: Use Grafana's time range overrides instead
+- **Query model refactored**: Migrated from `DataSourceApi` to `DataSourceWithBackend` for improved performance and security
+- **QueryEditor simplified**: Removed "Alias By", "Group By Column(s)", and "Group By Format" UI inputs. Query editor now supports SQL-only flow.
+- **Legacy dashboards removed**:
+  - TDinsight V2 dashboard (deprecated, use TDinsightV3 instead)
+  - Monitor dashboard (use TDinsightV3 or taosX dashboards)
+- **Minimum Grafana version**: Now requires Grafana 8.0+
+
+### Features
+
+- **Enhanced SQL macro support**: Added comprehensive support for Grafana time macros:
+  - `$__timeFrom`: Replaced with millisecond timestamp of range start
+  - `$__timeTo`: Replaced with millisecond timestamp of range end
+  - `$__timeFilter(column)`: Generates time range SQL condition for specified column
+- **Improved query test coverage**: Added comprehensive unit tests for SQL macro replacement and query model logic
+- **Simplified backend data processing**: Aligned with Grafana SDK's DataFrame best practices (LongToWide conversion)
+
+### Bug Fixes
+
+- **Alert tag extraction**: Fixed alert tag extraction for queries with grouped dimensions
+
+### Security
+
+- **grpc vulnerability fix**: Upgraded `google.golang.org/grpc` to v1.79.3 to address CVE-2026-33186
+- **CVE remediation**: Added replace directive for `go.opentelemetry.io/otel/sdk` v1.40.0 to fix CVE-2026-24051
+
+### Testing
+
+- Added unit tests for SQL macro replacement in query model generation
+- Enhanced test coverage for datasource query logic with 40+ new test cases
+- Added comprehensive tests for data conversion functions (convertRow, convertNonTimeValue, buildFrame)
+- Improved label parsing test cases for edge cases (spaces, special characters)
+
+### Refactoring
+
+- **Simulator metrics**: Synced metrics structure with taosx metrics-report.md documentation
+- **CI/CD improvements**: Updated trivy-action version for security scanning
+
 ## [3.8.0] - 2026-03-15
 
 ### Features

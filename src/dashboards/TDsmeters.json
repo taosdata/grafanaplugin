@@ -587,7 +587,6 @@
             "targets": [
                 {
                     "alias": "",
-                    "colNameToGroup": "",
                     "datasource": {
                         "type": "tdengine-datasource",
                         "uid": "${TDsmeters}"
@@ -595,8 +594,7 @@
                     "formatType": "Time series",
                     "queryType": "SQL",
                     "refId": "A",
-                    "sql": "select _wstart ,avg(current), avg(voltage), avg(phase) from dmeters.d1 where ts> now-3d  interval(30s);",
-                    "timeShiftPeriod": ""
+                    "sql": "select _wstart ,avg(current), avg(voltage), avg(phase) from dmeters.d1 where ts> now-3d  interval(30s);"
                 }
             ],
             "title": "AVG value with interval(30s)",

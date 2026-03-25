@@ -5,6 +5,15 @@
     - [Add Data Source](#add-data-source)
     - [Import Dashboard](#import-dashboard)
   - [Important changes](#important-changes)
+    - [v4.0.0 - **Breaking Changes Release**](#v400---breaking-changes-release)
+      - [Breaking Changes](#breaking-changes)
+      - [Migration Guide](#migration-guide)
+        - [Dashboard Queries](#dashboard-queries)
+        - [SQL Query Updates](#sql-query-updates)
+        - [Alert Rules](#alert-rules)
+        - [Rollback Plan](#rollback-plan)
+      - [New Features](#new-features)
+      - [Bug Fixes](#bug-fixes)
     - [v3.6.0](#v360)
     - [v3.2.0](#v320)
   - [Monitor TDengine Database with TDinsight Dashboard](#monitor-tdengine-database-with-tdinsight-dashboard)
@@ -66,6 +75,102 @@ After import:
 ![dashboard display](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/TDinsight-v3-full.png)
 
 ## Important changes
+
+### [v4.0.0](https://github.com/taosdata/grafanaplugin/releases/tag/v4.0.0) - **Breaking Changes Release**
+
+This version includes **breaking changes** that require action from users. Please read the migration guide carefully before upgrading.
+
+#### Breaking Changes
+
+1. **Removed deprecated query fields**:
+   - `alias`: Use SQL `AS` clause instead
+   - `colNameFormatStr`: Use Grafana's field display name feature
+   - `colNameToGroup`: Use SQL `GROUP BY` with proper column aliases
+   - `timeShift`, `timeShiftPeriod`, `timeShiftUnit`: Use Grafana's time range overrides in panel options
+
+2. **QueryEditor simplified**: Removed "Alias By", "Group By Column(s)", and "Group By Format" UI inputs. Query editor now supports SQL-only flow.
+
+3. **Legacy dashboards removed**: TDinsight V2 and Monitor dashboard are removed. Use TDinsightV3 or taosX dashboards instead.
+
+4. **Minimum Grafana version**: Now requires Grafana 8.0+ (previously 7.5+)
+
+#### Migration Guide
+
+##### Dashboard Queries
+
+If your existing dashboards use the removed fields, you need to update them:
+
+**OLD (v3.x)**:
+```json
+{
+  "alias": "My Metric",
+  "colNameFormatStr": "location_{{value}}",
+  "colNameToGroup": "location",
+  "formatType": "Time series"
+}
+```
+
+**NEW (v4.0.0)**:
+```json
+{
+  "formatType": "Time series"
+}
+```
+
+Use SQL `AS` clause for aliasing:
+```sql
+SELECT value AS my_metric FROM ...
+```
+
+Use Grafana's field display name override for grouped data:
+```json
+"fieldConfig": {
+  "defaults": {
+    "displayName": "prefix_${__field.labels.label_name}",
+  },
+  "overrides": []
+}
+```
+
+##### SQL Query Updates
+
+Use the new time macros for better time filtering:
+
+```sql
+-- Time filter macro
+SELECT * FROM sensors
+WHERE $__timeFilter(ts)
+GROUP BY tbname;
+
+-- Explicit time range macros
+SELECT * FROM sensors
+WHERE ts >= $__timeFrom AND ts < $__timeTo;
+```
+
+##### Alert Rules
+
+If you have alert rules using the removed fields:
+1. Export your alert rules before upgrading (Grafana UI → Alerting → New alert rule → Export)
+2. Update queries to remove deprecated fields
+3. Re-import alerts using Grafana's alert provisioning API
+
+##### Rollback Plan
+
+If you encounter issues after upgrading:
+1. Uninstall plugin v4.0.0
+2. Reinstall plugin v3.8.0
+3. Your dashboards will work again (but still need migration for future upgrades)
+
+#### New Features
+
+- **Enhanced SQL macros**: Added `$__timeFrom`, `$__timeTo`, `$__timeFilter(column)` for better time range handling
+
+#### Bug Fixes
+
+- Fixed label parsing issue when dimension values contain spaces
+- Fixed alert tag extraction for queries with grouped dimensions
+
+---
 
 ### [v3.6.0](https://github.com/taosdata/grafanaplugin/releases/tag/v3.6.0)
 1. Grafana  11 versions
@@ -159,7 +264,6 @@ You can get other dashboards in the examples' directory, or search in grafana wi
 Here is a short list:
 
 - [18180](https://grafana.com/grafana/dashboards/18180): TDinsightV3
-- [15167](https://grafana.com/grafana/dashboards/15167): TDinsightV2
 - [19910](https://grafana.com/grafana/dashboards/19910): TDsmeters
 - [20631](https://grafana.com/grafana/dashboards/20631): taosX
   

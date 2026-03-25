@@ -1,15 +1,11 @@
 import {DataQuery, DataSourceJsonData} from '@grafana/data'
 
 export interface Query extends DataQuery {
-    alias?: string
-    colNameFormatStr: string
-    colNameToGroup: string
-    formatType: string
-    queryType: string
+    queryType?: string
     sql: string
-    timeShiftPeriod: number
-    timeShiftUnit: string
-    expression: string
+    timeShiftPeriod?: number | string
+    timeShiftUnit?: string
+    expression?: string
 }
 
 export const DEFAULT_QUERY: Partial<Query> = {

@@ -22,6 +22,7 @@ data sources.
 ## Compatible with TDengine version
 | TDengine grafana plugin version | major changes                                                                                                            | TDengine version |
 | :-----------------------------: | ------------------------------------------------------------------------------------------------------------------------ | :--------------: |
+|              4.0.0              | 1. Simplified backend data processing by aligning with Grafana SDK's DataFrame best practices. <br> 2. Fixed alert tag extraction for queries with grouped dimensions.  | 3.3.7.0 or later |
 |              3.8.0              | Compatible Grafana version changed from 7.5 to 8.0.                                                                      | 3.3.7.0 or later |
 |              3.7.6              | Fix password changes not updating authentication credentials.                                                            | 3.3.7.0 or later |
 |              3.7.5              | Resolve dependency library security issues.                                                                              | 3.3.7.0 or later |

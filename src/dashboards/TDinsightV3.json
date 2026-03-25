@@ -44,7 +44,7 @@
       "type": "datasource",
       "id": "tdengine-datasource",
       "name": "TDengine Datasource",
-      "version": "3.8.0"
+      "version": "4.0.0"
     },
     {
       "type": "panel",
@@ -110,8 +110,6 @@
       "pluginVersion": "8.0.0",
       "targets": [
         {
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A"
@@ -167,8 +165,6 @@
       "pluginVersion": "8.0.0",
       "targets": [
         {
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -225,8 +221,6 @@
       "pluginVersion": "8.0.0",
       "targets": [
         {
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -283,8 +277,6 @@
       "pluginVersion": "8.0.0",
       "targets": [
         {
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -340,8 +332,6 @@
       "pluginVersion": "8.0.0",
       "targets": [
         {
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -397,8 +387,6 @@
       "pluginVersion": "8.0.0",
       "targets": [
         {
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -454,8 +442,6 @@
       "pluginVersion": "8.0.0",
       "targets": [
         {
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -510,8 +496,6 @@
       "pluginVersion": "8.0.0",
       "targets": [
         {
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -565,8 +549,6 @@
       "pluginVersion": "8.0.0",
       "targets": [
         {
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -620,8 +602,6 @@
       "pluginVersion": "8.0.0",
       "targets": [
         {
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -675,8 +655,6 @@
       "pluginVersion": "8.0.0",
       "targets": [
         {
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -730,8 +708,6 @@
       "pluginVersion": "8.0.0",
       "targets": [
         {
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -878,8 +854,6 @@
       "pluginVersion": "8.0.0",
       "targets": [
         {
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -966,8 +940,6 @@
       "pluginVersion": "8.0.0",
       "targets": [
         {
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -1054,8 +1026,6 @@
       "pluginVersion": "8.0.0",
       "targets": [
         {
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -1142,8 +1112,6 @@
       "pluginVersion": "8.0.0",
       "targets": [
         {
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -1249,8 +1217,6 @@
       "pluginVersion": "8.0.0",
       "targets": [
         {
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
           "formatType": "Time series",
           "hide": false,
           "queryType": "SQL",
@@ -1258,8 +1224,6 @@
           "sql": "select _wstart as ts, avg(grants_timeseries_used) as used , avg(grants_timeseries_total) as total from $database.taosd_cluster_info where _ts >= $from and _ts <= $to interval($interval) fill(null)"
         },
         {
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
           "formatType": "Time series",
           "hide": false,
           "queryType": "SQL",
@@ -1333,8 +1297,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Table",
               "queryType": "SQL",
               "refId": "A",
@@ -1415,8 +1377,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -1505,8 +1465,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Table",
               "queryType": "SQL",
               "refId": "A",
@@ -1587,8 +1545,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -1686,8 +1642,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -1770,8 +1724,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -1854,8 +1806,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -2022,8 +1972,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -2095,9 +2043,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "alias": "dnodes",
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -2178,8 +2123,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -2227,6 +2170,7 @@
                   "mode": "off"
                 }
               },
+              "displayName": "vgroup_${__field.labels.vgroup_id}",
               "mappings": [],
               "thresholds": {
                 "mode": "absolute",
@@ -2262,8 +2206,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "vgroup_{{vgroup_id}}",
-              "colNameToGroup": "vgroup_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -2320,9 +2262,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "alias": "dnodes",
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -2394,8 +2333,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -2463,8 +2400,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -2520,8 +2455,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -2576,8 +2509,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -2632,8 +2563,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -2696,9 +2625,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "alias": "cpu_taosd",
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Table",
               "queryType": "SQL",
               "refId": "A",
@@ -2752,9 +2678,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "alias": "mem_taosd",
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -2821,9 +2744,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "alias": "disk_taosd",
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -2911,8 +2831,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -3002,8 +2920,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -3052,6 +2968,7 @@
                   "mode": "off"
                 }
               },
+              "displayName": "L${__field.labels.data_dir_level}-${__field.labels.data_dir_name}-${__field.name}",
               "mappings": [],
               "thresholds": {
                 "mode": "absolute",
@@ -3087,16 +3004,12 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "L{{data_dir_level}}-{{data_dir_name}}-used",
-              "colNameToGroup": "data_dir_level, data_dir_name",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
               "sql": "select _wstart as ts, data_dir_level, data_dir_name, last(used) as used from $database.taosd_dnodes_data_dirs where dnode_ep = '$fqdn' and _ts >= $from and _ts <= $to partition by data_dir_level, data_dir_name interval($interval) fill(null) order by data_dir_level, data_dir_name"
             },
             {
-              "colNameFormatStr": "L{{data_dir_level}}-{{data_dir_name}}-total",
-              "colNameToGroup": "data_dir_level, data_dir_name",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -3184,8 +3097,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -3275,8 +3186,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -3366,8 +3275,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -3431,6 +3338,7 @@
                 }
               },
               "decimals": 0,
+              "displayName": "${__field.name}_${__field.labels.database_name}_${__field.labels.vgroup_id}",
               "mappings": [],
               "min": 0,
               "thresholds": {
@@ -3452,7 +3360,7 @@
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "/wal_write_time.*/"
+                  "options": "wal_write_time"
                 },
                 "properties": [
                   {
@@ -3483,16 +3391,12 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "total_rows_{{database_name}}_{{vgroup_id}}",
-              "colNameToGroup": "database_name,vgroup_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
               "sql": "select _wstart as ts, database_name, vgroup_id, avg(total_rows) as total_rows from $database.taosd_write_metrics where ('$databaseName' = '' or (database_name in (${databaseName:sqlstring}) and ('$vgroupId' = '' or vgroup_id in (${vgroupId:sqlstring})))) and _ts >= $from and _ts <= $to  partition by database_name, vgroup_id interval($interval) fill(null) order by database_name, vgroup_id"
             },
             {
-              "colNameFormatStr": "wal_write_time_{{database_name}}_{{vgroup_id}}",
-              "colNameToGroup": "database_name,vgroup_id",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -3541,6 +3445,7 @@
                 }
               },
               "decimals": 0,
+              "displayName": "${__field.name}_${__field.labels.database_name}_${__field.labels.vgroup_id}",
               "mappings": [],
               "min": 0,
               "thresholds": {
@@ -3562,7 +3467,7 @@
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "/commit_time.*/"
+                  "options": "commit_time"
                 },
                 "properties": [
                   {
@@ -3593,16 +3498,12 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "commit_count_{{database_name}}_{{vgroup_id}}",
-              "colNameToGroup": "database_name,vgroup_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
               "sql": "select _wstart as ts, database_name, vgroup_id, avg(commit_count) as commit_count from $database.taosd_write_metrics where ('$databaseName' = '' or (database_name in (${databaseName:sqlstring}) and ('$vgroupId' = '' or vgroup_id in (${vgroupId:sqlstring})))) and _ts >= $from and _ts <= $to  partition by database_name, vgroup_id interval($interval) fill(null) order by database_name, vgroup_id"
             },
             {
-              "colNameFormatStr": "commit_time_{{database_name}}_{{vgroup_id}}",
-              "colNameToGroup": "database_name,vgroup_id",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -3651,6 +3552,7 @@
                 }
               },
               "decimals": 0,
+              "displayName": "${__field.name}_${__field.labels.database_name}_${__field.labels.vgroup_id}",
               "mappings": [],
               "min": 0,
               "thresholds": {
@@ -3672,7 +3574,7 @@
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "/commit_time.*/"
+                  "options": "blocked_commit_time"
                 },
                 "properties": [
                   {
@@ -3703,16 +3605,12 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "blocked_commit_count_{{database_name}}_{{vgroup_id}}",
-              "colNameToGroup": "database_name,vgroup_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
               "sql": "select _wstart as ts, database_name, vgroup_id, avg(blocked_commit_count) as blocked_commit_count from $database.taosd_write_metrics where ('$databaseName' = '' or (database_name in (${databaseName:sqlstring}) and ('$vgroupId' = '' or vgroup_id in (${vgroupId:sqlstring})))) and _ts >= $from and _ts <= $to  partition by database_name, vgroup_id interval($interval) fill(null) order by database_name, vgroup_id"
             },
             {
-              "colNameFormatStr": "blocked_commit_time_{{database_name}}_{{vgroup_id}}",
-              "colNameToGroup": "database_name,vgroup_id",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -3761,6 +3659,7 @@
                 }
               },
               "decimals": 0,
+              "displayName": "${__field.name}_${__field.labels.database_name}_${__field.labels.vgroup_id}",
               "mappings": [],
               "min": 0,
               "thresholds": {
@@ -3782,7 +3681,7 @@
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "/merge_time.*/"
+                  "options": "merge_time"
                 },
                 "properties": [
                   {
@@ -3813,16 +3712,12 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "merge_count_{{database_name}}_{{vgroup_id}}",
-              "colNameToGroup": "database_name,vgroup_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
               "sql": "select _wstart as ts, database_name, vgroup_id, avg(merge_count) as merge_count from $database.taosd_write_metrics where ('$databaseName' = '' or (database_name in (${databaseName:sqlstring}) and ('$vgroupId' = '' or vgroup_id in (${vgroupId:sqlstring})))) and _ts >= $from and _ts <= $to  partition by database_name, vgroup_id interval($interval) fill(null) order by database_name, vgroup_id"
             },
             {
-              "colNameFormatStr": "merge_time_{{database_name}}_{{vgroup_id}}",
-              "colNameToGroup": "database_name,vgroup_id",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -3871,6 +3766,7 @@
                 }
               },
               "decimals": 0,
+              "displayName": "${__field.name}_${__field.labels.database_name}_${__field.labels.vgroup_id}",
               "mappings": [],
               "min": 0,
               "thresholds": {
@@ -3892,7 +3788,7 @@
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "/last_cache_commit_time.*/"
+                  "options": "last_cache_commit_time"
                 },
                 "properties": [
                   {
@@ -3923,16 +3819,12 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "last_cache_commit_count_{{database_name}}_{{vgroup_id}}",
-              "colNameToGroup": "database_name,vgroup_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
               "sql": "select _wstart as ts, database_name, vgroup_id, avg(last_cache_commit_count) as last_cache_commit_count from $database.taosd_write_metrics where ('$databaseName' = '' or (database_name in (${databaseName:sqlstring}) and ('$vgroupId' = '' or vgroup_id in (${vgroupId:sqlstring})))) and _ts >= $from and _ts <= $to  partition by database_name, vgroup_id interval($interval) fill(null) order by database_name, vgroup_id"
             },
             {
-              "colNameFormatStr": "last_cache_commit_time_{{database_name}}_{{vgroup_id}}",
-              "colNameToGroup": "database_name,vgroup_id",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -4051,6 +3943,7 @@
                   "mode": "off"
                 }
               },
+              "displayName": "${__field.labels.endpoint}_${__field.name}",
               "mappings": [],
               "thresholds": {
                 "mode": "absolute",
@@ -4085,16 +3978,12 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{endpoint}}_queries",
-              "colNameToGroup": "endpoint",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
               "sql": "select _wstart as ts, endpoint, sum(`query`)/($interval/1s) as `query` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
-              "colNameFormatStr": "{{endpoint}}_query_successful",
-              "colNameToGroup": "endpoint",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -4102,8 +3991,6 @@
               "sql": "select _wstart as ts, endpoint, sum(`query_success`)/($interval/1s) as `query_success` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
-              "colNameFormatStr": "{{endpoint}}_query_failed",
-              "colNameToGroup": "endpoint",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -4111,8 +3998,6 @@
               "sql": "select _wstart as ts, endpoint, sum(`query_fail`)/($interval/1s) as `query_fail` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
-              "colNameFormatStr": "{{endpoint}}_query_in_process",
-              "colNameToGroup": "endpoint",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -4120,8 +4005,6 @@
               "sql": "select _wstart as ts, endpoint, sum(`query_in_process`)/($interval/1s) as `query_in_process` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
-              "colNameFormatStr": "{{endpoint}}_writes",
-              "colNameToGroup": "endpoint",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -4129,8 +4012,6 @@
               "sql": "select _wstart as ts, endpoint, sum(`write`)/($interval/1s) as `write` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
-              "colNameFormatStr": "{{endpoint}}_write_successful",
-              "colNameToGroup": "endpoint",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -4138,8 +4019,6 @@
               "sql": "select _wstart as ts, endpoint, sum(`write_success`)/($interval/1s) as `write_success` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
-              "colNameFormatStr": "{{endpoint}}_write_failed",
-              "colNameToGroup": "endpoint",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -4147,8 +4026,6 @@
               "sql": "select _wstart as ts, endpoint, sum(`write_fail`)/($interval/1s) as `write_fail` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
-              "colNameFormatStr": "{{endpoint}}_write_in_process",
-              "colNameToGroup": "endpoint",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -4156,8 +4033,6 @@
               "sql": "select _wstart as ts, endpoint, sum(`write_in_process`)/($interval/1s) as `write_in_process` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
-              "colNameFormatStr": "{{endpoint}}_others",
-              "colNameToGroup": "endpoint",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -4165,8 +4040,6 @@
               "sql": "select _wstart as ts, endpoint, sum(`other`)/($interval/1s) as `other` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
-              "colNameFormatStr": "{{endpoint}}_other_successful",
-              "colNameToGroup": "endpoint",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -4174,8 +4047,6 @@
               "sql": "select _wstart as ts, endpoint, sum(`other_success`)/($interval/1s) as `other_success` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 0  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
-              "colNameFormatStr": "{{endpoint}}_other_failed",
-              "colNameToGroup": "endpoint",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -4279,6 +4150,7 @@
                   "mode": "off"
                 }
               },
+              "displayName": "${__field.labels.endpoint}_${__field.name}",
               "mappings": [],
               "thresholds": {
                 "mode": "absolute",
@@ -4313,16 +4185,12 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{endpoint}}_queries",
-              "colNameToGroup": "endpoint",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
               "sql": "select _wstart as ts, endpoint, sum(`query`)/($interval/1s) as `query` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
-              "colNameFormatStr": "{{endpoint}}_query_successful",
-              "colNameToGroup": "endpoint",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -4330,8 +4198,6 @@
               "sql": "select _wstart as ts, endpoint, sum(`query_success`)/($interval/1s) as `query_success` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
-              "colNameFormatStr": "{{endpoint}}_query_failed",
-              "colNameToGroup": "endpoint",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -4339,8 +4205,6 @@
               "sql": "select _wstart as ts, endpoint, sum(`query_fail`)/($interval/1s) as `query_fail` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
-              "colNameFormatStr": "{{endpoint}}_query_in_process",
-              "colNameToGroup": "endpoint",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -4348,8 +4212,6 @@
               "sql": "select _wstart as ts, endpoint, sum(`query_in_process`)/($interval/1s) as `query_in_process` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
-              "colNameFormatStr": "{{endpoint}}_writes",
-              "colNameToGroup": "endpoint",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -4357,8 +4219,6 @@
               "sql": "select _wstart as ts, endpoint, sum(`write`)/($interval/1s) as `write` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
-              "colNameFormatStr": "{{endpoint}}_write_successful",
-              "colNameToGroup": "endpoint",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -4366,8 +4226,6 @@
               "sql": "select _wstart as ts, endpoint, sum(`write_success`)/($interval/1s) as `write_success` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
-              "colNameFormatStr": "{{endpoint}}_write_failed",
-              "colNameToGroup": "endpoint",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -4375,8 +4233,6 @@
               "sql": "select _wstart as ts, endpoint, sum(`write_fail`)/($interval/1s) as `write_fail` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
-              "colNameFormatStr": "{{endpoint}}_write_in_process",
-              "colNameToGroup": "endpoint",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -4384,8 +4240,6 @@
               "sql": "select _wstart as ts, endpoint, sum(`write_in_process`)/($interval/1s) as `write_in_process` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
-              "colNameFormatStr": "{{endpoint}}_others",
-              "colNameToGroup": "endpoint",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -4393,8 +4247,6 @@
               "sql": "select _wstart as ts, endpoint, sum(`other`)/($interval/1s) as `other` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
-              "colNameFormatStr": "{{endpoint}}_other_successful",
-              "colNameToGroup": "endpoint",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -4402,8 +4254,6 @@
               "sql": "select _wstart as ts, endpoint, sum(`other_success`)/($interval/1s) as `other_success` from $database.adapter_requests where ts >= $from and ts <= $to and req_type = 1  and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
-              "colNameFormatStr": "{{endpoint}}_other_failed",
-              "colNameToGroup": "endpoint",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -4451,6 +4301,7 @@
                   "mode": "off"
                 }
               },
+              "displayName": "${__field.labels.label}",
               "mappings": [],
               "thresholds": {
                 "mode": "absolute",
@@ -4489,16 +4340,12 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{label}}",
-              "colNameToGroup": "label",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
               "sql": "select _wstart as ts, concat(endpoint, '_', `user`, '_', 'total') as label, max(conn_pool_total) as total from $database.adapter_conn_pool where _ts >= $from and _ts <= $to and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint, `user` interval($interval) fill(null)"
             },
             {
-              "colNameFormatStr": "{{label}}",
-              "colNameToGroup": "label",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "B",
@@ -4545,6 +4392,7 @@
                   "mode": "off"
                 }
               },
+              "displayName": "${__field.labels.label}",
               "mappings": [],
               "thresholds": {
                 "mode": "absolute",
@@ -4583,40 +4431,30 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{label}}",
-              "colNameToGroup": "label",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
               "sql": "select _wstart as ts, concat(endpoint, '_', 'ws_query_conn') as label, max(ws_query_conn) from $database.adapter_status where _ts >= $from and _ts <= $to and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
-              "colNameFormatStr": "{{label}}",
-              "colNameToGroup": "label",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "B",
               "sql": "select _wstart as ts, concat(endpoint, '_', 'ws_stmt_conn') as label, max(ws_stmt_conn) from $database.adapter_status where _ts >= $from and _ts <= $to and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
-              "colNameFormatStr": "{{label}}",
-              "colNameToGroup": "label",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "C",
               "sql": "select _wstart as ts, concat(endpoint, '_', 'ws_sml_conn') as label, max(ws_sml_conn) from $database.adapter_status where _ts >= $from and _ts <= $to and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
-              "colNameFormatStr": "{{label}}",
-              "colNameToGroup": "label",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "D",
               "sql": "select _wstart as ts, concat(endpoint, '_', 'ws_ws_conn') as label, max(ws_ws_conn) from $database.adapter_status where _ts >= $from and _ts <= $to and ('$adapter_endpoint' = '' or  endpoint in (${adapter_endpoint:sqlstring})) partition by endpoint interval($interval) fill(null)"
             },
             {
-              "colNameFormatStr": "{{label}}",
-              "colNameToGroup": "label",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "E",
@@ -4920,9 +4758,8 @@
         "auto_count": 100,
         "auto_min": "10s",
         "current": {
-          "selected": false,
-          "text": "30s",
-          "value": "30s"
+          "text": "auto",
+          "value": "$__auto_interval"
         },
         "description": null,
         "error": null,
@@ -4931,9 +4768,9 @@
         "name": "interval",
         "options": [
           {
-            "selected": false,
+            "selected": true,
             "text": "auto",
-            "value": "$__auto_interval_interval"
+            "value": "$__auto_interval"
           },
           {
             "selected": false,
@@ -4956,7 +4793,7 @@
             "value": "20s"
           },
           {
-            "selected": true,
+            "selected": false,
             "text": "30s",
             "value": "30s"
           },

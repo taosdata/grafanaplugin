@@ -109,6 +109,24 @@ func isIntegerTypesForInterface(tp interface{}) bool {
 	return false
 }
 
+func isTimestampTypeForInterface(tp interface{}) bool {
+	switch tp := tp.(type) {
+	case string:
+		return tp == CTypeTimestampStr
+	case int:
+		return isTimestampType(tp)
+	case int32:
+		return isTimestampType(int(tp))
+	case int64:
+		return isTimestampType(int(tp))
+	case float32:
+		return isTimestampType(int(tp))
+	case float64:
+		return isTimestampType(int(tp))
+	}
+	return false
+}
+
 func isFloatTypes(typeNum int) bool {
 	return typeNum == CTypeFloat || typeNum == CTypeDouble
 }
@@ -133,47 +151,47 @@ func getTypeArray(tp interface{}) interface{} {
 		return getTypeArrayForInt(int(tp))
 	}
 	// binary/nchar, and maybe json
-	return []string{}
+	return []*string{}
 }
 
 func getTypeArrayForInt(typeNum int) interface{} {
 	if isBoolType(typeNum) {
 		// BOOL
-		return []bool{}
+		return []*bool{}
 	}
 	if isIntegerTypes(typeNum) {
 		// 2/3/4/5,11/12/13/14, INTs
-		return []float64{} // return float64 otherwise will case `no float64 value column found in frame`
+		return []*float64{} // return float64 otherwise will case `no float64 value column found in frame`
 	}
 	if isFloatTypes(typeNum) {
 		// float/double
-		return []float64{}
+		return []*float64{}
 	}
 	if isTimestampType(typeNum) {
 		// timestamp
 		return []time.Time{}
 	}
 	// binary/nchar, and maybe json
-	return []string{}
+	return []*string{}
 }
 
 func getTypeArrayForStr(tp string) interface{} {
 	if tp == CTypeBoolStr {
-		return []bool{}
+		return []*bool{}
 	}
 	if inSlice[string](tp, integerTypes) {
-		return []float64{} // return float64 otherwise will case `no float64 value column found in frame`
+		return []*float64{} // return float64 otherwise will case `no float64 value column found in frame`
 	}
 	if tp == CTypeFloatStr || tp == CTypeDoubleStr {
 		// float/double
-		return []float64{}
+		return []*float64{}
 	}
 	if tp == CTypeTimestampStr {
 		// timestamp
 		return []time.Time{}
 	}
 	// binary/nchar, and maybe json
-	return []string{}
+	return []*string{}
 }
 
 func inSlice[T string | int64 | float64](field T, slice []T) bool {
@@ -248,17 +266,53 @@ func toFloat(f interface{}) (float64, error) {
 	}
 }
 
+func toBool(v interface{}) (bool, error) {
+	switch v := v.(type) {
+	case bool:
+		return v, nil
+	case int:
+		return v != 0, nil
+	case int32:
+		return v != 0, nil
+	case int64:
+		return v != 0, nil
+	case float32:
+		return v != 0, nil
+	case float64:
+		return v != 0, nil
+	case string:
+		value := strings.TrimSpace(v)
+		if value == "" {
+			return false, fmt.Errorf("empty bool string")
+		}
+		if value == "0" {
+			return false, nil
+		}
+		if value == "1" {
+			return true, nil
+		}
+		parsed, err := strconv.ParseBool(value)
+		if err != nil {
+			return false, fmt.Errorf("invalid bool value %q", v)
+		}
+		return parsed, nil
+	default:
+		return false, fmt.Errorf("unknown type %t", v)
+	}
+}
+
 type queryModel struct {
-	Alias            string `json:"alias,omitempty"`
-	ColNameFormatStr string `json:"colNameFormatStr,omitempty"`
-	ColNameToGroup   string `json:"colNameToGroup,omitempty"`
-	FormatType       string `json:"formatType,omitempty"`
-	Hide             bool   `json:"hide,omitempty"`
-	IntervalMs       int64  `json:"intervalMs,omitempty"`
-	MaxDataPoints    int64  `json:"maxDataPoints,omitempty"`
-	QueryType        string `json:"queryType,omitempty"`
-	RefID            string `json:"refId,omitempty"`
-	Sql              string `json:"sql,omitempty"`
+	Alias           string      `json:"alias,omitempty"`
+	Expression      string      `json:"expression,omitempty"`
+	FormatType      string      `json:"formatType,omitempty"`
+	Hide            bool        `json:"hide,omitempty"`
+	IntervalMs      int64       `json:"intervalMs,omitempty"`
+	MaxDataPoints   int64       `json:"maxDataPoints,omitempty"`
+	QueryType       string      `json:"queryType,omitempty"`
+	RefID           string      `json:"refId,omitempty"`
+	Sql             string      `json:"sql,omitempty"`
+	TimeShiftPeriod interface{} `json:"timeShiftPeriod,omitempty"`
+	TimeShiftUnit   string      `json:"timeShiftUnit,omitempty"`
 }
 
 type dataResult struct {
