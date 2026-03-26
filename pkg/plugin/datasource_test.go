@@ -501,6 +501,29 @@ func TestBuildFrame_TableFormatKeepsColumnOrderAndNilPrimaryTime(t *testing.T) {
 	require.Equal(t, time.Date(2024, 1, 1, 0, 10, 0, 0, time.UTC), timeValue)
 }
 
+func TestBuildFrame_TableFormatAllNilTimestamp(t *testing.T) {
+	result := &dataResult{
+		ColumnMeta: [][]interface{}{
+			{"task_id", float64(CTypeBinary)},
+			{"update_time", float64(CTypeTimestamp)},
+			{"latest", float64(CTypeDouble)},
+		},
+		Data: [][]interface{}{
+			{"task_1", nil, float64(10)},
+			{"task_2", nil, float64(11)},
+		},
+	}
+
+	frame, err := buildFrame(result, &queryModel{FormatType: "Table"}, true)
+	require.NoError(t, err)
+	require.Len(t, frame.Fields, 3)
+	require.Equal(t, "update_time", frame.Fields[1].Name)
+	require.Equal(t, data.FieldTypeNullableTime, frame.Fields[1].Type())
+	require.Equal(t, 2, frame.Fields[1].Len())
+	require.Nil(t, frame.Fields[1].At(0))
+	require.Nil(t, frame.Fields[1].At(1))
+}
+
 func TestHasDeprecatedTimeShift(t *testing.T) {
 	tests := []struct {
 		name     string

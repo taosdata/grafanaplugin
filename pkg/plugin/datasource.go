@@ -186,7 +186,7 @@ func buildFrame(result *dataResult, qm *queryModel, forceTableFormat bool) (*dat
 	}
 
 	timeLayout, err := detectTimeLayout(result.Data, timeColIdx)
-	if err != nil {
+	if err != nil && !keepNilPrimaryTime {
 		return nil, fmt.Errorf("ts parse layout error: %w", err)
 	}
 

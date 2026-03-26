@@ -49,24 +49,23 @@ describe('DataSource backend query path', () => {
     templateVariablesMock.mockReturnValue([]);
   });
 
-  it('rejects deprecated Arithmetic queries before backend execution', () => {
+  it('rejects deprecated Arithmetic queries in applyTemplateVariables', () => {
     const ds = new DataSource({ url: 'http://localhost', jsonData: {} } as any);
 
     expect(() =>
-      ds.query({
-        targets: [{ refId: 'B', queryType: 'Arithmetic', expression: '$A + $B' }],
-      } as any)
+      ds.applyTemplateVariables({ refId: 'B', queryType: 'Arithmetic', expression: '$A + $B', sql: '' } as any, {})
     ).toThrow('Use Grafana Expressions/Math for arithmetic instead.');
     expect(backendQueryMock).not.toHaveBeenCalled();
   });
 
-  it('rejects deprecated plugin timeShift before backend execution', () => {
+  it('rejects deprecated plugin timeShift in applyTemplateVariables', () => {
     const ds = new DataSource({ url: 'http://localhost', jsonData: {} } as any);
 
     expect(() =>
-      ds.query({
-        targets: [{ refId: 'A', queryType: 'SQL', sql: 'select 1', timeShiftPeriod: '1', timeShiftUnit: 'hours' }],
-      } as any)
+      ds.applyTemplateVariables(
+        { refId: 'A', queryType: 'SQL', sql: 'select 1', timeShiftPeriod: '1', timeShiftUnit: 'hours' } as any,
+        {}
+      )
     ).toThrow('Use the panel Query options "Time shift" instead.');
     expect(backendQueryMock).not.toHaveBeenCalled();
   });
