@@ -421,8 +421,8 @@ export class DataSource extends DataSourceWithBackend<Query, DataSourceOptions> 
         for (const variable of allVariables) {
             if ("current" in variable && variable.current && variable.current.value) {
                 const value = String(variable.current.value);
-                // Use regex with negative lookahead to ensure word boundary
-                // This prevents replacing $database when we mean to replace $database
+                // Use regex with a negative lookahead so we don't match variable names
+                // as prefixes of longer identifiers (e.g. avoid matching $db inside $dbname or $db2).
                 const pattern = new RegExp(`\\$${escapeRegex(variable.name)}(?![0-9A-Za-z_])`, 'g');
                 interpolatedSql = interpolatedSql.replace(pattern, value);
             }
