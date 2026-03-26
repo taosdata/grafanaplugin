@@ -87,7 +87,7 @@
   "links": [],
   "panels": [
     {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -142,7 +142,7 @@
     },
     {
       "collapsed": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -155,7 +155,7 @@
       "type": "row"
     },
     {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -230,7 +230,7 @@
       "type": "stat"
     },
     {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -305,7 +305,7 @@
       "type": "stat"
     },
     {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -380,7 +380,7 @@
       "type": "stat"
     },
     {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -444,7 +444,7 @@
       "type": "stat"
     },
     {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -527,7 +527,7 @@
       "type": "bargauge"
     },
     {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -615,7 +615,7 @@
       "type": "stat"
     },
     {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -685,7 +685,7 @@
       "type": "stat"
     },
     {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -747,7 +747,7 @@
       "type": "stat"
     },
     {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "description": "当前TDengine集群DNode数量，Alive 为存活，Total 为所有",
       "fieldConfig": {
         "defaults": {
@@ -811,7 +811,7 @@
       "type": "bargauge"
     },
     {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "description": "当前TDengine集群MNode数量，Alive 为存活，Total 为所有",
       "fieldConfig": {
         "defaults": {
@@ -875,7 +875,7 @@
       "type": "bargauge"
     },
     {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "description": "当前TDengine集群 VGroups 数量，Alive 为存活，Total 为所有",
       "fieldConfig": {
         "defaults": {
@@ -939,7 +939,7 @@
       "type": "bargauge"
     },
     {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "description": "当前TDengine集群 VNodes 数量，Alive 为存活，Total 为所有",
       "fieldConfig": {
         "defaults": {
@@ -1042,7 +1042,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1234,7 +1234,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1427,7 +1427,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1620,7 +1620,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1837,7 +1837,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "fieldConfig": {
         "defaults": {
           "unit": "percentunit"
@@ -1984,7 +1984,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -2134,7 +2134,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "description": "错误率（每秒错误数）",
       "fieldConfig": {
         "defaults": {
@@ -2249,7 +2249,7 @@
     },
     {
       "collapsed": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -2263,7 +2263,7 @@
       "type": "row"
     },
     {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2333,7 +2333,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "fieldConfig": {
         "defaults": {
           "unit": "short"
@@ -2450,7 +2450,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "fieldConfig": {
         "defaults": {
           "unit": "short"
@@ -2558,7 +2558,7 @@
     },
     {
       "collapsed": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -2575,7 +2575,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "description": "Include two parts:",
       "fieldConfig": {
         "defaults": {},
@@ -2736,7 +2736,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "fieldConfig": {
         "defaults": {
           "unit": "cps"
@@ -2867,7 +2867,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -3006,7 +3006,7 @@
     },
     {
       "collapsed": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -3020,7 +3020,7 @@
       "type": "row"
     },
     {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -3102,7 +3102,7 @@
       "type": "stat"
     },
     {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -3186,7 +3186,7 @@
       "type": "stat"
     },
     {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -3257,7 +3257,7 @@
       "type": "stat"
     },
     {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -3327,7 +3327,7 @@
       "type": "stat"
     },
     {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -3397,7 +3397,7 @@
       "type": "stat"
     },
     {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -3461,7 +3461,7 @@
       "type": "gauge"
     },
     {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -3540,7 +3540,7 @@
       "type": "gauge"
     },
     {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -3627,7 +3627,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "description": "CPU 资源占用情况。",
       "fieldConfig": {
         "defaults": {
@@ -3753,7 +3753,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -3891,7 +3891,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "fieldConfig": {
         "defaults": {
           "unit": "bytes"
@@ -4022,7 +4022,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "fieldConfig": {
         "defaults": {
           "unit": "binBps"
@@ -4133,7 +4133,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -4266,7 +4266,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -4404,7 +4404,7 @@
       {
         "allValue": null,
         "current": {},
-        "datasource": "${DS_PROMETHEUS}",
+        "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
         "definition": "label_values(taos_cluster_info_version, cluster_id)",
         "description": null,
         "error": null,
@@ -4427,7 +4427,7 @@
       {
         "allValue": null,
         "current": {},
-        "datasource": "${DS_PROMETHEUS}",
+        "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
         "definition": "label_values(taos_dnodes_info_uptime{cluster_id=\"$cluster\"}, dnode_ep)",
         "description": null,
         "error": null,
@@ -4450,7 +4450,7 @@
       {
         "allValue": null,
         "current": {},
-        "datasource": "${DS_PROMETHEUS}",
+        "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
         "definition": "label_values(taos_dnodes_info_uptime{cluster_id=\"$cluster\"}, dnode_id)",
         "description": null,
         "error": null,
@@ -4473,7 +4473,7 @@
       {
         "allValue": null,
         "current": {},
-        "datasource": "${DS_PROMETHEUS}",
+        "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
         "definition": "label_values(taos_vgroups_info_database_name{cluster_id=\"$cluster\"}, value)",
         "description": null,
         "error": null,
@@ -4496,7 +4496,7 @@
       {
         "allValue": null,
         "current": {},
-        "datasource": "${DS_PROMETHEUS}",
+        "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
         "definition": "label_values(taos_cluster_info_first_ep{cluster_id=\"$cluster\"}, value)",
         "description": null,
         "error": null,
@@ -4519,7 +4519,7 @@
       {
         "allValue": null,
         "current": {},
-        "datasource": "${DS_PROMETHEUS}",
+        "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
         "definition": "label_values(taos_cluster_info_version{cluster_id=\"$cluster\"}, value)",
         "description": null,
         "error": null,

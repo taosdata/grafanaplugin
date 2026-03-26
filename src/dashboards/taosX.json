@@ -38,7 +38,7 @@
       "type": "datasource",
       "id": "tdengine-datasource",
       "name": "TDengine Datasource",
-      "version": "3.8.0"
+      "version": "4.0.0"
     },
     {
       "type": "panel",
@@ -104,8 +104,6 @@
       "pluginVersion": "8.0.0",
       "targets": [
         {
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A"
@@ -162,8 +160,6 @@
       "pluginVersion": "8.0.0",
       "targets": [
         {
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -219,8 +215,6 @@
       "pluginVersion": "8.0.0",
       "targets": [
         {
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -286,13 +280,10 @@
       "pluginVersion": "8.0.0",
       "targets": [
         {
-          "alias": "cpu_taosx",
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
           "formatType": "Table",
           "queryType": "SQL",
           "refId": "A",
-          "sql": "select last(process_cpu_percent)  from $database.taosx_sys where taosx_id = '$taosX_id' and _ts >= $from and _ts <= $to"
+          "sql": "select last(process_cpu_percent) as cpu_taosx from $database.taosx_sys where taosx_id = '$taosX_id' and _ts >= $from and _ts <= $to"
         }
       ],
       "title": "CPU Usage",
@@ -345,9 +336,6 @@
       "pluginVersion": "8.0.0",
       "targets": [
         {
-          "alias": "mem_taosx",
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -403,8 +391,6 @@
       "pluginVersion": "8.0.0",
       "targets": [
         {
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -470,9 +456,6 @@
       "pluginVersion": "8.0.0",
       "targets": [
         {
-          "alias": "mem_taosx",
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -557,8 +540,6 @@
       "pluginVersion": "8.0.0",
       "targets": [
         {
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -643,8 +624,6 @@
       "pluginVersion": "8.0.0",
       "targets": [
         {
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -731,8 +710,6 @@
       "pluginVersion": "8.0.0",
       "targets": [
         {
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -819,8 +796,6 @@
       "pluginVersion": "8.0.0",
       "targets": [
         {
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -907,8 +882,6 @@
       "pluginVersion": "8.0.0",
       "targets": [
         {
-          "colNameFormatStr": "",
-          "colNameToGroup": "",
           "formatType": "Time series",
           "queryType": "SQL",
           "refId": "A",
@@ -976,8 +949,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -1034,8 +1005,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -1091,8 +1060,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -1158,13 +1125,10 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "alias": "cpu_taosx",
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Table",
               "queryType": "SQL",
               "refId": "A",
-              "sql": "select last(process_cpu_percent)  from $database.taosx_agent where taosx_id = '$taosX_id' and agent_id = '$agent_id' and _ts >= $from and _ts <= $to"
+              "sql": "select last(process_cpu_percent) as cpu_taosx  from $database.taosx_agent where taosx_id = '$taosX_id' and agent_id = '$agent_id' and _ts >= $from and _ts <= $to"
             }
           ],
           "title": "CPU Usage",
@@ -1217,9 +1181,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "alias": "mem_taosx",
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -1305,8 +1266,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -1393,8 +1352,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -1497,8 +1454,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Table",
               "queryType": "SQL",
               "refId": "A",
@@ -1571,8 +1526,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Table",
               "queryType": "SQL",
               "refId": "A",
@@ -1641,7 +1594,7 @@
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "/bps.*/"
+                  "options": "bps"
                 },
                 "properties": [
                   {
@@ -1672,15 +1625,12 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "id,name",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
               "sql": "select _rowts as ts, task_id as id, task_name as name, derivative(messages, 1s, 1) as mps from $database.taosx_task_tdengine3 where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'TDengine3' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id order by task_id, task_name"
             },
             {
-              "colNameToGroup": "id,name",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -1744,7 +1694,8 @@
                   }
                 ]
               },
-              "unit": "none"
+              "unit": "none",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -1768,8 +1719,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -1870,8 +1819,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Table",
               "queryType": "SQL",
               "refId": "A",
@@ -1933,7 +1880,8 @@
                   }
                 ]
               },
-              "unit": "cps"
+              "unit": "cps",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -1957,8 +1905,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -2021,7 +1967,8 @@
                   }
                 ]
               },
-              "unit": "cps"
+              "unit": "cps",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -2045,8 +1992,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -2147,8 +2092,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Table",
               "queryType": "SQL",
               "refId": "A",
@@ -2210,7 +2153,8 @@
                   }
                 ]
               },
-              "unit": "cps"
+              "unit": "cps",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -2234,8 +2178,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -2298,7 +2240,8 @@
                   }
                 ]
               },
-              "unit": "cps"
+              "unit": "cps",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -2322,8 +2265,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -2386,7 +2327,8 @@
                   }
                 ]
               },
-              "unit": "none"
+              "unit": "none",
+              "displayName": "${__field.labels.task_id}_${__field.name}"
             },
             "overrides": []
           },
@@ -2410,16 +2352,12 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}_processed_batches",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
               "sql": "select _wstart as ts, task_id,  (last(total_processed_batches) - first(total_processed_batches)) as processed_batches from $database.taosx_task_pibackfill where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'PIBackFill' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             },
             {
-              "colNameFormatStr": "{{task_id}}_received_batches",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -2483,7 +2421,8 @@
                   }
                 ]
               },
-              "unit": "none"
+              "unit": "none",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -2507,8 +2446,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -2572,7 +2509,8 @@
                   }
                 ]
               },
-              "unit": "percent"
+              "unit": "percent",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -2596,8 +2534,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -2661,7 +2597,8 @@
                   }
                 ]
               },
-              "unit": "percent"
+              "unit": "percent",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -2685,8 +2622,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -2749,7 +2684,8 @@
                   }
                 ]
               },
-              "unit": "binBps"
+              "unit": "binBps",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -2773,8 +2709,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -2838,7 +2772,8 @@
                   }
                 ]
               },
-              "unit": "binBps"
+              "unit": "binBps",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -2862,8 +2797,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -2964,8 +2897,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Table",
               "queryType": "SQL",
               "refId": "A",
@@ -3027,7 +2958,8 @@
                   }
                 ]
               },
-              "unit": "cps"
+              "unit": "cps",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -3051,8 +2983,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -3115,7 +3045,8 @@
                   }
                 ]
               },
-              "unit": "cps"
+              "unit": "cps",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -3139,8 +3070,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -3203,7 +3132,8 @@
                   }
                 ]
               },
-              "unit": "none"
+              "unit": "none",
+              "displayName": "${__field.labels.task_id}_${__field.name}"
             },
             "overrides": []
           },
@@ -3227,16 +3157,12 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}_processed_batches",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
               "sql": "select _wstart as ts, task_id,  (last(total_processed_batches) - first(total_processed_batches)) as processed_batches from $database.taosx_task_pi where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'PI' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             },
             {
-              "colNameFormatStr": "{{task_id}}_received_batches",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -3300,7 +3226,8 @@
                   }
                 ]
               },
-              "unit": "none"
+              "unit": "none",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -3324,8 +3251,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -3389,7 +3314,8 @@
                   }
                 ]
               },
-              "unit": "percent"
+              "unit": "percent",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -3413,8 +3339,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -3478,7 +3402,8 @@
                   }
                 ]
               },
-              "unit": "percent"
+              "unit": "percent",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -3502,8 +3427,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -3566,7 +3489,8 @@
                   }
                 ]
               },
-              "unit": "binBps"
+              "unit": "binBps",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -3590,8 +3514,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -3655,7 +3577,8 @@
                   }
                 ]
               },
-              "unit": "binBps"
+              "unit": "binBps",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -3679,8 +3602,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -3781,8 +3702,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Table",
               "queryType": "SQL",
               "refId": "A",
@@ -3844,7 +3763,8 @@
                   }
                 ]
               },
-              "unit": "cps"
+              "unit": "cps",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -3868,8 +3788,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -3932,7 +3850,8 @@
                   }
                 ]
               },
-              "unit": "cps"
+              "unit": "cps",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -3956,8 +3875,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -4020,7 +3937,8 @@
                   }
                 ]
               },
-              "unit": "none"
+              "unit": "none",
+              "displayName": "${__field.labels.task_id}_${__field.name}"
             },
             "overrides": []
           },
@@ -4044,16 +3962,12 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}_processed_batches",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
               "sql": "select _wstart as ts, task_id,  (last(total_processed_batches) - first(total_processed_batches)) as processed_batches from $database.taosx_task_opentsdb where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'OpenTSDB' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             },
             {
-              "colNameFormatStr": "{{task_id}}_received_batches",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -4117,7 +4031,8 @@
                   }
                 ]
               },
-              "unit": "none"
+              "unit": "none",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -4141,8 +4056,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -4206,7 +4119,8 @@
                   }
                 ]
               },
-              "unit": "percent"
+              "unit": "percent",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -4230,8 +4144,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -4295,7 +4207,8 @@
                   }
                 ]
               },
-              "unit": "percent"
+              "unit": "percent",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -4319,8 +4232,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -4383,7 +4294,8 @@
                   }
                 ]
               },
-              "unit": "binBps"
+              "unit": "binBps",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -4407,8 +4319,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -4472,7 +4382,8 @@
                   }
                 ]
               },
-              "unit": "binBps"
+              "unit": "binBps",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -4496,8 +4407,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -4598,8 +4507,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Table",
               "queryType": "SQL",
               "refId": "A",
@@ -4661,7 +4568,8 @@
                   }
                 ]
               },
-              "unit": "cps"
+              "unit": "cps",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -4685,8 +4593,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -4749,7 +4655,8 @@
                   }
                 ]
               },
-              "unit": "cps"
+              "unit": "cps",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -4773,8 +4680,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -4837,7 +4742,8 @@
                   }
                 ]
               },
-              "unit": "none"
+              "unit": "none",
+              "displayName": "${__field.labels.task_id}_${__field.name}"
             },
             "overrides": []
           },
@@ -4861,16 +4767,12 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}_processed_batches",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
               "sql": "select _wstart as ts, task_id,  (last(total_processed_batches) - first(total_processed_batches)) as processed_batches from $database.taosx_task_opcua where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'OPCUA' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             },
             {
-              "colNameFormatStr": "{{task_id}}_received_batches",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -4934,7 +4836,8 @@
                   }
                 ]
               },
-              "unit": "none"
+              "unit": "none",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -4958,8 +4861,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -5023,7 +4924,8 @@
                   }
                 ]
               },
-              "unit": "percent"
+              "unit": "percent",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -5047,8 +4949,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -5112,7 +5012,8 @@
                   }
                 ]
               },
-              "unit": "percent"
+              "unit": "percent",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -5136,8 +5037,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -5200,7 +5099,8 @@
                   }
                 ]
               },
-              "unit": "binBps"
+              "unit": "binBps",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -5224,8 +5124,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -5289,7 +5187,8 @@
                   }
                 ]
               },
-              "unit": "binBps"
+              "unit": "binBps",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -5313,8 +5212,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -5415,8 +5312,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Table",
               "queryType": "SQL",
               "refId": "A",
@@ -5478,7 +5373,8 @@
                   }
                 ]
               },
-              "unit": "cps"
+              "unit": "cps",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -5502,8 +5398,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -5566,7 +5460,8 @@
                   }
                 ]
               },
-              "unit": "cps"
+              "unit": "cps",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -5590,8 +5485,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -5654,7 +5547,8 @@
                   }
                 ]
               },
-              "unit": "none"
+              "unit": "none",
+              "displayName": "${__field.labels.task_id}_${__field.name}"
             },
             "overrides": []
           },
@@ -5678,16 +5572,12 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}_processed_batches",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
               "sql": "select _wstart as ts, task_id,  (last(total_processed_batches) - first(total_processed_batches)) as processed_batches from $database.taosx_task_opcda where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'OPCDA' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             },
             {
-              "colNameFormatStr": "{{task_id}}_received_batches",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -5751,7 +5641,8 @@
                   }
                 ]
               },
-              "unit": "none"
+              "unit": "none",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -5775,8 +5666,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -5840,7 +5729,8 @@
                   }
                 ]
               },
-              "unit": "percent"
+              "unit": "percent",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -5864,8 +5754,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -5929,7 +5817,8 @@
                   }
                 ]
               },
-              "unit": "percent"
+              "unit": "percent",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -5953,8 +5842,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -6017,7 +5904,8 @@
                   }
                 ]
               },
-              "unit": "binBps"
+              "unit": "binBps",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -6041,8 +5929,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -6106,7 +5992,8 @@
                   }
                 ]
               },
-              "unit": "binBps"
+              "unit": "binBps",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -6130,8 +6017,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -6232,8 +6117,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Table",
               "queryType": "SQL",
               "refId": "A",
@@ -6295,7 +6178,8 @@
                   }
                 ]
               },
-              "unit": "percentunit"
+              "unit": "percentunit",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -6319,8 +6203,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "hide": true,
               "queryType": "SQL",
@@ -6328,9 +6210,6 @@
               "sql": "select timetruncate(_rowts, 1s) as ts, derivative(processed_messages, $interval, 1) as mps, concat('processed ', task_id, '-',  task_name) as task_id from $database.taosx_task_mqtt where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task') and  _ts >= $from and _ts <= $to  partition by task_id, task_name"
             },
             {
-              "alias": "",
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "hide": true,
               "queryType": "SQL",
@@ -6338,7 +6217,6 @@
               "sql": "select timetruncate(_rowts, 1s) as ts, derivative(mqtt_fetched_messages, $interval, 1) as mps, concat('fetched ', task_id, '-',  task_name) as task_id from $database.taosx_task_mqtt where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task') and  _ts >= $from and _ts <= $to  partition by task_id, task_name"
             },
             {
-              "colNameToGroup": "id,name",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -6402,13 +6280,14 @@
                   }
                 ]
               },
-              "unit": "cps"
+              "unit": "cps",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": [
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "/bps.*/"
+                  "options": "rate"
                 },
                 "properties": [
                   {
@@ -6439,16 +6318,12 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
               "sql": "select timetruncate(_rowts, 1s) as ts, derivative(mqtt_fetched_messages, 1s, 1) as mps, concat('mps: ', task_id, '-',  task_name) as task_id from $database.taosx_task_mqtt where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task') and  _ts >= $from and _ts <= $to  partition by task_id, task_name"
             },
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -6513,7 +6388,8 @@
                   }
                 ]
               },
-              "unit": "none"
+              "unit": "none",
+              "displayName": "${__field.name}_${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -6537,16 +6413,12 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
               "sql": "select _wstart as ts, task_id,  (last(total_processed_batches) - first(total_processed_batches)) as processed_batches from $database.taosx_task_mqtt where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'MQTT' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             },
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -6610,13 +6482,14 @@
                   }
                 ]
               },
-              "unit": "r/s"
+              "unit": "r/s",
+              "displayName": "${__field.name}_${__field.labels.task_id}"
             },
             "overrides": [
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "/points.*/"
+                  "options": "points_per_second"
                 },
                 "properties": [
                   {
@@ -6647,15 +6520,12 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
               "sql": "select _wstart as ts, task_id,  (max(total_written_rows) - min(total_written_rows)) * 1000 / (max(total_execute_time) - min(total_execute_time)) as rows_per_second from $database.taosx_task_mqtt where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'MQTT' not in (${datasource:sqlstring})) and  _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             },
             {
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -6720,7 +6590,8 @@
                   }
                 ]
               },
-              "unit": "percent"
+              "unit": "percent",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -6744,8 +6615,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -6809,7 +6678,8 @@
                   }
                 ]
               },
-              "unit": "percent"
+              "unit": "percent",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -6833,8 +6703,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -6897,7 +6765,8 @@
                   }
                 ]
               },
-              "unit": "binBps"
+              "unit": "binBps",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -6921,8 +6790,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -6986,7 +6853,8 @@
                   }
                 ]
               },
-              "unit": "binBps"
+              "unit": "binBps",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -7010,8 +6878,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -7112,8 +6978,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Table",
               "queryType": "SQL",
               "refId": "A",
@@ -7175,7 +7039,8 @@
                   }
                 ]
               },
-              "unit": "cps"
+              "unit": "cps",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -7199,8 +7064,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -7263,7 +7126,8 @@
                   }
                 ]
               },
-              "unit": "cps"
+              "unit": "cps",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -7287,8 +7151,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -7351,7 +7213,8 @@
                   }
                 ]
               },
-              "unit": "none"
+              "unit": "none",
+              "displayName": "${__field.labels.task_id}_${__field.name}"
             },
             "overrides": []
           },
@@ -7375,16 +7238,12 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}_processed_batches",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
               "sql": "select _wstart as ts, task_id,  (last(total_processed_batches) - first(total_processed_batches)) as processed_batches from $database.taosx_task_kafka where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'Kafka' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             },
             {
-              "colNameFormatStr": "{{task_id}}_received_batches",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -7448,7 +7307,8 @@
                   }
                 ]
               },
-              "unit": "none"
+              "unit": "none",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -7472,8 +7332,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -7574,8 +7432,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Table",
               "queryType": "SQL",
               "refId": "A",
@@ -7637,7 +7493,8 @@
                   }
                 ]
               },
-              "unit": "cps"
+              "unit": "cps",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -7661,8 +7518,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -7725,7 +7580,8 @@
                   }
                 ]
               },
-              "unit": "cps"
+              "unit": "cps",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -7749,8 +7605,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -7813,7 +7667,8 @@
                   }
                 ]
               },
-              "unit": "none"
+              "unit": "none",
+              "displayName": "${__field.labels.task_id}_${__field.name}"
             },
             "overrides": []
           },
@@ -7837,16 +7692,12 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}_processed_batches",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
               "sql": "select _wstart as ts, task_id,  (last(total_processed_batches) - first(total_processed_batches)) as processed_batches from $database.taosx_task_influxdb where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'Influxdb' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             },
             {
-              "colNameFormatStr": "{{task_id}}_received_batches",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -7910,7 +7761,8 @@
                   }
                 ]
               },
-              "unit": "none"
+              "unit": "none",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -7934,8 +7786,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -7999,7 +7849,8 @@
                   }
                 ]
               },
-              "unit": "percent"
+              "unit": "percent",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -8023,8 +7874,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -8088,7 +7937,8 @@
                   }
                 ]
               },
-              "unit": "percent"
+              "unit": "percent",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -8112,8 +7962,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -8176,7 +8024,8 @@
                   }
                 ]
               },
-              "unit": "binBps"
+              "unit": "binBps",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -8200,8 +8049,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -8265,7 +8112,8 @@
                   }
                 ]
               },
-              "unit": "binBps"
+              "unit": "binBps",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -8289,8 +8137,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -8391,8 +8237,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Table",
               "queryType": "SQL",
               "refId": "A",
@@ -8454,7 +8298,8 @@
                   }
                 ]
               },
-              "unit": "cps"
+              "unit": "cps",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -8478,8 +8323,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -8542,7 +8385,8 @@
                   }
                 ]
               },
-              "unit": "cps"
+              "unit": "cps",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -8566,8 +8410,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -8630,7 +8472,8 @@
                   }
                 ]
               },
-              "unit": "none"
+              "unit": "none",
+              "displayName": "${__field.labels.task_id}_${__field.name}"
             },
             "overrides": []
           },
@@ -8654,16 +8497,12 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}_processed_batches",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
               "sql": "select _wstart as ts, task_id,  (last(total_processed_batches) - first(total_processed_batches)) as processed_batches from $database.taosx_task_csv where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'CSV' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             },
             {
-              "colNameFormatStr": "{{task_id}}_received_batches",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -8727,7 +8566,8 @@
                   }
                 ]
               },
-              "unit": "none"
+              "unit": "none",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -8751,8 +8591,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -8853,8 +8691,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "",
-              "colNameToGroup": "",
               "formatType": "Table",
               "queryType": "SQL",
               "refId": "A",
@@ -8916,7 +8752,8 @@
                   }
                 ]
               },
-              "unit": "cps"
+              "unit": "cps",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -8940,8 +8777,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -9004,7 +8839,8 @@
                   }
                 ]
               },
-              "unit": "cps"
+              "unit": "cps",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -9028,8 +8864,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
@@ -9092,7 +8926,8 @@
                   }
                 ]
               },
-              "unit": "none"
+              "unit": "none",
+              "displayName": "${__field.labels.task_id}_${__field.name}"
             },
             "overrides": []
           },
@@ -9116,16 +8951,12 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}_processed_batches",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",
               "sql": "select _wstart as ts, task_id,  (last(total_processed_batches) - first(total_processed_batches)) as processed_batches from $database.taosx_task_avevaHistorian where taosx_id = '$taosX_id' and ('$task' = '' OR task_id = '$task' or 'AvevaHistorian' not in (${datasource:sqlstring})) and _ts >= $from and _ts <= $to  partition by task_id  interval($interval) fill(null) order by task_id"
             },
             {
-              "colNameFormatStr": "{{task_id}}_received_batches",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "hide": false,
               "queryType": "SQL",
@@ -9189,7 +9020,8 @@
                   }
                 ]
               },
-              "unit": "none"
+              "unit": "none",
+              "displayName": "${__field.labels.task_id}"
             },
             "overrides": []
           },
@@ -9213,8 +9045,6 @@
           "pluginVersion": "8.0.0",
           "targets": [
             {
-              "colNameFormatStr": "{{task_id}}",
-              "colNameToGroup": "task_id",
               "formatType": "Time series",
               "queryType": "SQL",
               "refId": "A",

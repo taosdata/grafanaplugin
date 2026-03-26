@@ -41,3 +41,5 @@ tdengine-datasource*
 .DS_Store
 .history/
 CLAUDE.md
+
+.playwright-mcp/

@@ -15,11 +15,6 @@
     },
     {
       "type": "dashboard",
-      "name": "TDinsightV2",
-      "path": "dashboards/TDinsightV2.json"
-    },
-    {
-      "type": "dashboard",
       "name": "TDsmeters",
       "path": "dashboards/TDsmeters.json"
     },
@@ -95,8 +90,8 @@
         "path": "img/howto-add-datasource.jpg"
       }
     ],
-    "version": "3.8.0",
-    "updated": "2026-03-15"
+    "version": "4.0.0",
+    "updated": "2026-03-26"
   },
   "dependencies": {
     "grafanaDependency": ">=8.0.0",

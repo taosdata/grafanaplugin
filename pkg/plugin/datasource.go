@@ -3,10 +3,11 @@ package plugin
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"net/http"
+	"regexp"
+	"sort"
 	"strings"
 	"sync"
 	"time"
@@ -131,72 +132,239 @@ func (d *Datasource) query(ctx context.Context, _ backend.PluginContext, query b
 	if len(result.Data) == 0 || len(result.Data[0]) == 0 {
 		return
 	}
-	// if don't have timestamp col
-	hasTs := true
-	if len(result.ColumnMeta) == 1 && result.ColumnMeta[0][1] != CTypeTimestampStr && result.ColumnMeta[0][1] != CTypeTimestamp {
-		hasTs = false
-	}
-	// format data
-	if err = d.formatData(result, qm, hasTs); err != nil {
-		log.DefaultLogger.Error("## format data error ", "error", err)
+	forceTableFormat := isTableFormat(qm.FormatType)
+	frame, err := buildFrame(result, qm, forceTableFormat)
+	if err != nil {
+		log.DefaultLogger.Error("build frame error", "error", err)
 		return backend.ErrDataResponse(http.StatusBadRequest, err.Error())
 	}
-
-	// create data frame response.
-	// For an overview on data frames and how grafana handles them:
-	// https://grafana.com/docs/grafana/latest/developers/plugins/data-frames/
-	frame := data.NewFrame("") // do not set name for frame. this name will override the data column name
-
-	// add fields.
-	aliasList := strings.Split(qm.Alias, ",")
-	for i := 0; i < len(result.ColumnMeta); i++ {
-		name := toString(result.ColumnMeta[i][0])
-
-		if i > 0 && len(aliasList) >= i && len(aliasList[i-1]) > 0 {
-			name = strings.ReplaceAll(aliasList[i-1], "[[col]]", name)
-		}
-		frame.Fields = append(frame.Fields,
-			data.NewField(name, nil, getTypeArray(result.ColumnMeta[i][1])),
-		)
-	}
-
-	var timeLayout string
-	if hasTs {
-		timeLayout, err = dateparse.ParseFormat(toString(result.Data[0][0]))
+	// Convert Long format to Wide format using Grafana SDK.
+	tsSchema := frame.TimeSeriesSchema()
+	if !forceTableFormat && tsSchema.Type == data.TimeSeriesTypeLong {
+		sortFrameRowsByTime(frame)
+		frame, err = data.LongToWide(frame, nil)
 		if err != nil {
-			return backend.ErrDataResponse(http.StatusBadRequest, fmt.Sprintf("ts parse layout error: %s", err.Error()))
+			return backend.ErrDataResponse(http.StatusBadRequest, fmt.Sprintf("LongToWide conversion error: %s", err.Error()))
+		}
+	} else {
+		// Not a time series or already Wide format, set Meta
+		if frame.Meta == nil {
+			frame.Meta = &data.FrameMeta{}
+		}
+		if forceTableFormat {
+			frame.Meta.Type = data.FrameTypeTable
+		} else {
+			frame.Meta.Type = determineFrameType(frame.Fields)
 		}
 	}
-	response.Frames = make(data.Frames, 0, len(result.Data))
-	for i := 0; i < len(result.Data); i++ {
-		if hasTs {
-			if result.Data[i][0], err = time.Parse(timeLayout, toString(result.Data[i][0])); err != nil {
-				log.DefaultLogger.Error("parse error:", "error", err)
-				return backend.ErrDataResponse(http.StatusBadRequest, fmt.Sprintf("ts parse error: %s", err.Error()))
-			}
-		}
 
-		hasNil := false
-		for j := 1; j < len(result.Data[i]); j++ {
-			if result.Data[i][j] == nil {
-				hasNil = true
-				break
-			}
-			if isIntegerTypesForInterface(result.ColumnMeta[j][1]) {
-				if result.Data[i][j], err = toFloat(result.Data[i][j]); err != nil {
-					log.DefaultLogger.Error("parse numeric data error:", "error", err)
-					return backend.ErrDataResponse(http.StatusBadRequest, fmt.Sprintf("parse numeric data error: %s", err.Error()))
-				}
-			}
-		}
-		if hasNil {
-			continue
-		}
-		frame.AppendRow(result.Data[i]...)
-	}
-	// add the frames to the response.
 	response.Frames = append(response.Frames, frame)
 	return response
+}
+
+func buildFrame(result *dataResult, qm *queryModel, forceTableFormat bool) (*data.Frame, error) {
+	timeColIdx := findTimeColumnIndex(result.ColumnMeta)
+	columnOrder := buildColumnOrder(len(result.ColumnMeta), timeColIdx)
+	if forceTableFormat {
+		columnOrder = buildNaturalColumnOrder(len(result.ColumnMeta))
+	}
+	frame := data.NewFrame("")
+	aliasList := splitAliasList(qm.Alias)
+	valueAliasIdx := 0
+	keepNilPrimaryTime := forceTableFormat
+
+	for _, srcIdx := range columnOrder {
+		colMeta := result.ColumnMeta[srcIdx]
+		name := toString(colMeta[0])
+		if srcIdx != timeColIdx && valueAliasIdx < len(aliasList) && aliasList[valueAliasIdx] != "" {
+			name = strings.ReplaceAll(aliasList[valueAliasIdx], "[[col]]", name)
+		}
+		if srcIdx != timeColIdx {
+			valueAliasIdx++
+		}
+		frame.Fields = append(frame.Fields, data.NewField(name, nil, getTypeArrayForColumn(colMeta[1], srcIdx == timeColIdx, keepNilPrimaryTime)))
+	}
+
+	timeLayout, err := detectTimeLayout(result.Data, timeColIdx)
+	if err != nil && !keepNilPrimaryTime {
+		return nil, fmt.Errorf("ts parse layout error: %w", err)
+	}
+
+	for _, srcRow := range result.Data {
+		row, skip, err := convertRow(srcRow, result.ColumnMeta, columnOrder, timeColIdx, timeLayout, keepNilPrimaryTime)
+		if err != nil {
+			return nil, err
+		}
+		if skip {
+			continue
+		}
+		frame.AppendRow(row...)
+	}
+
+	return frame, nil
+}
+
+func splitAliasList(alias string) []string {
+	if strings.TrimSpace(alias) == "" {
+		return nil
+	}
+	parts := strings.Split(alias, ",")
+	for i := range parts {
+		parts[i] = strings.TrimSpace(parts[i])
+	}
+	return parts
+}
+
+func isTableFormat(formatType string) bool {
+	return strings.EqualFold(strings.TrimSpace(formatType), "table")
+}
+
+func getTypeArrayForColumn(tp interface{}, primaryTimeCol, keepNilPrimaryTime bool) interface{} {
+	if primaryTimeCol && keepNilPrimaryTime && isTimestampTypeForInterface(tp) {
+		return []*time.Time{}
+	}
+	if !primaryTimeCol && isTimestampTypeForInterface(tp) {
+		return []*time.Time{}
+	}
+	return getTypeArray(tp)
+}
+
+func buildNaturalColumnOrder(columnCount int) []int {
+	order := make([]int, 0, columnCount)
+	for idx := 0; idx < columnCount; idx++ {
+		order = append(order, idx)
+	}
+	return order
+}
+
+func findTimeColumnIndex(columnMeta [][]interface{}) int {
+	for idx, colMeta := range columnMeta {
+		if len(colMeta) > 1 && trans2CTypeStr(colMeta[1]) == CTypeTimestampStr {
+			return idx
+		}
+	}
+	return -1
+}
+
+func buildColumnOrder(columnCount, timeColIdx int) []int {
+	order := make([]int, 0, columnCount)
+	if timeColIdx >= 0 {
+		order = append(order, timeColIdx)
+	}
+	for idx := 0; idx < columnCount; idx++ {
+		if idx == timeColIdx {
+			continue
+		}
+		order = append(order, idx)
+	}
+	return order
+}
+
+func detectTimeLayout(rows [][]interface{}, timeColIdx int) (string, error) {
+	if timeColIdx < 0 {
+		return "", nil
+	}
+	for _, row := range rows {
+		if timeColIdx >= len(row) || row[timeColIdx] == nil {
+			continue
+		}
+		return dateparse.ParseFormat(toString(row[timeColIdx]))
+	}
+	return "", fmt.Errorf("timestamp column is empty")
+}
+
+func convertRow(srcRow []interface{}, columnMeta [][]interface{}, columnOrder []int, timeColIdx int, timeLayout string, keepNilPrimaryTime bool) ([]interface{}, bool, error) {
+	row := make([]interface{}, 0, len(columnOrder))
+	for _, srcIdx := range columnOrder {
+		if srcIdx >= len(srcRow) {
+			return nil, false, fmt.Errorf("row column index %d out of range", srcIdx)
+		}
+		value := srcRow[srcIdx]
+		if srcIdx == timeColIdx {
+			if value == nil {
+				if keepNilPrimaryTime {
+					row = append(row, nil)
+					continue
+				}
+				return nil, true, nil
+			}
+			parsed, err := time.Parse(timeLayout, toString(value))
+			if err != nil {
+				return nil, false, fmt.Errorf("ts parse error: %w", err)
+			}
+			if keepNilPrimaryTime {
+				parsedCopy := parsed
+				row = append(row, &parsedCopy)
+			} else {
+				row = append(row, parsed)
+			}
+			continue
+		}
+		converted, err := convertNonTimeValue(value, columnMeta[srcIdx][1], timeLayout)
+		if err != nil {
+			return nil, false, err
+		}
+		row = append(row, converted)
+	}
+	return row, false, nil
+}
+
+func convertNonTimeValue(value interface{}, columnType interface{}, timeLayout string) (interface{}, error) {
+	if value == nil {
+		return nil, nil
+	}
+	if isIntegerTypesForInterface(columnType) {
+		converted, err := toFloat(value)
+		if err != nil {
+			return nil, fmt.Errorf("parse numeric data error: %w", err)
+		}
+		return &converted, nil
+	}
+
+	switch trans2CTypeStr(columnType) {
+	case CTypeFloatStr, CTypeDoubleStr:
+		converted, err := toFloat(value)
+		if err != nil {
+			return nil, fmt.Errorf("parse numeric data error: %w", err)
+		}
+		return &converted, nil
+	case CTypeBoolStr:
+		converted, err := toBool(value)
+		if err != nil {
+			return nil, fmt.Errorf("parse bool data error: %w", err)
+		}
+		return &converted, nil
+	case CTypeTimestampStr:
+		parsed, err := parseTimestampValue(value, timeLayout)
+		if err != nil {
+			return nil, fmt.Errorf("parse timestamp data error: %w", err)
+		}
+		return &parsed, nil
+	default:
+		converted := toString(value)
+		return &converted, nil
+	}
+}
+
+func parseTimestampValue(value interface{}, timeLayout string) (time.Time, error) {
+	switch v := value.(type) {
+	case time.Time:
+		return v, nil
+	case *time.Time:
+		if v == nil {
+			return time.Time{}, fmt.Errorf("timestamp value is nil")
+		}
+		return *v, nil
+	}
+
+	strValue := toString(value)
+	if len(timeLayout) > 0 {
+		parsed, err := time.Parse(timeLayout, strValue)
+		if err == nil {
+			return parsed, nil
+		}
+	}
+	return dateparse.ParseAny(strValue)
 }
 
 func (d *Datasource) queryDataFromDatasource(ctx context.Context, query *queryModel) (*dataResult, error) {
@@ -219,104 +387,6 @@ func (d *Datasource) queryDataFromDatasource(ctx context.Context, query *queryMo
 	}
 
 	return &result, nil
-}
-
-func (d *Datasource) formatData(result *dataResult, query *queryModel, hasTs bool) error {
-	if !hasTs {
-		return nil
-	}
-	upperSql := strings.ToUpper(query.Sql)
-	if strings.Contains(upperSql, " PARTITION BY ") || strings.Contains(upperSql, " GROUP BY ") {
-		return d.formatGroupData(result, query)
-	}
-
-	return nil
-}
-
-var configError = errors.New("query config error")
-
-func (d *Datasource) formatGroupData(res *dataResult, query *queryModel) error {
-	if len(query.ColNameToGroup) == 0 {
-		log.DefaultLogger.Error("config error, group fields is nil", "query sql", query.Sql)
-		return fmt.Errorf("%v, %s", configError, "group_by_column config is null")
-	}
-	groups := strings.Split(query.ColNameToGroup, ",")
-	for i, group := range groups {
-		groups[i] = strings.TrimSpace(group)
-	}
-
-	var timestamps []string
-	var tsIndex int
-	var valueField, valueType string
-	var valueLength int64
-
-	valueIndex := -1
-	tsData := make(map[interface{}]map[string]interface{}, len(res.Data)) // {ts: {group: value}}
-	fieldIndex := make(map[string]int, len(res.ColumnMeta))
-	groupedNames := make(map[string]struct{}, len(res.Data))
-
-	var gotValueField bool
-	for i, colMeta := range res.ColumnMeta {
-		// trans columnMeta num to str for 2.x
-		colMeta[1] = trans2CTypeStr(colMeta[1])
-
-		colName := toString(colMeta[0])
-		colType := toString(colMeta[1])
-		fieldIndex[colName] = i
-		if colType == "TIMESTAMP" {
-			tsIndex = i
-			continue
-		}
-
-		if gotValueField {
-			continue
-		}
-		if !inSlice[string](colName, groups) {
-			valueIndex = i
-			valueField = colName
-			valueType = colType
-			valueLength, _ = toInt(colMeta[2])
-			gotValueField = true
-		}
-	}
-
-	if valueIndex == -1 {
-		log.DefaultLogger.Error("config error, unknown value field")
-		return fmt.Errorf("%v, %s", configError, "unknown value field")
-	}
-
-	for _, resData := range res.Data {
-		if _, ok := tsData[resData[tsIndex]]; !ok {
-			tsData[resData[tsIndex]] = make(map[string]interface{})
-			timestamps = append(timestamps, toString(resData[tsIndex]))
-		}
-		groupedName := groupedColumnName(resData, valueField, query.ColNameFormatStr, groups, fieldIndex)
-		groupedNames[groupedName] = struct{}{}
-		value, _ := toFloat(resData[valueIndex])
-		tsData[resData[tsIndex]][groupedName] = value
-	}
-
-	groupMeta := make([][]interface{}, 0, len(groupedNames)+1)
-	groupMeta = append(groupMeta, res.ColumnMeta[tsIndex])
-	for col := range groupedNames {
-		groupMeta = append(groupMeta, []interface{}{col, valueType, valueLength})
-	}
-
-	groupData := make([][]interface{}, 0, len(timestamps))
-	for _, ts := range timestamps {
-		row := make([]interface{}, len(groupMeta))
-		row[0] = ts
-		for i, m := range groupMeta[1:] {
-			row[i+1] = tsData[ts][toString(m[0])]
-		}
-		groupData = append(groupData, row)
-	}
-
-	res.Data = groupData
-	res.ColumnMeta = groupMeta
-	res.Rows = len(groupData)
-
-	return nil
 }
 
 // CheckHealth handles health checks sent from Grafana to the plugin.
@@ -344,6 +414,12 @@ func (d *Datasource) CheckHealth(ctx context.Context, req *backend.CheckHealthRe
 
 const sqlEndPoint = "/rest/sql"
 const utcSqlEndPoint = "/rest/sqlutc"
+
+var (
+	timeFromMacroPattern   = regexp.MustCompile(`\$__timeFrom(?:\s*\(\s*\))?`)
+	timeToMacroPattern     = regexp.MustCompile(`\$__timeTo(?:\s*\(\s*\))?`)
+	timeFilterMacroPattern = regexp.MustCompile(`\$__timeFilter\s*\(\s*([^)]+?)\s*\)`)
+)
 
 func (d *Datasource) detectEndpoint() (string, error) {
 	respData, err := d.doHttpPost(context.Background(), d.settings.URL+sqlEndPoint, "select server_version()")
@@ -408,6 +484,10 @@ func getQueryModel(query backend.DataQuery) (model *queryModel, success bool, er
 		log.DefaultLogger.Error("## queryType error, only support SQL queryType")
 		return nil, false, "queryType error, only support SQL queryType"
 	}
+	if hasDeprecatedTimeShift(model.TimeShiftPeriod, model.TimeShiftUnit) {
+		log.DefaultLogger.Error("## timeShift is deprecated, use panel time shift instead")
+		return nil, false, "timeShift is deprecated, use panel Query options -> Time shift instead"
+	}
 
 	sql := model.Sql
 	if len(sql) == 0 {
@@ -422,10 +502,19 @@ func getQueryModel(query backend.DataQuery) (model *queryModel, success bool, er
 	if query.Interval > 0 {
 		sql = strings.ReplaceAll(sql, "$interval", fmt.Sprint(query.Interval.Seconds())+"s")
 	}
-	sql = strings.ReplaceAll(sql, "$from", "'"+fmt.Sprint(query.TimeRange.From.In(timeZone).Format(time.RFC3339Nano))+"'")
-	sql = strings.ReplaceAll(sql, "$begin", "'"+fmt.Sprint(query.TimeRange.From.In(timeZone).Format(time.RFC3339Nano))+"'")
-	sql = strings.ReplaceAll(sql, "$to", "'"+fmt.Sprint(query.TimeRange.To.In(timeZone).Format(time.RFC3339Nano))+"'")
-	sql = strings.ReplaceAll(sql, "$end", "'"+fmt.Sprint(query.TimeRange.To.In(timeZone).Format(time.RFC3339Nano))+"'")
+	fromValue := "'" + fmt.Sprint(query.TimeRange.From.In(timeZone).Format(time.RFC3339Nano)) + "'"
+	toValue := "'" + fmt.Sprint(query.TimeRange.To.In(timeZone).Format(time.RFC3339Nano)) + "'"
+
+	sql = strings.ReplaceAll(sql, "$from", fromValue)
+	sql = strings.ReplaceAll(sql, "$begin", fromValue)
+	sql = strings.ReplaceAll(sql, "$to", toValue)
+	sql = strings.ReplaceAll(sql, "$end", toValue)
+
+	sql, err = applyGrafanaTimeMacros(sql, fromValue, toValue)
+	if err != nil {
+		log.DefaultLogger.Error("## apply Grafana time macros error", "error", err)
+		return nil, false, err.Error()
+	}
 	log.DefaultLogger.Debug("## query sql", "sql", sql)
 
 	model.Sql = sql
@@ -433,20 +522,143 @@ func getQueryModel(query backend.DataQuery) (model *queryModel, success bool, er
 	return
 }
 
-func groupedColumnName(data []interface{}, valueField string, formatStr string, groupFields []string, fieldIndex map[string]int) string {
-	if len(formatStr) == 0 {
-		m := make(map[string]interface{}, len(groupFields))
-		for _, field := range groupFields {
-			m[field] = data[fieldIndex[field]]
+func applyGrafanaTimeMacros(sql, fromValue, toValue string) (string, error) {
+	sql = timeFromMacroPattern.ReplaceAllString(sql, fromValue)
+	sql = timeToMacroPattern.ReplaceAllString(sql, toValue)
+	sql = timeFilterMacroPattern.ReplaceAllString(sql, "($1 >= "+fromValue+" AND $1 <= "+toValue+")")
+
+	if strings.Contains(sql, "$__timeFilter") {
+		return "", fmt.Errorf("macro $__timeFilter requires a column argument, e.g. $__timeFilter(ts)")
+	}
+	return sql, nil
+}
+
+func hasDeprecatedTimeShift(period interface{}, unit string) bool {
+	if len(strings.TrimSpace(unit)) > 0 {
+		return true
+	}
+
+	if period == nil {
+		return false
+	}
+
+	if v, ok := period.(string); ok {
+		return len(strings.TrimSpace(v)) > 0
+	}
+
+	n, err := toFloat(period)
+	if err != nil {
+		return true
+	}
+	return n != 0
+}
+
+func sortFrameRowsByTime(frame *data.Frame) {
+	if len(frame.Fields) == 0 {
+		return
+	}
+
+	timeFieldIdx := -1
+	for idx, field := range frame.Fields {
+		if field.Type() == data.FieldTypeTime || field.Type() == data.FieldTypeNullableTime {
+			timeFieldIdx = idx
+			break
 		}
-		j, _ := json.Marshal(m)
-		return fmt.Sprintf("%s %s", valueField, string(j))
+	}
+	if timeFieldIdx < 0 {
+		return
 	}
 
-	for _, field := range groupFields {
-		value := data[fieldIndex[field]]
-		formatStr = strings.ReplaceAll(formatStr, fmt.Sprintf("{{%s}}", field), toString(value))
+	timeField := frame.Fields[timeFieldIdx]
+	if timeField.Len() < 2 {
+		return
 	}
 
-	return formatStr
+	needsSort := false
+	for i := 1; i < timeField.Len(); i++ {
+		prev, prevOK := timeField.ConcreteAt(i - 1)
+		curr, currOK := timeField.ConcreteAt(i)
+		if !prevOK || !currOK {
+			return
+		}
+		if prev.(time.Time).After(curr.(time.Time)) {
+			needsSort = true
+			break
+		}
+	}
+	if !needsSort {
+		return
+	}
+
+	indexes := make([]int, timeField.Len())
+	for i := range indexes {
+		indexes[i] = i
+	}
+	sort.SliceStable(indexes, func(i, j int) bool {
+		left, _ := timeField.ConcreteAt(indexes[i])
+		right, _ := timeField.ConcreteAt(indexes[j])
+		return left.(time.Time).Before(right.(time.Time))
+	})
+
+	for _, field := range frame.Fields {
+		values := make([]interface{}, field.Len())
+		for idx := range indexes {
+			values[idx] = field.At(indexes[idx])
+		}
+		for idx, value := range values {
+			field.Set(idx, value)
+		}
+	}
+}
+
+// determineFrameType determines the Frame format based on field types.
+// Reference Grafana SDK's logic:
+// - Has string/bool fields = TimeSeriesLong (dimensions in string columns)
+// - No string fields = TimeSeriesWide
+// - No time field but has numeric fields = NumericWide
+func determineFrameType(fields []*data.Field) data.FrameType {
+	hasTime := false
+	hasString := false
+	hasNumeric := false
+
+	for _, field := range fields {
+		switch field.Type() {
+		case data.FieldTypeTime, data.FieldTypeNullableTime:
+			hasTime = true
+		case data.FieldTypeString, data.FieldTypeNullableString,
+			data.FieldTypeBool, data.FieldTypeNullableBool:
+			hasString = true
+		case data.FieldTypeFloat64, data.FieldTypeNullableFloat64,
+			data.FieldTypeInt64, data.FieldTypeNullableInt64,
+			data.FieldTypeFloat32, data.FieldTypeNullableFloat32,
+			data.FieldTypeInt32, data.FieldTypeNullableInt32,
+			data.FieldTypeInt8, data.FieldTypeNullableInt8,
+			data.FieldTypeInt16, data.FieldTypeNullableInt16,
+			data.FieldTypeUint8, data.FieldTypeNullableUint8,
+			data.FieldTypeUint16, data.FieldTypeNullableUint16,
+			data.FieldTypeUint32, data.FieldTypeNullableUint32,
+			data.FieldTypeUint64, data.FieldTypeNullableUint64:
+			hasNumeric = true
+		}
+	}
+
+	// No time column
+	if !hasTime {
+		if hasNumeric {
+			return data.FrameTypeNumericWide
+		}
+		return data.FrameTypeTable
+	}
+
+	// Has time column
+	if !hasNumeric {
+		return data.FrameTypeTable
+	}
+	if hasString {
+		// Has string fields = Long format (dimensions in string columns)
+		// Grafana alerting system will use string column values as labels
+		return data.FrameTypeTimeSeriesLong
+	}
+	// No string fields = Wide format
+	return data.FrameTypeTimeSeriesWide
 }
