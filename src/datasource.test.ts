@@ -1,4 +1,5 @@
 const backendQueryMock = jest.fn();
+const healthCheckMock = jest.fn();
 const templateReplaceMock = jest.fn((value: string) => value);
 const templateVariablesMock = jest.fn(() => []);
 
@@ -20,6 +21,10 @@ jest.mock('@grafana/runtime', () => {
         ...request,
         targets,
       });
+    }
+
+    callHealthCheck() {
+      return healthCheckMock();
     }
   }
 
@@ -44,6 +49,7 @@ describe('DataSource backend query path', () => {
   beforeEach(() => {
     backendQueryMock.mockReset();
     backendQueryMock.mockReturnValue('backend-query');
+    healthCheckMock.mockReset();
     templateReplaceMock.mockClear();
     templateVariablesMock.mockClear();
     templateVariablesMock.mockReturnValue([]);
@@ -79,6 +85,20 @@ describe('DataSource backend query path', () => {
 
     expect(ds.query(request as any)).toBe('backend-query');
     expect(backendQueryMock).toHaveBeenCalledWith(request);
+  });
+
+  it('tests the connection through the backend health check', async () => {
+    healthCheckMock.mockResolvedValue({ status: 'OK', message: 'Data source is working' });
+    const ds = new DataSource({ url: 'https://localhost', jsonData: { isLoadAlerts: false } } as any);
+    const directRequest = jest.spyOn(ds, 'request').mockResolvedValue({ status: 200, data: {} } as any);
+
+    await expect(ds.testDatasource()).resolves.toEqual({
+      status: 'success',
+      message: 'TDengine Data source is working',
+      title: 'Success',
+    });
+    expect(healthCheckMock).toHaveBeenCalledTimes(1);
+    expect(directRequest).not.toHaveBeenCalled();
   });
 
   it('applies template variables and defaults queryType to SQL', () => {

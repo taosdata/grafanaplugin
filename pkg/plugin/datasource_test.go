@@ -1,7 +1,12 @@
 package plugin
 
 import (
+	"context"
 	"encoding/json"
+	"encoding/pem"
+	"net"
+	"net/http"
+	"net/http/httptest"
 	"testing"
 	"time"
 
@@ -11,6 +16,64 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
+
+func TestNewDatasourceTLSSettings(t *testing.T) {
+	listener, err := net.Listen("tcp4", "127.0.0.1:0")
+	require.NoError(t, err)
+	server := &httptest.Server{Listener: listener, Config: &http.Server{Handler: http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"code":0,"data":[["3.3.0.0"]]}`))
+	})}}
+	server.StartTLS()
+	t.Cleanup(server.Close)
+
+	caCertificate := string(pem.EncodeToMemory(&pem.Block{
+		Type:  "CERTIFICATE",
+		Bytes: server.Certificate().Raw,
+	}))
+
+	tests := []struct {
+		name           string
+		jsonData       string
+		secureJSONData map[string]string
+		wantErr        bool
+	}{
+		{
+			name:     "certificate verification remains enabled by default",
+			jsonData: `{}`,
+			wantErr:  true,
+		},
+		{
+			name:     "skip verification is opt in",
+			jsonData: `{"tlsSkipVerify":true}`,
+		},
+		{
+			name:     "custom CA verifies the server certificate",
+			jsonData: `{"tlsAuthWithCACert":true}`,
+			secureJSONData: map[string]string{
+				"tlsCACert": caCertificate,
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			instance, err := NewDatasource(context.Background(), backend.DataSourceInstanceSettings{
+				URL:                     server.URL,
+				JSONData:                json.RawMessage(tt.jsonData),
+				DecryptedSecureJSONData: tt.secureJSONData,
+			})
+			if tt.wantErr {
+				require.Error(t, err)
+				return
+			}
+
+			require.NoError(t, err)
+			require.NotNil(t, instance)
+			instance.(interface{ Dispose() }).Dispose()
+		})
+	}
+}
 
 type dateTest struct {
 	in, out string

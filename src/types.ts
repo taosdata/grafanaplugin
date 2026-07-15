@@ -18,6 +18,8 @@ export const DEFAULT_QUERY: Partial<Query> = {
 export interface DataSourceOptions extends DataSourceJsonData {
     isLoadAlerts?: boolean;
     folderUidSuffix?: string;
+    tlsAuthWithCACert?: boolean;
+    tlsSkipVerify?: boolean;
 }
 
 /**
@@ -30,6 +32,7 @@ export interface SecureJsonData {
     token?: string
     basicAuth?: string
     basicAuthPassword?: string
+    tlsCACert?: string
 }
 
 export type ChangeOptions<T> = {

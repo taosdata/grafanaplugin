@@ -3,6 +3,7 @@
 - [Grafana Plugin for TDengine](#grafana-plugin-for-tdengine)
   - [Usage](#usage)
     - [Add Data Source](#add-data-source)
+      - [TLS/SSL](#tlsssl)
     - [Import Dashboard](#import-dashboard)
   - [Important changes](#important-changes)
     - [v4.0.0 - **Breaking Changes Release**](#v400---breaking-changes-release)
@@ -57,6 +58,23 @@ Note:
 Save and test it, it should say 'TDengine Data source is working'.
 
 ![data source test](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/howto-add-datasource-test.png)
+
+#### TLS/SSL
+
+Authentication includes a collapsed **TLS/SSL** section in Grafana 8.0 and newer. Prefer supplying a PEM-encoded CA certificate, which keeps certificate and host-name verification enabled. Enable **Skip TLS certificate validation** only for controlled testing because it exposes the connection to man-in-the-middle attacks.
+
+Provisioning uses Grafana's standard TLS fields:
+
+```yaml
+jsonData:
+  tlsAuthWithCACert: true
+  tlsSkipVerify: false
+secureJsonData:
+  tlsCACert: |-
+    -----BEGIN CERTIFICATE-----
+    ...
+    -----END CERTIFICATE-----
+```
 
 ### Import Dashboard
 
@@ -220,6 +238,12 @@ If you encounter issues after upgrading:
       # <bool> mark as default datasource. Max one per org
       isDefault: true
 
+      # Optional TLS settings. Certificate verification is enabled by default.
+      # Set tlsAuthWithCACert to true when tlsCACert is supplied.
+      jsonData:
+        tlsAuthWithCACert: false
+        tlsSkipVerify: false
+
       # <map> 
       secureJsonData:
         # <string> a redundant url configuration. Required.
@@ -229,6 +253,8 @@ If you encounter issues after upgrading:
         basicAuth: "${TDENGINE_BASIC_AUTH}"
         # <string> cloud service token of TDengine,  optional.
         token: "$TDENGINE_CLOUD_TOKEN"
+        # Optional PEM-encoded CA certificate for TLS verification.
+        # tlsCACert: "$TDENGINE_TLS_CA_CERT"
    
       version: 1
       # <bool> allow users to edit datasources from the UI.
