@@ -482,6 +482,7 @@ func (d *Datasource) detectEndpoint() (string, error) {
 func (d *Datasource) doHttpPost(ctx context.Context, endpoint, data string) (respData []byte, err error) {
 	requestURL, err := url.Parse(endpoint)
 	if err != nil {
+		err = redactHTTPErrorURL(err)
 		log.DefaultLogger.Error("query error", "data", data, "error", err)
 		return nil, err
 	}
@@ -529,16 +530,16 @@ func redactHTTPErrorURL(err error) error {
 	}
 
 	redactedURL, parseErr := url.Parse(urlError.URL)
-	if parseErr != nil {
-		redactedURL = &url.URL{Path: "[redacted]"}
-	} else {
+	redactedURLString := "[redacted]"
+	if parseErr == nil {
 		redactedURL.RawQuery = ""
 		redactedURL.ForceQuery = false
 		redactedURL.User = nil
+		redactedURLString = redactedURL.String()
 	}
 
 	redactedError := *urlError
-	redactedError.URL = redactedURL.String()
+	redactedError.URL = redactedURLString
 	return &redactedError
 }
 

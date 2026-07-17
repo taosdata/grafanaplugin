@@ -100,6 +100,20 @@ func TestNewDatasourceRedactsTokenFromTLSError(t *testing.T) {
 	assert.Contains(t, err.Error(), "certificate")
 }
 
+func TestDoHTTPPostRedactsMalformedEndpoint(t *testing.T) {
+	const password = "tdengine-super-secret-password"
+	const querySecret = "tdengine-super-secret-query"
+	endpoint := "https://root:" + password + "@example.com/%zz?key=" + querySecret
+	datasource := &Datasource{}
+
+	_, err := datasource.doHttpPost(context.Background(), endpoint, "select 1")
+
+	require.Error(t, err)
+	assert.NotContains(t, err.Error(), password)
+	assert.NotContains(t, err.Error(), querySecret)
+	assert.Contains(t, err.Error(), "invalid URL escape")
+}
+
 func TestNewDatasourceUsesLegacyBasicAuth(t *testing.T) {
 	const username = "root"
 	const password = "taosdata"
