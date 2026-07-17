@@ -38,7 +38,7 @@
       "type": "datasource",
       "id": "tdengine-datasource",
       "name": "TDengine Datasource",
-      "version": "4.0.0"
+      "version": "4.0.1"
     },
     {
       "type": "panel",
@@ -9067,6 +9067,18 @@
   "tags": [],
   "templating": {
     "list": [
+      {
+        "current": {
+          "selected": true,
+          "text": "${DS_TDENGINE}",
+          "value": "${DS_TDENGINE}"
+        },
+        "hide": 2,
+        "name": "DS_TDENGINE",
+        "query": "tdengine-datasource",
+        "skipUrlSync": true,
+        "type": "datasource"
+      },
       {
         "allValue": null,
         "current": {},

@@ -6,6 +6,7 @@
       - [TLS/SSL](#tlsssl)
     - [Import Dashboard](#import-dashboard)
   - [Important changes](#important-changes)
+    - [v4.0.1](#v401)
     - [v4.0.0 - **Breaking Changes Release**](#v400---breaking-changes-release)
       - [Breaking Changes](#breaking-changes)
       - [Migration Guide](#migration-guide)
@@ -61,6 +62,8 @@ Save and test it, it should say 'TDengine Data source is working'.
 
 #### TLS/SSL
 
+Configure the data source URL with an HTTPS endpoint, for example `https://localhost:6041`.
+
 Authentication includes a collapsed **TLS/SSL** section in Grafana 8.0 and newer. Prefer supplying a PEM-encoded CA certificate, which keeps certificate and host-name verification enabled. Enable **Skip TLS certificate validation** only for controlled testing because it exposes the connection to man-in-the-middle attacks.
 
 Provisioning uses Grafana's standard TLS fields:
@@ -93,6 +96,12 @@ After import:
 ![dashboard display](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/TDinsight-v3-full.png)
 
 ## Important changes
+
+### [v4.0.1](https://github.com/taosdata/grafanaplugin/releases/tag/v4.0.1)
+
+- Added TLS/SSL configuration with custom CA support and an explicit certificate-verification bypass for controlled testing.
+- Updated the bundled TDinsightV3 and taosX dashboards so Grafana 13 imports require selecting the TDengine data source only once while retaining Grafana 8 compatibility.
+- Updated the legacy TDinsight provisioning script to use the TDInsight V3 Dashboard ID `18180`.
 
 ### [v4.0.0](https://github.com/taosdata/grafanaplugin/releases/tag/v4.0.0) - **Breaking Changes Release**
 
