@@ -2,6 +2,7 @@ package plugin
 
 import (
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"encoding/pem"
 	"net"
@@ -73,6 +74,102 @@ func TestNewDatasourceTLSSettings(t *testing.T) {
 			instance.(interface{ Dispose() }).Dispose()
 		})
 	}
+}
+
+func TestNewDatasourceUsesLegacyBasicAuth(t *testing.T) {
+	const username = "root"
+	const password = "taosdata"
+	var authenticated bool
+
+	listener, err := net.Listen("tcp4", "127.0.0.1:0")
+	require.NoError(t, err)
+	server := &httptest.Server{Listener: listener, Config: &http.Server{Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		gotUsername, gotPassword, ok := r.BasicAuth()
+		if !ok || gotUsername != username || gotPassword != password {
+			w.WriteHeader(http.StatusUnauthorized)
+			_, _ = w.Write([]byte(`{"code":855,"desc":"Authentication failure"}`))
+			return
+		}
+
+		authenticated = true
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"code":0,"data":[["3.3.0.0"]]}`))
+	})}}
+	server.Start()
+	t.Cleanup(server.Close)
+
+	legacyBasicAuth := base64.StdEncoding.EncodeToString([]byte(username + ":" + password))
+	instance, err := NewDatasource(context.Background(), backend.DataSourceInstanceSettings{
+		URL: server.URL,
+		DecryptedSecureJSONData: map[string]string{
+			"basicAuth": legacyBasicAuth,
+		},
+	})
+
+	require.NoError(t, err)
+	require.NotNil(t, instance)
+	instance.(interface{ Dispose() }).Dispose()
+	assert.True(t, authenticated)
+}
+
+func TestNewDatasourceReturnsTDengineErrorWhenVersionQueryFails(t *testing.T) {
+	listener, err := net.Listen("tcp4", "127.0.0.1:0")
+	require.NoError(t, err)
+	server := &httptest.Server{Listener: listener, Config: &http.Server{Handler: http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"code":855,"desc":"Authentication failure"}`))
+	})}}
+	server.Start()
+	t.Cleanup(server.Close)
+
+	_, err = NewDatasource(context.Background(), backend.DataSourceInstanceSettings{URL: server.URL})
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "Authentication failure")
+	assert.NotContains(t, err.Error(), "unsupported protocol scheme")
+}
+
+func TestCheckHealthIncludesTDengineDescription(t *testing.T) {
+	listener, err := net.Listen("tcp4", "127.0.0.1:0")
+	require.NoError(t, err)
+	server := &httptest.Server{Listener: listener, Config: &http.Server{Handler: http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"code":855,"desc":"Authentication failure"}`))
+	})}}
+	server.Start()
+	t.Cleanup(server.Close)
+
+	datasource := &Datasource{
+		client:   server.Client(),
+		endpoint: server.URL,
+	}
+	result, err := datasource.CheckHealth(context.Background(), &backend.CheckHealthRequest{})
+
+	require.NoError(t, err)
+	assert.Equal(t, backend.HealthStatusError, result.Status)
+	assert.Contains(t, result.Message, "Authentication failure")
+}
+
+func TestCheckHealthIncludesTDengineDescriptionFromHTTPError(t *testing.T) {
+	listener, err := net.Listen("tcp4", "127.0.0.1:0")
+	require.NoError(t, err)
+	server := &httptest.Server{Listener: listener, Config: &http.Server{Handler: http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusUnauthorized)
+		_, _ = w.Write([]byte(`{"code":855,"desc":"Authentication failure"}`))
+	})}}
+	server.Start()
+	t.Cleanup(server.Close)
+
+	datasource := &Datasource{
+		client:   server.Client(),
+		endpoint: server.URL,
+	}
+	result, err := datasource.CheckHealth(context.Background(), &backend.CheckHealthRequest{})
+
+	require.NoError(t, err)
+	assert.Equal(t, backend.HealthStatusError, result.Status)
+	assert.Contains(t, result.Message, "Authentication failure")
 }
 
 type dateTest struct {

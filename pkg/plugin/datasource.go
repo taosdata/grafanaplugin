@@ -2,6 +2,7 @@ package plugin
 
 import (
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -38,6 +39,13 @@ func NewDatasource(ctx context.Context, settings backend.DataSourceInstanceSetti
 	if err != nil {
 		return nil, fmt.Errorf("http client options: %w", err)
 	}
+	if ops.BasicAuth == nil {
+		legacyBasicAuth, err := legacyBasicAuthOptions(settings.DecryptedSecureJSONData["basicAuth"])
+		if err != nil {
+			return nil, fmt.Errorf("legacy basic auth: %w", err)
+		}
+		ops.BasicAuth = legacyBasicAuth
+	}
 	client, err := httpclient.New(ops)
 	if err != nil {
 		return nil, fmt.Errorf("new httpclient error: %w", err)
@@ -54,6 +62,26 @@ func NewDatasource(ctx context.Context, settings backend.DataSourceInstanceSetti
 	}
 	ds.endpoint = endpoint
 	return &ds, nil
+}
+
+func legacyBasicAuthOptions(encoded string) (*httpclient.BasicAuthOptions, error) {
+	if encoded == "" {
+		return nil, nil
+	}
+
+	decoded, err := base64.StdEncoding.DecodeString(encoded)
+	if err != nil {
+		return nil, fmt.Errorf("decode credentials: %w", err)
+	}
+	credentials := strings.SplitN(string(decoded), ":", 2)
+	if len(credentials) != 2 || credentials[0] == "" {
+		return nil, fmt.Errorf("credentials must contain a username and password")
+	}
+
+	return &httpclient.BasicAuthOptions{
+		User:     credentials[0],
+		Password: credentials[1],
+	}, nil
 }
 
 // Datasource is an example datasource which can respond to data queries, reports
@@ -381,7 +409,7 @@ func (d *Datasource) queryDataFromDatasource(ctx context.Context, query *queryMo
 	}
 
 	if result.Code != 0 {
-		err = fmt.Errorf("query data by sql %s error, response code is %d ", query.Sql, result.Code)
+		err = fmt.Errorf("query data by sql %s error, %s", query.Sql, formatTDengineError(result.Code, result.Desc))
 		log.DefaultLogger.Error("query data error", "error", err)
 		return nil, err
 	}
@@ -434,7 +462,12 @@ func (d *Datasource) detectEndpoint() (string, error) {
 		return "", err
 	}
 	if len(ver.Data) != 1 || len(ver.Data[0]) != 1 {
-		log.DefaultLogger.Error("get server version data error, resp data is ", "resp data", string(respData))
+		detail := tdengineErrorFromBody(respData)
+		if detail == "" {
+			detail = "response does not contain a server version"
+		}
+		err = fmt.Errorf("get server version data error: %s", detail)
+		log.DefaultLogger.Error("get server version data error", "error", err)
 		return "", err
 	}
 
@@ -461,12 +494,39 @@ func (d *Datasource) doHttpPost(ctx context.Context, url, data string) (respData
 
 	defer func() { _ = resp.Body.Close() }()
 
-	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("http request for [%s] received code: %d, status %s ", data,
-			resp.StatusCode, resp.Status)
+	body, readErr := io.ReadAll(resp.Body)
+	if readErr != nil {
+		return nil, fmt.Errorf("read HTTP response: %w", readErr)
 	}
 
-	return io.ReadAll(resp.Body)
+	if resp.StatusCode != http.StatusOK {
+		message := fmt.Sprintf("http request for [%s] received code: %d, status %s", data,
+			resp.StatusCode, resp.Status)
+		if detail := tdengineErrorFromBody(body); detail != "" {
+			message += ", " + detail
+		}
+		return nil, fmt.Errorf("%s", message)
+	}
+
+	return body, nil
+}
+
+func formatTDengineError(code int, description string) string {
+	if description == "" {
+		return fmt.Sprintf("response code is %d", code)
+	}
+	return fmt.Sprintf("response code is %d, description: %s", code, description)
+}
+
+func tdengineErrorFromBody(body []byte) string {
+	var result struct {
+		Code int    `json:"code"`
+		Desc string `json:"desc"`
+	}
+	if err := json.Unmarshal(body, &result); err != nil || result.Desc == "" {
+		return ""
+	}
+	return formatTDengineError(result.Code, result.Desc)
 }
 
 func getQueryModel(query backend.DataQuery) (model *queryModel, success bool, errMsg string) {

@@ -318,6 +318,7 @@ type queryModel struct {
 type dataResult struct {
 	Status     string          `json:"status"`
 	Code       int             `json:"code"`
+	Desc       string          `json:"desc"`
 	Head       []string        `json:"head"`
 	ColumnMeta [][]interface{} `json:"column_meta"`
 	Data       [][]interface{} `json:"data"`
