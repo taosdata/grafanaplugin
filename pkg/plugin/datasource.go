@@ -483,7 +483,7 @@ func (d *Datasource) doHttpPost(ctx context.Context, endpoint, data string) (res
 	requestURL, err := url.Parse(endpoint)
 	if err != nil {
 		err = redactHTTPErrorURL(err)
-		log.DefaultLogger.Error("query error", "data", data, "error", err)
+		log.DefaultLogger.Error("parse query endpoint failed", "error", err)
 		return nil, err
 	}
 	if len(d.token) > 0 {
@@ -494,7 +494,7 @@ func (d *Datasource) doHttpPost(ctx context.Context, endpoint, data string) (res
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, requestURL.String(), strings.NewReader(data))
 	if err != nil {
 		err = redactHTTPErrorURL(err)
-		log.DefaultLogger.Error("query error", "data", data, "error", err)
+		log.DefaultLogger.Error("create query request failed", "error", err)
 		return nil, err
 	}
 	resp, err := d.client.Do(req)

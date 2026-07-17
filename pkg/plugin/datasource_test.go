@@ -13,10 +13,28 @@ import (
 
 	"github.com/araddon/dateparse"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
+	backendlog "github.com/grafana/grafana-plugin-sdk-go/backend/log"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
+
+type recordedLogEntry struct {
+	message string
+	args    []interface{}
+}
+
+type recordingLogger struct {
+	backendlog.Logger
+	errors []recordedLogEntry
+}
+
+func (logger *recordingLogger) Error(message string, args ...interface{}) {
+	logger.errors = append(logger.errors, recordedLogEntry{
+		message: message,
+		args:    append([]interface{}(nil), args...),
+	})
+}
 
 func TestNewDatasourceTLSSettings(t *testing.T) {
 	listener, err := net.Listen("tcp4", "127.0.0.1:0")
@@ -112,6 +130,49 @@ func TestDoHTTPPostRedactsMalformedEndpoint(t *testing.T) {
 	assert.NotContains(t, err.Error(), password)
 	assert.NotContains(t, err.Error(), querySecret)
 	assert.Contains(t, err.Error(), "invalid URL escape")
+}
+
+func TestDoHTTPPostDoesNotLogQueryOnRequestConstructionErrors(t *testing.T) {
+	const query = "select 'tdengine-super-secret-query'"
+	tests := []struct {
+		name            string
+		ctx             context.Context
+		endpoint        string
+		expectedMessage string
+	}{
+		{
+			name:            "malformed endpoint",
+			ctx:             context.Background(),
+			endpoint:        "https://example.com/%zz",
+			expectedMessage: "parse query endpoint failed",
+		},
+		{
+			name:            "nil request context",
+			ctx:             nil,
+			endpoint:        "https://example.com",
+			expectedMessage: "create query request failed",
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			logger := &recordingLogger{Logger: backendlog.NewNullLogger()}
+			originalLogger := backendlog.DefaultLogger
+			backendlog.DefaultLogger = logger
+			t.Cleanup(func() {
+				backendlog.DefaultLogger = originalLogger
+			})
+
+			datasource := &Datasource{}
+			_, err := datasource.doHttpPost(test.ctx, test.endpoint, query)
+
+			require.Error(t, err)
+			require.Len(t, logger.errors, 1)
+			assert.Equal(t, test.expectedMessage, logger.errors[0].message)
+			assert.NotContains(t, logger.errors[0].args, "data")
+			assert.NotContains(t, logger.errors[0].args, query)
+		})
+	}
 }
 
 func TestNewDatasourceUsesLegacyBasicAuth(t *testing.T) {
