@@ -4,9 +4,11 @@ import (
 	"context"
 	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"regexp"
 	"sort"
 	"strings"
@@ -477,17 +479,26 @@ func (d *Datasource) detectEndpoint() (string, error) {
 	return d.settings.URL + utcSqlEndPoint, nil
 }
 
-func (d *Datasource) doHttpPost(ctx context.Context, url, data string) (respData []byte, err error) {
-	if len(d.token) > 0 {
-		url += "?token=" + d.token
-	}
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, url, strings.NewReader(data))
+func (d *Datasource) doHttpPost(ctx context.Context, endpoint, data string) (respData []byte, err error) {
+	requestURL, err := url.Parse(endpoint)
 	if err != nil {
+		log.DefaultLogger.Error("query error", "data", data, "error", err)
+		return nil, err
+	}
+	if len(d.token) > 0 {
+		query := requestURL.Query()
+		query.Set("token", d.token)
+		requestURL.RawQuery = query.Encode()
+	}
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, requestURL.String(), strings.NewReader(data))
+	if err != nil {
+		err = redactHTTPErrorURL(err)
 		log.DefaultLogger.Error("query error", "data", data, "error", err)
 		return nil, err
 	}
 	resp, err := d.client.Do(req)
 	if err != nil {
+		err = redactHTTPErrorURL(err)
 		log.DefaultLogger.Error("query error", "error", err)
 		return nil, err
 	}
@@ -509,6 +520,26 @@ func (d *Datasource) doHttpPost(ctx context.Context, url, data string) (respData
 	}
 
 	return body, nil
+}
+
+func redactHTTPErrorURL(err error) error {
+	var urlError *url.Error
+	if !errors.As(err, &urlError) {
+		return err
+	}
+
+	redactedURL, parseErr := url.Parse(urlError.URL)
+	if parseErr != nil {
+		redactedURL = &url.URL{Path: "[redacted]"}
+	} else {
+		redactedURL.RawQuery = ""
+		redactedURL.ForceQuery = false
+		redactedURL.User = nil
+	}
+
+	redactedError := *urlError
+	redactedError.URL = redactedURL.String()
+	return &redactedError
 }
 
 func formatTDengineError(code int, description string) string {

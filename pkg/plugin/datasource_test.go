@@ -76,6 +76,30 @@ func TestNewDatasourceTLSSettings(t *testing.T) {
 	}
 }
 
+func TestNewDatasourceRedactsTokenFromTLSError(t *testing.T) {
+	const token = "tdengine-super-secret-token"
+
+	listener, err := net.Listen("tcp4", "127.0.0.1:0")
+	require.NoError(t, err)
+	server := &httptest.Server{Listener: listener, Config: &http.Server{Handler: http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"code":0,"data":[["3.3.0.0"]]}`))
+	})}}
+	server.StartTLS()
+	t.Cleanup(server.Close)
+
+	_, err = NewDatasource(context.Background(), backend.DataSourceInstanceSettings{
+		URL: server.URL,
+		DecryptedSecureJSONData: map[string]string{
+			"token": token,
+		},
+	})
+
+	require.Error(t, err)
+	assert.NotContains(t, err.Error(), token)
+	assert.Contains(t, err.Error(), "certificate")
+}
+
 func TestNewDatasourceUsesLegacyBasicAuth(t *testing.T) {
 	const username = "root"
 	const password = "taosdata"
