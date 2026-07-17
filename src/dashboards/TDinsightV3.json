@@ -4484,7 +4484,7 @@
           "value": "${DS_TDENGINE}"
         },
         "hide": 2,
-        "name": "DS_TDENGINE",
+        "name": "TDENGINE_DATASOURCE",
         "query": "tdengine-datasource",
         "skipUrlSync": true,
         "type": "datasource"
@@ -4492,7 +4492,7 @@
       {
         "allValue": null,
         "current": {},
-        "datasource": "${DS_TDENGINE}",
+        "datasource": "$TDENGINE_DATASOURCE",
         "definition": "select name from information_schema.ins_databases where `vgroups` is not null ORDER BY CASE WHEN name = 'log' THEN 1 ELSE 2 END, name;",
         "description": null,
         "error": null,
@@ -4515,7 +4515,7 @@
       {
         "allValue": null,
         "current": {},
-        "datasource": "${DS_TDENGINE}",
+        "datasource": "$TDENGINE_DATASOURCE",
         "definition": "select distinct dnode_ep  from $database.taosd_dnodes_info where _ts >= $from and _ts <= $to",
         "description": "TDengine Nodes FQDN (Hostname)",
         "error": null,
@@ -4538,7 +4538,7 @@
       {
         "allValue": null,
         "current": {},
-        "datasource": "${DS_TDENGINE}",
+        "datasource": "$TDENGINE_DATASOURCE",
         "definition": "select last(cluster_version) from $database.taosd_cluster_basic where ts >= $from and ts <= $to",
         "description": null,
         "error": null,
@@ -4561,7 +4561,7 @@
       {
         "allValue": null,
         "current": {},
-        "datasource": "${DS_TDENGINE}",
+        "datasource": "$TDENGINE_DATASOURCE",
         "definition": "select last(first_ep) from $database.taosd_cluster_basic where ts >= $from and ts <= $to",
         "description": null,
         "error": null,
@@ -4584,7 +4584,7 @@
       {
         "allValue": "",
         "current": {},
-        "datasource": "${DS_TDENGINE}",
+        "datasource": "$TDENGINE_DATASOURCE",
         "definition": "select distinct username  from $database.taos_sql_req where _ts >= $from and _ts <= $to",
         "description": "User Name",
         "error": null,
@@ -4607,7 +4607,7 @@
       {
         "allValue": "",
         "current": {},
-        "datasource": "${DS_TDENGINE}",
+        "datasource": "$TDENGINE_DATASOURCE",
         "definition": "select distinct result  from $database.taos_sql_req where _ts >= $from and _ts <= $to",
         "description": "SQL Result",
         "error": null,
@@ -4630,7 +4630,7 @@
       {
         "allValue": "",
         "current": {},
-        "datasource": "${DS_TDENGINE}",
+        "datasource": "$TDENGINE_DATASOURCE",
         "definition": "select distinct `duration`  from $database.taos_slow_sql where _ts >= $from and _ts <= $to",
         "description": "SQL Result",
         "error": null,
@@ -4653,7 +4653,7 @@
       {
         "allValue": null,
         "current": {},
-        "datasource": "${DS_TDENGINE}",
+        "datasource": "$TDENGINE_DATASOURCE",
         "definition": "select  distinct endpoint  from $database.adapter_requests where ts >= $from and ts <= $to order by endpoint",
         "description": null,
         "error": null,
@@ -4676,7 +4676,7 @@
       {
         "allValue": null,
         "current": {},
-        "datasource": "${DS_TDENGINE}",
+        "datasource": "$TDENGINE_DATASOURCE",
         "definition": "select distinct database_name from $database.taosd_write_metrics where _ts >= $from and _ts <= $to",
         "description": "TDengine Database Name",
         "error": null,
@@ -4699,7 +4699,7 @@
       {
         "allValue": null,
         "current": {},
-        "datasource": "${DS_TDENGINE}",
+        "datasource": "$TDENGINE_DATASOURCE",
         "definition": "select distinct vgroup_id from $database.taosd_write_metrics where database_name in (${databaseName:sqlstring}) and _ts >= $from and _ts <= $to",
         "description": "TDengine Vgroup Id",
         "error": null,
@@ -4722,7 +4722,7 @@
       {
         "allValue": null,
         "current": {},
-        "datasource": "${DS_TDENGINE}",
+        "datasource": "$TDENGINE_DATASOURCE",
         "definition": "select last(_ts) from $database.taosd_dnodes_status",
         "description": null,
         "error": null,
@@ -4745,7 +4745,7 @@
       {
         "allValue": null,
         "current": {},
-        "datasource": "${DS_TDENGINE}",
+        "datasource": "$TDENGINE_DATASOURCE",
         "definition": "select last(_ts) from $database.taosd_mnodes_info",
         "description": null,
         "error": null,

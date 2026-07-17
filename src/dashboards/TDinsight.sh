@@ -294,7 +294,7 @@ provisioning_dashboard() {
   fi
 
   # 2. Replace with TDengine data source name
-  sed 's#"datasource": "${DS_TDENGINE}"#"datasource": "'$TDENGINE_DS_NAME'"#g' -i $TDINSIGHT_DASHBOARD_UID.json
+  sed 's#"${DS_TDENGINE}"#"'$TDENGINE_DS_NAME'"#g' -i $TDINSIGHT_DASHBOARD_UID.json
   sed 's/"tdinsight"/"'$TDINSIGHT_DASHBOARD_UID'"/' -i $TDINSIGHT_DASHBOARD_UID.json
   sed 's/"TDinsight"/"'"$TDINSIGHT_DASHBOARD_TITLE"'"/' -i $TDINSIGHT_DASHBOARD_UID.json
   sed 's/"gnetId": 18180/"gnetId": null/' -i $TDINSIGHT_DASHBOARD_UID.json
