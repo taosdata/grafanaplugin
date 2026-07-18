@@ -22,6 +22,7 @@ data sources.
 ## Compatible with TDengine version
 | TDengine grafana plugin version | major changes                                                                                                            | TDengine version |
 | :-----------------------------: | ------------------------------------------------------------------------------------------------------------------------ | :--------------: |
+|              4.0.1              | 1. Added TLS/SSL configuration with custom CA support. <br> 2. Improved TDinsightV3 and taosX imports in Grafana 13 while retaining Grafana 8 compatibility. <br> 3. Updated legacy TDinsight provisioning to use Dashboard ID 18180. | 3.3.7.0 or later |
 |              4.0.0              | 1. Simplified backend data processing by aligning with Grafana SDK's DataFrame best practices. <br> 2. Fixed alert tag extraction for queries with grouped dimensions. <br> 3. Breaking: removed deprecated query fields (`alias`, `colNameFormatStr`, `colNameToGroup`, plugin `timeShift*`) and removed TDinsightV2/Monitor dashboards (see README/CHANGELOG migration notes). | 3.3.7.0 or later |
 |              3.8.0              | Compatible Grafana version changed from 7.5 to 8.0.                                                                      | 3.3.7.0 or later |
 |              3.7.6              | Fix password changes not updating authentication credentials.                                                            | 3.3.7.0 or later |

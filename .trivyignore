@@ -1,0 +1,4 @@
+# Pulled in by @grafana/runtime through the Grafana-provided Faro SDK.
+# Grafana packages are Webpack externals; fixing upstream requires Grafana Runtime 13
+# and would drop this release's Grafana 8 compatibility.
+CVE-2026-54285

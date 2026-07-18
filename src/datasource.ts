@@ -6,7 +6,7 @@ import {
 } from '@grafana/data'
 import {BackendSrv, DataSourceWithBackend, getBackendSrv, getTemplateSrv, TemplateSrv} from '@grafana/runtime'
 import {DataSourceOptions, Query} from './types';
-import _, {uniqBy} from "lodash";
+import {uniqBy} from "lodash";
 import data from './alert_rules.json'
 import { checkGrafanaVersion, getFolderUid } from './utils'
 
@@ -182,8 +182,8 @@ export class DataSource extends DataSourceWithBackend<Query, DataSourceOptions> 
     }
 
     testDatasource() { // save & test button
-        return this.request('show databases').then((response: any) => {
-            if (!!response && response.status === 200 && !_.get(response, 'data.code')) {
+        return this.callHealthCheck().then((response: any) => {
+            if (response?.status === 'OK') {
                 if (this.isLoadAlerts === true) {
                     return this.sendInitAlert().then(()=>{
                         return {status: "success", message: "TDengine Data source is working", title: "Success"};
@@ -198,7 +198,7 @@ export class DataSource extends DataSourceWithBackend<Query, DataSourceOptions> 
             // TDengine error response format: {code: 855, desc: "Authentication failure"}
             return {
                 status: "error",
-                message: "TDengine Data source is not working, reason: " + (response.data?.desc || response.data?.message || 'Unknown error'),
+                message: "TDengine Data source is not working, reason: " + (response?.message || 'Unknown error'),
                 title: "Failed"
             };
         });

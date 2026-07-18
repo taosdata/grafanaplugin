@@ -2,10 +2,13 @@ package plugin
 
 import (
 	"context"
+	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"regexp"
 	"sort"
 	"strings"
@@ -38,9 +41,19 @@ func NewDatasource(ctx context.Context, settings backend.DataSourceInstanceSetti
 	if err != nil {
 		return nil, fmt.Errorf("http client options: %w", err)
 	}
+	if ops.BasicAuth == nil {
+		legacyBasicAuth, err := legacyBasicAuthOptions(settings.DecryptedSecureJSONData["basicAuth"])
+		if err != nil {
+			return nil, fmt.Errorf("legacy basic auth: %w", err)
+		}
+		ops.BasicAuth = legacyBasicAuth
+	}
 	client, err := httpclient.New(ops)
 	if err != nil {
 		return nil, fmt.Errorf("new httpclient error: %w", err)
+	}
+	client.CheckRedirect = func(_ *http.Request, _ []*http.Request) error {
+		return http.ErrUseLastResponse
 	}
 
 	ds := Datasource{
@@ -54,6 +67,26 @@ func NewDatasource(ctx context.Context, settings backend.DataSourceInstanceSetti
 	}
 	ds.endpoint = endpoint
 	return &ds, nil
+}
+
+func legacyBasicAuthOptions(encoded string) (*httpclient.BasicAuthOptions, error) {
+	if encoded == "" {
+		return nil, nil
+	}
+
+	decoded, err := base64.StdEncoding.DecodeString(encoded)
+	if err != nil {
+		return nil, fmt.Errorf("decode credentials: %w", err)
+	}
+	credentials := strings.SplitN(string(decoded), ":", 2)
+	if len(credentials) != 2 || credentials[0] == "" {
+		return nil, fmt.Errorf("credentials must contain a username and password")
+	}
+
+	return &httpclient.BasicAuthOptions{
+		User:     credentials[0],
+		Password: credentials[1],
+	}, nil
 }
 
 // Datasource is an example datasource which can respond to data queries, reports
@@ -381,7 +414,7 @@ func (d *Datasource) queryDataFromDatasource(ctx context.Context, query *queryMo
 	}
 
 	if result.Code != 0 {
-		err = fmt.Errorf("query data by sql %s error, response code is %d ", query.Sql, result.Code)
+		err = fmt.Errorf("query data error, %s", formatTDengineError(result.Code, result.Desc))
 		log.DefaultLogger.Error("query data error", "error", err)
 		return nil, err
 	}
@@ -414,6 +447,7 @@ func (d *Datasource) CheckHealth(ctx context.Context, req *backend.CheckHealthRe
 
 const sqlEndPoint = "/rest/sql"
 const utcSqlEndPoint = "/rest/sqlutc"
+const maxErrorResponseBodyBytes = 64 * 1024
 
 var (
 	timeFromMacroPattern   = regexp.MustCompile(`\$__timeFrom(?:\s*\(\s*\))?`)
@@ -434,7 +468,12 @@ func (d *Datasource) detectEndpoint() (string, error) {
 		return "", err
 	}
 	if len(ver.Data) != 1 || len(ver.Data[0]) != 1 {
-		log.DefaultLogger.Error("get server version data error, resp data is ", "resp data", string(respData))
+		detail := tdengineErrorFromBody(respData)
+		if detail == "" {
+			detail = "response does not contain a server version"
+		}
+		err = fmt.Errorf("get server version data error: %s", detail)
+		log.DefaultLogger.Error("get server version data error", "error", err)
 		return "", err
 	}
 
@@ -444,17 +483,27 @@ func (d *Datasource) detectEndpoint() (string, error) {
 	return d.settings.URL + utcSqlEndPoint, nil
 }
 
-func (d *Datasource) doHttpPost(ctx context.Context, url, data string) (respData []byte, err error) {
-	if len(d.token) > 0 {
-		url += "?token=" + d.token
-	}
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, url, strings.NewReader(data))
+func (d *Datasource) doHttpPost(ctx context.Context, endpoint, data string) (respData []byte, err error) {
+	requestURL, err := url.Parse(endpoint)
 	if err != nil {
-		log.DefaultLogger.Error("query error", "data", data, "error", err)
+		err = redactHTTPErrorURL(err)
+		log.DefaultLogger.Error("parse query endpoint failed", "error", err)
+		return nil, err
+	}
+	if len(d.token) > 0 {
+		query := requestURL.Query()
+		query.Set("token", d.token)
+		requestURL.RawQuery = query.Encode()
+	}
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, requestURL.String(), strings.NewReader(data))
+	if err != nil {
+		err = redactHTTPErrorURL(err)
+		log.DefaultLogger.Error("create query request failed", "error", err)
 		return nil, err
 	}
 	resp, err := d.client.Do(req)
 	if err != nil {
+		err = redactHTTPErrorURL(err)
 		log.DefaultLogger.Error("query error", "error", err)
 		return nil, err
 	}
@@ -462,11 +511,63 @@ func (d *Datasource) doHttpPost(ctx context.Context, url, data string) (respData
 	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("http request for [%s] received code: %d, status %s ", data,
-			resp.StatusCode, resp.Status)
+		body, readErr := io.ReadAll(io.LimitReader(resp.Body, maxErrorResponseBodyBytes+1))
+		if readErr != nil {
+			return nil, fmt.Errorf("read HTTP error response: %w", readErr)
+		}
+
+		message := fmt.Sprintf("http request received code: %d, status %s", resp.StatusCode, resp.Status)
+		if len(body) <= maxErrorResponseBodyBytes {
+			if detail := tdengineErrorFromBody(body); detail != "" {
+				message += ", " + detail
+			}
+		}
+		return nil, fmt.Errorf("%s", message)
 	}
 
-	return io.ReadAll(resp.Body)
+	body, readErr := io.ReadAll(resp.Body)
+	if readErr != nil {
+		return nil, fmt.Errorf("read HTTP response: %w", readErr)
+	}
+	return body, nil
+}
+
+func redactHTTPErrorURL(err error) error {
+	var urlError *url.Error
+	if !errors.As(err, &urlError) {
+		return err
+	}
+
+	redactedURL, parseErr := url.Parse(urlError.URL)
+	redactedURLString := "[redacted]"
+	if parseErr == nil {
+		redactedURL.RawQuery = ""
+		redactedURL.ForceQuery = false
+		redactedURL.User = nil
+		redactedURLString = redactedURL.String()
+	}
+
+	redactedError := *urlError
+	redactedError.URL = redactedURLString
+	return &redactedError
+}
+
+func formatTDengineError(code int, description string) string {
+	if description == "" {
+		return fmt.Sprintf("response code is %d", code)
+	}
+	return fmt.Sprintf("response code is %d, description: %s", code, description)
+}
+
+func tdengineErrorFromBody(body []byte) string {
+	var result struct {
+		Code int    `json:"code"`
+		Desc string `json:"desc"`
+	}
+	if err := json.Unmarshal(body, &result); err != nil || result.Desc == "" {
+		return ""
+	}
+	return formatTDengineError(result.Code, result.Desc)
 }
 
 func getQueryModel(query backend.DataQuery) (model *queryModel, success bool, errMsg string) {

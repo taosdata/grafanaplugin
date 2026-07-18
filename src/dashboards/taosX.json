@@ -38,7 +38,7 @@
       "type": "datasource",
       "id": "tdengine-datasource",
       "name": "TDengine Datasource",
-      "version": "4.0.0"
+      "version": "4.0.1"
     },
     {
       "type": "panel",
@@ -9068,9 +9068,21 @@
   "templating": {
     "list": [
       {
+        "current": {
+          "selected": true,
+          "text": "${DS_TDENGINE}",
+          "value": "${DS_TDENGINE}"
+        },
+        "hide": 2,
+        "name": "TDENGINE_DATASOURCE",
+        "query": "tdengine-datasource",
+        "skipUrlSync": true,
+        "type": "datasource"
+      },
+      {
         "allValue": null,
         "current": {},
-        "datasource": "${DS_TDENGINE}",
+        "datasource": "$TDENGINE_DATASOURCE",
         "definition": "select name from information_schema.ins_databases where `vgroups` is not null ORDER BY CASE WHEN name = 'log' THEN 1 ELSE 2 END, name;",
         "description": null,
         "error": null,
@@ -9093,7 +9105,7 @@
       {
         "allValue": null,
         "current": {},
-        "datasource": "${DS_TDENGINE}",
+        "datasource": "$TDENGINE_DATASOURCE",
         "definition": "select distinct(taosx_id) from $database.taosx_sys where _ts >= $from and _ts <= $to",
         "description": null,
         "error": null,
@@ -9116,7 +9128,7 @@
       {
         "allValue": null,
         "current": {},
-        "datasource": "${DS_TDENGINE}",
+        "datasource": "$TDENGINE_DATASOURCE",
         "definition": "select concat(agent_id, '!', agent_id, '-' ,agent_name) from $database.taosx_agent where taosx_id = '$taosX_id' and _ts >= $from and _ts <= $to",
         "description": null,
         "error": null,
@@ -9139,7 +9151,7 @@
       {
         "allValue": null,
         "current": {},
-        "datasource": "${DS_TDENGINE}",
+        "datasource": "$TDENGINE_DATASOURCE",
         "definition": "SELECT 'TDengine2' AS datasource  UNION  SELECT 'TDengine3' UNION  SELECT 'Influxdb' UNION  SELECT 'OpenTSDB' UNION  SELECT 'OPCUA' UNION  SELECT 'OPCDA'  UNION  SELECT 'PI' UNION  SELECT 'PIBackFill' UNION  SELECT 'CSV'UNION  SELECT 'MQTT' UNION SELECT 'AvevaHistorian' UNION  SELECT 'Kafka' order by datasource",
         "description": null,
         "error": null,
@@ -9162,7 +9174,7 @@
       {
         "allValue": null,
         "current": {},
-        "datasource": "${DS_TDENGINE}",
+        "datasource": "$TDENGINE_DATASOURCE",
         "definition": "select distinct concat(task_id, '!', task_id, '-' ,task_name) from $database.taosx_task_$datasource where taosx_id = '$taosX_id' and _ts >= $from and _ts <= $to",
         "description": null,
         "error": null,

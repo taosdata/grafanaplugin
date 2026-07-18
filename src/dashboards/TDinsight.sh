@@ -33,7 +33,7 @@ TDENGINE_PASSWORD=${TDENGINE_PASSWORD:-taosdata}
 LOG_REPLICA=${LOG_REPLICA:1}
 
 # TDinsight dashboard configurations
-TDINSIGHT_DASHBOARD_ID=15167
+TDINSIGHT_DASHBOARD_ID=18180
 TDINSIGHT_DASHBOARD_UID=${TDINSIGHT_DASHBOARD_UID:-tdinsight}
 TDINSIGHT_DASHBOARD_TITLE=${TDINSIGHT_DASHBOARD_TITLE:-TDinsight}
 TDENGINE_EDITABLE=${TDENGINE_EDITABLE:-false}
@@ -294,10 +294,10 @@ provisioning_dashboard() {
   fi
 
   # 2. Replace with TDengine data source name
-  sed 's#"datasource": "${DS_TDENGINE}"#"datasource": "'$TDENGINE_DS_NAME'"#g' -i $TDINSIGHT_DASHBOARD_UID.json
+  sed 's#"${DS_TDENGINE}"#"'$TDENGINE_DS_NAME'"#g' -i $TDINSIGHT_DASHBOARD_UID.json
   sed 's/"tdinsight"/"'$TDINSIGHT_DASHBOARD_UID'"/' -i $TDINSIGHT_DASHBOARD_UID.json
   sed 's/"TDinsight"/"'"$TDINSIGHT_DASHBOARD_TITLE"'"/' -i $TDINSIGHT_DASHBOARD_UID.json
-  sed 's/"gnetId": 15167/"gnetId": null/' -i $TDINSIGHT_DASHBOARD_UID.json
+  sed 's/"gnetId": 18180/"gnetId": null/' -i $TDINSIGHT_DASHBOARD_UID.json
 
 
   # 4. Add dashboard config

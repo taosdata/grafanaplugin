@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.0.1] - 2026-07-17
+
+### Features
+
+- Added TLS/SSL configuration with PEM-encoded custom CA certificates.
+- Added an explicit option to skip TLS certificate validation for controlled testing environments.
+
+### Bug Fixes
+
+- Fixed TDinsightV3 and taosX datasource-variable resolution when importing dashboards into Grafana 13 while retaining Grafana 8 compatibility.
+- Updated the legacy TDinsight provisioning script to use the TDInsight V3 Dashboard ID `18180`.
+
+### Security
+
+- Disabled automatic HTTP redirects for datasource requests to prevent credentials and query payloads from being forwarded to redirected endpoints.
+- Removed raw SQL from HTTP-status and TDengine query-error messages returned to Grafana and written at Error level.
+
+### Upgrade Notes
+
+- Datasource URLs must point directly to the final TDengine REST endpoint. Configurations relying on HTTP 3xx redirects must update the URL before upgrading.
+
 ## [4.0.0] - 2026-03-26
 
 ### Breaking Changes
