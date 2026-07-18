@@ -5,10 +5,12 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"encoding/pem"
+	"fmt"
 	"io"
 	"net"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"sync/atomic"
 	"testing"
 	"time"
@@ -36,6 +38,12 @@ func (logger *recordingLogger) Error(message string, args ...interface{}) {
 		message: message,
 		args:    append([]interface{}(nil), args...),
 	})
+}
+
+type roundTripFunc func(*http.Request) (*http.Response, error)
+
+func (f roundTripFunc) RoundTrip(request *http.Request) (*http.Response, error) {
+	return f(request)
 }
 
 func TestNewDatasourceTLSSettings(t *testing.T) {
@@ -175,6 +183,86 @@ func TestDoHTTPPostDoesNotLogQueryOnRequestConstructionErrors(t *testing.T) {
 			assert.NotContains(t, logger.errors[0].args, query)
 		})
 	}
+}
+
+func TestQueryErrorsDoNotExposeSQL(t *testing.T) {
+	const sql = "select 'tdengine-super-secret-query'"
+	tests := []struct {
+		name       string
+		statusCode int
+		body       string
+		want       []string
+	}{
+		{
+			name:       "unauthorized",
+			statusCode: http.StatusUnauthorized,
+			body:       `{"code":855,"desc":"Authentication failure"}`,
+			want:       []string{"401", "855", "Authentication failure"},
+		},
+		{
+			name:       "server error",
+			statusCode: http.StatusInternalServerError,
+			body:       `{"code":1,"desc":"Internal error"}`,
+			want:       []string{"500", "1", "Internal error"},
+		},
+		{
+			name:       "TDengine business error",
+			statusCode: http.StatusOK,
+			body:       `{"code":9728,"desc":"Invalid operation"}`,
+			want:       []string{"9728", "Invalid operation"},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+				w.Header().Set("Content-Type", "application/json")
+				w.WriteHeader(test.statusCode)
+				_, _ = w.Write([]byte(test.body))
+			}))
+			t.Cleanup(server.Close)
+
+			logger := &recordingLogger{Logger: backendlog.NewNullLogger()}
+			originalLogger := backendlog.DefaultLogger
+			backendlog.DefaultLogger = logger
+			t.Cleanup(func() { backendlog.DefaultLogger = originalLogger })
+
+			queryJSON, err := json.Marshal(map[string]string{"queryType": "SQL", "sql": sql})
+			require.NoError(t, err)
+			datasource := &Datasource{client: server.Client(), endpoint: server.URL}
+			response := datasource.query(context.Background(), backend.PluginContext{}, backend.DataQuery{JSON: queryJSON})
+
+			require.Error(t, response.Error)
+			assert.NotContains(t, response.Error.Error(), sql)
+			for _, expected := range test.want {
+				assert.Contains(t, response.Error.Error(), expected)
+			}
+			require.NotEmpty(t, logger.errors)
+			for _, entry := range logger.errors {
+				assert.NotContains(t, fmt.Sprint(entry.args...), sql)
+			}
+		})
+	}
+}
+
+func TestDoHTTPPostLimitsErrorResponseBody(t *testing.T) {
+	const expectedLimit = 64 * 1024
+	payload := strings.Repeat("x", expectedLimit*2)
+	reader := strings.NewReader(payload)
+	datasource := &Datasource{client: &http.Client{Transport: roundTripFunc(func(request *http.Request) (*http.Response, error) {
+		return &http.Response{
+			StatusCode: http.StatusInternalServerError,
+			Status:     "500 Internal Server Error",
+			Header:     make(http.Header),
+			Body:       io.NopCloser(reader),
+			Request:    request,
+		}, nil
+	})}}
+
+	_, err := datasource.doHttpPost(context.Background(), "http://tdengine.invalid/rest/sql", "select 1")
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "500")
+	assert.Equal(t, expectedLimit+1, len(payload)-reader.Len())
 }
 
 func TestNewDatasourceUsesLegacyBasicAuth(t *testing.T) {

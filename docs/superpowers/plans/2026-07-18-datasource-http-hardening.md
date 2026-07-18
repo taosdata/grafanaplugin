@@ -198,7 +198,8 @@ Use a `strings.Reader` to prove the client consumes no more than the limit plus 
 
 ```go
 func TestDoHTTPPostLimitsErrorResponseBody(t *testing.T) {
-	payload := strings.Repeat("x", maxErrorResponseBodyBytes*2)
+	const expectedLimit = 64 * 1024
+	payload := strings.Repeat("x", expectedLimit*2)
 	reader := strings.NewReader(payload)
 	datasource := &Datasource{client: &http.Client{Transport: roundTripFunc(func(request *http.Request) (*http.Response, error) {
 		return &http.Response{
@@ -213,7 +214,7 @@ func TestDoHTTPPostLimitsErrorResponseBody(t *testing.T) {
 	_, err := datasource.doHttpPost(context.Background(), "http://tdengine.invalid/rest/sql", "select 1")
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "500")
-	assert.Equal(t, maxErrorResponseBodyBytes+1, len(payload)-reader.Len())
+	assert.Equal(t, expectedLimit+1, len(payload)-reader.Len())
 }
 ```
 

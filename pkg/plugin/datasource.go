@@ -414,7 +414,7 @@ func (d *Datasource) queryDataFromDatasource(ctx context.Context, query *queryMo
 	}
 
 	if result.Code != 0 {
-		err = fmt.Errorf("query data by sql %s error, %s", query.Sql, formatTDengineError(result.Code, result.Desc))
+		err = fmt.Errorf("query data error, %s", formatTDengineError(result.Code, result.Desc))
 		log.DefaultLogger.Error("query data error", "error", err)
 		return nil, err
 	}
@@ -447,6 +447,7 @@ func (d *Datasource) CheckHealth(ctx context.Context, req *backend.CheckHealthRe
 
 const sqlEndPoint = "/rest/sql"
 const utcSqlEndPoint = "/rest/sqlutc"
+const maxErrorResponseBodyBytes = 64 * 1024
 
 var (
 	timeFromMacroPattern   = regexp.MustCompile(`\$__timeFrom(?:\s*\(\s*\))?`)
@@ -509,20 +510,25 @@ func (d *Datasource) doHttpPost(ctx context.Context, endpoint, data string) (res
 
 	defer func() { _ = resp.Body.Close() }()
 
-	body, readErr := io.ReadAll(resp.Body)
-	if readErr != nil {
-		return nil, fmt.Errorf("read HTTP response: %w", readErr)
-	}
-
 	if resp.StatusCode != http.StatusOK {
-		message := fmt.Sprintf("http request for [%s] received code: %d, status %s", data,
-			resp.StatusCode, resp.Status)
-		if detail := tdengineErrorFromBody(body); detail != "" {
-			message += ", " + detail
+		body, readErr := io.ReadAll(io.LimitReader(resp.Body, maxErrorResponseBodyBytes+1))
+		if readErr != nil {
+			return nil, fmt.Errorf("read HTTP error response: %w", readErr)
+		}
+
+		message := fmt.Sprintf("http request received code: %d, status %s", resp.StatusCode, resp.Status)
+		if len(body) <= maxErrorResponseBodyBytes {
+			if detail := tdengineErrorFromBody(body); detail != "" {
+				message += ", " + detail
+			}
 		}
 		return nil, fmt.Errorf("%s", message)
 	}
 
+	body, readErr := io.ReadAll(resp.Body)
+	if readErr != nil {
+		return nil, fmt.Errorf("read HTTP response: %w", readErr)
+	}
 	return body, nil
 }
 
