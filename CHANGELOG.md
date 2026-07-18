@@ -13,8 +13,15 @@ All notable changes to this project will be documented in this file.
 
 - Fixed TDinsightV3 and taosX datasource-variable resolution when importing dashboards into Grafana 13 while retaining Grafana 8 compatibility.
 - Updated the legacy TDinsight provisioning script to use the TDInsight V3 Dashboard ID `18180`.
-- Disabled automatic HTTP redirects for datasource requests; configure the datasource URL to the final TDengine endpoint.
+
+### Security
+
+- Disabled automatic HTTP redirects for datasource requests to prevent credentials and query payloads from being forwarded to redirected endpoints.
 - Removed raw SQL from HTTP-status and TDengine query-error messages returned to Grafana and written at Error level.
+
+### Upgrade Notes
+
+- Datasource URLs must point directly to the final TDengine REST endpoint. Configurations relying on HTTP 3xx redirects must update the URL before upgrading.
 
 ## [4.0.0] - 2026-03-26
 
