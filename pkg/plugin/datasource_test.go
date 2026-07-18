@@ -5,9 +5,11 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"encoding/pem"
+	"io"
 	"net"
 	"net/http"
 	"net/http/httptest"
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -209,6 +211,60 @@ func TestNewDatasourceUsesLegacyBasicAuth(t *testing.T) {
 	require.NotNil(t, instance)
 	instance.(interface{ Dispose() }).Dispose()
 	assert.True(t, authenticated)
+}
+
+func TestNewDatasourceRejectsRedirectsForQueryAndHealthCheck(t *testing.T) {
+	const username = "root"
+	const password = "taosdata"
+	var redirectedRequests atomic.Int32
+
+	target := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		redirectedRequests.Add(1)
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"code":0,"data":[["unexpected redirect"]]}`))
+	}))
+	t.Cleanup(target.Close)
+
+	source := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		body, err := io.ReadAll(r.Body)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		if string(body) == "select server_version()" {
+			gotUsername, gotPassword, ok := r.BasicAuth()
+			if !ok || gotUsername != username || gotPassword != password {
+				w.WriteHeader(http.StatusUnauthorized)
+				return
+			}
+			w.Header().Set("Content-Type", "application/json")
+			_, _ = w.Write([]byte(`{"code":0,"data":[["3.3.0.0"]]}`))
+			return
+		}
+		http.Redirect(w, r, target.URL, http.StatusTemporaryRedirect)
+	}))
+	t.Cleanup(source.Close)
+
+	encoded := base64.StdEncoding.EncodeToString([]byte(username + ":" + password))
+	instance, err := NewDatasource(context.Background(), backend.DataSourceInstanceSettings{
+		URL: source.URL,
+		DecryptedSecureJSONData: map[string]string{
+			"basicAuth": encoded,
+		},
+	})
+	require.NoError(t, err)
+	t.Cleanup(func() { instance.(interface{ Dispose() }).Dispose() })
+
+	datasource := instance.(*Datasource)
+	_, err = datasource.queryDataFromDatasource(context.Background(), &queryModel{Sql: "select 1"})
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "307")
+
+	health, err := datasource.CheckHealth(context.Background(), &backend.CheckHealthRequest{})
+	require.NoError(t, err)
+	assert.Equal(t, backend.HealthStatusError, health.Status)
+	assert.Contains(t, health.Message, "307")
+	assert.Zero(t, redirectedRequests.Load())
 }
 
 func TestNewDatasourceReturnsTDengineErrorWhenVersionQueryFails(t *testing.T) {
@@ -891,8 +947,8 @@ func TestFindTimeColumnIndex(t *testing.T) {
 			expected: -1,
 		},
 		{
-			name: "empty metadata",
-			meta: [][]interface{}{},
+			name:     "empty metadata",
+			meta:     [][]interface{}{},
 			expected: -1,
 		},
 		{
@@ -914,46 +970,46 @@ func TestFindTimeColumnIndex(t *testing.T) {
 // TestBuildColumnOrder tests column ordering with timestamp first
 func TestBuildColumnOrder(t *testing.T) {
 	tests := []struct {
-		name         string
-		columnCount  int
-		timeColIdx   int
-		expected     []int
+		name        string
+		columnCount int
+		timeColIdx  int
+		expected    []int
 	}{
 		{
-			name: "time column at index 0",
+			name:        "time column at index 0",
 			columnCount: 3,
-			timeColIdx: 0,
-			expected: []int{0, 1, 2},
+			timeColIdx:  0,
+			expected:    []int{0, 1, 2},
 		},
 		{
-			name: "time column at index 1",
+			name:        "time column at index 1",
 			columnCount: 3,
-			timeColIdx: 1,
-			expected: []int{1, 0, 2},
+			timeColIdx:  1,
+			expected:    []int{1, 0, 2},
 		},
 		{
-			name: "time column at index 2",
+			name:        "time column at index 2",
 			columnCount: 3,
-			timeColIdx: 2,
-			expected: []int{2, 0, 1},
+			timeColIdx:  2,
+			expected:    []int{2, 0, 1},
 		},
 		{
-			name: "no time column",
+			name:        "no time column",
 			columnCount: 3,
-			timeColIdx: -1,
-			expected: []int{0, 1, 2},
+			timeColIdx:  -1,
+			expected:    []int{0, 1, 2},
 		},
 		{
-			name: "single column",
+			name:        "single column",
 			columnCount: 1,
-			timeColIdx: 0,
-			expected: []int{0},
+			timeColIdx:  0,
+			expected:    []int{0},
 		},
 		{
-			name: "empty columns",
+			name:        "empty columns",
 			columnCount: 0,
-			timeColIdx: -1,
-			expected: []int{},
+			timeColIdx:  -1,
+			expected:    []int{},
 		},
 	}
 
@@ -968,29 +1024,29 @@ func TestBuildColumnOrder(t *testing.T) {
 // TestBuildNaturalColumnOrder tests natural column order (for table format)
 func TestBuildNaturalColumnOrder(t *testing.T) {
 	tests := []struct {
-		name         string
-		columnCount  int
-		expected     []int
+		name        string
+		columnCount int
+		expected    []int
 	}{
 		{
-			name: "three columns",
+			name:        "three columns",
 			columnCount: 3,
-			expected: []int{0, 1, 2},
+			expected:    []int{0, 1, 2},
 		},
 		{
-			name: "single column",
+			name:        "single column",
 			columnCount: 1,
-			expected: []int{0},
+			expected:    []int{0},
 		},
 		{
-			name: "empty columns",
+			name:        "empty columns",
 			columnCount: 0,
-			expected: []int{},
+			expected:    []int{},
 		},
 		{
-			name: "five columns",
+			name:        "five columns",
 			columnCount: 5,
-			expected: []int{0, 1, 2, 3, 4},
+			expected:    []int{0, 1, 2, 3, 4},
 		},
 	}
 
@@ -1005,10 +1061,10 @@ func TestBuildNaturalColumnOrder(t *testing.T) {
 // TestDetectTimeLayout tests time layout detection from data rows
 func TestDetectTimeLayout(t *testing.T) {
 	tests := []struct {
-		name        string
-		rows        [][]interface{}
-		timeColIdx  int
-		expectError bool
+		name           string
+		rows           [][]interface{}
+		timeColIdx     int
+		expectError    bool
 		expectedLayout string
 	}{
 		{
@@ -1017,8 +1073,8 @@ func TestDetectTimeLayout(t *testing.T) {
 				{"2024-01-01T00:00:00Z", 1.0},
 				{"2024-01-01T01:00:00Z", 2.0},
 			},
-			timeColIdx: 0,
-			expectError: false,
+			timeColIdx:     0,
+			expectError:    false,
 			expectedLayout: "2006-01-02T15:04:05Z",
 		},
 		{
@@ -1026,8 +1082,8 @@ func TestDetectTimeLayout(t *testing.T) {
 			rows: [][]interface{}{
 				{"2024-01-01T00:00:00.000Z", 1.0},
 			},
-			timeColIdx: 0,
-			expectError: false,
+			timeColIdx:     0,
+			expectError:    false,
 			expectedLayout: "2006-01-02T15:04:05.000Z",
 		},
 		{
@@ -1035,8 +1091,8 @@ func TestDetectTimeLayout(t *testing.T) {
 			rows: [][]interface{}{
 				{1.0, "value"},
 			},
-			timeColIdx: -1,
-			expectError: false,
+			timeColIdx:     -1,
+			expectError:    false,
 			expectedLayout: "",
 		},
 		{
@@ -1045,7 +1101,7 @@ func TestDetectTimeLayout(t *testing.T) {
 				{nil, 1.0},
 				{nil, 2.0},
 			},
-			timeColIdx: 0,
+			timeColIdx:  0,
 			expectError: true,
 		},
 		{
@@ -1054,8 +1110,8 @@ func TestDetectTimeLayout(t *testing.T) {
 				{nil, 1.0},
 				{"2024-01-01T00:00:00Z", 2.0},
 			},
-			timeColIdx: 0,
-			expectError: false,
+			timeColIdx:     0,
+			expectError:    false,
 			expectedLayout: "2006-01-02T15:04:05Z",
 		},
 		{
@@ -1063,7 +1119,7 @@ func TestDetectTimeLayout(t *testing.T) {
 			rows: [][]interface{}{
 				{1.0, "value"},
 			},
-			timeColIdx: 5,
+			timeColIdx:  5,
 			expectError: true,
 		},
 	}
@@ -1086,104 +1142,104 @@ func TestConvertRow(t *testing.T) {
 	layout := "2006-01-02T15:04:05Z"
 
 	tests := []struct {
-		name            string
-		srcRow          []interface{}
-		columnMeta      [][]interface{}
-		columnOrder     []int
-		timeColIdx      int
+		name               string
+		srcRow             []interface{}
+		columnMeta         [][]interface{}
+		columnOrder        []int
+		timeColIdx         int
 		keepNilPrimaryTime bool
-		expectError     bool
-		expectSkip      bool
-		expectedRowLen  int
+		expectError        bool
+		expectSkip         bool
+		expectedRowLen     int
 	}{
 		{
-			name: "normal row conversion",
+			name:   "normal row conversion",
 			srcRow: []interface{}{"2024-01-01T00:00:00Z", int64(42), "test"},
 			columnMeta: [][]interface{}{
 				{"ts", "TIMESTAMP"},
 				{"value", "INT"},
 				{"name", "BINARY"},
 			},
-			columnOrder: []int{0, 1, 2},
-			timeColIdx: 0,
+			columnOrder:        []int{0, 1, 2},
+			timeColIdx:         0,
 			keepNilPrimaryTime: false,
-			expectError: false,
-			expectSkip: false,
-			expectedRowLen: 3,
+			expectError:        false,
+			expectSkip:         false,
+			expectedRowLen:     3,
 		},
 		{
-			name: "row with nil value column",
+			name:   "row with nil value column",
 			srcRow: []interface{}{"2024-01-01T00:00:00Z", nil, "test"},
 			columnMeta: [][]interface{}{
 				{"ts", "TIMESTAMP"},
 				{"value", "INT"},
 				{"name", "BINARY"},
 			},
-			columnOrder: []int{0, 1, 2},
-			timeColIdx: 0,
+			columnOrder:        []int{0, 1, 2},
+			timeColIdx:         0,
 			keepNilPrimaryTime: false,
-			expectError: false,
-			expectSkip: false,
-			expectedRowLen: 3,
+			expectError:        false,
+			expectSkip:         false,
+			expectedRowLen:     3,
 		},
 		{
-			name: "row with nil time column - should skip",
+			name:   "row with nil time column - should skip",
 			srcRow: []interface{}{nil, int64(42), "test"},
 			columnMeta: [][]interface{}{
 				{"ts", "TIMESTAMP"},
 				{"value", "INT"},
 				{"name", "BINARY"},
 			},
-			columnOrder: []int{0, 1, 2},
-			timeColIdx: 0,
+			columnOrder:        []int{0, 1, 2},
+			timeColIdx:         0,
 			keepNilPrimaryTime: false,
-			expectError: false,
-			expectSkip: true,
-			expectedRowLen: 0,
+			expectError:        false,
+			expectSkip:         true,
+			expectedRowLen:     0,
 		},
 		{
-			name: "row with nil time column in table format - keep it",
+			name:   "row with nil time column in table format - keep it",
 			srcRow: []interface{}{nil, int64(42), "test"},
 			columnMeta: [][]interface{}{
 				{"ts", "TIMESTAMP"},
 				{"value", "INT"},
 				{"name", "BINARY"},
 			},
-			columnOrder: []int{0, 1, 2},
-			timeColIdx: 0,
+			columnOrder:        []int{0, 1, 2},
+			timeColIdx:         0,
 			keepNilPrimaryTime: true,
-			expectError: false,
-			expectSkip: false,
-			expectedRowLen: 3,
+			expectError:        false,
+			expectSkip:         false,
+			expectedRowLen:     3,
 		},
 		{
-			name: "column order different from source",
+			name:   "column order different from source",
 			srcRow: []interface{}{"test", float64(42), "2024-01-01T00:00:00Z"},
 			columnMeta: [][]interface{}{
 				{"name", "BINARY"},
 				{"value", "INT"},
 				{"ts", "TIMESTAMP"},
 			},
-			columnOrder: []int{2, 1, 0},
-			timeColIdx: 2,
+			columnOrder:        []int{2, 1, 0},
+			timeColIdx:         2,
 			keepNilPrimaryTime: false,
-			expectError: false,
-			expectSkip: false,
-			expectedRowLen: 3,
+			expectError:        false,
+			expectSkip:         false,
+			expectedRowLen:     3,
 		},
 		{
-			name: "column index out of range",
+			name:   "column index out of range",
 			srcRow: []interface{}{"2024-01-01T00:00:00Z", int64(42)},
 			columnMeta: [][]interface{}{
 				{"ts", "TIMESTAMP"},
 				{"value", "INT"},
 			},
-			columnOrder: []int{0, 1, 5},
-			timeColIdx: 0,
+			columnOrder:        []int{0, 1, 5},
+			timeColIdx:         0,
 			keepNilPrimaryTime: false,
-			expectError: true,
-			expectSkip: false,
-			expectedRowLen: 0,
+			expectError:        true,
+			expectSkip:         false,
+			expectedRowLen:     0,
 		},
 	}
 
@@ -1217,95 +1273,95 @@ func TestConvertNonTimeValue(t *testing.T) {
 		verifyType  func(interface{}) bool
 	}{
 		{
-			name: "nil value",
-			value: nil,
-			columnType: "INT",
+			name:        "nil value",
+			value:       nil,
+			columnType:  "INT",
 			expectError: false,
-			expectNil: true,
+			expectNil:   true,
 		},
 		{
-			name: "integer to float",
-			value: int64(42),
-			columnType: "INT",
+			name:        "integer to float",
+			value:       int64(42),
+			columnType:  "INT",
 			expectError: false,
-			expectNil: false,
+			expectNil:   false,
 			verifyType: func(v interface{}) bool {
 				ptr, ok := v.(*float64)
 				return ok && ptr != nil && *ptr == 42.0
 			},
 		},
 		{
-			name: "float to float",
-			value: float64(3.14),
-			columnType: "DOUBLE",
+			name:        "float to float",
+			value:       float64(3.14),
+			columnType:  "DOUBLE",
 			expectError: false,
-			expectNil: false,
+			expectNil:   false,
 			verifyType: func(v interface{}) bool {
 				ptr, ok := v.(*float64)
 				return ok && ptr != nil && *ptr == 3.14
 			},
 		},
 		{
-			name: "bool true",
-			value: true,
-			columnType: "BOOL",
+			name:        "bool true",
+			value:       true,
+			columnType:  "BOOL",
 			expectError: false,
-			expectNil: false,
+			expectNil:   false,
 			verifyType: func(v interface{}) bool {
 				ptr, ok := v.(*bool)
 				return ok && ptr != nil && *ptr == true
 			},
 		},
 		{
-			name: "bool false",
-			value: false,
-			columnType: "BOOL",
+			name:        "bool false",
+			value:       false,
+			columnType:  "BOOL",
 			expectError: false,
-			expectNil: false,
+			expectNil:   false,
 			verifyType: func(v interface{}) bool {
 				ptr, ok := v.(*bool)
 				return ok && ptr != nil && *ptr == false
 			},
 		},
 		{
-			name: "string to bool true",
-			value: "1",
-			columnType: "BOOL",
+			name:        "string to bool true",
+			value:       "1",
+			columnType:  "BOOL",
 			expectError: false,
-			expectNil: false,
+			expectNil:   false,
 			verifyType: func(v interface{}) bool {
 				ptr, ok := v.(*bool)
 				return ok && ptr != nil && *ptr == true
 			},
 		},
 		{
-			name: "string to bool false",
-			value: "0",
-			columnType: "BOOL",
+			name:        "string to bool false",
+			value:       "0",
+			columnType:  "BOOL",
 			expectError: false,
-			expectNil: false,
+			expectNil:   false,
 			verifyType: func(v interface{}) bool {
 				ptr, ok := v.(*bool)
 				return ok && ptr != nil && *ptr == false
 			},
 		},
 		{
-			name: "binary string",
-			value: "test string",
-			columnType: "BINARY",
+			name:        "binary string",
+			value:       "test string",
+			columnType:  "BINARY",
 			expectError: false,
-			expectNil: false,
+			expectNil:   false,
 			verifyType: func(v interface{}) bool {
 				ptr, ok := v.(*string)
 				return ok && ptr != nil && *ptr == "test string"
 			},
 		},
 		{
-			name: "timestamp string",
-			value: "2024-01-01T00:00:00Z",
-			columnType: "TIMESTAMP",
+			name:        "timestamp string",
+			value:       "2024-01-01T00:00:00Z",
+			columnType:  "TIMESTAMP",
 			expectError: false,
-			expectNil: false,
+			expectNil:   false,
 			verifyType: func(v interface{}) bool {
 				ptr, ok := v.(*time.Time)
 				if !ok || ptr == nil {
@@ -1315,11 +1371,11 @@ func TestConvertNonTimeValue(t *testing.T) {
 			},
 		},
 		{
-			name: "integer type",
-			value: int64(100),
-			columnType: int(CTypeInt),
+			name:        "integer type",
+			value:       int64(100),
+			columnType:  int(CTypeInt),
 			expectError: false,
-			expectNil: false,
+			expectNil:   false,
 			verifyType: func(v interface{}) bool {
 				ptr, ok := v.(*float64)
 				return ok && ptr != nil && *ptr == 100.0

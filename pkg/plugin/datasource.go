@@ -52,6 +52,9 @@ func NewDatasource(ctx context.Context, settings backend.DataSourceInstanceSetti
 	if err != nil {
 		return nil, fmt.Errorf("new httpclient error: %w", err)
 	}
+	client.CheckRedirect = func(_ *http.Request, _ []*http.Request) error {
+		return http.ErrUseLastResponse
+	}
 
 	ds := Datasource{
 		settings: settings,
