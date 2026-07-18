@@ -47,7 +47,13 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Build and test frontend
+      - name: Typecheck frontend
+        run: yarn typecheck
+
+      - name: Test frontend
+        run: yarn test:ci
+
+      - name: Build and sign frontend
         run: yarn build && yarn sign
         env:
           GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}

@@ -102,6 +102,8 @@ After import:
 - Added TLS/SSL configuration with custom CA support and an explicit certificate-verification bypass for controlled testing.
 - Updated the bundled TDinsightV3 and taosX dashboards so Grafana 13 imports require selecting the TDengine data source only once while retaining Grafana 8 compatibility.
 - Updated the legacy TDinsight provisioning script to use the TDInsight V3 Dashboard ID `18180`.
+- Disabled automatic HTTP redirects for datasource requests; configure the datasource URL to the final TDengine endpoint.
+- Removed raw SQL from HTTP-status and TDengine query-error messages returned to Grafana and written at Error level.
 
 ### [v4.0.0](https://github.com/taosdata/grafanaplugin/releases/tag/v4.0.0) - **Breaking Changes Release**
 
