@@ -44,7 +44,7 @@
       "type": "datasource",
       "id": "tdengine-datasource",
       "name": "TDengine Datasource",
-      "version": "4.0.1"
+      "version": "4.0.2"
     },
     {
       "type": "panel",
@@ -1243,7 +1243,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 30
+        "y": 31
       },
       "id": 44,
       "panels": [
@@ -1399,7 +1399,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 31
+        "y": 32
       },
       "id": 52,
       "panels": [
@@ -1567,7 +1567,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 32
+        "y": 33
       },
       "id": 58,
       "panels": [
@@ -1994,7 +1994,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 33
+        "y": 34
       },
       "id": 64,
       "panels": [
@@ -2282,7 +2282,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 34
+        "y": 35
       },
       "id": 76,
       "panels": [
@@ -3298,7 +3298,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 35
+        "y": 36
       },
       "id": 77,
       "panels": [
@@ -3848,7 +3848,379 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 36
+        "y": 37
+      },
+      "id": 345,
+      "title": "Stream Computing",
+      "type": "row",
+      "panels": [
+        {
+          "datasource": "${DS_TDENGINE}",
+          "description": "Total number of streams. Requires a TDengine version with stream observability (information_schema.ins_streams).",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 3,
+            "x": 0,
+            "y": 37
+          },
+          "id": 346,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "text": {},
+            "textMode": "auto"
+          },
+          "pluginVersion": "8.0.0",
+          "targets": [
+            {
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select now() as ts, count(*) as streams_total from information_schema.ins_streams"
+            }
+          ],
+          "title": "Streams Total",
+          "type": "stat"
+        },
+        {
+          "datasource": "${DS_TDENGINE}",
+          "description": "Number of streams in Failed status. Requires a TDengine version with stream observability (information_schema.ins_streams).",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 1
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 3,
+            "x": 0,
+            "y": 41
+          },
+          "id": 347,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "text": {},
+            "textMode": "auto"
+          },
+          "pluginVersion": "8.0.0",
+          "targets": [
+            {
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select now() as ts, count(*) as failed_streams from information_schema.ins_streams where status = 'Failed'"
+            }
+          ],
+          "title": "Failed Streams",
+          "type": "stat"
+        },
+        {
+          "datasource": "${DS_TDENGINE}",
+          "description": "Realtime processing lag of the slowest active reader per stream (ms). NULL for streams using external data sources.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "displayName": "${__field.labels.stream_name}",
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "orange",
+                    "value": 10000
+                  },
+                  {
+                    "color": "red",
+                    "value": 60000
+                  }
+                ]
+              },
+              "unit": "ms"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 37
+          },
+          "id": 348,
+          "options": {
+            "displayMode": "gradient",
+            "orientation": "horizontal",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "showUnfilled": false,
+            "text": {}
+          },
+          "pluginVersion": "8.0.0",
+          "targets": [
+            {
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select now() as ts, stream_name, realtime_lag_ms from information_schema.ins_streams where realtime_lag_ms is not null partition by stream_name"
+            }
+          ],
+          "title": "Realtime Lag per Stream",
+          "type": "bargauge"
+        },
+        {
+          "datasource": "${DS_TDENGINE}",
+          "description": "Initial history calculation progress per stream (0-100%). NULL when FILL_HISTORY is not enabled.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "displayName": "${__field.labels.stream_name}",
+              "mappings": [],
+              "max": 100,
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "percent"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 9,
+            "x": 3,
+            "y": 37
+          },
+          "id": 349,
+          "options": {
+            "displayMode": "gradient",
+            "orientation": "horizontal",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "showUnfilled": true,
+            "text": {}
+          },
+          "pluginVersion": "8.0.0",
+          "targets": [
+            {
+              "formatType": "Time series",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select now() as ts, stream_name, history_progress_pct from information_schema.ins_streams where history_progress_pct is not null partition by stream_name"
+            }
+          ],
+          "title": "History Progress",
+          "type": "bargauge"
+        },
+        {
+          "datasource": "${DS_TDENGINE}",
+          "description": "Status, message, realtime lag, throughput, result latency and history progress of all streams. Requires a TDengine version with stream observability.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": "auto",
+                "displayMode": "auto",
+                "filterable": false
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 45
+          },
+          "id": 350,
+          "options": {
+            "cellHeight": "sm",
+            "footer": {
+              "countRows": false,
+              "fields": "",
+              "reducer": [
+                "sum"
+              ],
+              "show": false
+            },
+            "showHeader": true
+          },
+          "pluginVersion": "8.0.0",
+          "targets": [
+            {
+              "formatType": "Table",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select stream_name, status, message, realtime_lag_ms, input_rows_per_sec_1m, output_rows_per_sec_1m, runner_result_latency_avg_1m_ms, history_progress_pct from information_schema.ins_streams"
+            }
+          ],
+          "title": "Streams Overview",
+          "type": "table"
+        },
+        {
+          "datasource": "${DS_TDENGINE}",
+          "description": "Manual recalculation jobs: range, progress and status. Terminal records are kept in memory for 1 hour. Requires a TDengine version with stream observability.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": "auto",
+                "displayMode": "auto",
+                "filterable": false
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 24,
+            "x": 0,
+            "y": 53
+          },
+          "id": 351,
+          "options": {
+            "cellHeight": "sm",
+            "footer": {
+              "countRows": false,
+              "fields": "",
+              "reducer": [
+                "sum"
+              ],
+              "show": false
+            },
+            "showHeader": true
+          },
+          "pluginVersion": "8.0.0",
+          "targets": [
+            {
+              "formatType": "Table",
+              "queryType": "SQL",
+              "refId": "A",
+              "sql": "select stream_name, recalc_id, `start`, `end`, progress, status from information_schema.ins_stream_recalculates"
+            }
+          ],
+          "title": "Stream Recalculations",
+          "type": "table"
+        }
+      ]
+    },
+    {
+      "collapsed": true,
+      "datasource": "${DS_TDENGINE}",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 38
       },
       "id": 78,
       "panels": [

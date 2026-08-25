@@ -30,6 +30,7 @@ jest.mock('@grafana/runtime', () => {
 
   return {
     DataSourceWithBackend: MockDataSourceWithBackend,
+    config: { buildInfo: { version: '12.4.0' } },
     getBackendSrv: () => ({
       datasourceRequest: jest.fn(),
       get: jest.fn(),
@@ -475,5 +476,125 @@ describe('DataSource backend query path', () => {
         ds.applyTemplateVariables({ queryType: 'SQL', sql: 'select 1' } as any, {})
       ).not.toThrow();
     });
+  });
+});
+
+describe('sendInitAlert', () => {
+  const groupPath = (name: string) => `/api/v1/provisioning/folder/alert-testds-/rule-groups/${name}`;
+
+  const buildDs = () =>
+    new DataSource({
+      url: 'http://localhost',
+      uid: 'testds',
+      name: 'TDengine',
+      jsonData: { isLoadAlerts: true },
+    } as any);
+
+  const mockAlertGet = (ds: DataSource, alert1m: any) => {
+    (ds.backendSrv.get as jest.Mock).mockImplementation((path: string) => {
+      if (path === '/api/folders/alert-testds-') {
+        return Promise.resolve({});
+      }
+      if (path === groupPath('alert_1m')) {
+        if (alert1m?.status === 404) {
+          return Promise.reject({ status: 404 });
+        }
+        return Promise.resolve(alert1m);
+      }
+      // other rule groups are already provisioned
+      return Promise.resolve({ title: 'existing', interval: 60, rules: [{ title: 'Existing rule' }] });
+    });
+    (ds.backendSrv.put as jest.Mock).mockResolvedValue({});
+  };
+
+  const alert1mPutBodies = (ds: DataSource) =>
+    (ds.backendSrv.put as jest.Mock).mock.calls
+      .filter((call: any[]) => call[0] === groupPath('alert_1m'))
+      .map((call: any[]) => call[1]);
+
+  it('provisions the full template when the group does not exist', async () => {
+    const ds = buildDs();
+    mockAlertGet(ds, { status: 404 });
+
+    await ds.sendInitAlert();
+
+    const bodies = alert1mPutBodies(ds);
+    expect(bodies).toHaveLength(1);
+    expect(bodies[0].rules.map((r: any) => r.title)).toEqual([
+      'Query Count Alert',
+      'Slow Query Alert alert',
+      'Stream Failed Alert',
+      'Stream Recalc Failed Alert',
+    ]);
+    for (const rule of bodies[0].rules) {
+      expect(rule.folderUID).toBe('alert-testds-');
+      expect(rule.data[0].datasourceUid).toBe('testds');
+    }
+  });
+
+  it('backfills newly added rules into an existing group without touching existing rules', async () => {
+    const ds = buildDs();
+    const customizedRule = { title: 'Query Count Alert', uid: 'uid-q', for: '10m', labels: { team: 'sre' } };
+    const untouchedRule = { title: 'Slow Query Alert alert', uid: 'uid-s' };
+    mockAlertGet(ds, {
+      title: 'alert_1m',
+      folderUid: 'alert-testds-',
+      interval: 120,
+      rules: [customizedRule, untouchedRule],
+    });
+
+    await ds.sendInitAlert();
+
+    const bodies = alert1mPutBodies(ds);
+    expect(bodies).toHaveLength(1);
+    const merged = bodies[0];
+    // existing group interval is preserved
+    expect(merged.interval).toBe(120);
+    expect(merged.rules.map((r: any) => r.title)).toEqual([
+      'Query Count Alert',
+      'Slow Query Alert alert',
+      'Stream Failed Alert',
+      'Stream Recalc Failed Alert',
+    ]);
+    // existing rules are passed through untouched, keeping user customizations
+    expect(merged.rules[0]).toMatchObject({ uid: 'uid-q', for: '10m', labels: { team: 'sre' } });
+    expect(merged.rules[1]).toMatchObject({ uid: 'uid-s' });
+    // only the backfilled rules get this data source wired in
+    expect(merged.rules[2].folderUID).toBe('alert-testds-');
+    expect(merged.rules[2].data[0].datasourceUid).toBe('testds');
+    expect(merged.rules[2].data[0].model.datasource.uid).toBe('testds');
+    expect(merged.rules[3].data[0].datasourceUid).toBe('testds');
+  });
+
+  it('does not PUT when all backfill rules already exist', async () => {
+    const ds = buildDs();
+    mockAlertGet(ds, {
+      title: 'alert_1m',
+      folderUid: 'alert-testds-',
+      interval: 60,
+      rules: [
+        { title: 'Query Count Alert' },
+        { title: 'Slow Query Alert alert' },
+        { title: 'Stream Failed Alert' },
+        { title: 'Stream Recalc Failed Alert' },
+      ],
+    });
+
+    await ds.sendInitAlert();
+
+    expect(ds.backendSrv.put as jest.Mock).not.toHaveBeenCalled();
+  });
+
+  it('rejects when reading the existing group fails with a non-404 error', async () => {
+    const ds = buildDs();
+    (ds.backendSrv.get as jest.Mock).mockImplementation((path: string) => {
+      if (path === '/api/folders/alert-testds-') {
+        return Promise.resolve({});
+      }
+      return Promise.reject({ status: 500, message: 'boom' });
+    });
+
+    await expect(ds.sendInitAlert()).rejects.toMatchObject({ status: 500 });
+    expect(ds.backendSrv.put as jest.Mock).not.toHaveBeenCalled();
   });
 });
