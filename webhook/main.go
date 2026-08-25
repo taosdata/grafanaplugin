@@ -23,7 +23,7 @@ func main() {
 
 	go http.ListenAndServe(addr, handler)
 	log.Println(fmt.Sprintf("API is listening on: %s", addr))
-	quit := make(chan os.Signal)
+	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM, syscall.SIGKILL)
 	<-quit
 	log.Println("Shutdown WebServer ...")
