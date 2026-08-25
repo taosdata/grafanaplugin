@@ -7,6 +7,7 @@ TDinsight v3.x is a solution for monitoring TDengine using the builtin native mo
 ## Compatible with TDengine version
 | TDengine grafana plugin version | TDengine version |
 | :-----------------------------: | :--------------: |
+|              4.0.1              | 3.3.7.0 or later |
 |              4.0.0              | 3.3.7.0 or later |
 |              3.8.0              | 3.3.7.0 or later |
 |              3.7.6              | 3.3.7.0 or later |
@@ -331,6 +332,10 @@ When adding a data source, select 'Load TDengine Alert' and click on the alert m
 | Adapter Restful request failed            | Check every 30 seconds, the connector sends database operation instructions to the Adapter through Restful mode. If the execution fails more than 5 times, an alert will be triggered |
 | Adapter Websocket request failed          | Check every 30 seconds, the connector sends database operation instructions to the Adapter via Websocket. If the execution fails more than 5 times, an alert will be triggered        |
 | Slow query                                | Check every minute, and when a query is found to take more than 300 seconds, an alert will be triggered                                                                               |
+| Stream failed                             | Check every 60 seconds. When a stream has failure events reported within the last 120 seconds (reported by taosd to `log.taosd_stream_failure`), an alert will be triggered with the stream name, cluster ID and error code |
+| Stream recalculation failed               | Check every 60 seconds. When a stream recalculation job in `Failed` status exists, an alert will be triggered with the stream name, the recalculation job ID, the progress at the time of failure and the failure reason (the `message` column)                    |
+
+**Note**: The last two rules (stream failed / stream recalculation failed) rely on the stream computing observability feature and are only supported on TDengine **3.4.2.7** or later. On earlier versions these two rules stay in a query error state and do not affect the other alert rules. With these two rules, 16 alert rules are imported in total.
 
 
 ## Upgrade

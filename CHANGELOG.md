@@ -2,6 +2,38 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.0.2] - 2026-08-24
+
+### Features
+
+- TDinsightV3: added a collapsed Stream Computing row with stream-level observability panels (streams total/failed stats, per-stream realtime lag and history progress bar gauges, streams overview and stream recalculations tables).
+- Added two predefined stream alert rules to the `alert_1m` group: Stream Failed Alert (event-based, notification carries the TDengine error code) and Stream Recalc Failed Alert (notification carries the failed job identity and the failure reason from `ins_stream_recalculates.message`). Both rules carry a `service=stream` label for notification-policy routing (e.g. DingTalk).
+
+### Notes
+
+- The Stream Computing panels and the two stream alert rules require TDengine v3.4.2.7 or later; on earlier versions they stay in a query error state without affecting other panels or alert rules.
+
+## [4.0.1] - 2026-07-17
+
+### Features
+
+- Added TLS/SSL configuration with PEM-encoded custom CA certificates.
+- Added an explicit option to skip TLS certificate validation for controlled testing environments.
+
+### Bug Fixes
+
+- Fixed TDinsightV3 and taosX datasource-variable resolution when importing dashboards into Grafana 13 while retaining Grafana 8 compatibility.
+- Updated the legacy TDinsight provisioning script to use the TDInsight V3 Dashboard ID `18180`.
+
+### Security
+
+- Disabled automatic HTTP redirects for datasource requests to prevent credentials and query payloads from being forwarded to redirected endpoints.
+- Removed raw SQL from HTTP-status and TDengine query-error messages returned to Grafana and written at Error level.
+
+### Upgrade Notes
+
+- Datasource URLs must point directly to the final TDengine REST endpoint. Configurations relying on HTTP 3xx redirects must update the URL before upgrading.
+
 ## [4.0.0] - 2026-03-26
 
 ### Breaking Changes

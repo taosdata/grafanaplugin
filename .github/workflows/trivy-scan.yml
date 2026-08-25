@@ -35,6 +35,7 @@ jobs:
           format: 'sarif'
           output: 'trivy-fs-results.sarif'
           severity: 'CRITICAL,HIGH,MEDIUM'
+          limit-severities-for-sarif: true
           exit-code: '1' # Set to 1 to fail step when vulnerabilities are found (match comment intent)
           skip-dirs: 'target,node_modules' # Skip Maven build artifacts and node modules
           skip-files: 'pom.xml.versionsBackup' # Skip temporary Maven files

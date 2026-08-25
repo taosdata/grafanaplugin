@@ -3,6 +3,7 @@ import {Button, Modal, ConfirmModal, FieldSet, LegacyForms, Switch, Tab, TabCont
 import type {EditorProps} from './types'
 import {useChangeSecureOptions} from './useChangeSecureOptions'
 import {useResetSecureOptions} from './useResetSecureOptions'
+import {TLSSettings} from './TLSSettings'
 import {deleteAlerts, checkGrafanaVersion, getCurrentTime} from '../../utils'
 
 import './ConfigEditor.css'
@@ -169,6 +170,7 @@ export function ConfigEditor(props: EditorProps): ReactElement {
                         </div>
                     }
                 </TabContent>
+                <TLSSettings {...props} />
             </FieldSet>
             <div>
                 {isVisible && (
@@ -221,4 +223,3 @@ export function ConfigEditor(props: EditorProps): ReactElement {
         </div>
     )
 }
-

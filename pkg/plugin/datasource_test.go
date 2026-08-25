@@ -1,16 +1,419 @@
 package plugin
 
 import (
+	"context"
+	"encoding/base64"
 	"encoding/json"
+	"encoding/pem"
+	"fmt"
+	"io"
+	"net"
+	"net/http"
+	"net/http/httptest"
+	"strings"
+	"sync/atomic"
 	"testing"
 	"time"
 
 	"github.com/araddon/dateparse"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
+	backendlog "github.com/grafana/grafana-plugin-sdk-go/backend/log"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
+
+type recordedLogEntry struct {
+	message string
+	args    []interface{}
+}
+
+type recordingLogger struct {
+	backendlog.Logger
+	errors []recordedLogEntry
+}
+
+func (logger *recordingLogger) Error(message string, args ...interface{}) {
+	logger.errors = append(logger.errors, recordedLogEntry{
+		message: message,
+		args:    append([]interface{}(nil), args...),
+	})
+}
+
+type roundTripFunc func(*http.Request) (*http.Response, error)
+
+func (f roundTripFunc) RoundTrip(request *http.Request) (*http.Response, error) {
+	return f(request)
+}
+
+func TestNewDatasourceTLSSettings(t *testing.T) {
+	listener, err := net.Listen("tcp4", "127.0.0.1:0")
+	require.NoError(t, err)
+	server := &httptest.Server{Listener: listener, Config: &http.Server{Handler: http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"code":0,"data":[["3.3.0.0"]]}`))
+	})}}
+	server.StartTLS()
+	t.Cleanup(server.Close)
+
+	caCertificate := string(pem.EncodeToMemory(&pem.Block{
+		Type:  "CERTIFICATE",
+		Bytes: server.Certificate().Raw,
+	}))
+
+	tests := []struct {
+		name           string
+		jsonData       string
+		secureJSONData map[string]string
+		wantErr        bool
+	}{
+		{
+			name:     "certificate verification remains enabled by default",
+			jsonData: `{}`,
+			wantErr:  true,
+		},
+		{
+			name:     "skip verification is opt in",
+			jsonData: `{"tlsSkipVerify":true}`,
+		},
+		{
+			name:     "custom CA verifies the server certificate",
+			jsonData: `{"tlsAuthWithCACert":true}`,
+			secureJSONData: map[string]string{
+				"tlsCACert": caCertificate,
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			instance, err := NewDatasource(context.Background(), backend.DataSourceInstanceSettings{
+				URL:                     server.URL,
+				JSONData:                json.RawMessage(tt.jsonData),
+				DecryptedSecureJSONData: tt.secureJSONData,
+			})
+			if tt.wantErr {
+				require.Error(t, err)
+				return
+			}
+
+			require.NoError(t, err)
+			require.NotNil(t, instance)
+			instance.(interface{ Dispose() }).Dispose()
+		})
+	}
+}
+
+func TestNewDatasourceRedactsTokenFromTLSError(t *testing.T) {
+	const token = "tdengine-super-secret-token"
+
+	listener, err := net.Listen("tcp4", "127.0.0.1:0")
+	require.NoError(t, err)
+	server := &httptest.Server{Listener: listener, Config: &http.Server{Handler: http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"code":0,"data":[["3.3.0.0"]]}`))
+	})}}
+	server.StartTLS()
+	t.Cleanup(server.Close)
+
+	_, err = NewDatasource(context.Background(), backend.DataSourceInstanceSettings{
+		URL: server.URL,
+		DecryptedSecureJSONData: map[string]string{
+			"token": token,
+		},
+	})
+
+	require.Error(t, err)
+	assert.NotContains(t, err.Error(), token)
+	assert.Contains(t, err.Error(), "certificate")
+}
+
+func TestDoHTTPPostRedactsMalformedEndpoint(t *testing.T) {
+	const password = "tdengine-super-secret-password"
+	const querySecret = "tdengine-super-secret-query"
+	endpoint := "https://root:" + password + "@example.com/%zz?key=" + querySecret
+	datasource := &Datasource{}
+
+	_, err := datasource.doHttpPost(context.Background(), endpoint, "select 1")
+
+	require.Error(t, err)
+	assert.NotContains(t, err.Error(), password)
+	assert.NotContains(t, err.Error(), querySecret)
+	assert.Contains(t, err.Error(), "invalid URL escape")
+}
+
+func TestDoHTTPPostDoesNotLogQueryOnRequestConstructionErrors(t *testing.T) {
+	const query = "select 'tdengine-super-secret-query'"
+	tests := []struct {
+		name            string
+		ctx             context.Context
+		endpoint        string
+		expectedMessage string
+	}{
+		{
+			name:            "malformed endpoint",
+			ctx:             context.Background(),
+			endpoint:        "https://example.com/%zz",
+			expectedMessage: "parse query endpoint failed",
+		},
+		{
+			name:            "nil request context",
+			ctx:             nil,
+			endpoint:        "https://example.com",
+			expectedMessage: "create query request failed",
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			logger := &recordingLogger{Logger: backendlog.NewNullLogger()}
+			originalLogger := backendlog.DefaultLogger
+			backendlog.DefaultLogger = logger
+			t.Cleanup(func() {
+				backendlog.DefaultLogger = originalLogger
+			})
+
+			datasource := &Datasource{}
+			_, err := datasource.doHttpPost(test.ctx, test.endpoint, query)
+
+			require.Error(t, err)
+			require.Len(t, logger.errors, 1)
+			assert.Equal(t, test.expectedMessage, logger.errors[0].message)
+			assert.NotContains(t, logger.errors[0].args, "data")
+			assert.NotContains(t, logger.errors[0].args, query)
+		})
+	}
+}
+
+func TestQueryErrorsDoNotExposeSQL(t *testing.T) {
+	const sql = "select 'tdengine-super-secret-query'"
+	tests := []struct {
+		name       string
+		statusCode int
+		body       string
+		want       []string
+	}{
+		{
+			name:       "unauthorized",
+			statusCode: http.StatusUnauthorized,
+			body:       `{"code":855,"desc":"Authentication failure"}`,
+			want:       []string{"401", "855", "Authentication failure"},
+		},
+		{
+			name:       "server error",
+			statusCode: http.StatusInternalServerError,
+			body:       `{"code":1,"desc":"Internal error"}`,
+			want:       []string{"500", "1", "Internal error"},
+		},
+		{
+			name:       "TDengine business error",
+			statusCode: http.StatusOK,
+			body:       `{"code":9728,"desc":"Invalid operation"}`,
+			want:       []string{"9728", "Invalid operation"},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+				w.Header().Set("Content-Type", "application/json")
+				w.WriteHeader(test.statusCode)
+				_, _ = w.Write([]byte(test.body))
+			}))
+			t.Cleanup(server.Close)
+
+			logger := &recordingLogger{Logger: backendlog.NewNullLogger()}
+			originalLogger := backendlog.DefaultLogger
+			backendlog.DefaultLogger = logger
+			t.Cleanup(func() { backendlog.DefaultLogger = originalLogger })
+
+			queryJSON, err := json.Marshal(map[string]string{"queryType": "SQL", "sql": sql})
+			require.NoError(t, err)
+			datasource := &Datasource{client: server.Client(), endpoint: server.URL}
+			response := datasource.query(context.Background(), backend.PluginContext{}, backend.DataQuery{JSON: queryJSON})
+
+			require.Error(t, response.Error)
+			assert.NotContains(t, response.Error.Error(), sql)
+			for _, expected := range test.want {
+				assert.Contains(t, response.Error.Error(), expected)
+			}
+			require.NotEmpty(t, logger.errors)
+			for _, entry := range logger.errors {
+				assert.NotContains(t, fmt.Sprint(entry.args...), sql)
+			}
+		})
+	}
+}
+
+func TestDoHTTPPostLimitsErrorResponseBody(t *testing.T) {
+	const expectedLimit = 64 * 1024
+	payload := strings.Repeat("x", expectedLimit*2)
+	reader := strings.NewReader(payload)
+	datasource := &Datasource{client: &http.Client{Transport: roundTripFunc(func(request *http.Request) (*http.Response, error) {
+		return &http.Response{
+			StatusCode: http.StatusInternalServerError,
+			Status:     "500 Internal Server Error",
+			Header:     make(http.Header),
+			Body:       io.NopCloser(reader),
+			Request:    request,
+		}, nil
+	})}}
+
+	_, err := datasource.doHttpPost(context.Background(), "http://tdengine.invalid/rest/sql", "select 1")
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "500")
+	assert.Equal(t, expectedLimit+1, len(payload)-reader.Len())
+}
+
+func TestNewDatasourceUsesLegacyBasicAuth(t *testing.T) {
+	const username = "root"
+	const password = "taosdata"
+	var authenticated bool
+
+	listener, err := net.Listen("tcp4", "127.0.0.1:0")
+	require.NoError(t, err)
+	server := &httptest.Server{Listener: listener, Config: &http.Server{Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		gotUsername, gotPassword, ok := r.BasicAuth()
+		if !ok || gotUsername != username || gotPassword != password {
+			w.WriteHeader(http.StatusUnauthorized)
+			_, _ = w.Write([]byte(`{"code":855,"desc":"Authentication failure"}`))
+			return
+		}
+
+		authenticated = true
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"code":0,"data":[["3.3.0.0"]]}`))
+	})}}
+	server.Start()
+	t.Cleanup(server.Close)
+
+	legacyBasicAuth := base64.StdEncoding.EncodeToString([]byte(username + ":" + password))
+	instance, err := NewDatasource(context.Background(), backend.DataSourceInstanceSettings{
+		URL: server.URL,
+		DecryptedSecureJSONData: map[string]string{
+			"basicAuth": legacyBasicAuth,
+		},
+	})
+
+	require.NoError(t, err)
+	require.NotNil(t, instance)
+	instance.(interface{ Dispose() }).Dispose()
+	assert.True(t, authenticated)
+}
+
+func TestNewDatasourceRejectsRedirectsForQueryAndHealthCheck(t *testing.T) {
+	const username = "root"
+	const password = "taosdata"
+	var redirectedRequests atomic.Int32
+
+	target := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		redirectedRequests.Add(1)
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"code":0,"data":[["unexpected redirect"]]}`))
+	}))
+	t.Cleanup(target.Close)
+
+	source := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		body, err := io.ReadAll(r.Body)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		if string(body) == "select server_version()" {
+			gotUsername, gotPassword, ok := r.BasicAuth()
+			if !ok || gotUsername != username || gotPassword != password {
+				w.WriteHeader(http.StatusUnauthorized)
+				return
+			}
+			w.Header().Set("Content-Type", "application/json")
+			_, _ = w.Write([]byte(`{"code":0,"data":[["3.3.0.0"]]}`))
+			return
+		}
+		http.Redirect(w, r, target.URL, http.StatusTemporaryRedirect)
+	}))
+	t.Cleanup(source.Close)
+
+	encoded := base64.StdEncoding.EncodeToString([]byte(username + ":" + password))
+	instance, err := NewDatasource(context.Background(), backend.DataSourceInstanceSettings{
+		URL: source.URL,
+		DecryptedSecureJSONData: map[string]string{
+			"basicAuth": encoded,
+		},
+	})
+	require.NoError(t, err)
+	t.Cleanup(func() { instance.(interface{ Dispose() }).Dispose() })
+
+	datasource := instance.(*Datasource)
+	_, err = datasource.queryDataFromDatasource(context.Background(), &queryModel{Sql: "select 1"})
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "307")
+
+	health, err := datasource.CheckHealth(context.Background(), &backend.CheckHealthRequest{})
+	require.NoError(t, err)
+	assert.Equal(t, backend.HealthStatusError, health.Status)
+	assert.Contains(t, health.Message, "307")
+	assert.Zero(t, redirectedRequests.Load())
+}
+
+func TestNewDatasourceReturnsTDengineErrorWhenVersionQueryFails(t *testing.T) {
+	listener, err := net.Listen("tcp4", "127.0.0.1:0")
+	require.NoError(t, err)
+	server := &httptest.Server{Listener: listener, Config: &http.Server{Handler: http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"code":855,"desc":"Authentication failure"}`))
+	})}}
+	server.Start()
+	t.Cleanup(server.Close)
+
+	_, err = NewDatasource(context.Background(), backend.DataSourceInstanceSettings{URL: server.URL})
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "Authentication failure")
+	assert.NotContains(t, err.Error(), "unsupported protocol scheme")
+}
+
+func TestCheckHealthIncludesTDengineDescription(t *testing.T) {
+	listener, err := net.Listen("tcp4", "127.0.0.1:0")
+	require.NoError(t, err)
+	server := &httptest.Server{Listener: listener, Config: &http.Server{Handler: http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"code":855,"desc":"Authentication failure"}`))
+	})}}
+	server.Start()
+	t.Cleanup(server.Close)
+
+	datasource := &Datasource{
+		client:   server.Client(),
+		endpoint: server.URL,
+	}
+	result, err := datasource.CheckHealth(context.Background(), &backend.CheckHealthRequest{})
+
+	require.NoError(t, err)
+	assert.Equal(t, backend.HealthStatusError, result.Status)
+	assert.Contains(t, result.Message, "Authentication failure")
+}
+
+func TestCheckHealthIncludesTDengineDescriptionFromHTTPError(t *testing.T) {
+	listener, err := net.Listen("tcp4", "127.0.0.1:0")
+	require.NoError(t, err)
+	server := &httptest.Server{Listener: listener, Config: &http.Server{Handler: http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusUnauthorized)
+		_, _ = w.Write([]byte(`{"code":855,"desc":"Authentication failure"}`))
+	})}}
+	server.Start()
+	t.Cleanup(server.Close)
+
+	datasource := &Datasource{
+		client:   server.Client(),
+		endpoint: server.URL,
+	}
+	result, err := datasource.CheckHealth(context.Background(), &backend.CheckHealthRequest{})
+
+	require.NoError(t, err)
+	assert.Equal(t, backend.HealthStatusError, result.Status)
+	assert.Contains(t, result.Message, "Authentication failure")
+}
 
 type dateTest struct {
 	in, out string
@@ -632,8 +1035,8 @@ func TestFindTimeColumnIndex(t *testing.T) {
 			expected: -1,
 		},
 		{
-			name: "empty metadata",
-			meta: [][]interface{}{},
+			name:     "empty metadata",
+			meta:     [][]interface{}{},
 			expected: -1,
 		},
 		{
@@ -655,46 +1058,46 @@ func TestFindTimeColumnIndex(t *testing.T) {
 // TestBuildColumnOrder tests column ordering with timestamp first
 func TestBuildColumnOrder(t *testing.T) {
 	tests := []struct {
-		name         string
-		columnCount  int
-		timeColIdx   int
-		expected     []int
+		name        string
+		columnCount int
+		timeColIdx  int
+		expected    []int
 	}{
 		{
-			name: "time column at index 0",
+			name:        "time column at index 0",
 			columnCount: 3,
-			timeColIdx: 0,
-			expected: []int{0, 1, 2},
+			timeColIdx:  0,
+			expected:    []int{0, 1, 2},
 		},
 		{
-			name: "time column at index 1",
+			name:        "time column at index 1",
 			columnCount: 3,
-			timeColIdx: 1,
-			expected: []int{1, 0, 2},
+			timeColIdx:  1,
+			expected:    []int{1, 0, 2},
 		},
 		{
-			name: "time column at index 2",
+			name:        "time column at index 2",
 			columnCount: 3,
-			timeColIdx: 2,
-			expected: []int{2, 0, 1},
+			timeColIdx:  2,
+			expected:    []int{2, 0, 1},
 		},
 		{
-			name: "no time column",
+			name:        "no time column",
 			columnCount: 3,
-			timeColIdx: -1,
-			expected: []int{0, 1, 2},
+			timeColIdx:  -1,
+			expected:    []int{0, 1, 2},
 		},
 		{
-			name: "single column",
+			name:        "single column",
 			columnCount: 1,
-			timeColIdx: 0,
-			expected: []int{0},
+			timeColIdx:  0,
+			expected:    []int{0},
 		},
 		{
-			name: "empty columns",
+			name:        "empty columns",
 			columnCount: 0,
-			timeColIdx: -1,
-			expected: []int{},
+			timeColIdx:  -1,
+			expected:    []int{},
 		},
 	}
 
@@ -709,29 +1112,29 @@ func TestBuildColumnOrder(t *testing.T) {
 // TestBuildNaturalColumnOrder tests natural column order (for table format)
 func TestBuildNaturalColumnOrder(t *testing.T) {
 	tests := []struct {
-		name         string
-		columnCount  int
-		expected     []int
+		name        string
+		columnCount int
+		expected    []int
 	}{
 		{
-			name: "three columns",
+			name:        "three columns",
 			columnCount: 3,
-			expected: []int{0, 1, 2},
+			expected:    []int{0, 1, 2},
 		},
 		{
-			name: "single column",
+			name:        "single column",
 			columnCount: 1,
-			expected: []int{0},
+			expected:    []int{0},
 		},
 		{
-			name: "empty columns",
+			name:        "empty columns",
 			columnCount: 0,
-			expected: []int{},
+			expected:    []int{},
 		},
 		{
-			name: "five columns",
+			name:        "five columns",
 			columnCount: 5,
-			expected: []int{0, 1, 2, 3, 4},
+			expected:    []int{0, 1, 2, 3, 4},
 		},
 	}
 
@@ -746,10 +1149,10 @@ func TestBuildNaturalColumnOrder(t *testing.T) {
 // TestDetectTimeLayout tests time layout detection from data rows
 func TestDetectTimeLayout(t *testing.T) {
 	tests := []struct {
-		name        string
-		rows        [][]interface{}
-		timeColIdx  int
-		expectError bool
+		name           string
+		rows           [][]interface{}
+		timeColIdx     int
+		expectError    bool
 		expectedLayout string
 	}{
 		{
@@ -758,8 +1161,8 @@ func TestDetectTimeLayout(t *testing.T) {
 				{"2024-01-01T00:00:00Z", 1.0},
 				{"2024-01-01T01:00:00Z", 2.0},
 			},
-			timeColIdx: 0,
-			expectError: false,
+			timeColIdx:     0,
+			expectError:    false,
 			expectedLayout: "2006-01-02T15:04:05Z",
 		},
 		{
@@ -767,8 +1170,8 @@ func TestDetectTimeLayout(t *testing.T) {
 			rows: [][]interface{}{
 				{"2024-01-01T00:00:00.000Z", 1.0},
 			},
-			timeColIdx: 0,
-			expectError: false,
+			timeColIdx:     0,
+			expectError:    false,
 			expectedLayout: "2006-01-02T15:04:05.000Z",
 		},
 		{
@@ -776,8 +1179,8 @@ func TestDetectTimeLayout(t *testing.T) {
 			rows: [][]interface{}{
 				{1.0, "value"},
 			},
-			timeColIdx: -1,
-			expectError: false,
+			timeColIdx:     -1,
+			expectError:    false,
 			expectedLayout: "",
 		},
 		{
@@ -786,7 +1189,7 @@ func TestDetectTimeLayout(t *testing.T) {
 				{nil, 1.0},
 				{nil, 2.0},
 			},
-			timeColIdx: 0,
+			timeColIdx:  0,
 			expectError: true,
 		},
 		{
@@ -795,8 +1198,8 @@ func TestDetectTimeLayout(t *testing.T) {
 				{nil, 1.0},
 				{"2024-01-01T00:00:00Z", 2.0},
 			},
-			timeColIdx: 0,
-			expectError: false,
+			timeColIdx:     0,
+			expectError:    false,
 			expectedLayout: "2006-01-02T15:04:05Z",
 		},
 		{
@@ -804,7 +1207,7 @@ func TestDetectTimeLayout(t *testing.T) {
 			rows: [][]interface{}{
 				{1.0, "value"},
 			},
-			timeColIdx: 5,
+			timeColIdx:  5,
 			expectError: true,
 		},
 	}
@@ -827,104 +1230,104 @@ func TestConvertRow(t *testing.T) {
 	layout := "2006-01-02T15:04:05Z"
 
 	tests := []struct {
-		name            string
-		srcRow          []interface{}
-		columnMeta      [][]interface{}
-		columnOrder     []int
-		timeColIdx      int
+		name               string
+		srcRow             []interface{}
+		columnMeta         [][]interface{}
+		columnOrder        []int
+		timeColIdx         int
 		keepNilPrimaryTime bool
-		expectError     bool
-		expectSkip      bool
-		expectedRowLen  int
+		expectError        bool
+		expectSkip         bool
+		expectedRowLen     int
 	}{
 		{
-			name: "normal row conversion",
+			name:   "normal row conversion",
 			srcRow: []interface{}{"2024-01-01T00:00:00Z", int64(42), "test"},
 			columnMeta: [][]interface{}{
 				{"ts", "TIMESTAMP"},
 				{"value", "INT"},
 				{"name", "BINARY"},
 			},
-			columnOrder: []int{0, 1, 2},
-			timeColIdx: 0,
+			columnOrder:        []int{0, 1, 2},
+			timeColIdx:         0,
 			keepNilPrimaryTime: false,
-			expectError: false,
-			expectSkip: false,
-			expectedRowLen: 3,
+			expectError:        false,
+			expectSkip:         false,
+			expectedRowLen:     3,
 		},
 		{
-			name: "row with nil value column",
+			name:   "row with nil value column",
 			srcRow: []interface{}{"2024-01-01T00:00:00Z", nil, "test"},
 			columnMeta: [][]interface{}{
 				{"ts", "TIMESTAMP"},
 				{"value", "INT"},
 				{"name", "BINARY"},
 			},
-			columnOrder: []int{0, 1, 2},
-			timeColIdx: 0,
+			columnOrder:        []int{0, 1, 2},
+			timeColIdx:         0,
 			keepNilPrimaryTime: false,
-			expectError: false,
-			expectSkip: false,
-			expectedRowLen: 3,
+			expectError:        false,
+			expectSkip:         false,
+			expectedRowLen:     3,
 		},
 		{
-			name: "row with nil time column - should skip",
+			name:   "row with nil time column - should skip",
 			srcRow: []interface{}{nil, int64(42), "test"},
 			columnMeta: [][]interface{}{
 				{"ts", "TIMESTAMP"},
 				{"value", "INT"},
 				{"name", "BINARY"},
 			},
-			columnOrder: []int{0, 1, 2},
-			timeColIdx: 0,
+			columnOrder:        []int{0, 1, 2},
+			timeColIdx:         0,
 			keepNilPrimaryTime: false,
-			expectError: false,
-			expectSkip: true,
-			expectedRowLen: 0,
+			expectError:        false,
+			expectSkip:         true,
+			expectedRowLen:     0,
 		},
 		{
-			name: "row with nil time column in table format - keep it",
+			name:   "row with nil time column in table format - keep it",
 			srcRow: []interface{}{nil, int64(42), "test"},
 			columnMeta: [][]interface{}{
 				{"ts", "TIMESTAMP"},
 				{"value", "INT"},
 				{"name", "BINARY"},
 			},
-			columnOrder: []int{0, 1, 2},
-			timeColIdx: 0,
+			columnOrder:        []int{0, 1, 2},
+			timeColIdx:         0,
 			keepNilPrimaryTime: true,
-			expectError: false,
-			expectSkip: false,
-			expectedRowLen: 3,
+			expectError:        false,
+			expectSkip:         false,
+			expectedRowLen:     3,
 		},
 		{
-			name: "column order different from source",
+			name:   "column order different from source",
 			srcRow: []interface{}{"test", float64(42), "2024-01-01T00:00:00Z"},
 			columnMeta: [][]interface{}{
 				{"name", "BINARY"},
 				{"value", "INT"},
 				{"ts", "TIMESTAMP"},
 			},
-			columnOrder: []int{2, 1, 0},
-			timeColIdx: 2,
+			columnOrder:        []int{2, 1, 0},
+			timeColIdx:         2,
 			keepNilPrimaryTime: false,
-			expectError: false,
-			expectSkip: false,
-			expectedRowLen: 3,
+			expectError:        false,
+			expectSkip:         false,
+			expectedRowLen:     3,
 		},
 		{
-			name: "column index out of range",
+			name:   "column index out of range",
 			srcRow: []interface{}{"2024-01-01T00:00:00Z", int64(42)},
 			columnMeta: [][]interface{}{
 				{"ts", "TIMESTAMP"},
 				{"value", "INT"},
 			},
-			columnOrder: []int{0, 1, 5},
-			timeColIdx: 0,
+			columnOrder:        []int{0, 1, 5},
+			timeColIdx:         0,
 			keepNilPrimaryTime: false,
-			expectError: true,
-			expectSkip: false,
-			expectedRowLen: 0,
+			expectError:        true,
+			expectSkip:         false,
+			expectedRowLen:     0,
 		},
 	}
 
@@ -958,95 +1361,95 @@ func TestConvertNonTimeValue(t *testing.T) {
 		verifyType  func(interface{}) bool
 	}{
 		{
-			name: "nil value",
-			value: nil,
-			columnType: "INT",
+			name:        "nil value",
+			value:       nil,
+			columnType:  "INT",
 			expectError: false,
-			expectNil: true,
+			expectNil:   true,
 		},
 		{
-			name: "integer to float",
-			value: int64(42),
-			columnType: "INT",
+			name:        "integer to float",
+			value:       int64(42),
+			columnType:  "INT",
 			expectError: false,
-			expectNil: false,
+			expectNil:   false,
 			verifyType: func(v interface{}) bool {
 				ptr, ok := v.(*float64)
 				return ok && ptr != nil && *ptr == 42.0
 			},
 		},
 		{
-			name: "float to float",
-			value: float64(3.14),
-			columnType: "DOUBLE",
+			name:        "float to float",
+			value:       float64(3.14),
+			columnType:  "DOUBLE",
 			expectError: false,
-			expectNil: false,
+			expectNil:   false,
 			verifyType: func(v interface{}) bool {
 				ptr, ok := v.(*float64)
 				return ok && ptr != nil && *ptr == 3.14
 			},
 		},
 		{
-			name: "bool true",
-			value: true,
-			columnType: "BOOL",
+			name:        "bool true",
+			value:       true,
+			columnType:  "BOOL",
 			expectError: false,
-			expectNil: false,
+			expectNil:   false,
 			verifyType: func(v interface{}) bool {
 				ptr, ok := v.(*bool)
 				return ok && ptr != nil && *ptr == true
 			},
 		},
 		{
-			name: "bool false",
-			value: false,
-			columnType: "BOOL",
+			name:        "bool false",
+			value:       false,
+			columnType:  "BOOL",
 			expectError: false,
-			expectNil: false,
+			expectNil:   false,
 			verifyType: func(v interface{}) bool {
 				ptr, ok := v.(*bool)
 				return ok && ptr != nil && *ptr == false
 			},
 		},
 		{
-			name: "string to bool true",
-			value: "1",
-			columnType: "BOOL",
+			name:        "string to bool true",
+			value:       "1",
+			columnType:  "BOOL",
 			expectError: false,
-			expectNil: false,
+			expectNil:   false,
 			verifyType: func(v interface{}) bool {
 				ptr, ok := v.(*bool)
 				return ok && ptr != nil && *ptr == true
 			},
 		},
 		{
-			name: "string to bool false",
-			value: "0",
-			columnType: "BOOL",
+			name:        "string to bool false",
+			value:       "0",
+			columnType:  "BOOL",
 			expectError: false,
-			expectNil: false,
+			expectNil:   false,
 			verifyType: func(v interface{}) bool {
 				ptr, ok := v.(*bool)
 				return ok && ptr != nil && *ptr == false
 			},
 		},
 		{
-			name: "binary string",
-			value: "test string",
-			columnType: "BINARY",
+			name:        "binary string",
+			value:       "test string",
+			columnType:  "BINARY",
 			expectError: false,
-			expectNil: false,
+			expectNil:   false,
 			verifyType: func(v interface{}) bool {
 				ptr, ok := v.(*string)
 				return ok && ptr != nil && *ptr == "test string"
 			},
 		},
 		{
-			name: "timestamp string",
-			value: "2024-01-01T00:00:00Z",
-			columnType: "TIMESTAMP",
+			name:        "timestamp string",
+			value:       "2024-01-01T00:00:00Z",
+			columnType:  "TIMESTAMP",
 			expectError: false,
-			expectNil: false,
+			expectNil:   false,
 			verifyType: func(v interface{}) bool {
 				ptr, ok := v.(*time.Time)
 				if !ok || ptr == nil {
@@ -1056,11 +1459,11 @@ func TestConvertNonTimeValue(t *testing.T) {
 			},
 		},
 		{
-			name: "integer type",
-			value: int64(100),
-			columnType: int(CTypeInt),
+			name:        "integer type",
+			value:       int64(100),
+			columnType:  int(CTypeInt),
 			expectError: false,
-			expectNil: false,
+			expectNil:   false,
 			verifyType: func(v interface{}) bool {
 				ptr, ok := v.(*float64)
 				return ok && ptr != nil && *ptr == 100.0

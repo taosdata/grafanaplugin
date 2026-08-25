@@ -15,6 +15,10 @@ datasources:
   url: $TDENGINE_API
   # <bool> mark as default datasource. Max one per org
   isDefault: true
+  # Optional TLS settings. Keep certificate verification enabled by default.
+  jsonData:
+    tlsAuthWithCACert: false
+    tlsSkipVerify: false
   # <map> to store sensitive information
   secureJsonData:
     # <string> a redundant url configuration. Required.
@@ -23,6 +27,8 @@ datasources:
     #   `printf root:taosdata|base64`
     basicAuth: "${TDENGINE_BASIC_AUTH}"
     token: ${TDENGINE_CLOUD_TOKEN}
+    # Optional PEM-encoded CA certificate. Set tlsAuthWithCACert above to true before uncommenting:
+    # tlsCACert: ${TDENGINE_TLS_CA_CERT}
   version: 1
   # <bool> allow users to edit datasources from the UI.
   editable: true

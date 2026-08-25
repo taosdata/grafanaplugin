@@ -8,8 +8,11 @@
   - [Installation](#installation)
   - [Usage](#usage)
     - [Add Data Source](#add-data-source)
+      - [TLS/SSL](#tlsssl)
     - [Import Dashboard](#import-dashboard)
   - [Important changes](#important-changes)
+    - [v4.0.2](#v402)
+    - [v4.0.1](#v401)
     - [v4.0.0 - **Breaking Changes Release**](#v400---breaking-changes-release)
       - [Breaking Changes](#breaking-changes)
       - [Migration Guide](#migration-guide)
@@ -154,6 +157,25 @@ Save and test it, it should say 'TDengine Data source is working'.
 
 ![data source test](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/howto-add-datasource-test.png)
 
+#### TLS/SSL
+
+Configure the data source URL with an HTTPS endpoint, for example `https://localhost:6041`.
+
+Authentication includes a collapsed **TLS/SSL** section in Grafana 8.0 and newer. Prefer supplying a PEM-encoded CA certificate, which keeps certificate and host-name verification enabled. Enable **Skip TLS certificate validation** only for controlled testing because it exposes the connection to man-in-the-middle attacks.
+
+Provisioning uses Grafana's standard TLS fields:
+
+```yaml
+jsonData:
+  tlsAuthWithCACert: true
+  tlsSkipVerify: false
+secureJsonData:
+  tlsCACert: |-
+    -----BEGIN CERTIFICATE-----
+    ...
+    -----END CERTIFICATE-----
+```
+
 ### Import Dashboard
 
 Point to **+** / **Create** - **import** (or `/assets/import` url).
@@ -171,6 +193,27 @@ After import:
 ![dashboard display](https://raw.githubusercontent.com/taosdata/grafanaplugin/master/assets/TDinsight-v3-full.png)
 
 ## Important changes
+
+### [v4.0.2](https://github.com/taosdata/grafanaplugin/releases/tag/v4.0.2)
+
+- TDinsightV3 gained a collapsed **Stream Computing** row: streams total/failed stats, per-stream realtime lag and history progress, streams overview (status, message, throughput) and stream recalculation jobs.
+- Added two predefined stream alert rules to the `alert_1m` group: **Stream Failed Alert** (notification carries the TDengine error code) and **Stream Recalc Failed Alert** (notification carries the failure reason from `ins_stream_recalculates.message`). Both carry a `service=stream` label for notification-policy routing.
+- The Stream Computing panels and stream alert rules require TDengine **v3.4.2.7** or later.
+
+### [v4.0.1](https://github.com/taosdata/grafanaplugin/releases/tag/v4.0.1)
+
+- Added TLS/SSL configuration with custom CA support and an explicit certificate-verification bypass for controlled testing.
+- Updated the bundled TDinsightV3 and taosX dashboards so Grafana 13 imports require selecting the TDengine data source only once while retaining Grafana 8 compatibility.
+- Updated the legacy TDinsight provisioning script to use the TDInsight V3 Dashboard ID `18180`.
+
+#### Security
+
+- Disabled automatic HTTP redirects for datasource requests to prevent credentials and query payloads from being forwarded to redirected endpoints.
+- Removed raw SQL from HTTP-status and TDengine query-error messages returned to Grafana and written at Error level.
+
+#### Upgrade Notes
+
+- Datasource URLs must point directly to the final TDengine REST endpoint. Configurations relying on HTTP 3xx redirects must update the URL before upgrading.
 
 ### [v4.0.0](https://github.com/taosdata/grafanaplugin/releases/tag/v4.0.0) - **Breaking Changes Release**
 
@@ -316,6 +359,12 @@ If you encounter issues after upgrading:
       # <bool> mark as default datasource. Max one per org
       isDefault: true
 
+      # Optional TLS settings. Certificate verification is enabled by default.
+      # Set tlsAuthWithCACert to true when tlsCACert is supplied.
+      jsonData:
+        tlsAuthWithCACert: false
+        tlsSkipVerify: false
+
       # <map> 
       secureJsonData:
         # <string> a redundant url configuration. Required.
@@ -325,6 +374,8 @@ If you encounter issues after upgrading:
         basicAuth: "${TDENGINE_BASIC_AUTH}"
         # <string> cloud service token of TDengine,  optional.
         token: "$TDENGINE_CLOUD_TOKEN"
+        # Optional PEM-encoded CA certificate for TLS verification.
+        # tlsCACert: "$TDENGINE_TLS_CA_CERT"
    
       version: 1
       # <bool> allow users to edit datasources from the UI.
@@ -338,6 +389,44 @@ If you encounter issues after upgrading:
 ## Monitor TDengine Database with TDinsight Dashboard
 
 TDinsight is a simple monitoring solution for TDengine database. See [TDinsight README](https://github.com/taosdata/grafanaplugin/blob/master/src/dashboards/TDinsightV3.md) for the details.
+
+## Stream Computing Observability
+
+The plugin ships stream computing monitoring panels and alert rules. The panels query the TDengine stream system views (`information_schema.ins_streams` and `information_schema.ins_stream_recalculates`, served from mnode in-memory state); the stream failure alert reads failure events reported by taosd into the `log` database supertable `taosd_stream_failure`.
+
+> **TDengine version requirement**: these panels and alert rules require TDengine **3.4.2.7** or later, which includes the stream observability feature (the `realtime_lag_ms`, `history_progress_pct` and `ins_stream_recalculates.status` columns, plus stream failure reporting to `log.taosd_stream_failure`). The `log.taosd_stream_failure` supertable is created automatically on the first reported failure — until then, and on older TDengine versions, the related panels and alert rules will report query errors; this is expected.
+
+### TDinsightV3: Stream Computing section
+
+TDinsightV3 contains a collapsed **Stream Computing** row with the following panels:
+
+| Panel | Type | What it shows |
+| --- | --- | --- |
+| Streams Total | stat | Total number of streams |
+| Failed Streams | stat | Number of streams in `Failed` status (red when > 0) |
+| Streams Overview | table | `stream_name`, `status`, `message` (error reason), `realtime_lag_ms`, input/output throughput, result latency and `history_progress_pct` of all streams |
+| History Progress | bargauge | Initial history calculation progress (0-100%) per stream |
+| Realtime Lag per Stream | bargauge | Realtime processing lag (ms) of the slowest active reader per stream |
+| Stream Recalculations | table | Manual recalculation jobs: range, progress and status |
+
+The system views only hold current state (no history), so the section intentionally contains no time-series panels.
+
+### Stream alert rules
+
+When **Load TDengine Alert** is enabled on the data source (Grafana >= 11), two stream alert rules are provisioned into the existing `alert_1m` rule group (evaluation interval 60s):
+
+- **Stream Failed Alert** (`severity=critical`): event-based. taosd reports every stream failure to the `log.taosd_stream_failure` supertable (tags `cluster_id`/`stream_id`/`stream_name`, column `error_code`), and the rule fires one alert instance per stream for failures seen in the last 120 seconds. Unlike a status poll, this cannot miss failures of streams that are automatically restarted and quickly return to `Running`. Each instance is labeled with `stream_name` and `cluster_id`, and the notification shows **which stream failed and the error code**, e.g. `Stream s_demo (cluster: ...) failed, error code: -2147479517`. Query: `select now(), cluster_id, stream_name, last(cast(error_code as bigint)) as error_code from log.taosd_stream_failure where _ts >= (now - 120s) and _ts < now partition by cluster_id, stream_name having first(_ts) > 0`.
+- **Stream Recalc Failed Alert** (`severity=warning`): one alert instance per failed recalculation job, labeled with `stream_name`, `recalc_id`, the `progress` the job reached before failing and the failure `message`, so the notification shows **which recalc job of which stream failed and why** (the failure reason comes from the view's `message` column). Failed recalculation records are kept in memory for 1 hour, so such an instance recovers automatically afterwards. Query: `select now() as ts, stream_name, recalc_id, progress, message, count(*) as failed from information_schema.ins_stream_recalculates where status = 'Failed' partition by stream_name, recalc_id, progress, message`.
+
+Both rules use `noDataState=OK` (no failure events is the normal state — a firing instance recovers automatically once its event ages out, without emitting Grafana's noisy `DatasourceNoData` pseudo-alert) and `execErrState="Error"` (on older TDengine versions the rule shows an error state instead of misfiring).
+
+### Forwarding to DingTalk
+
+DingTalk delivery is configured in Grafana, not in the plugin:
+
+1. **Alerting** -> **Contact points** -> **New contact point**: choose type **DingTalk**, fill in the DingTalk robot webhook URL (and secret if enabled on the robot).
+2. **Alerting** -> **Notification policies** -> **New nested policy**: add matcher `service = stream` and route it to the DingTalk contact point created above (both stream alert rules carry the label `service=stream`).
+3. When a stream fails, the DingTalk group receives one message per alert instance containing the stream name and the failure error code.
 
 ## Docker Stack
 
