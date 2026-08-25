@@ -38,7 +38,7 @@
       "type": "datasource",
       "id": "tdengine-datasource",
       "name": "TDengine Datasource",
-      "version": "4.0.1"
+      "version": "4.0.2"
     },
     {
       "type": "panel",

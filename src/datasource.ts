@@ -14,6 +14,14 @@ const timeFromMacroPattern = /\$__timeFrom(?:\s*\(\s*\))?/g;
 const timeToMacroPattern = /\$__timeTo(?:\s*\(\s*\))?/g;
 const timeFilterMacroPattern = /\$__timeFilter\s*\(\s*([^)]+?)\s*\)/g;
 
+// Alert rules introduced after a rule group may already have been provisioned, keyed by rule
+// group name. When an existing data source is upgraded, only these rules are backfilled into
+// the existing group; rules shipped in earlier releases are never touched, so user-modified
+// or user-deleted rules are left alone.
+const backfillAlertRules: Record<string, string[]> = {
+    alert_1m: ['Stream Failed Alert', 'Stream Recalc Failed Alert'],
+};
+
 export class DataSource extends DataSourceWithBackend<Query, DataSourceOptions> {
     baseUrl: string
     backendSrv: BackendSrv
@@ -124,6 +132,47 @@ export class DataSource extends DataSourceWithBackend<Query, DataSourceOptions> 
         }
     }
 
+    // Provisions the rule group from the template when it does not exist yet. When the group
+    // already exists (upgraded data source), only the rules listed in backfillAlertRules are
+    // appended, so existing rules — including user customizations — are never modified.
+    async ensureAlertGroup(ruleGroup: string): Promise<void> {
+        let templateGroup = (data as any)[ruleGroup];
+        let exists = await this.getAlerts(ruleGroup);
+        if (!exists) {
+            this.modifyAlertDataSource(templateGroup);
+            await this.loadAlerts(ruleGroup, templateGroup);
+            return;
+        }
+
+        let newRuleTitles = backfillAlertRules[ruleGroup];
+        if (!newRuleTitles || newRuleTitles.length === 0) {
+            return;
+        }
+
+        let uid = getFolderUid(`${this.uid}`);
+        let path = `/api/v1/provisioning/folder/${uid}/rule-groups/${ruleGroup}`;
+        let existing = await this.backendSrv.get(path, {}, "", {showErrorAlert: false});
+        let existingRules = existing?.rules || [];
+        let existingTitles = new Set(existingRules.map((rule: any) => rule.title));
+        let missingRules = templateGroup.rules.filter((rule: any) =>
+            newRuleTitles.indexOf(rule.title) >= 0 && !existingTitles.has(rule.title));
+        if (missingRules.length === 0) {
+            return;
+        }
+
+        for (const rule of missingRules) {
+            rule.folderUID = uid;
+            rule.data[0].datasourceUid = this.uid;
+            rule.data[0].model.datasource.uid = this.uid;
+        }
+        await this.loadAlerts(ruleGroup, {
+            title: ruleGroup,
+            folderUid: uid,
+            interval: existing.interval,
+            rules: existingRules.concat(missingRules),
+        });
+    }
+
     sendInitAlert(): Promise<void> {
         return new Promise(async (resolve, reject) => {
             try {
@@ -135,42 +184,12 @@ export class DataSource extends DataSourceWithBackend<Query, DataSourceOptions> 
                     }
 
                     if (bOk) {
-                        bOk = await this.getAlerts("alert_1m");
-                        if (!bOk) {
-                            this.modifyAlertDataSource(data.alert_1m);
-                            await this.loadAlerts("alert_1m", data.alert_1m);
-                        }
-
-                        bOk = await this.getAlerts("alert_5m");
-                        if (!bOk) {
-                            this.modifyAlertDataSource(data.alert_5m);
-                            await this.loadAlerts("alert_5m", data.alert_5m);
-                        }
-
-                        bOk = await this.getAlerts("alert_30s");
-                        if (!bOk) {
-                            this.modifyAlertDataSource(data.alert_30s);
-                            await this.loadAlerts("alert_30s", data.alert_30s);
-                        }
-
-                        bOk = await this.getAlerts("alert_90s");
-                        if (!bOk) {
-                            this.modifyAlertDataSource(data.alert_90s);
-                            await this.loadAlerts("alert_90s", data.alert_90s);
-                        }
-
-                        bOk = await this.getAlerts("alert_180s");
-                        if (!bOk) {
-                            this.modifyAlertDataSource(data.alert_180s);
-                            await this.loadAlerts("alert_180s", data.alert_180s);
-                        }
-
-                        bOk = await this.getAlerts("alert_24h");
-                        if (!bOk) {
-                            this.modifyAlertDataSource(data.alert_24h);
-                            await this.loadAlerts("alert_24h", data.alert_24h);
-                        }
-                        
+                        await this.ensureAlertGroup("alert_1m");
+                        await this.ensureAlertGroup("alert_5m");
+                        await this.ensureAlertGroup("alert_30s");
+                        await this.ensureAlertGroup("alert_90s");
+                        await this.ensureAlertGroup("alert_180s");
+                        await this.ensureAlertGroup("alert_24h");
                     }
                 }
                 resolve();
@@ -195,7 +214,8 @@ export class DataSource extends DataSourceWithBackend<Query, DataSourceOptions> 
                 }
 
             }
-            // TDengine error response format: {code: 855, desc: "Authentication failure"}
+            // failure details are provided by the backend CheckHealth message
+            // (e.g. "failed get connect to tdengine. ...")
             return {
                 status: "error",
                 message: "TDengine Data source is not working, reason: " + (response?.message || 'Unknown error'),

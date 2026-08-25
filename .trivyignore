@@ -2,3 +2,23 @@
 # Grafana packages are Webpack externals; fixing upstream requires Grafana Runtime 13
 # and would drop this release's Grafana 8 compatibility.
 CVE-2026-54285
+
+# react-router is pinned to 6.30.4 in resolutions as a transitive dependency of
+# the Grafana packages / plugin scaffolding. The fix requires a major bump to
+# react-router v7, which risks breaking @grafana/ui and plugin-e2e. MEDIUM only.
+CVE-2026-53666
+CVE-2026-53669
+
+# .config/Dockerfile is auto-generated Grafana plugin scaffolding used only for
+# local development; per AGENTS.md it must not be edited, so its Dockerfile
+# findings are ignored here instead.
+DS-0001
+# DS-0002 (root user) also covers webhook/Dockerfile and
+# scripts/data-generation/Dockerfile: both are demo/example images kept
+# as-is to avoid unverified permission changes in container runtime.
+DS-0002
+DS-0025
+DS-0029
+# DS-0031 is a false positive: the flagged GF_AUTH_* env vars are Grafana
+# development-mode toggles, not secrets.
+DS-0031

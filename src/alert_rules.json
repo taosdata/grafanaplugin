@@ -1023,6 +1023,176 @@
                     "summary": "Query duration exceeds 300 seconds"
                 },
                 "isPaused": false
+            },
+            {
+                "orgID": 1,
+                "folderUID": "fdvz0sywic3r4c",
+                "ruleGroup": "alert_1m",
+                "title": "Stream Failed Alert",
+                "condition": "C",
+                "data": [
+                    {
+                        "refId": "A",
+                        "queryType": "SQL",
+                        "relativeTimeRange": {
+                            "from": 600,
+                            "to": 0
+                        },
+                        "datasourceUid": "eduofcpsbaqkgb",
+                        "model": {
+                            "datasource": {
+                                "type": "tdengine-datasource",
+                                "uid": "eduofcpsbaqkgb"
+                            },
+                            "formatType": "Time series",
+                            "intervalMs": 1000,
+                            "maxDataPoints": 43200,
+                            "queryType": "SQL",
+                            "refId": "A",
+                            "sql": "select now(), cluster_id, stream_name, last(cast(error_code as bigint)) as error_code from log.taosd_stream_failure where _ts >= (now - 120s) and _ts < now partition by cluster_id, stream_name having first(_ts) > 0"
+                        }
+                    },
+                    {
+                        "refId": "B",
+                        "queryType": "",
+                        "relativeTimeRange": {
+                            "from": 600,
+                            "to": 0
+                        },
+                        "datasourceUid": "__expr__",
+                        "model": {
+                            "datasource": {
+                                "name": "Expression",
+                                "type": "__expr__",
+                                "uid": "__expr__"
+                            },
+                            "expression": "A",
+                            "intervalMs": 1000,
+                            "maxDataPoints": 43200,
+                            "reducer": "last",
+                            "refId": "B",
+                            "type": "reduce"
+                        }
+                    },
+                    {
+                        "refId": "C",
+                        "queryType": "",
+                        "relativeTimeRange": {
+                            "from": 600,
+                            "to": 0
+                        },
+                        "datasourceUid": "__expr__",
+                        "model": {
+                            "datasource": {
+                                "name": "Expression",
+                                "type": "__expr__",
+                                "uid": "__expr__"
+                            },
+                            "expression": "$B != 0",
+                            "intervalMs": 1000,
+                            "maxDataPoints": 43200,
+                            "refId": "C",
+                            "type": "math"
+                        }
+                    }
+                ],
+                "noDataState": "OK",
+                "execErrState": "Error",
+                "for": "0s",
+                "annotations": {
+                    "description": "Stream {{ $labels.stream_name }} (cluster: {{ $labels.cluster_id }}) failed, error code: {{ $values.B }}.",
+                    "summary": "Stream failed: {{ $labels.stream_name }}"
+                },
+                "labels": {
+                    "service": "stream",
+                    "severity": "critical"
+                },
+                "isPaused": false
+            },
+            {
+                "orgID": 1,
+                "folderUID": "fdvz0sywic3r4c",
+                "ruleGroup": "alert_1m",
+                "title": "Stream Recalc Failed Alert",
+                "condition": "C",
+                "data": [
+                    {
+                        "refId": "A",
+                        "queryType": "SQL",
+                        "relativeTimeRange": {
+                            "from": 600,
+                            "to": 0
+                        },
+                        "datasourceUid": "eduofcpsbaqkgb",
+                        "model": {
+                            "datasource": {
+                                "type": "tdengine-datasource",
+                                "uid": "eduofcpsbaqkgb"
+                            },
+                            "formatType": "Time series",
+                            "intervalMs": 1000,
+                            "maxDataPoints": 43200,
+                            "queryType": "SQL",
+                            "refId": "A",
+                            "sql": "select now() as ts, stream_name, recalc_id, progress, message, count(*) as failed from information_schema.ins_stream_recalculates where status = 'Failed' partition by stream_name, recalc_id, progress, message"
+                        }
+                    },
+                    {
+                        "refId": "B",
+                        "queryType": "",
+                        "relativeTimeRange": {
+                            "from": 600,
+                            "to": 0
+                        },
+                        "datasourceUid": "__expr__",
+                        "model": {
+                            "datasource": {
+                                "name": "Expression",
+                                "type": "__expr__",
+                                "uid": "__expr__"
+                            },
+                            "expression": "A",
+                            "intervalMs": 1000,
+                            "maxDataPoints": 43200,
+                            "reducer": "last",
+                            "refId": "B",
+                            "type": "reduce"
+                        }
+                    },
+                    {
+                        "refId": "C",
+                        "queryType": "",
+                        "relativeTimeRange": {
+                            "from": 600,
+                            "to": 0
+                        },
+                        "datasourceUid": "__expr__",
+                        "model": {
+                            "datasource": {
+                                "name": "Expression",
+                                "type": "__expr__",
+                                "uid": "__expr__"
+                            },
+                            "expression": "$B > 0",
+                            "intervalMs": 1000,
+                            "maxDataPoints": 43200,
+                            "refId": "C",
+                            "type": "math"
+                        }
+                    }
+                ],
+                "noDataState": "OK",
+                "execErrState": "Error",
+                "for": "0s",
+                "annotations": {
+                    "description": "Recalc job {{ $labels.recalc_id }} of stream {{ $labels.stream_name }} failed at progress {{ $labels.progress }}: {{ $labels.message }}",
+                    "summary": "Stream recalculation failed: {{ $labels.stream_name }}"
+                },
+                "labels": {
+                    "service": "stream",
+                    "severity": "warning"
+                },
+                "isPaused": false
             }
         ]
     },
