@@ -93,6 +93,7 @@ There are jest unit tests in `src/datasource.test.ts`, `src/module.test.ts`, `sr
 ## Code style guidelines
 
 - Frontend: TypeScript (strict per `.config/tsconfig.json`), React 18 function components with hooks (see `useChangeString.tsx`, `useChangeSecureOptions.tsx` patterns in `src/components/`). Formatting/linting is inherited from the Grafana scaffolding configs — run `yarn lint` and `yarn typecheck` before considering frontend work done. Indentation in existing `src/` files is 4 spaces.
+- Lint toolchain note: `eslint` is pinned to 9.x in `resolutions` (security fixes), while `@grafana/eslint-config` v7 + `@typescript-eslint` 6.x target eslint 8. `yarn lint` therefore runs with `ESLINT_USE_FLAT_CONFIG=false` (legacy eslintrc mode), `eslint-plugin-react`/`eslint-plugin-jsdoc` are bumped via `resolutions` for eslint 9 API compatibility, and three incompatible rules (`@typescript-eslint/naming-convention`, `@typescript-eslint/consistent-type-assertions`, `deprecation/deprecation`) are disabled in the root `.eslintrc`. The proper fix is migrating to `@grafana/eslint-config` v10 + flat config.
 - Backend: standard Go, formatted with `gofmt`; table-driven unit tests with `stretchr/testify` in `pkg/plugin/datasource_test.go`.
 - Comments in this codebase are written in English.
 - TDengine column types are represented by numeric constants (`CTypeBool` … `CTypeUnsignedBigInt`) and their string forms in `pkg/plugin/config.go`; numeric/integer columns are surfaced to Grafana as `float64` fields (see `getTypeArrayForInt` — required by Grafana frame validation).

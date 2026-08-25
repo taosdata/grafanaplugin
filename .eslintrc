@@ -1,3 +1,26 @@
 {
-  "extends": "./.config/.eslintrc"
+  "extends": "./.config/.eslintrc",
+  "overrides": [
+    {
+      // eslint 9 (pinned in resolutions for security fixes) removed
+      // context.parserServices / context.getScope. @typescript-eslint 6.x rules
+      // that need parserServices crash under eslint 9; disabling them here keeps
+      // the rest of the lint suite working until the toolchain migrates to
+      // @grafana/eslint-config v10 + flat config.
+      "files": ["**/*.{js,jsx,ts,tsx}"],
+      "rules": {
+        "@typescript-eslint/naming-convention": "off",
+        "@typescript-eslint/consistent-type-assertions": "off"
+      }
+    },
+    {
+      // eslint-plugin-deprecation bundles an old @typescript-eslint/utils that
+      // reads context.parserServices; the plugin is abandoned, so the warn-only
+      // deprecation rule is disabled here.
+      "files": ["src/**/*.{ts,tsx}"],
+      "rules": {
+        "deprecation/deprecation": "off"
+      }
+    }
+  ]
 }
