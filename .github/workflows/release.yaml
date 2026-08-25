@@ -204,7 +204,7 @@ jobs:
           host: ${{ secrets.OFFICIAL_CN_HOST }}
           username: ${{ secrets.OFFICIAL_CN_USERNAME }}
           password: ${{ secrets.OFFICIAL_CN_PASSWORD }}
-          source: ./tdengine-datasource.zip
+          source: tdengine-datasource.zip
           target: ${{ secrets.GRAFANA_PLUGIN_PATH }}
           overwrite: true
       - name: Upload Grafana Plugin (EN)
@@ -213,6 +213,6 @@ jobs:
           host: ${{ secrets.OFFICIAL_EN_HOST }}
           username: ${{ secrets.OFFICIAL_EN_USERNAME }}
           password: ${{ secrets.OFFICIAL_EN_PASSWORD }}
-          source: ./tdengine-datasource.zip
+          source: tdengine-datasource.zip
           target: ${{ secrets.GRAFANA_PLUGIN_PATH }} 
           overwrite: true
