@@ -1,16 +1,19 @@
 import React, { ReactElement, useState } from 'react'
-import { Collapse, InlineField, InlineFieldRow, TextArea } from '@grafana/ui'
+import { Collapse, InlineFieldRow } from '@grafana/ui'
 import type { EditorProps } from './types'
-import { useChangeOptionsArea } from './useChangeString'
+import { QueryBuilder } from './QueryBuilder';
 
 export function QueryEditor(props: EditorProps): ReactElement {
     const { query } = props;
     if (!query.queryType) {
         query.queryType = "SQL"
     }
-
-    const onChangeSql = useChangeOptionsArea(props, { propertyName: 'sql', runQuery: false })
-    const onblurSql = useChangeOptionsArea(props, { propertyName: 'sql', runQuery: true })
+    if (!query.editorMode) {
+        query.editorMode = "builder"
+    }
+    if (!query.builderData) {
+        query.builderData = {}
+    }
 
     const ShowGeneratedSql = () => {
         const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -74,21 +77,7 @@ export function QueryEditor(props: EditorProps): ReactElement {
                     </div>
                 </InlineFieldRow>
             )}
-
-            <InlineFieldRow>
-                <InlineField label='Input Sql' labelWidth={20} tooltip='' grow>
-                    <TextArea
-                        style={{ width: "100%", minWidth: "800px" }}
-                        rows={5}
-                        className={'min-width-30 max-width-100 gf-form--grow'}
-                        placeholder={'select _wstart as ts, avg(mem_free), dnode_ep from log.taosd_dnodes_info where _ts>=$from and _ts<=$to partition by dnode_ep interval($interval)'}
-                        onChange={onChangeSql}
-                        onBlur={onblurSql}
-                        value={query.sql}
-                    />
-                </InlineField>
-            </InlineFieldRow>
-
+            <QueryBuilder {...props} />
             <InlineFieldRow>
                 <ShowGeneratedSql />
                 <ShowHelpCollapse />

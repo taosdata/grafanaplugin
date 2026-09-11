@@ -1,11 +1,39 @@
 import {DataQuery, DataSourceJsonData} from '@grafana/data'
 
+export type TimeUnit = 'b' | 'u' | 'a' | 's' | 'm' | 'h' | 'd' | 'n' | 'w' | 'y'
+
+export type TimeValue = {
+    number?: number
+    unit?: TimeUnit
+}
+
+export interface BuilderData {
+    database?: string
+    table?: string
+    columns?: Array<{
+        column: string
+        function: string
+        alias: string
+    }>
+    whereClause?: string
+    groupBy?: string[]
+    partitionBy?: string[]
+    limit?: number
+    offset?: number
+    sLimit?: number
+    sOffset?: number
+    interval?: TimeValue
+    sliding?: TimeValue
+}
+
 export interface Query extends DataQuery {
     queryType?: string
     sql: string
     timeShiftPeriod?: number | string
     timeShiftUnit?: string
     expression?: string
+    editorMode?: 'builder' | 'code'
+    builderData: BuilderData
 }
 
 export const DEFAULT_QUERY: Partial<Query> = {
