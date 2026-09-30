@@ -44,6 +44,3 @@ CLAUDE.md
 
 .playwright-mcp/
 /docs/superpowers/
-
-# eslint cache
-.eslintcache
