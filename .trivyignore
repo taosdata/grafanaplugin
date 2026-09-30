@@ -2,3 +2,9 @@
 # Grafana packages are Webpack externals; fixing upstream requires Grafana Runtime 13
 # and would drop this release's Grafana 8 compatibility.
 CVE-2026-54285
+
+# react-router is a Webpack external provided by the Grafana host and is never
+# imported by this plugin; the bundled artifact contains no react-router code.
+# Fixing requires react-router 7, which the Grafana host (>= 8 support) does not provide.
+CVE-2026-53666
+CVE-2026-53669
