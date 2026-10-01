@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { SelectableValue } from "@grafana/data";
 import { InlineFieldRow, Stack, Field, Select } from "@grafana/ui";
-import { defaultColumn } from "./SelectColumns";
+import { tsColumn } from "./SelectColumns";
 import { EditorProps } from "../types";
 
 export function QueryHeader({ query, onChange, datasource }: EditorProps) {
@@ -39,10 +39,17 @@ export function QueryHeader({ query, onChange, datasource }: EditorProps) {
                 `SHOW ${query.builderData.database}.VTABLES;`,
                 undefined
             );
-            setTables(vtbls.concat(tbls).map((r) => ({
-                label: r.text,
-                value: String(r.value ?? r.text),
-            })))
+            setTables(
+                vtbls.map((r) => ({
+                    label: "V " + r.text,
+                    value: String(r.value ?? r.text),
+                })).concat(
+                    tbls.map((r) => ({
+                        label: r.text,
+                        value: String(r.value ?? r.text),
+                    }))
+                )
+            )
         } catch (error) {
             console.error('Failed to load tables:', error);
             setTables([]);
@@ -66,7 +73,7 @@ export function QueryHeader({ query, onChange, datasource }: EditorProps) {
                 ...query.builderData,
                 database: opt?.value,
                 table: undefined,
-                columns: [defaultColumn],
+                columns: [{ ...tsColumn }],
             }
         });
     };
@@ -79,7 +86,7 @@ export function QueryHeader({ query, onChange, datasource }: EditorProps) {
             builderData: {
                 ...query.builderData,
                 table: opt?.value,
-                columns: [defaultColumn],
+                columns: [{ ...tsColumn }],
             }
         });
     };

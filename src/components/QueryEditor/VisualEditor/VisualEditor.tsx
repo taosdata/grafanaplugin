@@ -24,6 +24,13 @@ export function VisualEditor(props: EditorProps) {
     const [generatedSQL, setGeneratedSQL] = useState<string>('');
     const [columns, setColumns] = useState<SelectableValue<string>[]>([]);
 
+    if (query.builderData.whereClause === undefined) {
+        query.builderData.whereClause = "ts > $from AND ts < $to";
+    }
+    if (query.builderData.interval === undefined) {
+        query.builderData.interval = "$interval";
+    }
+
     const onBuilderDataChange = (value: BuilderData) => {
         onChange({ ...query, builderData: value });
     }
@@ -165,10 +172,10 @@ function generateSQL(builderData: BuilderData): string {
     if (builderData.partitionBy && builderData.partitionBy.length > 0) {
         parts.push(`PARTITION BY ${builderData.partitionBy.join(', ')}`);
     }
-    if (builderData.interval && builderData.interval.number && builderData.interval.unit) {
-        parts.push(`INTERVAL(${builderData.interval.number}${builderData.interval.unit})`);
-        if (builderData.sliding && builderData.sliding.number && builderData.sliding.unit) {
-            parts.push(`SLIDING(${builderData.sliding.number}${builderData.sliding.unit})`);
+    if (builderData.interval) {
+        parts.push(`INTERVAL(${builderData.interval})`);
+        if (builderData.sliding) {
+            parts.push(`SLIDING(${builderData.sliding})`);
         }
     }
     if (builderData.groupBy && builderData.groupBy.length > 0) {

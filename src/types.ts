@@ -22,8 +22,8 @@ export interface BuilderData {
     offset?: number
     sLimit?: number
     sOffset?: number
-    interval?: TimeValue
-    sliding?: TimeValue
+    interval?: string
+    sliding?: string
 }
 
 export interface Query extends DataQuery {

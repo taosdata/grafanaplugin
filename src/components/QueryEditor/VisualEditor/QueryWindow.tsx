@@ -1,7 +1,7 @@
 import React from "react";
-import { InlineFieldRow, Stack, Field} from "@grafana/ui";
+import { InlineFieldRow, Stack, Field, Input} from "@grafana/ui";
 import { BuilderData } from "types";
-import { OptionalLabel, TimeInput } from "./Utils";
+import { OptionalLabel } from "./Utils";
 
 type Props = {
     builderData: BuilderData
@@ -13,15 +13,15 @@ export function QueryWindow({ builderData, onChange }: Props) {
         <InlineFieldRow>
             <Stack gap={2} alignItems="end">
                 <Field label="Interval">
-                    <TimeInput
+                    <Input
                         value={builderData.interval}
-                        onChange={(value) => onChange({ ...builderData, interval: value })}
+                        onChange={(event: React.FormEvent<HTMLInputElement>) => onChange({ ...builderData, interval: event.currentTarget.value })}
                     />
                 </Field>
                 <Field label={<OptionalLabel label="Sliding" />}>
-                    <TimeInput
+                    <Input
                         value={builderData.sliding}
-                        onChange={(value) => onChange({ ...builderData, sliding: value })}
+                        onChange={(event: React.FormEvent<HTMLInputElement>) => onChange({ ...builderData, sliding: event.currentTarget.value })}
                     />
                 </Field>
             </Stack>

@@ -21,6 +21,12 @@ const AGGREGATION_FUNCTIONS = [
     { label: 'LAST', value: 'last' },
 ];
 
+export const tsColumn = {
+    column: 'ts',
+    function: '',
+    alias: ''
+}
+
 export const defaultColumn = {
     column: '',
     function: '',
@@ -41,7 +47,7 @@ export function SelectColumns({ builderData, onChange, columns }: Props) {
     ) => {
         const newColumns = [...(builderData.columns || [])];
         if (!newColumns[index]) {
-            newColumns[index] = defaultColumn;
+            newColumns[index] = {...defaultColumn};
         }
         newColumns[index] = { ...newColumns[index], [field]: value };
         onChange({ ...builderData, columns: newColumns });
@@ -52,7 +58,7 @@ export function SelectColumns({ builderData, onChange, columns }: Props) {
             ...builderData,
             columns: [
                 ...(builderData.columns || []),
-                defaultColumn,
+                {...defaultColumn},
             ],
         });
     };
@@ -67,7 +73,7 @@ export function SelectColumns({ builderData, onChange, columns }: Props) {
     return (
         <InlineFieldRow>
             <Stack gap={0} wrap="wrap" direction="column">
-                {(builderData.columns || [defaultColumn]).map((col, index) => (
+                {(builderData.columns || [{...tsColumn}]).map((col, index) => (
                     <div key={index}>
                         <Stack gap={2} alignItems="end">
                             <Field label={<OptionalLabel label="Data operations" />}>
