@@ -40,7 +40,7 @@ To install this plugin, please refer to [Install the Grafana Plugin for TDengine
 ## Prerequisites
 To build the plugin from source, prepare both the Go backend toolchain and the Node.js frontend toolchain.
 
-- Go 1.21 or above
+- Go 1.26 or above
 - Node.js 22 or above
 - Yarn 1.22.4 (recommended by `packageManager`) or npm for running equivalent scripts
 - `jq` and `zip` if you want to create the release zip from `scripts/package.sh`

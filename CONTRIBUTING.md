@@ -4,16 +4,16 @@ Start your Grafana plugin develop by following the [6 tips for improving your Gr
 
 ## Development Setup
 
-This plugin requires node >=12.0.0, Go >= 1.7 .
+This plugin requires Node.js >= 22 and Go >= 1.26 .
 
 Install Go by following the [installation document](https://golang.org/doc/install):
 
 ```sh
-wget -c https://golang.org/dl/go1.17.2.linux-amd64.tar.gz
-sudo tar -xvf go1.17.2.linux-amd64.tar.gz -C /usr/local/
+wget -c https://golang.org/dl/go1.26.2.linux-amd64.tar.gz
+sudo tar -xvf go1.26.2.linux-amd64.tar.gz -C /usr/local/
 export PATH=$PATH:/usr/local/go/bin
 # or to your local directory
-#tar -xvf go1.17.2.linux-amd64.tar.gz -C $HOME/.local/
+#tar -xvf go1.26.2.linux-amd64.tar.gz -C $HOME/.local/
 #export PATH=$PATH:$HOME/.local/go/bin
 ```
 
