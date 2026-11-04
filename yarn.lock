@@ -825,16 +825,6 @@
     tslib "2.7.0"
     typescript "5.5.4"
 
-"@grafana/e2e-selectors@^11.4.0-209206":
-  version "11.4.0-209567"
-  resolved "https://registry.yarnpkg.com/@grafana/e2e-selectors/-/e2e-selectors-11.4.0-209567.tgz#b103f95ec05ea332e1a17e7284e6ad6f4ebeb569"
-  integrity sha512-cY7OUaKpFlkb4Zt2eE75mVjvyVm2qOqPj7Ip+UCU4Krw4WrI98TL5BhdBzmdJfOo1dX6KvcArhLVvujnq7lv8w==
-  dependencies:
-    "@grafana/tsconfig" "^2.0.0"
-    semver "7.6.3"
-    tslib "2.7.0"
-    typescript "5.5.4"
-
 "@grafana/eslint-config@^7.0.0":
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/@grafana/eslint-config/-/eslint-config-7.0.0.tgz#9f8474a7d1c63e0510d7076ecbb644850693cb0b"
@@ -866,14 +856,11 @@
     ua-parser-js "^1.0.32"
     web-vitals "^4.0.1"
 
-"@grafana/plugin-e2e@^1.12.1":
-  version "1.12.2"
-  resolved "https://registry.yarnpkg.com/@grafana/plugin-e2e/-/plugin-e2e-1.12.2.tgz#6429aaa9fe8f9dbbc4dc11b196008dba986ecb56"
-  integrity sha512-yOexG5cV8Dz3cTL6AUJX2B2+AyW+ulET4MGhMRyBrBuCp156JKdUq+HnnRdjOmdZ2co8eMEJpjrb4ZbR7MWs8Q==
+"@grafana/plugin-e2e@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@grafana/plugin-e2e/-/plugin-e2e-4.0.0.tgz#bc47c286321918a5a2dbe3619f779269bd4be663"
+  integrity sha512-XtvSaBnLNNwX7Opc04fNf1U1QLA2qWBh5rzStI/JmJ9FG5yR3vs0uHhB+5F4d+HGa6qGnoKxhCUiSRy7TvBIXA==
   dependencies:
-    "@grafana/e2e-selectors" "^11.4.0-209206"
-    semver "^7.5.4"
-    uuid "^11.0.2"
     yaml "^2.3.4"
 
 "@grafana/runtime@latest":
@@ -7895,15 +7882,15 @@ selection-is-backward@^1.0.0:
   resolved "https://registry.yarnpkg.com/selection-is-backward/-/selection-is-backward-1.0.0.tgz#97a54633188a511aba6419fc5c1fa91b467e6be1"
   integrity sha512-C+6PCOO55NLCfS8uQjUKV/6E5XMuUcfOVsix5m0QqCCCKi495NgeQVNfWtAaD71NKHsdmFCJoXUGfir3qWdr9A==
 
-semver@7.6.3, semver@^7.3.5, semver@^7.5.3, semver@^7.5.4, semver@^7.6.3:
-  version "7.6.3"
-  resolved "https://registry.yarnpkg.com/semver/-/semver-7.6.3.tgz#980f7b5550bc175fb4dc09403085627f9eb33143"
-  integrity sha512-oVekP1cKtI+CTDvHWYFUcMtsK/00wmAEfyqKfNdARm8u1wNVhSgaX7A8d4UuIlUI5e84iEwOhs7ZPYRmzU9U6A==
-
 semver@^6.3.1:
   version "6.3.1"
   resolved "https://registry.yarnpkg.com/semver/-/semver-6.3.1.tgz#556d2ef8689146e46dcea4bfdd095f3434dffcb4"
   integrity sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==
+
+semver@^7.3.5, semver@^7.5.3, semver@^7.5.4, semver@^7.6.3:
+  version "7.6.3"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-7.6.3.tgz#980f7b5550bc175fb4dc09403085627f9eb33143"
+  integrity sha512-oVekP1cKtI+CTDvHWYFUcMtsK/00wmAEfyqKfNdARm8u1wNVhSgaX7A8d4UuIlUI5e84iEwOhs7ZPYRmzU9U6A==
 
 semver@^7.7.2:
   version "7.7.4"
@@ -8848,7 +8835,7 @@ util-deprecate@^1.0.2:
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
   integrity sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==
 
-uuid@11.1.1, uuid@9.0.1, uuid@^11.0.2:
+uuid@11.1.1, uuid@9.0.1:
   version "11.1.1"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-11.1.1.tgz#f6d81d2e1c65d00762e5e29b16c5d2d995e208ad"
   integrity sha512-vIYxrBCC/N/K+Js3qSN88go7kIfNPssr/hHCesKCQNAjmgvYS2oqr69kIufEG+O4+PfezOH4EbIeHCfFov8ZgQ==
