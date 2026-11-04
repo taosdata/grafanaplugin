@@ -4,7 +4,7 @@
   "description": "Grafana datasource plugin for TDengine",
   "scripts": {
     "build": "webpack -c ./.config/webpack/webpack.config.ts --env production",
-    "build:all": "webpack -c ./.config/webpack/webpack.config.ts --env production && npx --yes @grafana/sign-plugin && scripts/package.sh",
+    "build:all": "webpack -c ./.config/webpack/webpack.config.ts --env production && npx --yes @grafana/sign-plugin@4.0.0 && scripts/package.sh",
     "build:dist": "webpack -c ./.config/webpack/webpack.config.ts --env production && mage",
     "build:prod": "webpack -c ./.config/webpack/webpack.config.ts --env production",
     "dev": "webpack -w -c ./.config/webpack/webpack.config.ts --env development",
@@ -14,7 +14,7 @@
     "lint:fix": "yarn run lint --fix",
     "package": "scripts/package.sh",
     "server": "docker compose up --build",
-    "sign": "npx --yes @grafana/sign-plugin@latest",
+    "sign": "npx --yes @grafana/sign-plugin@4.0.0",
     "test": "jest --watch --onlyChanged",
     "test:ci": "jest --passWithNoTests --maxWorkers 4",
     "typecheck": "tsc --noEmit"
