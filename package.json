@@ -118,7 +118,8 @@
     "@protobufjs/utf8": "1.1.1",
     "protocol-buffers-schema": "3.6.1",
     "cosmiconfig/yaml": "1.10.3",
-    "@grafana/plugin-e2e/yaml": "2.8.3"
+    "@grafana/plugin-e2e/yaml": "2.8.3",
+    "zod": "4.6.6"
   },
   "packageManager": "yarn@1.22.4"
 }
