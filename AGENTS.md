@@ -62,7 +62,7 @@ Rule groups are provisioned via `ensureAlertGroup()` in `src/datasource.ts`: a m
 
 ## Build and test commands
 
-Prerequisites: **Node.js >= 22**, **Yarn 1.22.4** (`packageManager` field), **Go 1.26+** (go.mod targets 1.26 — required by `golang.org/x/net` v0.60.0; CI uses 1.26), plus `jq` and `zip` for packaging.
+Prerequisites: **Node.js >= 22**, **Yarn 1.22.4** (`packageManager` field), **Go 1.21+** (go.mod targets 1.25; CI uses 1.25), plus `jq` and `zip` for packaging.
 
 ```bash
 yarn install --frozen-lockfile   # frontend deps
